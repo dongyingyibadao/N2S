@@ -1,6 +1,6 @@
 schema_version: 1.0.0
 id: pytorch.npu.sinusoidal-fp64-fallback
-version: 0.2.0
+version: 0.2.1
 title: NPU sinusoidal FP64 capability fallback
 status: candidate
 summary: Use FP32 only at a recognized sinusoidal safe-dtype boundary when NPU FP64 is unsuitable.
@@ -71,15 +71,17 @@ evidence:
   - evidence/summary.yaml
 promotion:
   requirements:
-    - MINT plus two independent non-MINT projects across at least two model families.
-    - Fixed checkpoint/input/seed model-level action or logit, top-k, loss and gradient comparison.
+    - Fixed-input module A/B for every approved dimension and period range.
+    - A weight-free helper integration probe for each approved source adapter, or explicit exclusion of that adapter.
+    - The source case plus two independent projects and two model families only before making a broad cross-project or model-family claim.
+    - Fixed checkpoint/input/seed action or logit, top-k, loss and gradient comparison only for model-output or training claims.
     - CPU FP64 or original CUDA reference and same-NPU before/after timing and memory.
     - Explicit approved thresholds for each declared dimension and period range.
   blockers:
     - CUDA comparison is pending.
     - Current torch 2.9.0 plus torch-npu 2.9.0 passed every tested FP64 shape, so a universal capability-fallback rationale is unsupported.
-    - LeRobot and OpenPI passed static adapter validation only; runtime/model evidence is pending.
-    - The fixed MINT model does not call the matched sinusoidal helper, making its zero full-model delta vacuous.
+    - LeRobot and OpenPI passed static adapter validation only; weight-free helper integration evidence is pending before either adapter can be approved.
+    - The fixed MINT model does not call the matched sinusoidal helper, so it cannot support a model-scoped claim; this does not block a redesigned shape-scoped module rule.
     - Target-project verification commands have not been approved.
 rollback: Restore the MPS-only equality check, or remove the OpenPI-local NPU guard, then rerun the verified FP64 path.
 approval: null

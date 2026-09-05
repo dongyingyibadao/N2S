@@ -6,6 +6,7 @@ import jsonschema
 
 
 ROOT = Path(__file__).resolve().parent
+EVIDENCE_LEVELS = {"static": 0, "module": 1, "integration": 2, "model": 3}
 
 
 def main():
@@ -19,6 +20,19 @@ def main():
             raise SystemExit(f"{path.name}: {errors[0].message}")
         if value["decision"] == "approved" and any(item is None for item in value["thresholds"].values()):
             raise SystemExit(f"{path.name}: approved decision requires all threshold objects")
+        if value["decision"] == "approved" and not value["approved_evidence_level"]:
+            raise SystemExit(f"{path.name}: approved decision requires approved_evidence_level")
+        if value["decision"] == "approved" and not value["approved_scope"]:
+            raise SystemExit(f"{path.name}: approved decision requires approved_scope")
+        if value["decision"] == "approved" and (
+            EVIDENCE_LEVELS[value["approved_evidence_level"]]
+            > EVIDENCE_LEVELS[value["assessed_evidence_level"]]
+        ):
+            raise SystemExit(f"{path.name}: approved evidence level exceeds assessed evidence level")
+        if value["decision"] != "approved" and value["approved_evidence_level"] is not None:
+            raise SystemExit(f"{path.name}: non-approved decision cannot set approved_evidence_level")
+        if value["decision"] != "approved" and value["approved_scope"] is not None:
+            raise SystemExit(f"{path.name}: non-approved decision cannot set approved_scope")
         if value["decision"] is not None and not value["approver"]:
             raise SystemExit(f"{path.name}: decision requires approver")
         if value["decision"] is not None and not value["decided_at"]:

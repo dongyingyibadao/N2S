@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "rule_id": "pytorch.npu.compile-capability-fallback",
-  "rule_version": "0.1.0",
+  "rule_version": "0.1.1",
   "current_status": "candidate",
   "auto_apply": false,
   "review_status": "agent_assessed",
@@ -18,6 +18,7 @@
     "LeRobot PI0 and SmolVLA fixed-revision static adapter validation",
     "OpenPI PI0 explicitly rejected because constructor-time device proof is absent"
   ],
+  "assessed_evidence_level": "model",
   "thresholds": {
     "functional": null,
     "numerical": null,
@@ -27,13 +28,14 @@
   "required_before_decision": [
     "Run and return the fixed-input CUDA block A/B capture",
     "Add a successful NPU compile control in a supported environment",
-    "Cover a second torch and torch-npu tuple and a second independently matchable non-MINT project",
+    "Cover a second torch and torch-npu tuple and add weight-free integration for each approved adapter",
     "Approve environment-tuple scope and eager fallback performance/memory policy"
   ],
   "rollback": "Remove the NPU eager guard only after compile passes the same fixed functional, numerical, timing, and memory protocol.",
   "decision": "remain_candidate",
   "approver": "codex-agent-evidence-review",
-  "decided_at": "2026-09-01T06:05:26Z",
+  "decided_at": "2026-09-05T07:03:46Z",
+  "approved_evidence_level": null,
   "approved_scope": null,
   "limitations": [
     "The current NPU failure proves missing Triton only",
@@ -41,6 +43,6 @@
   ],
   "evidence_revision": {
     "repository_commit": "30ff7adb7eaa20f19bd6131366426e7ab247559b",
-    "registry_sha256": "076d2d556f019809e408d3dae1445ee551fe28fbf72662edb1b2df72079f7311"
+    "registry_sha256": "c8a33f0544cc253f6305a59f534c24bb485087e5bd48f7beca4530b5bf2c30f7"
   }
 }

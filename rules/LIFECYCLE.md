@@ -8,11 +8,20 @@
 ## `candidate`
 
 具备规则契约、代码形态 detector、LibCST codemod、修改后 validator、正反 fixtures 和可追溯
-证据。候选规则可以用于检查与人工审阅，但 `eligible_for_apply` 固定为 false。
+的模块级 A/B 证据。候选规则可以从一个可复现案例形成，用于检查与审阅，但
+`eligible_for_apply` 固定为 false；跨项目和模型级缺口写入 blockers，不阻止保存 candidate。
 
-数值或运行时候选晋级前至少满足：MINT 加两个非 MINT 项目、两个模型家族、CUDA/高精度参考、
-固定 checkpoint/input/seed 的模型级数值结果，以及同一 NPU 的修改前后耗时和显存 A/B。框架
-API 规则改用“两个项目、两个相关框架版本”的覆盖要求。
+## 证据层级与范围上限
+
+- `module` 是最低层级：固定输入/seed、CUDA 或 CPU 高精度参考、同一 NPU 的修改前后数值、耗时
+  和显存 A/B。它可以支持 exact device/framework/operator/dtype/shape 范围的规则评定。
+- `integration` 用无权重最小调用链证明 detector 匹配的实际 adapter 会执行修改路径。某个 adapter
+  缺少这一层证据时，不得进入该 adapter 的批准范围。
+- `model` 只对模型输出、训练、checkpoint/release、预处理语义或模型级性能声明强制要求。广泛的
+  跨项目/模型家族结论仍需源案例加两个独立项目并覆盖至少两个模型家族。
+
+证据层级不是质量分数。模块证据完整的窄规则可以比模型证据不完整的宽规则更可靠。批准范围必须
+列出证据层级和精确环境，不能用较低层级结果推断较高层级行为。
 
 ## `approved`
 
@@ -20,8 +29,12 @@ API 规则改用“两个项目、两个相关框架版本”的覆盖要求。
 可以设置 `automation.auto_apply: true`。工具每次只应用一条批准规则，随后立即执行结构 validator
 和 manifest 中的验证命令；任一步失败都会恢复备份。
 
+模块级批准可以存在，但只能覆盖已验证的算子/模块、设备、版本、dtype、shape/range 和模式。
+若 codemod 修改真实模型调用链，每个获批 adapter 还必须有 integration 证据；没有模型级证据时，
+approval 必须明确排除端到端模型正确性、训练稳定性和模型级性能声明。
+
 审批不是永久豁免。框架、设备、dtype、shape 或代码形态超出批准范围时，规则重新 fail closed。
-新增 adapter 或扩大范围需要新增证据和再次人工审批。
+新增 adapter 或扩大范围需要新增证据和再次审批。
 
 ## 回退与审计
 

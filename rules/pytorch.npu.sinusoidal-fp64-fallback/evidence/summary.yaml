@@ -52,6 +52,6 @@ static_external_coverage:
   runtime_status: pending
 missing:
   - CUDA reference run
-  - A model whose live forward path actually calls the matched helper
-  - Runtime and model-level validation for both non-MINT source snapshots
+  - Weight-free helper integration for each source adapter intended for approval
+  - A live model path only before model-scoped output, training or performance claims
   - Approved per-shape and period-range numerical thresholds

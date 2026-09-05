@@ -111,10 +111,11 @@
       "oneOf": [
         {"type": "null"},
         {
-          "type": "object", "required": ["approver", "approved_at", "evidence_revision", "scope", "limitations"],
+          "type": "object", "required": ["approver", "approved_at", "evidence_revision", "evidence_level", "scope", "limitations"],
           "properties": {
             "approver": {"type": "string"}, "approved_at": {"type": "string", "format": "date-time"},
             "evidence_revision": {"type": "string"}, "scope": {"type": "string"},
+            "evidence_level": {"enum": ["module", "integration", "model"]},
             "limitations": {"type": "array", "items": {"type": "string"}}
           }, "additionalProperties": false
         }

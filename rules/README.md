@@ -29,6 +29,11 @@ schema、插件接口、fixture 和注册表漂移。
 启用 `auto_apply`、存在完整审批记录、源文件哈希未变化、validator 通过和验证命令成功。审批人必须
 把允许的环境范围写入 approval；在范围尚不能由 detector 证明时，validator 或验证命令必须拒绝。
 
+规则验证采用 `module`、`integration`、`model` 三层证据。模块级 A/B 是 candidate 的最低要求；
+模型级不是统一门槛，只在批准范围声明模型输出、训练、checkpoint 或模型级性能时要求。仅有模块
+证据的评定必须固定到实际测试的设备、版本、算子、dtype 和 shape；真实源码 adapter 进入批准范围
+前还需要无权重的最小 integration probe。完整边界见 [LIFECYCLE.md](LIFECYCLE.md)。
+
 ## 当前候选
 
 - `pytorch.npu.sinusoidal-fp64-fallback`：只在已识别的位置编码安全 dtype helper 中增加 NPU

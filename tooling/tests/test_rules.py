@@ -164,6 +164,7 @@ class RuleFixtureTests(unittest.TestCase):
                 "approver": "isolated-test-only",
                 "approved_at": "2026-08-31T00:00:00+00:00",
                 "evidence_revision": "test-fixture",
+                "evidence_level": "integration",
                 "scope": "temporary unit test",
                 "limitations": ["not production evidence"],
             }

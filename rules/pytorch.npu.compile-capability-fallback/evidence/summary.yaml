@@ -58,6 +58,6 @@ static_external_coverage:
 missing:
   - Successful NPU compile control
   - Fixed-output eager versus compile comparison
-  - Runtime validation for the LeRobot source snapshot and a second independently matchable project
+  - Weight-free branch integration for each source adapter intended for approval
   - A second torch and torch-npu environment tuple
   - CUDA compile and eager controls

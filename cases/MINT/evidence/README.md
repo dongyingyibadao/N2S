@@ -23,5 +23,6 @@ baseline/candidate 源码 SHA256 和完整的最小 unified diff。
 同一 checkpoint、序列化输入和隔离子进程；FP64 模型结果同时记录 matched helper 调用数，避免把
 未执行路径的零 delta 误作安全证据。
 
-CUDA 回传必须来自 [cuda bundle](../cuda/README.md)，包含九份 JSON、必要日志、聚合 manifest 和
-`SHA256SUMS`。当前目录中的旧 `pending_cuda` 只证明无 NVIDIA 本机时的降级行为，不可用于审批。
+CUDA 回传必须来自 [cuda block bundle](../cuda/README.md)，包含三份模块级 JSON、必要日志、聚合
+manifest 和 `SHA256SUMS`。它不需要 checkpoint，也不产生模型级结论。当前目录中的旧
+`pending_cuda` 只证明无 NVIDIA 本机时的降级行为，不可用于审批。

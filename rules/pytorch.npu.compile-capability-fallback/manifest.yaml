@@ -1,6 +1,6 @@
 schema_version: 1.0.0
 id: pytorch.npu.compile-capability-fallback
-version: 0.1.0
+version: 0.1.1
 title: NPU torch.compile capability fallback
 status: candidate
 summary: Keep eager execution available when a recognized configuration would request an unverified NPU compile path.
@@ -62,8 +62,8 @@ automation:
   fail_closed: true
 verification:
   acceptance_contract:
-    functional: Eager fixed inputs and model smoke pass; compile failure is reproduced for every approved environment tuple.
-    numerical: Eager outputs meet model-specific reference thresholds; thresholds are pending.
+    functional: Eager fixed inputs pass and compile capability is reproduced for every approved environment tuple; approved source adapters also pass a weight-free branch integration probe.
+    numerical: Fixed block outputs meet approved eager/reference thresholds; model-output thresholds are required only for model-scoped claims.
     performance: Same-NPU eager/compile raw samples, median and p95 are recorded without a global speed threshold.
     memory: Same-NPU eager/compile peak memory is recorded; an approved regression threshold is pending.
   commands: []
@@ -71,15 +71,17 @@ evidence:
   - evidence/summary.yaml
 promotion:
   requirements:
-    - MINT plus two independent non-MINT projects across at least two model families.
     - At least two torch/torch-npu environment tuples, including one capability-probe outcome.
-    - Fixed model input numerical comparison and same-NPU warm timing/memory A/B.
+    - Fixed block input numerical comparison and same-NPU warm timing/memory A/B.
+    - A weight-free branch integration probe for each approved source adapter, or explicit exclusion of that adapter.
+    - The source case plus two independent projects and two model families only before making a broad cross-project or model-family claim.
+    - Model-level comparison only when approval claims end-to-end outputs, training behavior or model-level performance.
     - Approved scope must name versions where fallback is necessary; the principle must remain capability-based.
   blockers:
     - The current failure is caused by one environment's missing Triton dependency.
     - Successful NPU compile control and same-device performance A/B are missing.
     - LeRobot has static PI0/SmolVLA matches only; OpenPI is intentionally rejected because its constructor has no statically provable device field.
-    - Runtime evidence from a second independently matchable non-MINT project is missing.
+    - Weight-free integration evidence from a second independently matchable non-MINT adapter is missing for cross-project approval.
     - Target-project verification commands have not been approved.
 rollback: Remove the NPU guard after the compile path passes the same functional, numerical, timing and memory protocol.
 approval: null

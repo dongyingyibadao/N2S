@@ -1,6 +1,6 @@
 schema_version: 1.0.0
 id: pytorch.attention.cache-dtype-alignment
-version: 0.1.0
+version: 0.1.1
 title: Cached attention boundary dtype alignment
 status: candidate
 summary: Align embeddings entering a recognized KV-cache attention boundary to the projection weight dtype.
@@ -62,8 +62,8 @@ automation:
   fail_closed: true
 verification:
   acceptance_contract:
-    functional: Cached inference, uncached control and fixed-shape SDPA execute without dtype errors for approved adapters.
-    numerical: Action/logit/top-k/loss deltas meet model-specific approved thresholds; thresholds are pending.
+    functional: Fixed-shape SDPA module controls execute without dtype errors; each approved source adapter additionally executes the matched cache path in a weight-free integration probe.
+    numerical: Module scope uses CPU FP32 and paired block metrics; action/logit/top-k/loss thresholds are required only for model-scoped claims. Thresholds are pending.
     performance: Same-NPU raw timing samples, median and p95 include cast cost; no limit is approved yet.
     memory: Same-NPU peak allocated memory includes converted prefix lifetime; no limit is approved yet.
   commands: []
@@ -71,14 +71,16 @@ evidence:
   - evidence/summary.yaml
 promotion:
   requirements:
-    - MINT plus two independent non-MINT projects and at least two attention/model families.
-    - Fixed checkpoint/input/seed action, logit, top-k, loss and finite-gradient comparisons as applicable.
+    - Fixed-input module A/B for every approved dtype and shape, with the local cast included in timing and memory.
+    - A weight-free integration probe for each approved cache adapter, or explicit exclusion of that adapter.
+    - The source case plus two independent projects and two model families only before making a broad cross-project or model-family claim.
+    - Fixed checkpoint/input/seed action, logit, top-k, loss and finite-gradient comparisons only for model-output or training claims.
     - CPU FP32/high-precision or original CUDA reference and same-NPU timing/memory A/B.
     - Separate adapters and thresholds for standard SDPA, fused attention and quantized paths.
   blockers:
-    - The failing MINT baseline cannot provide paired action/logit deltas or a model performance ratio; an independently valid reference path is still needed for numerical thresholds.
+    - The failing MINT baseline cannot provide paired action/logit deltas or a model performance ratio; this blocks model-scoped thresholds, not fixed-shape module assessment.
     - CUDA cache behavior is pending.
-    - LeRobot and OpenPI have passed static adapter validation only; their runtime/model evidence is pending.
+    - LeRobot and OpenPI have passed static adapter validation only; weight-free integration evidence is pending before either adapter can be approved.
     - Current codemod covers only the recognized prefix adapter, not every Q/K/V/mask boundary.
     - Target-project verification commands have not been approved.
 rollback: Remove the local cast only after the entire prefix, cache and query path is configured and verified in one intended dtype.

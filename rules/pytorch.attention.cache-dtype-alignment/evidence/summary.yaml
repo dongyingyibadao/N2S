@@ -61,6 +61,6 @@ static_external_coverage:
   model_families: [MINT, PI0]
   runtime_status: pending
 missing:
-  - An independently valid model reference path for paired action/logit deltas and thresholds
   - CUDA cached-attention comparison
-  - Runtime and model-level validation for both non-MINT source snapshots
+  - Weight-free cache-path integration validation for each non-MINT adapter intended for approval
+  - An independently valid model reference path only before model-scoped action/logit or performance claims
