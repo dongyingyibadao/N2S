@@ -38,3 +38,15 @@ N2S/tooling/n2s-rules rollback --report apply-report.json
 成功 apply 在目标项目 `.n2s/backups/` 保存原文件，在 `.n2s/reports/` 保存审计报告。改写后的
 Python 文件不 import N2S。rollback 会先确认文件仍等于本次改写的 SHA256，若用户随后修改过文件
 则拒绝覆盖。inspect/plan 除调用者显式指定的 `--output` 外，不写目标项目。
+
+## 官方知识工具
+
+独立入口 `n2s-knowledge` 管理官方 Git 镜像、只读快照和固定版本索引，不执行上游代码：
+
+```bash
+N2S/tooling/n2s-knowledge refresh-if-due
+N2S/tooling/n2s-knowledge status
+N2S/tooling/n2s-knowledge search "torch_npu" --scope manipulation
+```
+
+同步、审阅、许可限制和接纳流程见 [upstreams/README.md](../upstreams/README.md)。

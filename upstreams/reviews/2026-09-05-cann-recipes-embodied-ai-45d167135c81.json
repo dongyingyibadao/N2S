@@ -1,0 +1,15 @@
+{
+  "decision": "accept",
+  "license_checked": true,
+  "limitations": [
+    "Acceptance covers provenance and knowledge indexing, not N2S runtime validation.",
+    "The upstream disclaimer restricts samples to non-commercial use.",
+    "Per-model and third-party license files continue to govern their respective content."
+  ],
+  "remote_url": "https://gitcode.com/cann/cann-recipes-embodied-ai.git",
+  "reviewed_at": "2026-09-05T00:00:00Z",
+  "reviewer": "N2S official-knowledge integration review",
+  "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514",
+  "source": "cann-recipes-embodied-ai",
+  "summary": "Accepted as the initial immutable official-knowledge revision specified by the N2S integration decision; no migration rule was promoted."
+}

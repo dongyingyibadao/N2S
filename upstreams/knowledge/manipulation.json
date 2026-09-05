@@ -1,0 +1,256 @@
+{
+  "items": [
+    {
+      "devices": ["Atlas A2"], "id": "recipe.pi0.online", "models": ["PI0"], "modes": ["online_inference"],
+      "n2s_validation": {"level": "not_verified", "status": "upstream_documented"},
+      "official_claim": {"references": [{"path": "manipulation/pi0/infer_with_torch/README.md", "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514", "source": "cann-recipes-embodied-ai"}], "status": "official_statement", "summary": "PI0 online inference on Atlas A2 uses LeRobot, NPU fused operators, graph mode, and computation rewrites."},
+      "rule_relations": [{"rationale": "The upstream enables a known graph-mode path; the N2S rule only disables compile for configurations whose NPU compile capability has not been established.", "relation": "different_scope", "rule_id": "pytorch.npu.compile-capability-fallback"}],
+      "scope": ["manipulation", "manipulation/pi0/infer_with_torch"],
+      "software_versions": {"cann": ["8.3.RC1"], "framework": ["LeRobot"], "pytorch": ["2.1.0"], "torch_npu": ["2.1.0.post12"]},
+      "title": "PI0 Atlas A2 online inference recipe", "type": "recipe"
+    },
+    {
+      "devices": ["Ascend 310P"], "id": "recipe.pi0.om", "models": ["PI0"], "modes": ["om_inference"],
+      "n2s_validation": {"level": "not_verified", "status": "upstream_documented"},
+      "official_claim": {"references": [{"path": "manipulation/pi0/infer_with_om/README.md", "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514", "source": "cann-recipes-embodied-ai"}], "status": "official_statement", "summary": "PI0 is split into VLM and action-expert ONNX models, compiled with ATC, checked against ONNXRuntime, and evaluated through an OM backend on 310P."},
+      "rule_relations": [], "scope": ["manipulation", "manipulation/pi0/infer_with_om"],
+      "software_versions": {"cann": ["8.0.0-8.2.RC1"], "framework": ["LeRobot"], "pytorch": [], "torch_npu": []},
+      "title": "PI0 310P OM inference recipe", "type": "recipe"
+    },
+    {
+      "devices": ["Atlas A2"], "id": "recipe.pi0.training", "models": ["PI0"], "modes": ["training"],
+      "n2s_validation": {"level": "not_verified", "status": "upstream_documented"},
+      "official_claim": {"references": [{"path": "manipulation/pi0/train/README.md", "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514", "source": "cann-recipes-embodied-ai"}], "status": "official_statement", "summary": "PI0 distributed LIBERO training uses a pinned LeRobot commit, common and PI0-specific Ascend patches, local model/data paths, and explicit optimization switches."},
+      "rule_relations": [], "scope": ["manipulation", "manipulation/pi0/train"],
+      "software_versions": {"cann": ["8.3.0+"], "framework": ["LeRobot@58f70b6bd370864139a3795ac3497a9eae8c42d5"], "pytorch": [], "torch_npu": []},
+      "title": "PI0 Atlas A2 training recipe", "type": "recipe"
+    },
+    {
+      "devices": ["Ascend 310P"], "id": "recipe.pi05.online", "models": ["PI0.5"], "modes": ["online_inference"],
+      "n2s_validation": {"level": "not_verified", "status": "upstream_documented"},
+      "official_claim": {"references": [{"path": "manipulation/pi05/infer_with_torch/README.md", "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514", "source": "cann-recipes-embodied-ai"}], "status": "official_statement", "summary": "PI0.5 PyTorch inference on 310P applies an NPU patch, uses a safe dtype path, and includes deterministic CPU/GPU-to-NPU accuracy comparison."},
+      "rule_relations": [{"rationale": "The official PI0.5 patch adds an NPU float64-to-float32 safe-dtype boundary for sinusoidal embeddings, matching the rule's narrow mechanism.", "relation": "supports", "rule_id": "pytorch.npu.sinusoidal-fp64-fallback"}],
+      "scope": ["manipulation", "manipulation/pi05/infer_with_torch"],
+      "software_versions": {"cann": ["8.2.RC1"], "framework": ["LeRobot"], "pytorch": ["2.5.1"], "torch_npu": ["2.5.1.post1 / Ascend Extension 7.1.0"]},
+      "title": "PI0.5 310P online inference recipe", "type": "recipe"
+    },
+    {
+      "devices": ["Ascend 310P"], "id": "recipe.pi05.om", "models": ["PI0.5"], "modes": ["om_inference"],
+      "n2s_validation": {"level": "not_verified", "status": "upstream_documented"},
+      "official_claim": {"references": [{"path": "manipulation/pi05/infer_with_om/README.md", "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514", "source": "cann-recipes-embodied-ai"}], "status": "official_statement", "summary": "PI0.5 deployment exports two ONNX parts, compiles both to OM for the actual 310P SoC, and compares segmented and end-to-end outputs."},
+      "rule_relations": [], "scope": ["manipulation", "manipulation/pi05/infer_with_om"],
+      "software_versions": {"cann": ["8.0.0-8.2.RC1"], "framework": ["LeRobot@58f70b6bd370864139a3795ac3497a9eae8c42d5"], "pytorch": [], "torch_npu": []},
+      "title": "PI0.5 310P OM inference recipe", "type": "recipe"
+    },
+    {
+      "devices": ["Atlas A2"], "id": "recipe.pi05.training", "models": ["PI0.5"], "modes": ["training"],
+      "n2s_validation": {"level": "not_verified", "status": "upstream_documented"},
+      "official_claim": {"references": [{"path": "manipulation/pi05/train/README.md", "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514", "source": "cann-recipes-embodied-ai"}], "status": "official_statement", "summary": "PI0.5 Atlas A2 training pins LeRobot 0.4.4 and combines fast beta sampling, fused QKV/attention/MLP paths, fine-grained checkpointing, and DDP static graph settings."},
+      "rule_relations": [], "scope": ["manipulation", "manipulation/pi05/train"],
+      "software_versions": {"cann": ["8.3.RC1"], "framework": ["LeRobot 0.4.4@8fff0fde7c79f23a93d845d1a50e985de01f8b8a"], "pytorch": [], "torch_npu": ["2.8.0.post2"]},
+      "title": "PI0.5 Atlas A2 training recipe", "type": "recipe"
+    },
+    {
+      "devices": ["Ascend 310P"], "id": "recipe.act.om", "models": ["ACT"], "modes": ["om_inference"],
+      "n2s_validation": {"level": "not_verified", "status": "upstream_documented"},
+      "official_claim": {"references": [{"path": "manipulation/act/infer_with_om/README.md", "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514", "source": "cann-recipes-embodied-ai"}], "status": "official_statement", "summary": "ACT deployment derives its input schema from model configuration, exports ONNX, compiles OM for 310P, validates numerical output, and retains normalization processors."},
+      "rule_relations": [], "scope": ["manipulation", "manipulation/act/infer_with_om"],
+      "software_versions": {"cann": ["8.0.0-8.2.RC1"], "framework": ["LeRobot"], "pytorch": [], "torch_npu": []},
+      "title": "ACT 310P OM inference recipe", "type": "recipe"
+    },
+    {
+      "devices": ["Atlas A2"], "id": "recipe.act.training", "models": ["ACT"], "modes": ["training"],
+      "n2s_validation": {"level": "not_verified", "status": "upstream_documented"},
+      "official_claim": {"references": [{"path": "manipulation/act/train/README.md", "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514", "source": "cann-recipes-embodied-ai"}], "status": "official_statement", "summary": "ACT training on Atlas A2 pins LeRobot, applies a shared Ascend training patch, and covers ALOHA transfer-cube training and evaluation."},
+      "rule_relations": [], "scope": ["manipulation", "manipulation/act/train"],
+      "software_versions": {"cann": ["8.3.0+"], "framework": ["LeRobot@58f70b6bd370864139a3795ac3497a9eae8c42d5"], "pytorch": [], "torch_npu": []},
+      "title": "ACT Atlas A2 training recipe", "type": "recipe"
+    },
+    {
+      "devices": ["Atlas A2"], "id": "recipe.smolvla.training", "models": ["SmolVLA"], "modes": ["training"],
+      "n2s_validation": {"level": "not_verified", "status": "upstream_documented"},
+      "official_claim": {"references": [{"path": "manipulation/smolvla/train/README.md", "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514", "source": "cann-recipes-embodied-ai"}], "status": "official_statement", "summary": "SmolVLA LIBERO training keeps common and model-specific Ascend patches separate and uses a pinned external LeRobot checkout."},
+      "rule_relations": [], "scope": ["manipulation", "manipulation/smolvla/train"],
+      "software_versions": {"cann": ["8.3.0+"], "framework": ["LeRobot@58f70b6bd370864139a3795ac3497a9eae8c42d5"], "pytorch": [], "torch_npu": []},
+      "title": "SmolVLA Atlas A2 training recipe", "type": "recipe"
+    },
+    {
+      "devices": ["Ascend 310P"], "id": "recipe.diffusion-policy.om", "models": ["DiffusionPolicy"], "modes": ["om_inference"],
+      "n2s_validation": {"level": "not_verified", "status": "upstream_documented"},
+      "official_claim": {"references": [{"path": "manipulation/diffusion-policy/infer_with_om/README.md", "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514", "source": "cann-recipes-embodied-ai"}], "status": "official_statement", "summary": "DiffusionPolicy deployment exports a config-derived ONNX graph, compiles it for 310P, verifies ONNX-to-OM outputs, and evaluates PushT with normalization artifacts."},
+      "rule_relations": [], "scope": ["manipulation", "manipulation/diffusion-policy/infer_with_om"],
+      "software_versions": {"cann": ["8.0.0-8.2.RC1"], "framework": ["LeRobot"], "pytorch": [], "torch_npu": []},
+      "title": "DiffusionPolicy 310P OM inference recipe", "type": "recipe"
+    },
+    {
+      "devices": ["Ascend 310P"], "id": "recipe.openvla.om", "models": ["OpenVLA"], "modes": ["om_inference"],
+      "n2s_validation": {"level": "not_verified", "status": "upstream_documented"},
+      "official_claim": {"references": [{"path": "manipulation/openvla/infer_with_om/README.md", "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514", "source": "cann-recipes-embodied-ai"}], "status": "official_statement", "summary": "OpenVLA 7B is split into vision, projector, embedding, prefill, and decoder graphs for 310P OM compilation and LIBERO evaluation."},
+      "rule_relations": [], "scope": ["manipulation", "manipulation/openvla/infer_with_om"],
+      "software_versions": {"cann": ["8.0.0-8.2.RC1"], "framework": ["OpenVLA"], "pytorch": [], "torch_npu": []},
+      "title": "OpenVLA 310P OM inference recipe", "type": "recipe"
+    },
+    {
+      "devices": ["Atlas A3"], "id": "recipe.gr00t.online", "models": ["Isaac-GR00T N1.6"], "modes": ["online_inference"],
+      "n2s_validation": {"level": "not_verified", "status": "upstream_documented"},
+      "official_claim": {"references": [{"path": "manipulation/Isaac-GR00T/README.md", "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514", "source": "cann-recipes-embodied-ai"}], "status": "official_statement", "summary": "Isaac-GR00T N1.6 online inference on Atlas A3 applies model adaptor patches including NPU device transfer, fused RMSNorm, and fused inference attention."},
+      "rule_relations": [], "scope": ["manipulation", "manipulation/Isaac-GR00T"],
+      "software_versions": {"cann": ["8.3.RC1"], "framework": ["Isaac-GR00T"], "pytorch": ["2.7.1"], "torch_npu": ["2.7.1"]},
+      "title": "Isaac-GR00T N1.6 Atlas A3 inference recipe", "type": "recipe"
+    },
+    {
+      "devices": ["Ascend 310P"], "id": "recipe.spirit.online", "models": ["Spirit v1.5"], "modes": ["online_inference"],
+      "n2s_validation": {"level": "not_verified", "status": "upstream_documented"},
+      "official_claim": {"references": [{"path": "manipulation/spirit-v1.5/infer_with_torch/README.md", "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514", "source": "cann-recipes-embodied-ai"}], "status": "official_statement", "summary": "Spirit v1.5 online inference on 310P uses a model implementation and attention-processor patch with pinned PyTorch and torch_npu dependencies."},
+      "rule_relations": [], "scope": ["manipulation", "manipulation/spirit-v1.5/infer_with_torch"],
+      "software_versions": {"cann": ["8.3.RC1"], "framework": ["Spirit v1.5"], "pytorch": ["2.7.1"], "torch_npu": ["2.7.1"]},
+      "title": "Spirit v1.5 310P inference recipe", "type": "recipe"
+    },
+    {
+      "devices": ["Atlas A2", "Atlas A3", "Ascend 310P"], "id": "matrix.manipulation.support", "models": ["PI0", "PI0.5", "ACT", "SmolVLA", "DiffusionPolicy", "OpenVLA", "Isaac-GR00T N1.6", "Spirit v1.5"], "modes": ["training", "online_inference", "om_inference"],
+      "n2s_validation": {"level": "not_verified", "status": "upstream_documented"},
+      "official_claim": {"references": [{"path": "README.md", "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514", "source": "cann-recipes-embodied-ai"}], "status": "official_statement", "summary": "The upstream support table maps each manipulation recipe to its specific mode and Atlas A2, Atlas A3, or Ascend 310P target; support is not implied outside those rows."},
+      "rule_relations": [], "scope": ["manipulation"],
+      "software_versions": {"cann": ["8.0.0-8.3.RC1, recipe-specific"], "framework": ["LeRobot", "OpenVLA", "Isaac-GR00T", "Spirit v1.5"], "pytorch": [], "torch_npu": []},
+      "title": "Official manipulation support matrix", "type": "version_matrix"
+    },
+    {
+      "devices": ["Atlas A2", "Atlas A3"], "id": "capability.npu-device-transfer", "models": ["PI0", "PI0.5", "ACT", "SmolVLA", "Isaac-GR00T N1.6"], "modes": ["training", "online_inference"],
+      "n2s_validation": {"level": "not_verified", "status": "upstream_documented"},
+      "official_claim": {"references": [{"path": "manipulation/act/train/src/patches/lerobot_ascend_train_common.patch", "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514", "source": "cann-recipes-embodied-ai"}, {"path": "manipulation/Isaac-GR00T/adaptor_patches/gr00t_policy_patch.py", "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514", "source": "cann-recipes-embodied-ai"}], "status": "official_statement", "summary": "Training and GR00T adaptor paths import torch_npu and transfer_to_npu so framework device selection can route supported operations to NPU."},
+      "rule_relations": [], "scope": ["manipulation"],
+      "software_versions": {"cann": [], "framework": ["LeRobot", "Isaac-GR00T"], "pytorch": [], "torch_npu": []},
+      "title": "NPU discovery and transfer_to_npu integration", "type": "capability"
+    },
+    {
+      "devices": ["Atlas A2", "Atlas A3", "Ascend 310P"], "id": "capability.fused-transformer", "models": ["PI0", "PI0.5", "Isaac-GR00T N1.6", "Spirit v1.5"], "modes": ["training", "online_inference"],
+      "n2s_validation": {"level": "not_verified", "status": "upstream_documented"},
+      "official_claim": {"references": [{"path": "docs/manipulation/pi0/infer_with_torch/README.md", "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514", "source": "cann-recipes-embodied-ai"}, {"path": "manipulation/pi05/train/doc/README.md", "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514", "source": "cann-recipes-embodied-ai"}], "status": "official_statement", "summary": "Documented transformer optimizations include NPU fused attention, fused QKV projection, RMSNorm/add-RMSNorm, and grouped Gemma MLP input projections; each has model-local layout and mask constraints."},
+      "rule_relations": [{"rationale": "Both concern dtype correctness at attention boundaries, but these official fusion rewrites do not establish the N2S KV-cache embedding/weight contract.", "relation": "related", "rule_id": "pytorch.attention.cache-dtype-alignment"}],
+      "scope": ["manipulation"],
+      "software_versions": {"cann": [], "framework": ["LeRobot", "Isaac-GR00T", "Spirit v1.5"], "pytorch": [], "torch_npu": []},
+      "title": "Model-local fused attention, QKV, RMSNorm, and MLP", "type": "capability"
+    },
+    {
+      "devices": ["Atlas A2"], "id": "capability.fast-beta", "models": ["PI0", "PI0.5"], "modes": ["training"],
+      "n2s_validation": {"level": "not_verified", "status": "upstream_documented"},
+      "official_claim": {"references": [{"path": "manipulation/pi05/train/doc/README.md", "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514", "source": "cann-recipes-embodied-ai"}], "status": "official_statement", "summary": "A specialized beta sampler is used for the fixed Beta(1.5, 1.0) training-time distribution to avoid general distribution construction and CPU fallback overhead."},
+      "rule_relations": [], "scope": ["manipulation", "manipulation/pi05/train"],
+      "software_versions": {"cann": ["8.3.RC1"], "framework": ["LeRobot 0.4.4"], "pytorch": [], "torch_npu": ["2.8.0.post2"]},
+      "title": "Fast beta time sampling", "type": "capability"
+    },
+    {
+      "devices": ["Atlas A2"], "id": "capability.checkpoint-granularity", "models": ["PI0", "PI0.5"], "modes": ["training"],
+      "n2s_validation": {"level": "not_verified", "status": "upstream_documented"},
+      "official_claim": {"references": [{"path": "manipulation/pi0/train/doc/README.md", "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514", "source": "cann-recipes-embodied-ai"}, {"path": "manipulation/pi05/train/doc/README.md", "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514", "source": "cann-recipes-embodied-ai"}], "status": "official_statement", "summary": "The recipes retain internal fine-grained gradient checkpointing while disabling an outer suffix checkpoint that would recompute the whole suffix during backward."},
+      "rule_relations": [], "scope": ["manipulation", "manipulation/pi0/train", "manipulation/pi05/train"],
+      "software_versions": {"cann": ["8.3.RC1"], "framework": ["LeRobot"], "pytorch": [], "torch_npu": []},
+      "title": "Gradient checkpoint granularity", "type": "capability"
+    },
+    {
+      "devices": ["Atlas A2"], "id": "capability.ddp-static-graph", "models": ["PI0.5"], "modes": ["training"],
+      "n2s_validation": {"level": "not_verified", "status": "upstream_documented"},
+      "official_claim": {"references": [{"path": "manipulation/pi05/train/doc/README.md", "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514", "source": "cann-recipes-embodied-ai"}], "status": "official_statement", "summary": "PI0.5 uses find_unused_parameters=False, static_graph=True, and gradient_as_bucket_view=True to reduce DDP graph and bucket overhead."},
+      "rule_relations": [{"rationale": "This is an explicitly tested DDP setting, not evidence that torch.compile is supported for the separate N2S rule's target configurations.", "relation": "different_scope", "rule_id": "pytorch.npu.compile-capability-fallback"}],
+      "scope": ["manipulation", "manipulation/pi05/train"],
+      "software_versions": {"cann": ["8.3.RC1"], "framework": ["LeRobot 0.4.4"], "pytorch": [], "torch_npu": ["2.8.0.post2"]},
+      "title": "PI0.5 DDP static graph settings", "type": "capability"
+    },
+    {
+      "devices": ["Atlas A2", "Atlas A3", "Ascend 310P"], "id": "capability.graph-and-om", "models": ["PI0", "PI0.5", "ACT", "DiffusionPolicy", "OpenVLA", "Isaac-GR00T N1.6"], "modes": ["online_inference", "om_inference"],
+      "n2s_validation": {"level": "not_verified", "status": "upstream_documented"},
+      "official_claim": {"references": [{"path": "README.md", "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514", "source": "cann-recipes-embodied-ai"}], "status": "official_statement", "summary": "The upstream distinguishes runtime graph paths such as torchair from static ATC-generated OM deployment; an OM must be rebuilt for the actual SoC and input contract."},
+      "rule_relations": [{"rationale": "Documented successful graph paths narrow where a fallback may be unnecessary, but do not promote or widen the N2S compile rule.", "relation": "different_scope", "rule_id": "pytorch.npu.compile-capability-fallback"}],
+      "scope": ["manipulation"],
+      "software_versions": {"cann": ["8.0.0-8.3.RC1, recipe-specific"], "framework": ["LeRobot", "OpenVLA", "Isaac-GR00T"], "pytorch": [], "torch_npu": []},
+      "title": "Runtime graph mode and ATC OM conversion", "type": "capability"
+    },
+    {
+      "devices": ["Ascend 310P"], "id": "issue.fp16-attention-mask", "models": ["PI0.5"], "modes": ["online_inference"],
+      "n2s_validation": {"level": "not_verified", "status": "upstream_documented"},
+      "official_claim": {"references": [{"path": "manipulation/pi05/infer_with_torch/modeling_pi05.patch", "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514", "source": "cann-recipes-embodied-ai"}], "status": "official_statement", "summary": "The PI0.5 patch replaces a fixed very-negative attention-mask value with torch.finfo(runtime_dtype).min; casting a value outside FP16 range can become -inf and contaminate attention with NaN."},
+      "rule_relations": [{"rationale": "This is additional official evidence that dtype boundaries in attention require explicit handling, but the affected mask is outside the cache-alignment rule's current detector scope.", "relation": "related", "rule_id": "pytorch.attention.cache-dtype-alignment"}],
+      "scope": ["manipulation", "manipulation/pi05/infer_with_torch"],
+      "software_versions": {"cann": ["8.2.RC1"], "framework": ["LeRobot"], "pytorch": ["2.5.1"], "torch_npu": ["2.5.1.post1"]},
+      "title": "FP16 attention-mask finite minimum", "type": "known_issue"
+    },
+    {
+      "devices": ["Atlas A2"], "id": "issue.video-frame-tolerance", "models": ["ACT", "PI0", "SmolVLA"], "modes": ["training"],
+      "n2s_validation": {"level": "not_verified", "status": "upstream_documented"},
+      "official_claim": {"references": [{"path": "manipulation/act/train/src/patches/lerobot_ascend_train_common.patch", "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514", "source": "cann-recipes-embodied-ai"}], "status": "official_statement", "summary": "TorchCodec frame lookup may exceed a strict timestamp tolerance while remaining within one frame interval; the patch uses a frame-rate-derived tolerance and warns once."},
+      "rule_relations": [], "scope": ["manipulation"],
+      "software_versions": {"cann": ["8.3.0+"], "framework": ["LeRobot@58f70b6bd370864139a3795ac3497a9eae8c42d5"], "pytorch": [], "torch_npu": []},
+      "title": "Video frame timestamp tolerance", "type": "known_issue"
+    },
+    {
+      "devices": ["Atlas A2"], "id": "issue.distributed-output-directory", "models": ["ACT", "PI0", "SmolVLA"], "modes": ["training"],
+      "n2s_validation": {"level": "not_verified", "status": "upstream_documented"},
+      "official_claim": {"references": [{"path": "manipulation/act/train/src/patches/lerobot_ascend_train_common.patch", "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514", "source": "cann-recipes-embodied-ai"}], "status": "official_statement", "summary": "During distributed startup rank 0 can create the output directory before slower ranks validate configuration; overwrite protection stays on rank 0 while nonzero ranks reuse that run directory."},
+      "rule_relations": [], "scope": ["manipulation"],
+      "software_versions": {"cann": ["8.3.0+"], "framework": ["LeRobot@58f70b6bd370864139a3795ac3497a9eae8c42d5"], "pytorch": [], "torch_npu": []},
+      "title": "Distributed output-directory startup race", "type": "known_issue"
+    },
+    {
+      "devices": ["Atlas A2"], "id": "issue.int64-cumsum", "models": ["PI0"], "modes": ["training"],
+      "n2s_validation": {"level": "not_verified", "status": "upstream_documented"},
+      "official_claim": {"references": [{"path": "manipulation/pi0/train/doc/README.md", "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514", "source": "cann-recipes-embodied-ai"}], "status": "official_statement", "summary": "The PI0 training path avoids unsupported NPU INT64 cumsum by constructing attention positions in int32 and applying boolean mask logic."},
+      "rule_relations": [], "scope": ["manipulation", "manipulation/pi0/train"],
+      "software_versions": {"cann": ["8.3.0+"], "framework": ["LeRobot"], "pytorch": [], "torch_npu": []},
+      "title": "NPU INT64 cumsum constraint", "type": "known_issue"
+    },
+    {
+      "devices": ["Atlas A2", "Atlas A3", "Ascend 310P"], "id": "issue.dependencies-and-architecture", "models": ["PI0", "PI0.5", "ACT", "SmolVLA", "DiffusionPolicy", "OpenVLA", "Isaac-GR00T N1.6", "Spirit v1.5"], "modes": ["training", "online_inference", "om_inference"],
+      "n2s_validation": {"level": "not_verified", "status": "upstream_documented"},
+      "official_claim": {"references": [{"path": "docs/deployment_troubleshooting.md", "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514", "source": "cann-recipes-embodied-ai"}], "status": "official_statement", "summary": "torch, torchvision, torch_npu, CANN, host architecture, ATC soc_version, ACLLite paths, model assets, and input shapes must match the individual recipe; the repository does not claim one universal combination."},
+      "rule_relations": [], "scope": ["manipulation"],
+      "software_versions": {"cann": ["recipe-specific"], "framework": ["recipe-specific"], "pytorch": ["recipe-specific"], "torch_npu": ["recipe-specific"]},
+      "title": "Dependency, architecture, and SoC constraints", "type": "known_issue"
+    },
+    {
+      "devices": ["Atlas A2"], "id": "performance.pi0.training", "models": ["PI0"], "modes": ["training"],
+      "n2s_validation": {"level": "not_verified", "status": "upstream_documented"},
+      "official_claim": {"references": [{"path": "manipulation/pi0/train/doc/README.md", "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514", "source": "cann-recipes-embodied-ai"}], "status": "official_statement", "summary": "The combined fused-attention and outer-checkpoint change is reported at 81.77 samples/s under the stated eight-card comparison setup."},
+      "performance_context": {"batch": "24 per card, 192 global", "card_count": 8, "dataset": "LIBERO", "device": "Atlas A2", "measurement": "end-to-end training throughput, 30-step optimization comparison", "model": "PI0", "value": "81.77 samples/s"},
+      "rule_relations": [], "scope": ["manipulation", "manipulation/pi0/train"],
+      "software_versions": {"cann": ["8.3.0+"], "framework": ["LeRobot@58f70b6bd370864139a3795ac3497a9eae8c42d5"], "pytorch": [], "torch_npu": []},
+      "title": "PI0 eight-card training throughput claim", "type": "performance_claim"
+    },
+    {
+      "devices": ["Atlas A2"], "id": "performance.act.training", "models": ["ACT"], "modes": ["training"],
+      "n2s_validation": {"level": "not_verified", "status": "upstream_documented"},
+      "official_claim": {"references": [{"path": "manipulation/act/train/doc/README.md", "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514", "source": "cann-recipes-embodied-ai"}], "status": "official_statement", "summary": "The TorchCodec ACT run reports 760.24 end-to-end samples/s over steps 10 through 100 in the stated eight-card setup."},
+      "performance_context": {"batch": "64 per card, 512 global", "card_count": 8, "dataset": "ALOHA transfer_cube", "device": "Atlas A2", "measurement": "end-to-end samples/s, steps 10-100", "model": "ACT", "value": "760.24 samples/s"},
+      "rule_relations": [], "scope": ["manipulation", "manipulation/act/train"],
+      "software_versions": {"cann": ["8.3.0+"], "framework": ["LeRobot@58f70b6bd370864139a3795ac3497a9eae8c42d5"], "pytorch": [], "torch_npu": []},
+      "title": "ACT eight-card training throughput claim", "type": "performance_claim"
+    },
+    {
+      "devices": ["Atlas A2"], "id": "performance.smolvla.training", "models": ["SmolVLA"], "modes": ["training"],
+      "n2s_validation": {"level": "not_verified", "status": "upstream_documented"},
+      "official_claim": {"references": [{"path": "manipulation/smolvla/train/doc/README.md", "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514", "source": "cann-recipes-embodied-ai"}], "status": "official_statement", "summary": "The Atlas A2 SmolVLA reference reports 233-244 aggregate samples/s from stable-step update timing."},
+      "performance_context": {"batch": "32 per card, 256 global", "card_count": 8, "dataset": "LIBERO", "device": "Atlas A2 910B", "measurement": "aggregate throughput derived from stable 1.05-1.10 s update time", "model": "SmolVLA", "value": "233-244 samples/s"},
+      "rule_relations": [], "scope": ["manipulation", "manipulation/smolvla/train"],
+      "software_versions": {"cann": ["8.3.0+"], "framework": ["LeRobot@58f70b6bd370864139a3795ac3497a9eae8c42d5"], "pytorch": [], "torch_npu": []},
+      "title": "SmolVLA eight-card training throughput claim", "type": "performance_claim"
+    },
+    {
+      "devices": ["Atlas A2"], "id": "performance.pi0.online", "models": ["PI0"], "modes": ["online_inference"],
+      "n2s_validation": {"level": "not_verified", "status": "upstream_documented"},
+      "official_claim": {"references": [{"path": "manipulation/pi0/infer_with_torch/README.md", "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514", "source": "cann-recipes-embodied-ai"}], "status": "official_statement", "summary": "The PI0 online recipe reports an 80 ms single-inference time for a 50 by 6 action sequence under its sample setup."},
+      "performance_context": {"batch": null, "card_count": 1, "dataset": "Koch arm sample", "device": "Atlas A2", "measurement": "single inference latency", "model": "PI0", "value": "80 ms"},
+      "rule_relations": [], "scope": ["manipulation", "manipulation/pi0/infer_with_torch"],
+      "software_versions": {"cann": ["8.3.RC1"], "framework": ["LeRobot"], "pytorch": ["2.1.0"], "torch_npu": ["2.1.0.post12"]},
+      "title": "PI0 online latency claim", "type": "performance_claim"
+    },
+    {
+      "devices": ["Ascend 310P"], "id": "performance.pi05.online", "models": ["PI0.5"], "modes": ["online_inference"],
+      "n2s_validation": {"level": "not_verified", "status": "upstream_documented"},
+      "official_claim": {"references": [{"path": "manipulation/pi05/infer_with_torch/README.md", "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514", "source": "cann-recipes-embodied-ai"}], "status": "official_statement", "summary": "The PI0.5 online recipe reports approximately 862 ms average latency and 1.16 FPS for its mock-input example."},
+      "performance_context": {"batch": null, "card_count": 1, "dataset": "deterministic mock input", "device": "Ascend 310P", "measurement": "average inference latency and throughput", "model": "PI0.5", "value": "862.1430 ms; 1.16 FPS"},
+      "rule_relations": [], "scope": ["manipulation", "manipulation/pi05/infer_with_torch"],
+      "software_versions": {"cann": ["8.2.RC1"], "framework": ["LeRobot"], "pytorch": ["2.5.1"], "torch_npu": ["2.5.1.post1"]},
+      "title": "PI0.5 online latency claim", "type": "performance_claim"
+    }
+  ],
+  "schema_version": "1.0.0"
+}

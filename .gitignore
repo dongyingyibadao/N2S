@@ -6,6 +6,9 @@ __pycache__/
 .ruff_cache/
 .DS_Store
 
+# Official upstream mirrors, immutable snapshots, live indexes and sync state.
+upstreams/_cache/
+
 # NVIDIA captures are returned separately and reviewed before admission.
 cases/MINT/cuda/results-*/
 cases/MINT/evidence/cuda-blocks/

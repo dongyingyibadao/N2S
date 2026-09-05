@@ -1,0 +1,154 @@
+{
+  "schema_version": "1.0.0",
+  "sources": [
+    {
+      "acceptance_review": "upstreams/reviews/2026-09-05-cann-recipes-embodied-ai-45d167135c81.json",
+      "accepted_license_fingerprints": {
+        "3d_vision/Hunyuan3D/LICENSE": "86d1c74593aeebe78c0dc4d6b28206ede82e28e8bac2a93fe36b0eca06cbc9dd",
+        "3d_vision/Hunyuan3D/NOTICE": "9ef89c88faf6fa97a7cc9ffc15deec7a8c27fb7ac9bca1f57e2884a5f8d48f42",
+        "3d_vision/SLARM/LICENSE": "ade94f364846e490d56072fc77e5cab5dd4fcd65367045023c52e08184137506",
+        "3d_vision/gaussian_splatting/LICENSE": "96a4f89293c0df19880da9b0e35f67589f5885ea61b224ef16bb2bd599a8a44d",
+        "3d_vision/vggt/LICENSE.txt": "b94e46746792d1adfa0ebdbccada5d4576d244ae230be9de8a46b5868fff001b",
+        "DISCLAIMER.md": "1bf9eef5e70d247636e33a91e4ce196604f88fc35eb299245d873386351985b4",
+        "LICENSE": "3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5",
+        "Third_Party_Open_Source_Software_Notice": "1182289be0fcd4e01548686d22fd37c131ae3e4ae721b41e7df464dda5a07977",
+        "locomotion/NMR/LICENSE": "5fa491a3dbcde29e130ca2d9980dda139efc566b79ac77e9d3543d817d113f3f",
+        "locomotion/NMR/licenses/SMPL-X-License-Notice.md": "7a74e325bdef979ad358be31168e4f6afece854b8ed8fbe3105c337cb395beaf",
+        "manipulation/spirit-v1.5/infer_with_torch/LICENSE.txt": "06e7b103535f093f226d7f71aab827b11a379a1e388c1d4f10b97e4aee42ff91"
+      },
+      "accepted_revision": "45d167135c81d97573bfbe0e564bb4a1d9642514",
+      "authority": "official_upstream",
+      "branch": "master",
+      "browse_url_template": "https://gitcode.com/cann/cann-recipes-embodied-ai/blob/{revision}/{path}",
+      "deep_index_scopes": [
+        "manipulation/pi0",
+        "manipulation/pi05",
+        "manipulation/act",
+        "manipulation/smolvla",
+        "manipulation/openvla",
+        "manipulation/diffusion-policy",
+        "manipulation/Isaac-GR00T",
+        "manipulation/spirit-v1.5"
+      ],
+      "id": "cann-recipes-embodied-ai",
+      "index_policy": "all_files_and_markdown_titles",
+      "license_files": ["LICENSE", "DISCLAIMER.md", "Third_Party_Open_Source_Software_Notice"],
+      "metadata_rules": [
+        {
+          "devices": ["Atlas A2"],
+          "model": "PI0",
+          "modes": ["online_inference"],
+          "prefix": "manipulation/pi0/infer_with_torch/",
+          "software_versions": {"cann": ["8.3.RC1"], "framework": ["LeRobot"], "pytorch": ["2.1.0"], "torch_npu": ["2.1.0.post12"]}
+        },
+        {
+          "devices": ["Ascend 310P"],
+          "model": "PI0",
+          "modes": ["om_inference"],
+          "prefix": "manipulation/pi0/infer_with_om/",
+          "software_versions": {"cann": ["8.0.0-8.2.RC1"], "framework": ["LeRobot"], "pytorch": [], "torch_npu": []}
+        },
+        {
+          "devices": ["Atlas A2"],
+          "model": "PI0",
+          "modes": ["training"],
+          "prefix": "manipulation/pi0/train/",
+          "software_versions": {"cann": ["8.3.0+"], "framework": ["LeRobot@58f70b6bd370864139a3795ac3497a9eae8c42d5"], "pytorch": [], "torch_npu": []}
+        },
+        {
+          "devices": ["Ascend 310P"],
+          "model": "PI0.5",
+          "modes": ["online_inference"],
+          "prefix": "manipulation/pi05/infer_with_torch/",
+          "software_versions": {"cann": ["8.2.RC1"], "framework": ["LeRobot"], "pytorch": ["2.5.1"], "torch_npu": ["2.5.1.post1 / Ascend Extension 7.1.0"]}
+        },
+        {
+          "devices": ["Ascend 310P"],
+          "model": "PI0.5",
+          "modes": ["om_inference"],
+          "prefix": "manipulation/pi05/infer_with_om/",
+          "software_versions": {"cann": ["8.0.0-8.2.RC1"], "framework": ["LeRobot@58f70b6bd370864139a3795ac3497a9eae8c42d5"], "pytorch": [], "torch_npu": []}
+        },
+        {
+          "devices": ["Atlas A2"],
+          "model": "PI0.5",
+          "modes": ["training"],
+          "prefix": "manipulation/pi05/train/",
+          "software_versions": {"cann": ["8.3.RC1"], "framework": ["LeRobot 0.4.4@8fff0fde7c79f23a93d845d1a50e985de01f8b8a"], "pytorch": [], "torch_npu": ["2.8.0.post2"]}
+        },
+        {
+          "devices": ["Ascend 310P"],
+          "model": "ACT",
+          "modes": ["om_inference"],
+          "prefix": "manipulation/act/infer_with_om/",
+          "software_versions": {"cann": ["8.0.0-8.2.RC1"], "framework": ["LeRobot"], "pytorch": [], "torch_npu": []}
+        },
+        {
+          "devices": ["Atlas A2"],
+          "model": "ACT",
+          "modes": ["training"],
+          "prefix": "manipulation/act/train/",
+          "software_versions": {"cann": ["8.3.0+"], "framework": ["LeRobot@58f70b6bd370864139a3795ac3497a9eae8c42d5"], "pytorch": [], "torch_npu": []}
+        },
+        {
+          "devices": ["Atlas A2"],
+          "model": "SmolVLA",
+          "modes": ["training"],
+          "prefix": "manipulation/smolvla/train/",
+          "software_versions": {"cann": ["8.3.0+"], "framework": ["LeRobot@58f70b6bd370864139a3795ac3497a9eae8c42d5"], "pytorch": [], "torch_npu": []}
+        },
+        {
+          "devices": ["Ascend 310P"],
+          "model": "DiffusionPolicy",
+          "modes": ["om_inference"],
+          "prefix": "manipulation/diffusion-policy/infer_with_om/",
+          "software_versions": {"cann": ["8.0.0-8.2.RC1"], "framework": ["LeRobot"], "pytorch": [], "torch_npu": []}
+        },
+        {
+          "devices": ["Ascend 310P"],
+          "model": "OpenVLA",
+          "modes": ["om_inference"],
+          "prefix": "manipulation/openvla/infer_with_om/",
+          "software_versions": {"cann": ["8.0.0-8.2.RC1"], "framework": ["OpenVLA"], "pytorch": [], "torch_npu": []}
+        },
+        {
+          "devices": ["Atlas A3"],
+          "model": "Isaac-GR00T N1.6",
+          "modes": ["online_inference"],
+          "prefix": "manipulation/Isaac-GR00T/",
+          "software_versions": {"cann": ["8.3.RC1"], "framework": ["Isaac-GR00T"], "pytorch": ["2.7.1"], "torch_npu": ["2.7.1"]}
+        },
+        {
+          "devices": ["Ascend 310P"],
+          "model": "Spirit v1.5",
+          "modes": ["online_inference"],
+          "prefix": "manipulation/spirit-v1.5/infer_with_torch/",
+          "software_versions": {"cann": ["8.3.RC1"], "framework": ["Spirit v1.5"], "pytorch": ["2.7.1"], "torch_npu": ["2.7.1"]}
+        },
+        {
+          "devices": ["Atlas A2"],
+          "model": "PI0",
+          "modes": ["online_inference"],
+          "prefix": "docs/manipulation/pi0/infer_with_torch/",
+          "software_versions": {"cann": ["8.3.RC1"], "framework": ["LeRobot"], "pytorch": ["2.1.0"], "torch_npu": ["2.1.0.post12"]}
+        },
+        {
+          "devices": ["Ascend 310P"],
+          "model": "PI0",
+          "modes": ["om_inference"],
+          "prefix": "docs/manipulation/pi0/infer_with_om/",
+          "software_versions": {"cann": ["8.0.0-8.2.RC1"], "framework": ["LeRobot"], "pytorch": [], "torch_npu": []}
+        },
+        {
+          "devices": ["Atlas A3"],
+          "model": "Isaac-GR00T N1.6",
+          "modes": ["online_inference"],
+          "prefix": "docs/manipulation/GR00T N1.6/",
+          "software_versions": {"cann": ["8.3.RC1"], "framework": ["Isaac-GR00T"], "pytorch": ["2.7.1"], "torch_npu": ["2.7.1"]}
+        }
+      ],
+      "remote_url": "https://gitcode.com/cann/cann-recipes-embodied-ai.git",
+      "usage_restrictions": "Internal non-commercial reference only. Preserve upstream license, disclaimer, and third-party notices; do not republish upstream text, patches, or code as N2S-owned content."
+    }
+  ]
+}

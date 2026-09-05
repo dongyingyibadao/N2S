@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "items": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "devices": {"items": {"type": "string"}, "type": "array"},
+          "id": {"pattern": "^[a-z0-9][a-z0-9._-]+$", "type": "string"},
+          "models": {"items": {"type": "string"}, "minItems": 1, "type": "array"},
+          "modes": {"items": {"type": "string"}, "minItems": 1, "type": "array"},
+          "n2s_validation": {
+            "additionalProperties": false,
+            "properties": {
+              "level": {"enum": ["not_verified", "module", "integration", "model"], "type": "string"},
+              "status": {"enum": ["upstream_documented", "n2s_verified"], "type": "string"}
+            },
+            "required": ["level", "status"],
+            "type": "object"
+          },
+          "official_claim": {
+            "additionalProperties": false,
+            "properties": {
+              "references": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "path": {"minLength": 1, "type": "string"},
+                    "revision": {"pattern": "^[0-9a-f]{40}$", "type": "string"},
+                    "source": {"type": "string"}
+                  },
+                  "required": ["path", "revision", "source"],
+                  "type": "object"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "status": {"const": "official_statement"},
+              "summary": {"minLength": 1, "type": "string"}
+            },
+            "required": ["status", "summary", "references"],
+            "type": "object"
+          },
+          "performance_context": {
+            "additionalProperties": false,
+            "properties": {
+              "batch": {"type": ["string", "null"]},
+              "card_count": {"minimum": 1, "type": ["integer", "null"]},
+              "dataset": {"type": ["string", "null"]},
+              "device": {"type": "string"},
+              "measurement": {"type": "string"},
+              "model": {"type": "string"},
+              "value": {"type": "string"}
+            },
+            "required": ["device", "card_count", "batch", "model", "dataset", "measurement", "value"],
+            "type": "object"
+          },
+          "rule_relations": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "rationale": {"minLength": 1, "type": "string"},
+                "relation": {"enum": ["supports", "related", "counterevidence", "different_scope"], "type": "string"},
+                "rule_id": {"type": "string"}
+              },
+              "required": ["rule_id", "relation", "rationale"],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "scope": {"items": {"type": "string"}, "minItems": 1, "type": "array"},
+          "software_versions": {
+            "additionalProperties": false,
+            "properties": {
+              "cann": {"items": {"type": "string"}, "type": "array"},
+              "framework": {"items": {"type": "string"}, "type": "array"},
+              "pytorch": {"items": {"type": "string"}, "type": "array"},
+              "torch_npu": {"items": {"type": "string"}, "type": "array"}
+            },
+            "required": ["cann", "framework", "pytorch", "torch_npu"],
+            "type": "object"
+          },
+          "title": {"minLength": 1, "type": "string"},
+          "type": {"enum": ["recipe", "capability", "known_issue", "version_matrix", "performance_claim"], "type": "string"}
+        },
+        "required": ["id", "type", "title", "scope", "models", "modes", "devices", "software_versions", "official_claim", "n2s_validation", "rule_relations"],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "schema_version": {"const": "1.0.0"}
+  },
+  "required": ["schema_version", "items"],
+  "type": "object"
+}

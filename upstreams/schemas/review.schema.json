@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "decision": {"const": "accept"},
+    "license_checked": {"const": true},
+    "limitations": {"items": {"type": "string"}, "minItems": 1, "type": "array"},
+    "reviewed_at": {"format": "date-time", "type": "string"},
+    "reviewer": {"minLength": 1, "type": "string"},
+    "remote_url": {"minLength": 1, "type": "string"},
+    "revision": {"pattern": "^[0-9a-f]{40}$", "type": "string"},
+    "source": {"type": "string"},
+    "summary": {"minLength": 1, "type": "string"}
+  },
+  "required": ["decision", "license_checked", "limitations", "remote_url", "reviewed_at", "reviewer", "revision", "source", "summary"],
+  "type": "object"
+}

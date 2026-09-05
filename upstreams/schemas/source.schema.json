@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "sources": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "acceptance_review": {"type": "string"},
+          "accepted_license_fingerprints": {
+            "additionalProperties": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+            "type": "object"
+          },
+          "accepted_revision": {"pattern": "^[0-9a-f]{40}$", "type": "string"},
+          "authority": {"enum": ["official_upstream"], "type": "string"},
+          "branch": {"minLength": 1, "type": "string"},
+          "browse_url_template": {"type": "string"},
+          "deep_index_scopes": {"items": {"type": "string"}, "minItems": 1, "type": "array"},
+          "id": {"pattern": "^[a-z0-9][a-z0-9._-]+$", "type": "string"},
+          "index_policy": {"enum": ["all_files_and_markdown_titles"], "type": "string"},
+          "license_files": {"items": {"type": "string"}, "minItems": 1, "type": "array"},
+          "metadata_rules": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "devices": {"items": {"type": "string"}, "type": "array"},
+                "model": {"type": "string"},
+                "modes": {"items": {"type": "string"}, "minItems": 1, "type": "array"},
+                "prefix": {"minLength": 1, "type": "string"},
+                "software_versions": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "cann": {"items": {"type": "string"}, "type": "array"},
+                    "framework": {"items": {"type": "string"}, "type": "array"},
+                    "pytorch": {"items": {"type": "string"}, "type": "array"},
+                    "torch_npu": {"items": {"type": "string"}, "type": "array"}
+                  },
+                  "required": ["cann", "framework", "pytorch", "torch_npu"],
+                  "type": "object"
+                }
+              },
+              "required": ["prefix", "model", "modes", "devices", "software_versions"],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "remote_url": {"pattern": "^(https://|file://|/)", "type": "string"},
+          "usage_restrictions": {"minLength": 1, "type": "string"}
+        },
+        "required": ["id", "remote_url", "branch", "accepted_revision", "authority", "deep_index_scopes", "license_files", "usage_restrictions", "index_policy", "browse_url_template", "accepted_license_fingerprints", "acceptance_review", "metadata_rules"],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    }
+  },
+  "required": ["schema_version", "sources"],
+  "type": "object"
+}
