@@ -9,12 +9,15 @@
   "evidence_paths": [
     "rules/pytorch.npu.compile-capability-fallback/evidence/summary.yaml",
     "cases/MINT/evidence/npu/runtime_rule_ab.json",
+    "cases/MINT/evidence/cuda/capture-20260905T081517Z/runtime_rule_ab.json",
+    "cases/MINT/evidence/cuda/capture-20260905T081517Z/candidate_checks.json",
     "cases/MINT/evidence/npu/compile_model_inference_ab.json",
     "cases/MINT/evidence/npu/compile_model_training_ab.json",
     "cases/validation-projects/reports/static_validation.json"
   ],
   "observed_scope": [
     "Ascend910B2C torch 2.9.0 plus torch-npu 2.9.0 environment with Triton absent",
+    "RTX 4090 torch 2.9.0+cu128 environment where Triton imports and compile/eager both pass with identical fixed-input output",
     "LeRobot PI0 and SmolVLA fixed-revision static adapter validation",
     "OpenPI PI0 explicitly rejected because constructor-time device proof is absent"
   ],
@@ -26,23 +29,24 @@
     "memory": null
   },
   "required_before_decision": [
-    "Run and return the fixed-input CUDA block A/B capture",
     "Add a successful NPU compile control in a supported environment",
     "Cover a second torch and torch-npu tuple and add weight-free integration for each approved adapter",
-    "Approve environment-tuple scope and eager fallback performance/memory policy"
+    "Freeze the environment-tuple scope and eager fallback performance/memory policy, then independently rerun it",
+    "Repeat CUDA timing on an idle device before making a CUDA performance claim"
   ],
   "rollback": "Remove the NPU eager guard only after compile passes the same fixed functional, numerical, timing, and memory protocol.",
   "decision": "remain_candidate",
   "approver": "codex-agent-evidence-review",
-  "decided_at": "2026-09-05T07:03:46Z",
+  "decided_at": "2026-09-05T11:54:33Z",
   "approved_evidence_level": null,
   "approved_scope": null,
   "limitations": [
     "The current NPU failure proves missing Triton only",
-    "The rule must not be approved as a universal statement that NPU compile is unavailable"
+    "The rule must not be approved as a universal statement that NPU compile is unavailable",
+    "CUDA timing was captured under concurrent GPU load and is not suitable for freezing a performance threshold"
   ],
   "evidence_revision": {
-    "repository_commit": "30ff7adb7eaa20f19bd6131366426e7ab247559b",
-    "registry_sha256": "c8a33f0544cc253f6305a59f534c24bb485087e5bd48f7beca4530b5bf2c30f7"
+    "repository_commit": "917a826ce47d94886cd113d1e9c4ebd1e451eeeb",
+    "registry_sha256": "eb05d6b3706107912eca6ad4f0538d6a33a3223213457016cfe2e66709d56760"
   }
 }

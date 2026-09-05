@@ -9,12 +9,14 @@
   "evidence_paths": [
     "rules/pytorch.npu.sinusoidal-fp64-fallback/evidence/summary.yaml",
     "cases/MINT/evidence/npu/runtime_rule_ab.json",
+    "cases/MINT/evidence/cuda/capture-20260905T081517Z/runtime_rule_ab.json",
     "cases/MINT/evidence/npu/sinusoidal_fp64_model_inference_ab.json",
     "cases/MINT/evidence/npu/sinusoidal_fp64_model_training_ab.json",
     "cases/validation-projects/reports/static_validation.json"
   ],
   "observed_scope": [
     "Ascend910B2C torch 2.9.0 plus torch-npu 2.9.0 supports all tested FP64 sinusoidal shapes",
+    "RTX 4090 torch 2.9.0+cu128 supports all tested FP64 sinusoidal shapes and does not require a capability fallback",
     "FP32 is much faster for one 4096x1024 workload but changes numerical error by shape/range",
     "LeRobot shared helper and OpenPI local helper fixed-revision static adapter validation"
   ],
@@ -26,25 +28,27 @@
     "memory": null
   },
   "required_before_decision": [
-    "Run and return the fixed-input CUDA block A/B capture",
-    "Choose whether the rule is a version-specific capability fallback or a performance optimization",
+    "Replace the rejected capability rationale with a separately reviewed shape-scoped performance rule before reconsideration",
     "Execute the matched helper through a weight-free integration probe for every adapter intended for approval",
-    "Approve numerical limits separately for every declared dimension and period range",
+    "Freeze numerical limits separately for every declared dimension and period range and independently rerun them",
+    "Repeat CUDA timing on an idle device before making a CUDA performance claim",
     "Add model-level A/B only if a redesigned rule claims model outputs, training or model-level performance"
   ],
   "rollback": "Restore the MPS-only condition or remove the OpenPI NPU guard, then rerun on a backend whose FP64 path is verified.",
   "decision": "rejected",
   "approver": "codex-agent-evidence-review",
-  "decided_at": "2026-09-05T07:03:46Z",
+  "decided_at": "2026-09-05T11:54:33Z",
   "approved_evidence_level": null,
   "approved_scope": null,
   "limitations": [
     "Current evidence contradicts a universal capability-required fallback rationale",
     "The MINT full-model zero delta is vacuous because the matched helper call count is zero",
-    "The 1024-dimension wide-range max absolute error is 0.010269512865533403"
+    "The NPU 1024-dimension wide-range max absolute error is 0.010269512865533403",
+    "The CUDA 1024-dimension wide-range max absolute error is 0.008085543901095976",
+    "CUDA timing was captured under concurrent GPU load and is not suitable for freezing a performance threshold"
   ],
   "evidence_revision": {
-    "repository_commit": "30ff7adb7eaa20f19bd6131366426e7ab247559b",
-    "registry_sha256": "c8a33f0544cc253f6305a59f534c24bb485087e5bd48f7beca4530b5bf2c30f7"
+    "repository_commit": "917a826ce47d94886cd113d1e9c4ebd1e451eeeb",
+    "registry_sha256": "eb05d6b3706107912eca6ad4f0538d6a33a3223213457016cfe2e66709d56760"
   }
 }

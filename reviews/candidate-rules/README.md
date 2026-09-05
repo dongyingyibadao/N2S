@@ -1,22 +1,20 @@
 # Candidate rule maintainer packet
 
 This packet records an evidence-only agent assessment. Each JSON file is independent and uses `agent_assessed`
-to distinguish the recorded decision from a pending human-maintainer review. The assessment may choose
-`approved`, `remain_candidate`, or `rejected` for one rule without changing the others.
+to identify the reviewing subject. The agent assessment may choose `approved`, `remain_candidate`, or `rejected`
+for one rule without changing the others; repository-owner confirmation is still required to enable `auto_apply`.
+
+The JSON reviews were reassessed against RTX 4090 CUDA evidence commit `917a826` on 2026-09-05. The capture closes
+the CUDA module functional and numerical blocker. Its timing was collected under concurrent keepalive load, so it
+is retained as raw evidence but cannot freeze a CUDA performance threshold.
 
 Current engineering recommendations:
 
-The review JSON files are pinned to the pre-CUDA evidence revision recorded inside each file. A verified RTX 4090
-module capture was added on 2026-09-05 after that assessment. It satisfies the functional and numerical CUDA block
-run item; its timing was collected under a concurrent keepalive load and must be repeated on an idle device before
-performance thresholds are frozen. The decisions below remain unchanged, but the JSON packets have not yet been
-reassessed against the new capture.
-
 | Rule | Recommendation | Main reason |
 |---|---|---|
-| cache dtype alignment | remain candidate | MINT candidate and CUDA block work, but the failing model baseline gives no paired delta and adapter integration is pending |
-| compile capability fallback | remain candidate | one environment proves missing Triton only; no successful NPU compile control exists |
-| sinusoidal FP64 fallback | rejected in the current capability scope | tested NPU FP64 works; any replacement rule must be redesigned as a shape-scoped performance candidate |
+| cache dtype alignment | remain candidate | MINT candidate and CUDA block work; exact adapter integration, thresholds and an independent rerun are pending |
+| compile capability fallback | remain candidate | CUDA compile succeeds, while the only NPU failure proves missing Triton; a successful NPU control and second environment tuple are absent |
+| sinusoidal FP64 fallback | rejected in the current capability scope | tested NPU and CUDA FP64 both work; any replacement must be a separately reviewed shape-scoped performance rule |
 
 No rule is approved, so all thresholds, `approved_evidence_level`, and `approved_scope` remain null and every
 manifest remains `candidate` with `auto_apply: false`. The entries in `required_before_decision` are the evidence required before a future
