@@ -40,7 +40,7 @@
     "The rule must not be approved as a universal statement that NPU compile is unavailable"
   ],
   "evidence_revision": {
-    "repository_commit": null,
+    "repository_commit": "30ff7adb7eaa20f19bd6131366426e7ab247559b",
     "registry_sha256": "076d2d556f019809e408d3dae1445ee551fe28fbf72662edb1b2df72079f7311"
   }
 }
