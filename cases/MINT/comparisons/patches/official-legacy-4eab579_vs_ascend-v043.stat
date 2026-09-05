@@ -1,0 +1,14 @@
+ .../src/lerobot_policy_mint/configuration_mint.py  |  92 ++++-----------
+ .../package/src/lerobot_policy_mint/mint_utils.py  |  22 +++-
+ .../src/lerobot_policy_mint/modeling_mint.py       |  22 ++--
+ .../project/README.md                              |  17 +--
+ .../project/requirements.txt => /dev/null          |   4 -
+ .../project/scripts/eval_v043_aligned.sh           |  75 +++++++++++++
+ .../scripts/eval_v043_aligned_task_sharded_8npu.sh |  82 ++++++++++++++
+ .../project/scripts/lerobot_eval_aligned.py        |  35 ++++++
+ .../project/scripts/prepare_mint_base_v043.sh      |  45 ++++++++
+ .../project/scripts/run_mint_v043_campaign.sh      |  47 ++++++++
+ .../project/scripts/run_pi05_v043_campaign.sh      |  31 +++++
+ .../project/scripts/train_mint_v043.sh             | 125 +++++++++++++++++++++
+ .../project/scripts/train_pi05_v043.sh             | 123 ++++++++++++++++++++
+ 13 files changed, 619 insertions(+), 101 deletions(-)

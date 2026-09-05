@@ -1,0 +1,41 @@
+ .../package/README.md => /dev/null                 |   9 -
+ .../package/pyproject.toml                         |  11 +-
+ .../package/src/lerobot_policy_mint/__init__.py    |  35 +-
+ .../src/lerobot_policy_mint/configuration_mint.py  | 132 +-----
+ .../package/src/lerobot_policy_mint/mint_utils.py  |  22 +-
+ .../src/lerobot_policy_mint/modeling_mint.py       | 262 +++++------
+ .../src/lerobot_policy_mint/processor_mint.py      |   3 +-
+ .../project/README.md                              | 179 ++------
+ .../project/requirements.txt => /dev/null          |  21 -
+ .../project/scripts/EVALUATION_PROTOCOLS.md        |  41 ++
+ /dev/null => ascend-v062/project/scripts/README.md | 201 +++++++++
+ .../project/scripts/VERSION_MATRIX.md              |  35 ++
+ .../project/scripts/assemble_pi05_base_upload.sh   |  73 +++
+ .../project/scripts/collect_npu_telemetry.sh       |  32 ++
+ .../project/scripts/download_mint_assets.sh        |  50 +++
+ /dev/null => ascend-v062/project/scripts/env.sh    |  39 ++
+ .../project/scripts/eval_joint_formal_8npu.sh      |  76 ++++
+ .../project/scripts/eval_libero.sh                 |  66 +++
+ .../project/scripts/eval_libero_benchmark.sh       |  45 ++
+ .../project/scripts/eval_mint_official_4npu.sh     | 102 +++++
+ .../scripts/finalize_libero_formal_campaign.sh     | 122 ++++++
+ .../project/scripts/generate_libero_report.py      | 488 +++++++++++++++++++++
+ .../scripts/generate_mint_runtime_report.py        | 123 ++++++
+ .../project/scripts/hash_safetensors_tensors.py    |  67 +++
+ .../project/scripts/launch_dual_12h.sh             | 123 ++++++
+ .../project/scripts/launch_joint_8npu_12h.sh       | 139 ++++++
+ .../project/scripts/launch_mint_4npu_12h.sh        | 155 +++++++
+ .../project/scripts/launch_mint_8npu_12h.sh        |  11 +
+ .../project/scripts/monitor_dual_training.sh       |  48 ++
+ .../project/scripts/preflight_mint.py              | 116 +++++
+ .../scripts/queue_mint_dual_framework_report.sh    |  93 ++++
+ .../project/scripts/record_environment.sh          |  84 ++++
+ .../project/scripts/resume_libero_train.sh         |  42 ++
+ .../project/scripts/resume_mint_reproduction.sh    |  66 +++
+ .../project/scripts/smoke_mint_model.py            | 183 ++++++++
+ .../project/scripts/smoke_mint_ops.py              |  57 +++
+ .../project/scripts/train_libero_reproduction.sh   | 137 ++++++
+ .../project/scripts/train_libero_smoke.sh          |  85 ++++
+ .../project/scripts/validate_mint_base_resume.sh   | 139 ++++++
+ .../project/scripts/verify_training_stability.py   | 138 ++++++
+ 40 files changed, 3438 insertions(+), 412 deletions(-)

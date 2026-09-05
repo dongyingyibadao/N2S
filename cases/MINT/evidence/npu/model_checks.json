@@ -1,0 +1,321 @@
+{
+  "schema_version": "1.0.0",
+  "case": "MINT",
+  "generated_at": "2026-08-30T09:28:53.981800+00:00",
+  "promotion_status": "exploratory",
+  "backend": "npu",
+  "environment": {
+    "device": "Ascend910B2C",
+    "torch": "2.9.0+cpu",
+    "torch_npu": "2.9.0",
+    "source": "N2S snapshots plus content-addressed prior run evidence"
+  },
+  "tests": [
+    {
+      "id": "snapshot_import_v043",
+      "classification": "framework_api",
+      "status": "passed",
+      "evidence_status": "npu_passed",
+      "seed": 42,
+      "input": {
+        "expected_source": "/inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/N2S/cases/MINT/sources/ascend-v043/lerobot_policy_mint/src"
+      },
+      "checkpoint": null,
+      "samples": [],
+      "metrics": {
+        "all_modules_from_snapshot": true,
+        "imported_files": {
+          "package": "/inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/N2S/cases/MINT/sources/ascend-v043/lerobot_policy_mint/src/lerobot_policy_mint/__init__.py",
+          "configuration": "/inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/N2S/cases/MINT/sources/ascend-v043/lerobot_policy_mint/src/lerobot_policy_mint/configuration_mint.py",
+          "mint_utils": "/inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/N2S/cases/MINT/sources/ascend-v043/lerobot_policy_mint/src/lerobot_policy_mint/mint_utils.py",
+          "modeling": "/inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/N2S/cases/MINT/sources/ascend-v043/lerobot_policy_mint/src/lerobot_policy_mint/modeling_mint.py",
+          "processor": "/inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/N2S/cases/MINT/sources/ascend-v043/lerobot_policy_mint/src/lerobot_policy_mint/processor_mint.py"
+        }
+      },
+      "memory": {},
+      "exception": null,
+      "acceptance": "record_only_no_unified_threshold"
+    },
+    {
+      "id": "snapshot_import_v062",
+      "classification": "framework_api",
+      "status": "passed",
+      "evidence_status": "npu_passed",
+      "seed": 42,
+      "input": {
+        "expected_source": "/inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/N2S/cases/MINT/sources/ascend-v062/lerobot_policy_mint/src"
+      },
+      "checkpoint": null,
+      "samples": [],
+      "metrics": {
+        "all_modules_from_snapshot": true,
+        "imported_files": {
+          "package": "/inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/N2S/cases/MINT/sources/ascend-v062/lerobot_policy_mint/src/lerobot_policy_mint/__init__.py",
+          "configuration": "/inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/N2S/cases/MINT/sources/ascend-v062/lerobot_policy_mint/src/lerobot_policy_mint/configuration_mint.py",
+          "mint_utils": "/inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/N2S/cases/MINT/sources/ascend-v062/lerobot_policy_mint/src/lerobot_policy_mint/mint_utils.py",
+          "modeling": "/inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/N2S/cases/MINT/sources/ascend-v062/lerobot_policy_mint/src/lerobot_policy_mint/modeling_mint.py",
+          "processor": "/inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/N2S/cases/MINT/sources/ascend-v062/lerobot_policy_mint/src/lerobot_policy_mint/processor_mint.py"
+        }
+      },
+      "memory": {},
+      "exception": null,
+      "acceptance": "record_only_no_unified_threshold"
+    },
+    {
+      "id": "snapshot_operator_smoke",
+      "classification": "operator_implementation",
+      "status": "passed",
+      "evidence_status": "npu_passed",
+      "seed": 42,
+      "input": {
+        "source": "ascend-v062 snapshot",
+        "seed": 42
+      },
+      "checkpoint": null,
+      "samples": [],
+      "metrics": {
+        "device": "Ascend910B2C",
+        "area_shape": [
+          2,
+          3,
+          16,
+          16
+        ],
+        "bilinear_shape": [
+          2,
+          3,
+          24,
+          24
+        ],
+        "conv1d_shape": [
+          2,
+          48,
+          16
+        ],
+        "embedding_shape": [
+          2,
+          16,
+          32
+        ],
+        "multinomial_shape": [
+          32,
+          1
+        ],
+        "finite_gradients": true
+      },
+      "memory": {},
+      "exception": null,
+      "acceptance": "record_only_no_unified_threshold"
+    },
+    {
+      "id": "random_weight_inference",
+      "classification": "mint_specific_change",
+      "status": "passed",
+      "evidence_status": "npu_passed",
+      "seed": 42,
+      "input": {
+        "batch_size": 1,
+        "image_count": 2,
+        "image_dtype": "torch.float32",
+        "token_length": 32,
+        "scope": "random-weight structure-only smoke; not a quality result"
+      },
+      "checkpoint": null,
+      "samples": [
+        5.5174
+      ],
+      "metrics": {
+        "mode": "inference",
+        "build_seconds": 40.2824,
+        "warmup_runs": 0,
+        "timed_runs": 1,
+        "optimizer_step": false,
+        "run_seconds_mean": 5.5174,
+        "run_seconds_median": 5.5174,
+        "run_seconds_p95": 5.5174,
+        "run_seconds_min": 5.5174,
+        "run_seconds_max": 5.5174,
+        "action_shape": [
+          1,
+          16,
+          7
+        ],
+        "intention_shape": [
+          1,
+          32
+        ],
+        "finite_actions": true
+      },
+      "memory": {
+        "peak_allocated_gib": 7.4562
+      },
+      "exception": null,
+      "acceptance": "record_only_no_unified_threshold"
+    },
+    {
+      "id": "random_weight_training",
+      "classification": "operator_implementation",
+      "status": "passed",
+      "evidence_status": "npu_passed",
+      "seed": 42,
+      "input": {
+        "batch_size": 1,
+        "image_count": 2,
+        "image_dtype": "torch.float32",
+        "token_length": 32,
+        "scope": "random-weight structure-only smoke; not a quality result"
+      },
+      "checkpoint": null,
+      "samples": [
+        6.6575
+      ],
+      "metrics": {
+        "mode": "training",
+        "build_seconds": 39.716,
+        "warmup_runs": 0,
+        "timed_runs": 1,
+        "optimizer_step": true,
+        "run_seconds_mean": 6.6575,
+        "run_seconds_median": 6.6575,
+        "run_seconds_p95": 6.6575,
+        "run_seconds_min": 6.6575,
+        "run_seconds_max": 6.6575,
+        "loss": 6.38011360168457,
+        "finite_loss": true,
+        "finite_output_gradient": true
+      },
+      "memory": {
+        "peak_allocated_gib": 33.9021
+      },
+      "exception": null,
+      "acceptance": "record_only_no_unified_threshold"
+    },
+    {
+      "id": "checkpoint_inference",
+      "classification": "checkpoint_release_semantics",
+      "status": "passed",
+      "evidence_status": "npu_passed",
+      "seed": 42,
+      "input": {
+        "batch_size": 1,
+        "image_count": 2,
+        "image_dtype": "torch.float32",
+        "token_length": 32,
+        "scope": "pretrained checkpoint: /inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/workspace/models/mint_libero"
+      },
+      "checkpoint": {
+        "path": "/inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/workspace/models/mint_libero",
+        "sha256": "e0248497a1a9b750249ac65945baa53ab2ad57a8e9941229a7bf3ed0e6d218c9"
+      },
+      "samples": [
+        5.694
+      ],
+      "metrics": {
+        "mode": "inference",
+        "build_seconds": 41.8845,
+        "warmup_runs": 0,
+        "timed_runs": 1,
+        "optimizer_step": false,
+        "run_seconds_mean": 5.694,
+        "run_seconds_median": 5.694,
+        "run_seconds_p95": 5.694,
+        "run_seconds_min": 5.694,
+        "run_seconds_max": 5.694,
+        "action_shape": [
+          1,
+          16,
+          7
+        ],
+        "intention_shape": [
+          1,
+          32
+        ],
+        "finite_actions": true
+      },
+      "memory": {
+        "peak_allocated_gib": 7.4562
+      },
+      "exception": null,
+      "acceptance": "record_only_no_unified_threshold"
+    },
+    {
+      "id": "official_checkpoint_dataset_single_update",
+      "classification": "checkpoint_release_semantics",
+      "status": "passed",
+      "evidence_status": "npu_passed",
+      "seed": 42,
+      "input": {
+        "dataset": "lerobot/libero revision a1aaacb7f6cd6ee5fb43120f673cebb0cfea7dd4 episode 0",
+        "batch_size": 1
+      },
+      "checkpoint": {
+        "path": "/inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/workspace/models/mint_libero/model.safetensors",
+        "size_bytes": 7054844856,
+        "sha256": "e0248497a1a9b750249ac65945baa53ab2ad57a8e9941229a7bf3ed0e6d218c9"
+      },
+      "samples": [
+        7.384
+      ],
+      "metrics": {
+        "status": "passed",
+        "dataset": "lerobot/libero revision a1aaacb7f6cd6ee5fb43120f673cebb0cfea7dd4 episode 0",
+        "batch_size": 1,
+        "optimizer_updates": 1,
+        "loss_log_3dp": 0.0,
+        "gradient_norm": 0.087,
+        "update_seconds": 7.116,
+        "step_seconds": 7.384,
+        "peak_memory_gb": 33.92,
+        "end_of_training_seen": true,
+        "raw_log_path": "/inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/workspace/outputs/mint/train/mint_smoke_actual_20260829/train.log",
+        "raw_log_sha256": "7d77f39873282052409a99a0edadf2f15805236647fe9c24e19e8494be6cb78e"
+      },
+      "memory": {
+        "peak_allocated_gb": 33.92
+      },
+      "exception": null,
+      "acceptance": "record_only_no_unified_threshold"
+    },
+    {
+      "id": "official_checkpoint_libero_three_round",
+      "classification": "mint_specific_change",
+      "status": "passed",
+      "evidence_status": "npu_passed",
+      "seed": 42,
+      "input": {
+        "suite": "libero_spatial",
+        "task_id": 0,
+        "scope": "functional smoke only, not a benchmark"
+      },
+      "checkpoint": {
+        "path": "/inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/workspace/models/mint_libero/model.safetensors",
+        "size_bytes": 7054844856,
+        "sha256": "e0248497a1a9b750249ac65945baa53ab2ad57a8e9941229a7bf3ed0e6d218c9"
+      },
+      "samples": [
+        20.63913671175639,
+        20.63913671175639,
+        20.63913671175639
+      ],
+      "metrics": {
+        "status": "passed",
+        "scope": "functional smoke only, not a benchmark",
+        "suite": "libero_spatial",
+        "task_id": 0,
+        "episodes": 3,
+        "successes": 3,
+        "success_percent": 100.0,
+        "eval_seconds": 61.91740918159485,
+        "mean_episode_seconds": 20.63913671175639,
+        "validated_videos": 3,
+        "raw_eval_info_path": "/inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/workspace/outputs/reproduction/mint_infer_20260829/eval_info.json",
+        "raw_eval_info_sha256": "fcc1ecf21b8b132cc517725d49410131a3b004c47ee0fb75cd8463cd663b5628",
+        "raw_video_validation_path": "/inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/workspace/outputs/reproduction/mint_infer_20260829/video_validation.json",
+        "raw_video_validation_sha256": "337332340e8110d171fd9eb4ecc8a5575f6bde23b20926dd1f19bc7cd27c9118"
+      },
+      "memory": {},
+      "exception": null,
+      "acceptance": "record_only_no_unified_threshold"
+    }
+  ]
+}

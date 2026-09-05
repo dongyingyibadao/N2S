@@ -1,0 +1,57 @@
+schema_version: 1.0.0
+rule_id: pytorch.npu.sinusoidal-fp64-fallback
+status: exploratory_source_evidence
+sources:
+  - path: ../../../cases/MINT/comparisons/patches/supplemental-official-declared-59fa23d_vs_ascend-v043-package.patch
+    result: exact_source_change_recovered
+  - path: ../../../cases/MINT/evidence/npu/candidate_checks.json
+    test_id: sinusoidal_fp32_fallback
+    result: passed_fixed_input_metrics_recorded
+  - path: ../../../cases/MINT/evidence/npu/runtime_rule_ab.json
+    result: npu_fp64_and_fp32_both_passed_three_shapes_with_timing_and_memory
+  - path: ../../../cases/MINT/evidence/npu/sinusoidal_fp64_model_inference_ab.json
+    result: fixed_checkpoint_pair_passed_but_matched_helper_call_count_zero
+  - path: ../../../cases/MINT/evidence/npu/sinusoidal_fp64_model_training_ab.json
+    result: training_pair_passed_but_matched_helper_call_count_zero
+  - path: ../../../cases/validation-projects/reports/static_validation.json
+    project: LeRobot@4aaff99be4a1d81568c08c8f0296b41b40c99ec4
+    result: shared_safe_dtype_adapter_matched_and_codemod_validated
+  - path: ../../../cases/validation-projects/reports/static_validation.json
+    project: OpenPI@215abfb217dbac7d5f1273282331b9b1866c0479
+    result: local_safe_dtype_adapter_matched_and_codemod_validated
+observations:
+  functional:
+    npu_fp64_baseline_all_cases_passed: true
+    fallback_functionally_required_in_this_environment: false
+  dimension_256_period_0_004_to_4:
+    max_abs_error: 0.00011957985683264116
+    max_relative_error: 66600921.756367855
+    rmse: 0.000009874227330530374
+    cosine_similarity: 0.9999999999025011
+  dimension_1024_period_0_0001_to_10000:
+    max_abs_error: 0.010269512865533403
+    rmse: 0.0003950577162775681
+    cosine_similarity: 0.9999998439294
+  performance_dimension_4096_period_0_0001_to_10000:
+    fp64_median_seconds: 0.07153288880363107
+    fp32_median_seconds: 0.00018164236098527908
+    fp32_fp64_median_ratio: 0.002539284572777645
+    fp32_minus_fp64_peak_increment_bytes: -41947136
+  fixed_checkpoint_model:
+    matched_helper_call_count: 0
+    action_logit_loss_gradient_delta: zero_but_vacuous
+    direct_source_helper_probe_max_abs_error: 0.00011957985683264116
+  interpretation: Current evidence supports a possible performance tradeoff, not a capability-required fallback.
+environment:
+  device: Ascend910B2C
+  torch: 2.9.0+cpu
+  torch_npu: 2.9.0
+static_external_coverage:
+  snapshot_hashes_verified: true
+  matched: [LeRobot-PI0, LeRobot-SmolVLA, OpenPI-PI0]
+  runtime_status: pending
+missing:
+  - CUDA reference run
+  - A model whose live forward path actually calls the matched helper
+  - Runtime and model-level validation for both non-MINT source snapshots
+  - Approved per-shape and period-range numerical thresholds

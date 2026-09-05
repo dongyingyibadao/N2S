@@ -1,0 +1,7 @@
+INFO 2026-08-29 10:16:38 ot_train.py:613 cfg.steps=1 (1)
+INFO 2026-08-29 10:16:38 ot_train.py:615 dataset.num_episodes=1
+INFO 2026-08-29 10:16:38 ot_train.py:621 num_learnable_params=3498686704 (3B)
+Loading model from: /inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/workspace/models/mint_libero
+All pretrained keys loaded successfully
+INFO 2026-08-29 10:16:45 ot_train.py:771 step:1 smpl:1 ep:0 epch:0.00 loss:0.000 grdn:0.087 lr:2.5e-05 data_s:0.180 prep_s:0.086 updt_s:7.116 step_s:7.384 smp/s:0 mem_gb:33.92 loss_mean_all_levels:0.000 loss_level_0:0.000 loss_level_1:0.000 loss_level_2:0.000
+INFO 2026-08-29 10:16:45 ot_train.py:908 End of training

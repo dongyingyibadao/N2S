@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://n2s.local/schemas/mint-result.schema.json",
+  "title": "N2S MINT experimental result",
+  "type": "object",
+  "required": ["schema_version", "case", "generated_at", "promotion_status", "backend", "environment", "tests"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "case": {"const": "MINT"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "promotion_status": {"const": "exploratory"},
+    "backend": {"enum": ["npu", "cuda"]},
+    "environment": {"type": "object"},
+    "tests": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "classification", "status", "evidence_status", "seed", "input", "checkpoint", "samples", "metrics", "exception", "acceptance"],
+        "properties": {
+          "id": {"type": "string"},
+          "classification": {
+            "enum": ["numerical_precision", "operator_implementation", "device_library_replacement", "framework_api", "checkpoint_release_semantics", "mint_specific_change"]
+          },
+          "status": {"enum": ["passed", "failed", "skipped", "pending_cuda"]},
+          "evidence_status": {"enum": ["static_analysis", "npu_passed", "npu_failed", "cuda_passed", "cuda_failed", "pending_cuda"]},
+          "seed": {"type": ["integer", "null"]},
+          "input": {"type": "object"},
+          "checkpoint": {"type": ["object", "null"]},
+          "samples": {"type": "array", "items": {"type": "number"}},
+          "metrics": {"type": "object"},
+          "memory": {"type": "object"},
+          "exception": {"type": ["object", "null"]},
+          "acceptance": {"const": "record_only_no_unified_threshold"}
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

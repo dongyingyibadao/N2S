@@ -1,0 +1,85 @@
+schema_version: 1.0.0
+id: pytorch.npu.compile-capability-fallback
+version: 0.1.0
+title: NPU torch.compile capability fallback
+status: candidate
+summary: Keep eager execution available when a recognized configuration would request an unverified NPU compile path.
+classification: operator_implementation
+risk: medium
+scope:
+  ecosystem: pytorch-torch-npu
+  frameworks: ["PyTorch torch.compile", "torch-npu (version-specific validation required)"]
+  devices: ["Ascend NPU"]
+  modes: [training, inference]
+  code_shapes:
+    - A config.compile_model if-block wraps one or more torch.compile assignments and config.device is available.
+source_cases:
+  - cases/MINT:disable-torch-compile-on-npu
+  - cases/validation-projects:lerobot-4aaff99-pi0-smolvla-static
+  - cases/validation-projects:openpi-215abfb-explicit-refusal
+applicability:
+  preconditions:
+    - Eager mode is a supported functional path.
+    - config.device identifies the actual execution backend.
+    - The exact compile block is recognized and has no existing else branch.
+  exclusions:
+    - Code where compilation is required for correctness.
+    - Dynamic device selection that is not represented by config.device.
+    - NPU environments whose compile path has already passed the rule-specific acceptance contract.
+  unknowns_fail_closed: true
+contract:
+  before:
+    - A bare config.compile_model condition controls torch.compile calls.
+  after:
+    - Compilation runs only when the configured device does not start with npu.
+    - A requested NPU compile emits a warning and continues in eager mode.
+  invariants:
+    - Non-NPU compile behavior and compile options are unchanged.
+    - The eager callable remains the original implementation.
+    - No project code imports N2S.
+change:
+  rationale: MINT compile failed in the recorded environment because the NPU Inductor path imported unavailable Triton support.
+  method: Add a backend capability fallback around the existing compile block and retain an observable eager branch.
+  before_example: 'if config.compile_model:'
+  after_example: 'if config.compile_model and not str(config.device).startswith("npu"):'
+impact:
+  functional: A compile request on a matched NPU configuration selects eager execution instead of failing during compilation.
+  numerical: Eager fixed-input execution passed; eager-vs-successful-NPU-compile output comparison is unavailable.
+  performance: Eager timing is recorded, but the missing-Triton baseline has no successful warm compile samples; no speed comparison is valid.
+  memory: Eager peak memory and failed compile allocation are recorded, but no successful same-NPU compile memory control exists.
+  benefits:
+    - Preserves an executable path in environments where NPU compile capability is absent.
+  drawbacks:
+    - Can hide a newly available compile optimization until the environment is revalidated.
+  side_effects:
+    - Adds logging import when absent and emits one construction-time warning for the matched branch.
+automation:
+  detector: detector.py
+  codemod: codemod.py
+  validator: validator.py
+  language: python-libcst-1.9.0
+  auto_apply: false
+  fail_closed: true
+verification:
+  acceptance_contract:
+    functional: Eager fixed inputs and model smoke pass; compile failure is reproduced for every approved environment tuple.
+    numerical: Eager outputs meet model-specific reference thresholds; thresholds are pending.
+    performance: Same-NPU eager/compile raw samples, median and p95 are recorded without a global speed threshold.
+    memory: Same-NPU eager/compile peak memory is recorded; an approved regression threshold is pending.
+  commands: []
+evidence:
+  - evidence/summary.yaml
+promotion:
+  requirements:
+    - MINT plus two independent non-MINT projects across at least two model families.
+    - At least two torch/torch-npu environment tuples, including one capability-probe outcome.
+    - Fixed model input numerical comparison and same-NPU warm timing/memory A/B.
+    - Approved scope must name versions where fallback is necessary; the principle must remain capability-based.
+  blockers:
+    - The current failure is caused by one environment's missing Triton dependency.
+    - Successful NPU compile control and same-device performance A/B are missing.
+    - LeRobot has static PI0/SmolVLA matches only; OpenPI is intentionally rejected because its constructor has no statically provable device field.
+    - Runtime evidence from a second independently matchable non-MINT project is missing.
+    - Target-project verification commands have not been approved.
+rollback: Remove the NPU guard after the compile path passes the same functional, numerical, timing and memory protocol.
+approval: null

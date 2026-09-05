@@ -1,0 +1,29 @@
+{
+  "scope": "pretrained checkpoint: /inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/workspace/models/mint_libero",
+  "mode": "inference",
+  "device": "Ascend910B2C",
+  "batch_size": 1,
+  "image_count": 2,
+  "image_dtype": "torch.float32",
+  "token_length": 32,
+  "build_seconds": 41.8845,
+  "warmup_runs": 0,
+  "timed_runs": 1,
+  "optimizer_step": false,
+  "run_seconds_mean": 5.694,
+  "run_seconds_median": 5.694,
+  "run_seconds_p95": 5.694,
+  "run_seconds_min": 5.694,
+  "run_seconds_max": 5.694,
+  "max_memory_gib": 7.4562,
+  "action_shape": [
+    1,
+    16,
+    7
+  ],
+  "intention_shape": [
+    1,
+    32
+  ],
+  "finite_actions": true
+}

@@ -1,0 +1,4428 @@
+diff --git a/official-main-691a5e6/package/README.md b/official-main-691a5e6/package/README.md
+deleted file mode 100644
+index dd5b021..0000000
+--- a/official-main-691a5e6/package/README.md
++++ /dev/null
+@@ -1,9 +0,0 @@
+-# LeRobot MINT policy
+-
+-This package registers the full MINT-4B policy as `--policy.type=mint`.
+-
+-```bash
+-pip install -e ./policy/lerobot_policy_mint
+-```
+-
+-See the repository README for tokenizer, training, and evaluation commands.
+diff --git a/official-main-691a5e6/package/pyproject.toml b/ascend-v062/package/pyproject.toml
+index 77f1369..7b6f933 100644
+--- a/official-main-691a5e6/package/pyproject.toml
++++ b/ascend-v062/package/pyproject.toml
+@@ -4,15 +4,14 @@ build-backend = "setuptools.build_meta"
+ 
+ [project]
+ name = "lerobot_policy_mint"
+-version = "0.2.0"
+-description = "MINT-4B policy plugin for LeRobot"
++version = "0.1.0"
++description = "Standalone MINT policy plugin for LeRobot"
+ readme = "README.md"
+ requires-python = ">=3.12"
+ dependencies = [
+-    "lerobot==0.5.1",
+-    "omegaconf>=2.3.0",
+-    "scipy>=1.10.1,<1.15",
+-    "einops>=0.8.0",
++    "lerobot>=0.6.2,<0.7.0",
++    "transformers>=5.4.0,<5.6.0",
++    "scipy>=1.10.1,<1.15"
+ ]
+ 
+ [tool.setuptools.packages.find]
+diff --git a/official-main-691a5e6/package/src/lerobot_policy_mint/__init__.py b/ascend-v062/package/src/lerobot_policy_mint/__init__.py
+index cf931fe..5e82a54 100644
+--- a/official-main-691a5e6/package/src/lerobot_policy_mint/__init__.py
++++ b/ascend-v062/package/src/lerobot_policy_mint/__init__.py
+@@ -1,14 +1,39 @@
+ #!/usr/bin/env python
+ 
+-"""MINT-4B policy plugin for LeRobot."""
++import os
+ 
+ try:
+-    import lerobot  # noqa: F401
++    import lerobot
+ except ImportError as exc:
+-    raise ImportError("Install lerobot==0.5.1 before using MINT.") from exc
++    raise ImportError(
++        "lerobot is not installed. Please install lerobot to use the MINT policy package."
++    ) from exc
+ 
+ from .configuration_mint import MINTConfig
+ from .modeling_mint import MINTPolicy
+-from .processor_mint import make_mint_pre_post_processors
++from .processor_mint import MINTPrepareStateTokenizerProcessorStep, make_mint_pre_post_processors
+ 
+-__all__ = ["MINTConfig", "MINTPolicy", "make_mint_pre_post_processors"]
++
++def _install_legacy_pi05_prompt_compatibility() -> None:
++    """Restore the processor semantics used to train the public MINT checkpoint."""
++    if os.environ.get("MINT_USE_CURRENT_PI05_STATE_PROMPT") == "1":
++        return
++
++    from lerobot.processor import ProcessorStepRegistry
++
++    # The public artifact serializes the LeRobot v0.4.3 PI0.5 registry name.
++    # That implementation padded LIBERO state from 8 to 32 dimensions before
++    # tokenization. LeRobot 0.6 no longer pads in this step, changing the prompt.
++    ProcessorStepRegistry._registry[  # noqa: SLF001
++        "pi05_prepare_state_tokenizer_processor_step"
++    ] = MINTPrepareStateTokenizerProcessorStep
++
++
++_install_legacy_pi05_prompt_compatibility()
++
++__all__ = [
++    "MINTConfig",
++    "MINTPolicy",
++    "MINTPrepareStateTokenizerProcessorStep",
++    "make_mint_pre_post_processors",
++]
+diff --git a/official-main-691a5e6/package/src/lerobot_policy_mint/configuration_mint.py b/ascend-v062/package/src/lerobot_policy_mint/configuration_mint.py
+index 0e8103b..c0ebdcf 100644
+--- a/official-main-691a5e6/package/src/lerobot_policy_mint/configuration_mint.py
++++ b/ascend-v062/package/src/lerobot_policy_mint/configuration_mint.py
+@@ -1,10 +1,7 @@
+ #!/usr/bin/env python
+ 
+-import os
+ from dataclasses import dataclass, field
+ 
+-
+-from omegaconf import OmegaConf
+ from lerobot.configs.policies import PreTrainedConfig
+ from lerobot.configs.types import FeatureType, NormalizationMode, PolicyFeature
+ from lerobot.optim.optimizers import AdamWConfig
+@@ -19,24 +16,34 @@ class MINTConfig(PreTrainedConfig):
+     paligemma_variant: str = "gemma_2b"
+     action_expert_variant: str = "gemma_300m"
+     train_expert_only: bool = False  # If True, only train the action expert, keep paligemma frozen
+-    dtype: str = "float32"  # Options: "bfloat16", "float32"
++    dtype: str = "bfloat16"  # Options: "bfloat16", "float32"
+ 
+     n_obs_steps: int = 1
+-    chunk_size: int = 32  # Must match the VQ-VAE horizon
+-    n_action_steps: int = 4  # Number of action steps to execute
++    chunk_size: int = 16  # Number of action steps to predict, alignment with multi-scale vqvae
++    n_action_steps: int = 1  # Number of action steps to execute
+     label_smooth: float = 0.0  # Label smoothing for action prediction loss
+-
++    # Shorter state and action vectors will be padded to these dimensions
+     max_state_dim: int = 32
+-    max_action_dim: int = 8
+-
+-    # Provide VQVAE checkpoint path. Runtime params are loaded from ckpt_dir/config.yaml.
++    max_action_dim: int = 7  # alignment with multi-scale vqvae config
++
++    # multi-scale vqvae config
++    codebook_size: int = 512
++    codebook_dim: int = 32
++    ch: int = 48
++    ch_mult: list[int] = field(default_factory=lambda: [2, 4, 8])
++    patch_nums: list[int] = field(default_factory=lambda: [1, 2, 4])
++    znorm: bool = True
++    quant_conv_ks: int = 3
++    quant_resi: float = 0.5
++    share_quant_resi: int = 0
++    patchwise: dict | None = field(default_factory=lambda: {
++        "enable": True,
++        "d_embed": 8,         
++        "grouped_depth": 2,    
++        "norm": "layer",
++    })
+     vqvae_name_or_path: str | None = ""
+ 
+-    # CNN VQ-VAE parameters. Runtime values are loaded from config.yaml.
+-    ch: int = 32
+-    ch_mult: tuple[int, ...] = (2, 4, 8)
+-    patchwise: dict | None = None
+-
+     image_resolution: tuple[int, int] = (
+         DEFAULT_IMAGE_SIZE,
+         DEFAULT_IMAGE_SIZE,
+@@ -51,7 +58,7 @@ class MINTConfig(PreTrainedConfig):
+         default_factory=lambda: {
+             "VISUAL": NormalizationMode.IDENTITY,
+             "STATE": NormalizationMode.QUANTILES,  # mint uses quantiles for state
+-            "ACTION": NormalizationMode.QUANTILES,
++            "ACTION": NormalizationMode.IDENTITY,  # mint uses identity for action
+         }
+     )
+ 
+@@ -72,16 +79,11 @@ class MINTConfig(PreTrainedConfig):
+     # For example, --steps=3000 will scale warmup to 100 and decay to 3000
+     scheduler_warmup_steps: int = 1_000
+     scheduler_decay_steps: int = 30_000
+-    scheduler_decay_lr: float = 2.5e-6
++    scheduler_decay_lr: float = 2.5e-5
+ 
+     def __post_init__(self):
+         super().__post_init__()
+ 
+-        if self.vqvae_name_or_path:
+-            self._load_vqvae_runtime_config()
+-        elif self.pretrained_path is None:
+-            raise ValueError("`vqvae_name_or_path` is required.")
+-
+         # Validate configuration
+         if self.n_action_steps > self.chunk_size:
+             raise ValueError(
+@@ -97,92 +99,6 @@ class MINTConfig(PreTrainedConfig):
+         if self.dtype not in ["bfloat16", "float32"]:
+             raise ValueError(f"Invalid dtype: {self.dtype}")
+ 
+-        if self.chunk_size <= 0:
+-            raise ValueError("chunk_size must be positive")
+-        if self.n_action_steps <= 0:
+-            raise ValueError("n_action_steps must be positive")
+-
+-    def _load_vqvae_runtime_config(self) -> None:
+-        if not self.vqvae_name_or_path:
+-            raise ValueError("`vqvae_name_or_path` is required.")
+-        if OmegaConf is None:
+-            raise ImportError("OmegaConf is required to load VQVAE runtime config.")
+-
+-        checkpoint_path, config_path = self._resolve_vqvae_paths(self.vqvae_name_or_path)
+-
+-        cfg = OmegaConf.to_container(OmegaConf.load(config_path), resolve=True)
+-        model_cfg = cfg.get("model_cfg", {})
+-        quant_cfg = cfg.get("quant_cfg", {})
+-
+-        runtime_cfg = {**model_cfg, **quant_cfg}
+-        if runtime_cfg.get("encoder_type", "cnn") != "cnn":
+-            raise ValueError("Only the CNN VQ-VAE backend is supported by this package.")
+-        for key in (
+-            "encoder_type",
+-            "d_model",
+-            "n_heads",
+-            "n_input_layers",
+-            "n_cross_layers",
+-            "n_latent_layers",
+-            "n_output_layers",
+-        ):
+-            runtime_cfg.pop(key, None)
+-
+-        for key, value in runtime_cfg.items():
+-            setattr(self, key, value)
+-
+-        horizon = cfg.get("horizon")
+-        if horizon is None:
+-            raise ValueError(f"Missing `horizon` in VQ-VAE config: {config_path}")
+-        if self.chunk_size != horizon:
+-            raise ValueError(
+-                f"chunk_size ({self.chunk_size}) must match VQ-VAE horizon ({horizon})"
+-            )
+-        self.vqvae_name_or_path = checkpoint_path
+-
+-    def _resolve_vqvae_paths(self, input_path: str) -> tuple[str, str]:
+-        """Resolve checkpoint and config paths from a checkpoint file or directory.
+-
+-        Rules:
+-        - If input is a checkpoint file, load config from its parent directory.
+-        - If input is a directory:
+-          - choose the only .pth file if exactly one exists;
+-          - choose latest.pth if multiple .pth files exist and latest.pth exists;
+-          - otherwise raise an error.
+-        """
+-        resolved_input = os.path.abspath(os.path.expanduser(input_path))
+-
+-        if os.path.isfile(resolved_input):
+-            ckpt_path = resolved_input
+-            ckpt_dir = os.path.dirname(ckpt_path)
+-        elif os.path.isdir(resolved_input):
+-            ckpt_dir = resolved_input
+-            pth_files = sorted(
+-                [os.path.join(ckpt_dir, fn) for fn in os.listdir(ckpt_dir) if fn.endswith(".pth")]
+-            )
+-
+-            if len(pth_files) == 0:
+-                raise FileNotFoundError(f"No .pth checkpoint found in directory: {ckpt_dir}")
+-            if len(pth_files) == 1:
+-                ckpt_path = pth_files[0]
+-            else:
+-                latest_path = os.path.join(ckpt_dir, "latest.pth")
+-                if os.path.isfile(latest_path):
+-                    ckpt_path = latest_path
+-                else:
+-                    raise ValueError(
+-                        f"Multiple .pth checkpoints found in {ckpt_dir}, but latest.pth is missing. "
+-                        "Please provide a checkpoint file directly or create latest.pth."
+-                    )
+-        else:
+-            raise FileNotFoundError(f"Invalid checkpoint path: {input_path}")
+-
+-        config_path = os.path.join(ckpt_dir, "config.yaml")
+-        if not os.path.isfile(config_path):
+-            raise FileNotFoundError(f"VQVAE runtime config not found: {config_path}")
+-
+-        return ckpt_path, config_path
+-
+     def validate_features(self) -> None:
+         """Validate and set up input/output features."""
+         for i in range(self.empty_cameras):
+diff --git a/official-main-691a5e6/package/src/lerobot_policy_mint/mint_utils.py b/ascend-v062/package/src/lerobot_policy_mint/mint_utils.py
+index c67c3f4..67e509b 100644
+--- a/official-main-691a5e6/package/src/lerobot_policy_mint/mint_utils.py
++++ b/ascend-v062/package/src/lerobot_policy_mint/mint_utils.py
+@@ -746,7 +746,25 @@ class MultiScaleVQVAE(nn.Module):
+ 
+     def load_vqvae_weights(self, load_path: str):
+         """Load VQVAE weights from resume_path or huggingface hub."""
+-        if not os.path.exists(load_path):
++        if os.path.isdir(load_path):
++            pt_files = []
++            for root, _, files in os.walk(load_path):
++                for file_name in files:
++                    if file_name.endswith(".pth"):
++                        pt_files.append(os.path.join(root, file_name))
++
++            if len(pt_files) == 0:
++                logging.warning(f"VQVAE load path is a directory but no .pth file was found: {load_path}")
++                return
++
++            if len(pt_files) > 1:
++                pt_files.sort(key=os.path.getmtime, reverse=True)
++                logging.warning(
++                    f"Multiple .pth files found in {load_path}. "
++                    f"Using the latest modified file: {pt_files[0]}"
++                )
++            load_path = pt_files[0]
++        elif not os.path.exists(load_path):
+             try:
+                 load_path = hf_hub_download(
+                     repo_id=load_path,
+@@ -853,7 +871,7 @@ class TemporalEnsembler:
+ 
+ 
+ class IntentionEnsembler:
+-    def __init__(self, horizon: int, n_action_steps: int, temperature: float = 0.1):
++    def __init__(self, horizon: int, n_action_steps: int, temperature: float = 0.05):
+         self.horizon = horizon
+         self.n_action_steps = n_action_steps
+         self.temperature = temperature
+diff --git a/official-main-691a5e6/package/src/lerobot_policy_mint/modeling_mint.py b/ascend-v062/package/src/lerobot_policy_mint/modeling_mint.py
+index 5eacd5a..fdadde1 100644
+--- a/official-main-691a5e6/package/src/lerobot_policy_mint/modeling_mint.py
++++ b/ascend-v062/package/src/lerobot_policy_mint/modeling_mint.py
+@@ -31,24 +31,19 @@ import os
+ from huggingface_hub import hf_hub_download
+ from huggingface_hub.constants import SAFETENSORS_SINGLE_FILE
+ from safetensors.torch import load_file as load_safetensors_file
++import yaml
+ 
+ # Conditional import for type checking and lazy loading
+ if TYPE_CHECKING or _transformers_available:
+     from transformers.models.auto import CONFIG_MAPPING
+     from transformers.models.gemma import modeling_gemma
+-    from lerobot.policies.pi_gemma import (
+-        PaliGemmaForConditionalGenerationWithPiGemma,
+-        PiGemmaForCausalLM,
+-        _gated_residual,
+-        layernorm_forward,
+-    )
++    from transformers.models.gemma.modeling_gemma import GemmaForCausalLM
++    from transformers.models.paligemma.modeling_paligemma import PaliGemmaForConditionalGeneration
+ else:
+     CONFIG_MAPPING = None
+     modeling_gemma = None
+-    PiGemmaForCausalLM = None
+-    PaliGemmaForConditionalGenerationWithPiGemma = None
+-    _gated_residual = None
+-    layernorm_forward = None
++    GemmaForCausalLM = None
++    PaliGemmaForConditionalGeneration = None
+ 
+ from lerobot.configs.policies import PreTrainedConfig
+ from lerobot.policies.pretrained import PreTrainedPolicy, T
+@@ -71,7 +66,7 @@ class ActionSelectKwargs(TypedDict, total=False):
+ 
+ def get_safe_dtype(target_dtype, device_type):
+     """Get a safe dtype for the given device type."""
+-    if device_type == "mps" and target_dtype == torch.float64:
++    if device_type in {"mps", "npu"} and target_dtype == torch.float64:
+         return torch.float32
+     if device_type == "cpu":
+         # CPU doesn't support bfloat16, use float32 instead
+@@ -200,7 +195,7 @@ def resize_with_pad_torch(  # see openpi `resize_with_pad_torch` (exact copy)
+     if images.dtype == torch.uint8:
+         resized_images = torch.round(resized_images).clamp(0, 255).to(torch.uint8)
+     elif images.dtype == torch.float32:
+-        resized_images = resized_images.clamp(0.0, 1.0)
++        resized_images = resized_images.clamp(-1.0, 1.0)
+     else:
+         raise ValueError(f"Unsupported image dtype: {images.dtype}")
+ 
+@@ -211,7 +206,7 @@ def resize_with_pad_torch(  # see openpi `resize_with_pad_torch` (exact copy)
+     pad_w1 = pad_w0 + remainder_w
+ 
+     # Pad
+-    constant_value = 0 if images.dtype == torch.uint8 else 0.0
++    constant_value = 0 if images.dtype == torch.uint8 else -1.0
+     padded_images = F.pad(
+         resized_images,
+         (pad_w0, pad_w1, pad_h0, pad_h1),  # left, right, top, bottom
+@@ -234,11 +229,9 @@ def compute_layer_complete(
+     query_states = []
+     key_states = []
+     value_states = []
+-    gates = []
+     for i, hidden_states in enumerate(inputs_embeds):
+         layer = models[i].layers[layer_idx]
+-        hidden_states, gate = layernorm_forward(layer.input_layernorm, hidden_states, adarms_cond[i])  # noqa: PLW2901
+-        gates.append(gate)
++        hidden_states = layer.input_layernorm(hidden_states)
+         input_shape = hidden_states.shape[:-1]
+         hidden_shape = (*input_shape, -1, layer.self_attn.head_dim)
+         query_state = layer.self_attn.q_proj(hidden_states).view(hidden_shape).transpose(1, 2)
+@@ -273,11 +266,9 @@ def compute_layer_complete(
+         attention_mask,
+         scaling,
+     )
+-    # Flatten attention output with module-defined projection input size.
+-    # This is robust across transformers versions where GemmaAttention may not expose `num_heads`.
+-    reference_attn = paligemma.model.language_model.layers[layer_idx].self_attn
+-    hidden_size = reference_attn.o_proj.in_features
+-    att_output = att_output.reshape(batch_size, -1, hidden_size)
++    # Get head_dim from the current layer, not from the model
++    head_dim = paligemma.model.language_model.layers[layer_idx].self_attn.head_dim
++    att_output = att_output.reshape(batch_size, -1, 1 * 8 * head_dim)
+     # Process layer outputs
+     outputs_embeds = []
+     start_pos = 0
+@@ -287,16 +278,14 @@ def compute_layer_complete(
+         if att_output.dtype != layer.self_attn.o_proj.weight.dtype:
+             att_output = att_output.to(layer.self_attn.o_proj.weight.dtype)
+         out_emb = layer.self_attn.o_proj(att_output[:, start_pos:end_pos])
+-        # first residual
+-        out_emb = _gated_residual(hidden_states, out_emb, gates[i])  # noqa: SLF001
+-        after_first_residual = out_emb.clone()
+-        out_emb, gate = layernorm_forward(layer.post_attention_layernorm, out_emb, adarms_cond[i])
++        out_emb = hidden_states + out_emb
++        after_first_residual = out_emb
++        out_emb = layer.post_attention_layernorm(out_emb)
+         # Convert to bfloat16 if the next layer (mlp) uses bfloat16
+         if layer.mlp.up_proj.weight.dtype == torch.bfloat16:
+             out_emb = out_emb.to(dtype=torch.bfloat16)
+         out_emb = layer.mlp(out_emb)
+-        # second residual
+-        out_emb = _gated_residual(after_first_residual, out_emb, gate)  # noqa: SLF001
++        out_emb = after_first_residual + out_emb
+         outputs_embeds.append(out_emb)
+         start_pos = end_pos
+     return outputs_embeds
+@@ -390,14 +379,9 @@ class PaliGemmaWithExpertModel(
+             adarms_cond_dim=action_expert_config.width if use_adarms[1] else None,
+         )
+ 
+-        self.paligemma = PaliGemmaForConditionalGenerationWithPiGemma(config=vlm_config_hf)
+-        self.paligemma.lm_head = None
+-        self.gemma_expert = PiGemmaForCausalLM(config=action_expert_config_hf)
++        self.paligemma = PaliGemmaForConditionalGeneration(config=vlm_config_hf)
++        self.gemma_expert = GemmaForCausalLM(config=action_expert_config_hf)
+         self.gemma_expert.model.embed_tokens = None
+-        self.gemma_expert.lm_head = None
+-        
+-        # print(f"PaliGemma params: {sum(p.numel() for p in self.paligemma.parameters()) / 1e6:.2f} M")
+-        # print(f"Gemma AR Expert params: {sum(p.numel() for p in self.gemma_expert.parameters()) / 1e6:.2f} M")
+ 
+         self.to_bfloat16_for_selected_params(precision)
+         self._set_requires_grad()
+@@ -428,24 +412,34 @@ class PaliGemmaWithExpertModel(
+             self.paligemma.eval()
+             for param in self.paligemma.parameters():
+                 param.requires_grad = False
+-    
+-    def train(self, mode: bool = True):
+-        super().train(mode)
+-        if self.train_expert_only:
+-            self.paligemma.eval()
+ 
+     def embed_image(self, image: torch.Tensor):
+         out_dtype = image.dtype
+         if image.dtype != torch.float32:
+             image = image.to(torch.float32)
+         image_outputs = self.paligemma.model.get_image_features(image)
+-        features = image_outputs.pooler_output * self.paligemma.config.text_config.hidden_size**0.5
++        features = image_outputs.pooler_output
+         if features.dtype != out_dtype:
+             features = features.to(out_dtype)
+         return features
+ 
+     def embed_language_tokens(self, tokens: torch.Tensor):
+-        return self.paligemma.model.language_model.embed_tokens(tokens)
++        embedding = self.paligemma.model.language_model.get_input_embeddings()
++        if os.environ.get("MINT_USE_TRANSFORMERS_SCALED_LANGUAGE_EMBEDDING") == "1":
++            return embedding(tokens)
++
++        # MINT's pinned Transformers branch uses nn.Embedding here. Transformers 5
++        # replaced it with GemmaTextScaledWordEmbedding, which multiplies checkpoint
++        # embeddings by sqrt(hidden_size) and changes the policy semantics.
++        return F.embedding(
++            tokens,
++            embedding.weight,
++            padding_idx=embedding.padding_idx,
++            max_norm=embedding.max_norm,
++            norm_type=embedding.norm_type,
++            scale_grad_by_freq=embedding.scale_grad_by_freq,
++            sparse=embedding.sparse,
++        )
+ 
+     def forward(
+         self,
+@@ -523,7 +517,7 @@ class PaliGemmaWithExpertModel(
+             def compute_final_norms(inputs_embeds, adarms_cond):
+                 outputs_embeds = []
+                 for i, hidden_states in enumerate(inputs_embeds):
+-                    out_emb, _ = layernorm_forward(models[i].norm, hidden_states, adarms_cond[i])
++                    out_emb = models[i].norm(hidden_states)
+                     outputs_embeds.append(out_emb)
+                 return outputs_embeds
+ 
+@@ -595,14 +589,19 @@ class MINTPytorch(nn.Module):
+         self.gradient_checkpointing_enabled = False
+ 
+         # Compile model if requested
+-        if config.compile_model:
++        if config.compile_model and not str(config.device).startswith("npu"):
+             torch.set_float32_matmul_precision("high")
+             self.sample_actions = torch.compile(self.sample_actions, mode=config.compile_mode)
+             # Also compile the main forward pass used during training
+             self.forward = torch.compile(self.forward, mode=config.compile_mode)
++        elif config.compile_model:
++            logging.warning("torch.compile is disabled for MINT on Ascend NPU; using eager execution.")
+ 
+         if config.vqvae_name_or_path:
+             self.multi_scale_vqvae.load_vqvae_weights(config.vqvae_name_or_path)
++            # Clear the path so that it doesn't get saved in the config and requested during eval,
++            # as the VQVAE weights will be saved along with the policy's state dict.
++            config.vqvae_name_or_path = ""
+         # freeze vqvae
+         for param in self.multi_scale_vqvae.parameters():
+             param.requires_grad = False
+@@ -786,6 +785,11 @@ class MINTPytorch(nn.Module):
+         """Do a full inference forward and compute the action."""
+ 
+         prefix_embs, prefix_pad_masks, prefix_att_masks = self.embed_prefix(images, img_masks, tokens, masks)
++        prefix_dtype = (
++            self.paligemma_with_expert.paligemma.model.language_model.layers[0]
++            .self_attn.q_proj.weight.dtype
++        )
++        prefix_embs = prefix_embs.to(dtype=prefix_dtype)
+         prefix_att_2d_masks = make_att_2d_masks(prefix_pad_masks, prefix_att_masks)
+         prefix_position_ids = torch.cumsum(prefix_pad_masks, dim=1) - 1
+ 
+@@ -926,8 +930,8 @@ class MINTPytorch(nn.Module):
+         z_q = self.multi_scale_vqvae.post_quant_conv(f_hat)
+         rec = self.multi_scale_vqvae.decoder(z_q)
+         if self.multi_scale_vqvae.patchwise_proj is not None:
+-            rec = self.multi_scale_vqvae.patchwise_proj(rec)
+-
++             rec = self.multi_scale_vqvae.patchwise_proj(rec)
++        
+         return rec, intention_vector
+ 
+     @torch.no_grad()
+@@ -1009,8 +1013,8 @@ class MINTPytorch(nn.Module):
+         z_q = self.multi_scale_vqvae.post_quant_conv(f_hat)
+         rec = self.multi_scale_vqvae.decoder(z_q)
+         if self.multi_scale_vqvae.patchwise_proj is not None:
+-            rec = self.multi_scale_vqvae.patchwise_proj(rec)
+-
++             rec = self.multi_scale_vqvae.patchwise_proj(rec)
++        
+         return rec, intention_vector
+ 
+ 
+@@ -1047,7 +1051,6 @@ class MINTPolicy(PreTrainedPolicy):
+             horizon=config.chunk_size,
+             n_action_steps=config.n_action_steps,
+         )
+-
+         self.reset()
+     
+     @classmethod
+@@ -1088,83 +1091,84 @@ class MINTPolicy(PreTrainedPolicy):
+         # Check if dataset_stats were provided in kwargs
+         model = cls(config, **kwargs)
+ 
+-        # Now manually load and remap the state dict
+-        try:
+-            # Try to load the pytorch_model.bin or model.safetensors file
+-            print(f"Loading model from: {pretrained_name_or_path}")
+-            try:
+-                from transformers.utils import cached_file
+-
+-                # Try safetensors first
+-                resolved_file = cached_file(
+-                    pretrained_name_or_path,
+-                    "model.safetensors",
+-                    cache_dir=kwargs.get("cache_dir"),
+-                    force_download=kwargs.get("force_download", False),
+-                    resume_download=kwargs.get("resume_download"),
+-                    proxies=kwargs.get("proxies"),
+-                    use_auth_token=kwargs.get("use_auth_token"),
+-                    revision=kwargs.get("revision"),
+-                    local_files_only=kwargs.get("local_files_only", False),
+-                )
+-                from safetensors.torch import load_file
+-
+-                original_state_dict = load_file(resolved_file)
+-                print("✓ Loaded state dict from model.safetensors")
+-            except Exception as e:
+-                print(f"Could not load state dict from remote files: {e}")
+-                print("Returning model without loading pretrained weights")
+-                return model
+-
+-            # First, fix any key differences # see openpi `model.py, _fix_pytorch_state_dict_keys`
+-            fixed_state_dict = model._fix_pytorch_state_dict_keys(original_state_dict, model.config)
+-
+-            # Then add "model." prefix for all keys that don't already have it
+-            remapped_state_dict = {}
+-            remap_count = 0
+-
+-            for key, value in fixed_state_dict.items():
+-                if not key.startswith("model."):
+-                    new_key = f"model.{key}"
+-                    remapped_state_dict[new_key] = value
+-                    remap_count += 1
+-                    if remap_count <= 10:  # Only print first 10 to avoid spam
+-                        print(f"Remapped: {key} -> {new_key}")
+-                else:
+-                    remapped_state_dict[key] = value
+-
+-            if remap_count > 0:
+-                print(f"Remapped {remap_count} state dict keys")
+-
+-            # Load the remapped state dict into the model
+-            missing_keys, unexpected_keys = model.load_state_dict(remapped_state_dict, strict=strict)
++        print(f"Loading model from: {pretrained_name_or_path}")
++        from safetensors.torch import load_file
++        from transformers.utils import cached_file
+ 
+-            if missing_keys:
+-                print(f"Missing keys when loading state dict: {len(missing_keys)} keys")
+-                if len(missing_keys) <= 5:
+-                    for key in missing_keys:
+-                        print(f"  - {key}")
+-                else:
+-                    for key in missing_keys[:5]:
+-                        print(f"  - {key}")
+-                    print(f"  ... and {len(missing_keys) - 5} more")
+-
+-            if unexpected_keys:
+-                print(f"Unexpected keys when loading state dict: {len(unexpected_keys)} keys")
+-                if len(unexpected_keys) <= 5:
+-                    for key in unexpected_keys:
+-                        print(f"  - {key}")
+-                else:
+-                    for key in unexpected_keys[:5]:
+-                        print(f"  - {key}")
+-                    print(f"  ... and {len(unexpected_keys) - 5} more")
+-
+-            if not missing_keys and not unexpected_keys:
+-                print("✓✓ All keys loaded successfully!")
++        try:
++            resolved_file = cached_file(
++                pretrained_name_or_path,
++                "model.safetensors",
++                cache_dir=cache_dir,
++                force_download=force_download,
++                proxies=proxies,
++                token=token,
++                revision=revision,
++                local_files_only=local_files_only,
++            )
++            if resolved_file is None:
++                raise FileNotFoundError("model.safetensors was not resolved")
++            original_state_dict = load_file(resolved_file, device="cpu")
++        except Exception as exc:
++            raise RuntimeError(
++                f"Failed to load pretrained MINT weights from {pretrained_name_or_path!s}"
++            ) from exc
++
++        is_mint_checkpoint = any(
++            "multi_scale_vqvae" in key or "vq_code_" in key for key in original_state_dict
++        )
++        if not is_mint_checkpoint:
++            source_key_count = len(original_state_dict)
++            original_state_dict = {
++                key: value
++                for key, value in original_state_dict.items()
++                if key.removeprefix("model.").startswith("paligemma_with_expert.paligemma.")
++            }
++            print(
++                "Detected PI0.5 initialization checkpoint: loaded "
++                f"{len(original_state_dict)}/{source_key_count} PaliGemma backbone tensors; "
++                "MINT action expert remains randomly initialized."
++            )
+ 
+-        except Exception as e:
+-            print(f"Warning: Could not remap state dict keys: {e}")
++        fixed_state_dict = model._fix_pytorch_state_dict_keys(original_state_dict, model.config)
++        remapped_state_dict = {
++            key if key.startswith("model.") else f"model.{key}": value
++            for key, value in fixed_state_dict.items()
++        }
++        remap_count = sum(not key.startswith("model.") for key in fixed_state_dict)
++        if remap_count:
++            print(f"Remapped {remap_count} state dict keys")
++
++        missing_keys, unexpected_keys = model.load_state_dict(remapped_state_dict, strict=strict)
++        if missing_keys:
++            print(f"Missing keys when loading state dict: {len(missing_keys)}")
++            for key in missing_keys[:5]:
++                print(f"  - {key}")
++        if unexpected_keys:
++            print(f"Unexpected keys when loading state dict: {len(unexpected_keys)}")
++            for key in unexpected_keys[:5]:
++                print(f"  - {key}")
++        if is_mint_checkpoint and (missing_keys or unexpected_keys):
++            raise RuntimeError(
++                "Complete MINT checkpoint did not match the model exactly: "
++                f"missing={len(missing_keys)}, unexpected={len(unexpected_keys)}"
++            )
++        if not is_mint_checkpoint:
++            missing_backbone_keys = [
++                key
++                for key in missing_keys
++                if key.startswith("model.paligemma_with_expert.paligemma.")
++            ]
++            if missing_backbone_keys or unexpected_keys:
++                raise RuntimeError(
++                    "PI0.5 backbone initialization was incomplete: "
++                    f"missing_backbone={len(missing_backbone_keys)}, "
++                    f"unexpected={len(unexpected_keys)}"
++                )
++        if not missing_keys and not unexpected_keys:
++            print("All pretrained keys loaded successfully")
+ 
++        model.eval()
+         return model
+ 
+     def _fix_pytorch_state_dict_keys(
+@@ -1214,8 +1218,15 @@ class MINTPolicy(PreTrainedPolicy):
+ 
+             # Handle vision tower embedding layer potential differences
+             if "patch_embedding" in key:
+-                # Some checkpoints might have this, but current model expects different structure
+-                logging.warning(f"Vision embedding key might need handling: {key}")
++                logging.debug("Loading vision embedding key: %s", key)
++
++            if key in {
++                "model.paligemma_with_expert.paligemma.lm_head.weight",
++                "paligemma_with_expert.paligemma.lm_head.weight",
++            }:
++                fixed_state_dict[
++                    "model.paligemma_with_expert.paligemma.model.language_model.embed_tokens.weight"
++                ] = value.clone()
+ 
+             fixed_state_dict[new_key] = value
+ 
+@@ -1301,8 +1312,7 @@ class MINTPolicy(PreTrainedPolicy):
+ 
+     def prepare_action(self, batch):
+         """Pad action"""
+-        actions = batch[ACTION]
+-        actions = pad_vector(actions, self.config.max_action_dim)
++        actions = pad_vector(batch[ACTION], self.config.max_action_dim)
+         return actions
+ 
+     @torch.no_grad()
+diff --git a/official-main-691a5e6/package/src/lerobot_policy_mint/processor_mint.py b/ascend-v062/package/src/lerobot_policy_mint/processor_mint.py
+index 513b1c1..be9813f 100644
+--- a/official-main-691a5e6/package/src/lerobot_policy_mint/processor_mint.py
++++ b/ascend-v062/package/src/lerobot_policy_mint/processor_mint.py
+@@ -11,6 +11,7 @@ from lerobot.configs.types import PipelineFeatureType, PolicyFeature
+ from lerobot.processor import (
+     AddBatchDimensionProcessorStep,
+     DeviceProcessorStep,
++    EnvTransition,
+     NormalizerProcessorStep,
+     PolicyAction,
+     PolicyProcessorPipeline,
+@@ -18,10 +19,10 @@ from lerobot.processor import (
+     ProcessorStepRegistry,
+     RenameObservationsProcessorStep,
+     TokenizerProcessorStep,
++    TransitionKey,
+     UnnormalizerProcessorStep,
+ )
+ from lerobot.processor.converters import policy_action_to_transition, transition_to_policy_action
+-from lerobot.types import EnvTransition, TransitionKey
+ from lerobot.utils.constants import (
+     OBS_STATE,
+     POLICY_POSTPROCESSOR_DEFAULT_NAME,
+diff --git a/official-main-691a5e6/project/README.md b/ascend-v062/project/README.md
+index 3961027..d32a3ec 100644
+--- a/official-main-691a5e6/project/README.md
++++ b/ascend-v062/project/README.md
+@@ -4,13 +4,13 @@
+ 
+   <p>
+     <a href="https://arxiv.org/abs/2602.08602"><img alt="arXiv" src="https://img.shields.io/badge/arXiv-2602.08602-b31b1b?style=for-the-badge&logo=arxiv&logoColor=white"></a>
+-    <a href="https://huggingface.co/huangrm/MINT-libero-130"><img alt="Hugging Face Policy" src="https://img.shields.io/badge/HuggingFace-Policy-ffca28?style=for-the-badge&logo=huggingface&logoColor=black"></a>
+-    <a href="https://huggingface.co/huangrm/MINT-tokenizer-libero-130"><img alt="Hugging Face Tokenizer" src="https://img.shields.io/badge/HuggingFace-Tokenizer-ffca28?style=for-the-badge&logo=huggingface&logoColor=black"></a>
++    <a href="https://huggingface.co/huangrm/MINT-libero"><img alt="Hugging Face Policy" src="https://img.shields.io/badge/HuggingFace-Policy-ffca28?style=for-the-badge&logo=huggingface&logoColor=black"></a>
++    <a href="https://huggingface.co/huangrm/MINT-tokenizer-libero"><img alt="Hugging Face Tokenizer" src="https://img.shields.io/badge/HuggingFace-Tokenizer-ffca28?style=for-the-badge&logo=huggingface&logoColor=black"></a>
+   </p>
+ 
+   <p>
+     <img alt="Python" src="https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white" />
+-    <img alt="Status" src="https://img.shields.io/badge/Status-Released-16a34a?style=for-the-badge" />
++    <img alt="Status" src="https://img.shields.io/badge/Status-In%20Progress-f59e0b?style=for-the-badge" />
+     <img alt="License" src="https://img.shields.io/badge/License-MIT-16a34a?style=for-the-badge" />
+   </p>
+ </div>
+@@ -24,51 +24,37 @@
+ 
+ ---
+ 
+-## Overview
++## Overview ✨
+ 
+ We introduce MINT (Mimic Intent, Not just Trajectories), a framework for end-to-end imitation learning in dexterous manipulation. MINT explicitly <span style="background-color:#e0f2fe;color:#075985;padding:0 4px;border-radius:4px;"><strong>disentangles behavior intent from execution details</strong></span> by learning a hierarchical, multi-scale token representation of actions. Coarse tokens capture global, low-frequency intent, while finer tokens encode high-frequency execution details. Our policy generates trajectories via <span style="background-color:#e0f2fe;color:#075985;padding:0 4px;border-radius:4px;"><strong>next-scale autoregression</strong></span>, performing progressive <span style="background-color:#e0f2fe;color:#075985;padding:0 4px;border-radius:4px;"><strong>intent-to-execution reasoning</strong></span>. This structure enables efficient learning, robust adaptation to environmental dynamics, and <span style="background-color:#e0f2fe;color:#075985;padding:0 4px;border-radius:4px;"><strong>one-shot skill transfer</strong></span> by reusing the intent token from a demonstration. Experiments on simulation and real robots demonstrate strong performance, high generalization, and effective skill transfer.
+ 
+-## Open-Source Roadmap
++## Open-Source Roadmap 🗺️
+ 
+ | Track | Scope | Status | Target |
+ |---|---|---|---|
+ | ✅ LeRobot Integration | MINT-4B training/evaluation pipeline | Released | Done |
+-| ✅ Public Weights | LIBERO-130 policy + tokenizer on Hugging Face | Released | Done |
+-| ✅ SDAT Training | Training scripts + configs | Released | Done |
+-| ✅ Lightweight MINT-30M | LeRobot-compatible MINT-Light policy | Released | Done |
+-| 🗓 Multi-dataset Checkpoints | CALVIN / Bridge policy-tokenizer pairs | Planned | 2026 H2 |
++| ✅ Public Weights | LIBERO policy + tokenizer on Hugging Face | Released | Done |
++| 🚧 SDAT Training | Training scripts + configs | Planned | 2026 H1 |
++| 🗓 Lightweight MINT-30M | A lightweight framework | In progress | 2026 H2 |
++| 🗓 Multi-dataset Checkpoints | CALVIN / MetaWorld / Bridge policy-tokenizer pairs | Planned | 2026 H2 |
+ | 🗓 Support Bimanual Manipulation | RoboTwin and other bimanual manipulation benchmarks | Planned | 2026 H3 |
+ 
+-## Installation
+-
+-### LeRobot compatibility
+-
+-| Branch | LeRobot version | Status |
+-|---|---|---|
+-| `main` | `0.5.1` | Current release |
+-| `legacy/lerobot-0.4.3` | `0.4.3` | Archived previous codebase |
+-
+-The current `main` branch supports LeRobot 0.5.1. Use the legacy branch only when an existing
+-environment must remain on LeRobot 0.4.3; the two integrations should not be mixed.
++## Installation 🛠️
+ 
+ ```bash
+-conda create -y -n mint python=3.12 cmake=3.11
++conda create -y -n mint python=3.12
+ conda activate mint
+ 
+-pip install "lerobot[pi]==0.5.1"
++pip install lerobot==0.4.3
+ # Install LIBERO dependencies via LeRobot:
+-pip install "lerobot[libero]==0.5.1"
+-
+-# Install all MINT policy runtime dependencies:
+-pip install -r requirements.txt
++pip install "lerobot[libero]==0.4.3"
+ 
+ conda install -y ffmpeg -c conda-forge
+ ```
+ 
+ ```bash
+-# install policy
+-pip install -e ./policy/lerobot_policy_mint
+-pip install -e ./policy/lerobot_policy_mint_light
++cd lerobot_policy_mint
++pip install -e .
+ ```
+ 
+ Note: If you encounter build errors on Linux, you may also need system packages such as cmake,
+@@ -78,159 +64,84 @@ build-essential, python3-dev, pkg-config, and FFmpeg development libraries.
+ apt-get install cmake build-essential python3-dev pkg-config libavformat-dev libavcodec-dev libavdevice-dev libavutil-dev libswscale-dev libswresample-dev libavfilter-dev
+ ```
+ 
+-## Model Zoo
+-
+-The [`policy`](policy) directory contains two independent packages with matching
+-`pyproject.toml` plus `src/<package>/` layouts. Install the package you need, then choose
+-`--policy.type=mint` or `--policy.type=mint_light`; both use the standard LeRobot commands.
++## Model Zoo 🧩
+ 
+-### MINT-4B (LeRobot implementation) 🤗
++### MINT-4B (Lerobot implementation) 🤗
+ | Dataset | Policy | Tokenizer | Status | Notes |
+ |---|---|---|---|---|
+-| [LIBERO-130](Retoc71586/libero_130_lerobot_v3) | [huangrm/MINT-libero-130](https://huggingface.co/huangrm/MINT-libero-130) | [huangrm/MINT-tokenizer-libero-130](https://huggingface.co/huangrm/MINT-tokenizer-libero-130) | Available | LeRobot 0.5.1 release |
++| LIBERO | [huangrm/MINT-libero](https://huggingface.co/huangrm/MINT-libero) | [huangrm/MINT-tokenizer-libero](https://huggingface.co/huangrm/MINT-tokenizer-libero) | Available | Current public release |
+ | CALVIN | Coming soon | Coming soon | Planned | Upcoming release |
+-| [Bridge](FedorX8/bridge_v2_lerobot) | Coming soon | Coming soon | Planned | Upcoming release |
++| MetaWorld | Coming soon | Coming soon | Planned | Upcoming release |
++| Bridge | Coming soon | Coming soon | Planned | Upcoming release |
+ 
+-### MINT-Light / MINT-30M ⚡
++### MINT-30M (A lightweight implementation) ⚡
+ 
+ | Dataset | Policy | Tokenizer | Status | Notes |
+ |---|---|---|---|---|
+-| LIBERO | [huangrm/MINT-light-libero-130](https://huggingface.co/huangrm/MINT-light-libero-130) | [huangrm/MINT-tokenizer-libero-130](https://huggingface.co/huangrm/MINT-tokenizer-libero-130) | Available | Light-weight version |
+-| LIBERO | [huangrm/MINT-light-zero](https://huggingface.co/huangrm/MINT-light-zero) | [huangrm/MINT-tokenizer-libero-130](https://huggingface.co/huangrm/MINT-tokenizer-libero-130) | Available | Visual-only checkpoint for one-shot transfer |
++| LIBERO | Coming soon | Coming soon | In progress | Upcoming release |
++| CALVIN | Coming soon | Coming soon | Planned | Upcoming release |
+ 
+ 
+-- MINT-4B (`mint`) uses the PaliGemma backbone and action expert for maximum capacity.
+-- MINT-Light (`mint_light`) keeps MINT's coarse-to-fine action-token prediction but replaces
+-the large VLM with a fixed DINOv3 ViT-L/16 visual encoder, a SigLIP2 text encoder.
+ 
+-## Training Example
++## Training Example 🏋️
+ 
+ First, download the required tokenizer:
+ 
+ ```bash
+-hf download huangrm/MINT-tokenizer-libero-130 --local-dir <path/to/tokenizer>
+-```
+-Or, train your own tokenizer:
+-```bash
+-# install tokenizer training dependencies
+-pip install -r requirements.txt
+-python -m SDAT.train --config-name train
++hf download huangrm/MINT-tokenizer-libero --local-dir <path/to/tokenizer>
+ ```
+ 
+-Start MINT-4B training:
++Start training:
+ 
+ ```bash
+-accelerate launch \
+-    --multi_gpu \
+-    --num_processes=2 \
+-    $(which lerobot-train) \
+-    --dataset.repo_id=HuggingFaceVLA/libero \
++lerobot-train \
++    --dataset.repo_id=<your_dataset> \
+     --policy.type=mint \
+-    --output_dir=<path/to/output> \
++    --output_dir=./outputs/mint_training \
+     --job_name=mint_training \
+-    --policy.repo_id=mint \
+-    --policy.pretrained_path=huangrm/pi05_base \
+-    --policy.vqvae_name_or_path=<path/to/tokenizer-checkpoint> \
++    --policy.repo_id=<your_repo_id> \
++    --policy.pretrained_path=huangrm/MINT-libero \
++    --policy.vqvae_name_or_path=<path/to/tokenizer> \
+     --policy.compile_model=false \
+     --policy.gradient_checkpointing=true \
+-    --policy.dtype=float32 \
+-    --steps=100000 \
+-    --save_freq=20000 \
++    --policy.dtype=bfloat16 \
++    --steps=10000 \
+     --policy.device=cuda \
+-    --batch_size=16
++    --batch_size=32
+ ```
+ 
+-For MINT-Light, use the same command and change the policy type. you can reuse the same tokenizer checkpoint from above, or train a new one with the SDAT training script.
+-
+-```bash
+-lerobot-train \
+-    --dataset.repo_id=<dataset-repo-id> \
+-    --policy.type=mint_light \
+-    --policy.use_language=true \
+-    --policy.vqvae_name_or_path=<path/to/tokenizer-checkpoint> \
+-    --policy.device=cuda \
+-    --output_dir=<path/to/output>
+-```
+-
+-`use_language=false` trains the visual-only MINT-Light policy used by one-shot
+-transfer.
+-
+-## Evaluation
++## Evaluation 📊
+ 
+ ```bash
+ lerobot-eval \
+-    --policy.path=huangrm/MINT-libero-130 \
+-    --policy.vqvae_name_or_path=<path/to/tokenizer-checkpoint> \
++    --policy.path=huangrm/MINT-libero \
+     --env.type=libero \
+-    --env.task=libero_object,libero_10,libero_goal,libero_spatial \
++    --env.task=libero_10,libero_object,libero_spatial,libero_goal \
+     --eval.batch_size=1 \
+-    --eval.n_episodes=50 \
+-    --seed=1000 \
++    --eval.n_episodes=2 \
++    --seed=42 \
+     --policy.n_action_steps=4
+ ```
+ 
+-Evaluation is identical for MINT-Light: point `--policy.path` at a local
+-`pretrained_model` directory or a Hugging Face model ID. LeRobot reads the saved
+-policy type automatically.
+-
+-## One-Shot Transfer
+-
+-Set the policy and VQ-VAE references to their Hugging Face model IDs. Both are
+-downloaded and cached automatically by `from_pretrained`:
+-
+-```bash
+-CHECKPOINT=huangrm/MINT-light-zero
+-VQVAE=huangrm/MINT-tokenizer-libero-130
+-```
+-
+-You can also use existing local paths:
+-
+-```bash
+-CHECKPOINT=/path/to/pretrained_model
+-VQVAE=/path/to/tokenizer/ms_vqvae.pth
+-```
+-
+-The three evaluation demonstrations are already included in
+-`transfer/demo_traj`. Run any of the transfer tests with the selected model:
+-
+-```bash
+-# New task
+-bash transfer/scripts/transfer_new_task.sh "$CHECKPOINT" "$VQVAE"
+-
+-# New layout
+-bash transfer/scripts/transfer_new_layout.sh "$CHECKPOINT" "$VQVAE"
+-
+-# Extended horizon
+-bash transfer/scripts/transfer_extend_horizon.sh "$CHECKPOINT" "$VQVAE"
+-```
+-
+-The scripts save results and trajectory videos under `outputs/transfer_*`.
+-Set options such as `SEED`, `NUM_EPISODES`, or `SAVE_VIDEO` before the command
+-to override their defaults:
+ 
+-```bash
+-SEED=42 NUM_EPISODES=5 SAVE_VIDEO=1 \
+-bash transfer/scripts/transfer_new_task.sh "$CHECKPOINT" "$VQVAE"
+-```
+ 
+-See [`transfer/README.md`](transfer/README.md) for the concise transfer usage
+-guide.
+-
+-## Citation
++## Citation 📚
+ 
+ If you find this project useful, please cite:
+ 
+ ```bibtex
+ @article{huang2026mimic,
+   title={Mimic Intent, Not Just Trajectories},
+-  author={Huang, Renming and Zeng, Chendong and Tang, Wenjing and Cai, Jintian and Lu, Cewu and Cai, Panpan},
++  author={Huang, Renming and Zeng, Chendong and Tang, Wenjing and Cai, Jingtian and Lu, Cewu and Cai, Panpan},
+   journal={arXiv preprint arXiv:2602.08602},
+   year={2026}
+ }
+ ```
+ 
+-## Acknowledgement
++## Acknowledgement 🙏
+ 
+ This project is built on top of excellent open-source ecosystems.
+ We sincerely thank the teams behind [LeRobot](https://github.com/huggingface/lerobot)
+ and [OpenPI](https://github.com/Physical-Intelligence/openpi) for their impactful contributions.
++
++ 
+\ No newline at end of file
+diff --git a/official-main-691a5e6/project/requirements.txt b/official-main-691a5e6/project/requirements.txt
+deleted file mode 100644
+index abb15d0..0000000
+--- a/official-main-691a5e6/project/requirements.txt
++++ /dev/null
+@@ -1,21 +0,0 @@
+-# LeRobot runtime
+-lerobot==0.5.1
+-torch>=2.2.0
+-torchvision>=0.17.0
+-accelerate>=1.2.1
+-
+-# MINT and MINT-Light model dependencies
+-timm>=1.0.20
+-transformers>=4.53.0
+-huggingface-hub>=0.34.2
+-safetensors>=0.4.3
+-einops>=0.8.0
+-omegaconf>=2.3.0
+-scipy>=1.10.1,<1.15
+-numpy>=1.24.0
+-
+-# SDAT/MINT-30M training utilities
+-lightning>=2.2.0
+-hydra-core>=1.3.2
+-typed-argument-parser>=1.10.1
+-pytz>=2024.1
+diff --git a/ascend-v062/project/scripts/EVALUATION_PROTOCOLS.md b/ascend-v062/project/scripts/EVALUATION_PROTOCOLS.md
+new file mode 100644
+index 0000000..490146b
+--- /dev/null
++++ b/ascend-v062/project/scripts/EVALUATION_PROTOCOLS.md
+@@ -0,0 +1,41 @@
++# LIBERO evaluation protocols
++
++The development runs and published-result reproductions intentionally use different sample sizes.
++Every report must show both the success count and denominator; percentages alone are not sufficient.
++
++| Result target | Framework/checkpoint line | Episodes per task | Rollouts per suite | Total rollouts | Seed | Actions executed per inference |
++|---|---|---:|---:|---:|---:|---:|
++| LeRobot PI0.5 published (`97/99/98/96`) | `pi05_libero_finetuned_v044` | 10 | 100 | 400 | 1000 | 10 |
++| OpenPI PI0.5 original (`98.8/98.2/98.0/92.4`) | OpenPI LIBERO checkpoint | 50 | 500 | 2000 | 7 | 5 |
++| MINT-4B paper (`97.4/99.6/98.2/97.8`) | MINT native LeRobot 0.4.3 line | 50 | 500 | 2000 | 42 | 4 |
++| Development A/B | Any pinned line | 5 | 50 | 200 | recorded per run | recorded per run |
++
++The LeRobot PI0.5 documentation explicitly launches `eval.n_episodes=10` over all 10 tasks in each
++suite. Its published percentages therefore have a denominator of 100 per suite.
++
++OpenPI's public evaluator defaults to `num_trials_per_task=50`, seed 7, and `replan_steps=5`. Its
++suite horizons are 220/280/300/520 for Spatial/Object/Goal/LIBERO-10. The LeRobot evaluator uses
++280/280/300/520 and the published LeRobot reproduction explicitly uses 10 action steps. These are
++separate public protocols; an OpenPI percentage is not used as the direct baseline for a LeRobot run.
++
++The MINT paper says it follows the standard LIBERO protocol and reports binary episode success, but
++does not explicitly state the episode count or random seed. Its 0.2 percentage-point granularity is
++consistent with 500 rollouts per suite. The public MINT repository supplies seed 42 in its evaluation
++example. The MINT alignment launcher consequently uses 50 episodes per task and seed 42, and records
++this evidence/assumption in the run manifest. This is the closest reproducible public protocol, not a
++claim that the omitted paper details were independently confirmed with the authors.
++
++LIBERO uses the benchmark-provided initial-state arrays. The LeRobot environment advances through
++those arrays deterministically for each task; the configured seed is retained in `eval_info.json`.
++Suite horizons are 280 steps for Spatial/Object, 300 for Goal, and 520 for LIBERO-10.
++
++## Parallel evaluation
++
++Formal evaluation may run suites in parallel because each suite has an independent environment,
++fixed initial-state order, and a dedicated output directory. Keep `eval.batch_size=1`; do not batch
++multiple rollouts together for a published-number comparison. The four-NPU launchers assign one
++complete suite to each NPU, so their result is protocol-equivalent to the serial launchers.
++
++`eval_joint_formal_8npu.sh` uses NPU 0-3 for the LeRobot PI0.5 protocol and NPU 4-7 for the MINT
++paper-alignment protocol. It is safe to run from a second instance that mounts the same persistent
++root only when its run tag is unique. Never point two instances at the same output directory.
+diff --git a/ascend-v062/project/scripts/README.md b/ascend-v062/project/scripts/README.md
+new file mode 100644
+index 0000000..b160609
+--- /dev/null
++++ b/ascend-v062/project/scripts/README.md
+@@ -0,0 +1,201 @@
++# 昇腾 910B 上的 MINT 与 PI0.5
++
++本目录保存用于 LIBERO 训练和评测的昇腾启动脚本。运行前必须由接手者显式设置持久化根目录：
++
++```bash
++export ASCEND_VLA_PERSISTENT_ROOT=<持久化根目录>
++```
++
++The pinned old/current framework lines and their experimental roles are recorded in
++[`VERSION_MATRIX.md`](VERSION_MATRIX.md).
++The distinct smoke, LeRobot PI0.5, OpenPI PI0.5, and MINT paper evaluation denominators are recorded
++in [`EVALUATION_PROTOCOLS.md`](EVALUATION_PROTOCOLS.md).
++
++Code, Python packages, models, datasets, caches, checkpoints, logs, metrics, and rollout videos live
++below that root. CANN 8.5 and required system libraries live in the container image. The Python
++environment is the persistent `envs/lerobot-npu` virtual environment. No model, dataset, checkpoint,
++or evaluation artifact is intentionally written into the image layer.
++
++## Ascend compatibility changes
++
++- Use `torch-npu` and `device=npu` with BF16 model weights.
++- Disable CUDA `torch.compile`; MINT and PI0.5 use eager execution on NPU.
++- Use PyAV for LIBERO videos because TorchCodec cannot load against the Ascend PyTorch build.
++- Keep the PaliGemma vision tower and projector in FP32 where required by Transformers 5.x.
++- Bypass `GemmaTextScaledWordEmbedding` by default when embedding MINT language tokens. MINT pins the
++  Hugging Face `fix/lerobot_openpi` branch at commit
++  `dcddb970176382c0fcf4521b0c0e6fc15894dfe0`, where this path is a plain `nn.Embedding`.
++  Transformers 5.x otherwise multiplies those embeddings by `sqrt(2048)`, changing the policy
++  semantics even though every checkpoint tensor loads successfully. Set
++  `MINT_USE_TRANSFORMERS_SCALED_LANGUAGE_EMBEDDING=1` only to reproduce the pre-fix diagnostic
++  baseline.
++- Restore the LeRobot v0.4.3 PI0.5 state-prompt processor referenced by the public MINT artifact.
++  It pads LIBERO state from 8 to 32 dimensions before discretization; LeRobot 0.6.2 changed the
++  same serialized registry name to an 8-dimensional prompt. Set
++  `MINT_USE_CURRENT_PI05_STATE_PROMPT=1` only to reproduce that incompatible behavior.
++- Convert inference prefix embeddings to the language-model dtype before creating the KV cache.
++  Ascend SDPA requires query, key, and value to have identical dtypes.
++- Use the top-level `--discover_packages_path=lerobot_policy_mint` argument. A policy-scoped plugin
++  argument leaks into `--policy.path` overrides in the current LeRobot parser.
++- Load complete MINT checkpoints with zero missing and zero unexpected keys. PI0.5 initialization
++  loads only the PaliGemma backbone; the MINT action expert stays randomly initialized.
++
++## Environment and assets
++
++```bash
++source scripts/ascend/env.sh
++python scripts/ascend/preflight_mint.py \
++  --checkpoint "$MINT_CHECKPOINT" \
++  --tokenizer "$MINT_TOKENIZER" \
++  --dataset "$HF_LEROBOT_HOME/lerobot/libero" \
++  --require-weights --require-complete-dataset
++```
++
++Expected complete LIBERO revision `a1aaacb7f6cd6ee5fb43120f673cebb0cfea7dd4`:
++
++```text
++1693 episodes, 273465 frames, 377 parquet files, 74 MP4 files, 0 incomplete files
++```
++
++After the generic `lerobot/pi05_base` file is checksum-verified, validate MINT backbone
++initialization, checkpoint save, resume, and resumed-checkpoint inference with:
++
++```bash
++scripts/ascend/validate_mint_base_resume.sh mint_base_resume_validation
++```
++
++## Evaluation
++
++MINT uses `n_action_steps=4`, matching the public repository example:
++
++```bash
++scripts/ascend/eval_libero.sh \
++  "$MINT_CHECKPOINT" \
++  "$MINT_OUTPUT_ROOT/eval/mint_spatial_smoke" \
++  libero_spatial '[0]' 1 4 42 auto
++
++scripts/ascend/eval_libero_benchmark.sh \
++  "$MINT_CHECKPOINT" 5 mint_libero_4suites_5eps 4
++```
++
++Run the formal current-framework control on four NPUs with one suite per card:
++
++```bash
++scripts/ascend/eval_mint_official_4npu.sh \
++  "$MINT_CHECKPOINT" mint_current_50eps_4npu 50 4 42 4,5,6,7
++```
++
++The command above is a 200-rollout development A/B (`5 episodes/task`), not a published-result
++reproduction. The formal MINT comparison uses the launcher default of `50 episodes/task` (2,000
++rollouts total). The formal LeRobot PI0.5 comparison uses `10 episodes/task` (400 rollouts total).
++Always report successes/trials alongside percentages.
++
++On an eight-NPU instance, run both formal protocols concurrently while retaining batch size 1:
++
++```bash
++scripts/ascend/eval_joint_formal_8npu.sh \
++  "$MINT_ASCEND_ROOT/models/pi05_libero_finetuned" \
++  "$MINT_CHECKPOINT" \
++  joint_formal_8npu_$(date +%Y%m%d_%H%M%S)
++```
++
++PI0.5 uses NPU 0-3 and MINT on the pinned LeRobot 0.4.3 line uses NPU 4-7. The run tag must be
++unique when another instance mounts the same persistent storage.
++
++Each run retains `eval.log`, `eval_info.json`, and per-episode MP4 files. The validator decodes every
++video referenced by `eval_info.json`. The benchmark report includes per-task and per-suite CSV,
++JSON, Markdown, a published-vs-NPU comparison plot, and Wilson 95% confidence intervals.
++
++Pass `--baseline-dir` and `--pi05-dir` to `generate_libero_report.py` to add the MINT pre-fix and
++PI0.5 NPU four-suite results to the same tables and comparison plot.
++
++For the final 50-episodes-per-task comparison, `finalize_libero_formal_campaign.sh` waits for the
++four MINT/PI0.5 framework combinations, generates one joint report, and rejects any suite whose
++trial count is not exactly 500. The expected `eval_info.json` counts can be changed from 4 to 8 via
++`PI05_CURRENT_EXPECTED_FILES` and `PI05_V043_EXPECTED_FILES` when PI0.5 uses task sharding.
++
++Generate batch-scaling CSV, JSON, and PNG from retained inference logs with:
++
++```bash
++python scripts/ascend/generate_mint_runtime_report.py \
++  "$MINT_ASCEND_ROOT/outputs/benchmarks/mint_libero_public_checkpoint"
++```
++
++## Official training schedules
++
++MINT follows arXiv:2602.08602 Appendix Table VI: global batch 128, AdamW, learning rate `2e-4`,
++betas `(0.9, 0.95)`, weight decay `0.01`, chunk size 16, and 30000 optimizer updates. PI0.5 follows
++the recipe embedded in `pi05_libero_finetuned_v044`, the checkpoint used for the published LIBERO
++rates: global batch 256, AdamW, learning rate `2.5e-5`, mean/std normalization, and 6000 optimizer
++updates. The newer 30000-update, global-batch-64 documentation quickstart remains available via
++`PI05_RECIPE=quickstart`, but is not the published-result reproduction setting.
++
++The trainer loop counts micro-batches. Therefore:
++
++- trainer steps and checkpoint frequency are multiplied by gradient accumulation;
++- scheduler lengths are not multiplied by gradient accumulation;
++- Accelerate advances its scheduler once per data-parallel process per optimizer update, so
++  scheduler lengths are multiplied by `NUM_PROCESSES`.
++
++Examples for the current two-card allocation, one independent job per card:
++
++```bash
++# MINT on one NPU: batch 32 x gradient accumulation 4 = global batch 128
++scripts/ascend/train_libero_reproduction.sh 1 32 mint_libero 30000 200
++
++# PI0.5 on another NPU: batch 16 x gradient accumulation 16 = global batch 256
++../lerobot-ascend/scripts/ascend/train_libero_reproduction.sh \
++  1 16 pi05_libero "$MINT_ASCEND_ROOT/models/pi05_libero_base" 6000 100
++```
++
++Both launchers reject incomplete assets and existing output directories. Checkpoints contain model,
++optimizer, scheduler, RNG, data-order, and training-step state.
++
++## Resume and 12-hour run
++
++```bash
++scripts/ascend/resume_libero_train.sh \
++  /path/to/checkpoints/000200/pretrained_model TARGET_MICRO_STEPS 1 resumed_run
++
++scripts/ascend/launch_dual_12h.sh dual_12h_$(date +%Y%m%d_%H%M%S) 12h
++scripts/ascend/monitor_dual_training.sh \
++  "$MINT_ASCEND_ROOT/outputs/dual_12h/RUN_TAG"
++```
++
++The dual launcher assigns MINT to visible NPU 0 and PI0.5 to visible NPU 1. It retains a manifest,
++separate launcher logs, process IDs, one-minute NPU telemetry, periodic resumable checkpoints, and a
++stability report. Before occupying either card it verifies the pinned SHA256 values for both base
++weights and the MINT tokenizer. It uses `timeout` only as a 12-hour wall-clock boundary; the most
++recent periodic checkpoint remains the resume point.
++
++For an eight-NPU allocation, run four-way DDP for each model concurrently:
++
++```bash
++scripts/ascend/launch_joint_8npu_12h.sh \
++  joint_8npu_12h_$(date +%Y%m%d_%H%M%S) 12h
++scripts/ascend/monitor_dual_training.sh \
++  "$MINT_ASCEND_ROOT/outputs/joint_8npu_12h/RUN_TAG"
++```
++
++MINT uses visible NPU 0-3 with micro batch 8 and PI0.5 uses NPU 4-7 with micro batch 16. Both use
++gradient accumulation 4, preserving their official global batches of 128 and 256 respectively.
++
++To prioritize the official MINT recipe without starting PI0.5 training, use the dedicated four-NPU
++launcher. The third argument selects four physical device IDs from a larger allocation:
++
++```bash
++scripts/ascend/launch_mint_4npu_12h.sh \
++  mint_4npu_12h_$(date +%Y%m%d_%H%M%S) 12h 8,9,10,11
++```
++
++The launcher verifies the generic PI0.5 initialization and tokenizer SHA256 values, preserves the
++paper's global batch 128, and writes a session manifest, one-minute NPU telemetry, logs, and periodic
++resumable checkpoints under persistent `outputs/` paths. The default interval is 1,000 optimizer
++updates because a complete model plus AdamW state is about 22 GB; override it with
++`MINT_SAVE_UPDATES` when a shorter recovery point is worth the additional storage.
++
++Create an environment and source snapshot after final code changes with:
++
++```bash
++scripts/ascend/record_environment.sh pre_training_snapshot
++```
+diff --git a/ascend-v062/project/scripts/VERSION_MATRIX.md b/ascend-v062/project/scripts/VERSION_MATRIX.md
+new file mode 100644
+index 0000000..7fa7a00
+--- /dev/null
++++ b/ascend-v062/project/scripts/VERSION_MATRIX.md
+@@ -0,0 +1,35 @@
++# LeRobot, PI0.5, and MINT Ascend version matrix
++
++Snapshot date: 2026-08-26.
++
++| Line | LeRobot source | Transformers | Model artifact | Purpose |
++|---|---|---|---|---|
++| MINT-native control | `v0.4.3` (`0b067df57d21d3a02d6c511f1609172fa39ac29b`) | `4.53.3` OpenPI branch (`dcddb970176382c0fcf4521b0c0e6fc15894dfe0`) | `huangrm/MINT-libero`, or the same PI0.5 artifact below | Isolate Ascend changes with MINT's original framework semantics |
++| Published PI0.5 | checkpoint release `v0.4.4` | Serialized with the release-time PI0.5 implementation | `lerobot/pi05_libero_finetuned_v044` revision `8e174154ef5f6c60a8da12ae99c303d8963138c1` | Published-weight evaluation and official 6,000-update recipe |
++| Current integration | source snapshot version `0.6.2` | `>=5.4,<5.6` | The same published PI0.5 and MINT artifacts after migration | Retain compatibility with current LeRobot development |
++
++Upstream's latest stable tag at the snapshot date is `v0.6.1`; the local `0.6.2` tree is a
++development snapshot, not a stable release tag.
++
++The old source line is imported through `PYTHONPATH` from `projects/lerobot-v043-ascend`. Python
++package metadata can still print `0.6.2` because the shared persistent environment contains the
++current editable installation; `preflight_v043.py` verifies the imported source path and pinned
++source revision separately.
++
++## Ascend-only compatibility boundary
++
++The MINT-native control keeps these device-level changes:
++
++- discover and validate `torch.npu` devices;
++- fall back from FP64 to FP32 where Ascend does not support FP64;
++- disable CUDA-oriented `torch.compile` on NPU;
++- align prefix/KV-cache dtypes for Ascend SDPA;
++- serialize and restore NPU RNG state for checkpoints.
++
++The local PaliGemma tokenizer redirect avoids a gated Hub dependency. The LIBERO task filter is an
++evaluation convenience. Neither changes model weights. MINT's 32-value state prompt and plain
++language embedding are release-time semantic compatibility, not Ascend changes.
++
++The `0.4.3` and `0.6.2` PI0.5 policy directories differ substantially. The current tree adds and
++changes policy configuration, processor behavior, model logic, and memory support, so a current-vs-
++old result difference must not be attributed to Ascend without the same-checkpoint A/B evaluation.
+diff --git a/ascend-v062/project/scripts/assemble_pi05_base_upload.sh b/ascend-v062/project/scripts/assemble_pi05_base_upload.sh
+new file mode 100755
+index 0000000..13de729
+--- /dev/null
++++ b/ascend-v062/project/scripts/assemble_pi05_base_upload.sh
+@@ -0,0 +1,73 @@
++#!/usr/bin/env bash
++
++set -euo pipefail
++
++SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
++source "$SCRIPT_DIR/env.sh"
++
++MODEL_DIR="${1:-$MINT_PI05_BASE}"
++PART_SIZE=3616791468
++FULL_SIZE=14467165872
++FULL_SHA256="0eb11ca9587678c1d2ef8cf32807c29f8ce53a2bfdfc1aa4a4c96f16fca59b0f"
++PART_SHA256=(
++    "20454f3800c55392ac8684fab84da72af52f0792fe9f29e2f27cdc9f7b295943"
++    "441ca220e4bbfac2dfbf37af8a1435e5677f2d87a83dbddc09f9921d6e456073"
++    "2d5919b6784bff555e612293ab54bb22617ca7c9c095e1ef625dd615ca1d067d"
++    "8d9d1f8a221d64b267f59a3d483a454aaf1dddba6760cba86bc9b5327df84b83"
++)
++TARGET="$MODEL_DIR/model.safetensors"
++TEMP_TARGET="$MODEL_DIR/model.safetensors.assembling"
++
++if [[ -e "$TARGET" ]]; then
++    actual="$(sha256sum "$TARGET" | cut -d ' ' -f 1)"
++    if [[ "$actual" == "$FULL_SHA256" ]]; then
++        printf 'PI0.5 base is already complete: %s\n' "$TARGET"
++        exit 0
++    fi
++    echo "Refusing to overwrite an existing target with SHA256 $actual" >&2
++    exit 2
++fi
++if [[ -e "$TEMP_TARGET" ]]; then
++    echo "Refusing to overwrite an existing assembly file: $TEMP_TARGET" >&2
++    exit 2
++fi
++
++for index in 0 1 2 3; do
++    part="$MODEL_DIR/upload_clean_part${index}.tmp"
++    if [[ ! -f "$part" ]]; then
++        echo "Missing upload part: $part" >&2
++        exit 2
++    fi
++    size="$(stat -c '%s' "$part")"
++    if [[ "$size" != "$PART_SIZE" ]]; then
++        echo "Size mismatch for $part: expected=$PART_SIZE actual=$size" >&2
++        exit 2
++    fi
++    actual="$(sha256sum "$part" | cut -d ' ' -f 1)"
++    if [[ "$actual" != "${PART_SHA256[$index]}" ]]; then
++        echo "SHA256 mismatch for $part: expected=${PART_SHA256[$index]} actual=$actual" >&2
++        exit 2
++    fi
++    printf 'part%s verified: size=%s sha256=%s\n' "$index" "$size" "$actual"
++done
++
++dd if="$MODEL_DIR/upload_clean_part0.tmp" of="$TEMP_TARGET" bs=16M status=progress
++for index in 1 2 3; do
++    dd if="$MODEL_DIR/upload_clean_part${index}.tmp" of="$TEMP_TARGET" \
++        bs=16M oflag=append conv=notrunc status=progress
++done
++
++actual_size="$(stat -c '%s' "$TEMP_TARGET")"
++if [[ "$actual_size" != "$FULL_SIZE" ]]; then
++    echo "Assembled size mismatch: expected=$FULL_SIZE actual=$actual_size" >&2
++    exit 2
++fi
++actual_sha256="$(sha256sum "$TEMP_TARGET" | cut -d ' ' -f 1)"
++if [[ "$actual_sha256" != "$FULL_SHA256" ]]; then
++    echo "Assembled SHA256 mismatch: expected=$FULL_SHA256 actual=$actual_sha256" >&2
++    exit 2
++fi
++
++mv "$TEMP_TARGET" "$TARGET"
++printf '%s  %s\n' "$FULL_SHA256" "$(basename -- "$TARGET")" >"$MODEL_DIR/model.safetensors.sha256"
++printf 'PI0.5 base assembled and verified: %s\n' "$TARGET"
+diff --git a/ascend-v062/project/scripts/collect_npu_telemetry.sh b/ascend-v062/project/scripts/collect_npu_telemetry.sh
+new file mode 100755
+index 0000000..9e57194
+--- /dev/null
++++ b/ascend-v062/project/scripts/collect_npu_telemetry.sh
+@@ -0,0 +1,32 @@
++#!/usr/bin/env bash
++
++set -eo pipefail
++
++SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
++source "$SCRIPT_DIR/env.sh"
++
++SESSION_DIR="${1:?Usage: $0 SESSION_DIR MINT_PID PI05_PID}"
++MINT_PID="${2:?Usage: $0 SESSION_DIR MINT_PID PI05_PID}"
++PI05_PID="${3:?Usage: $0 SESSION_DIR MINT_PID PI05_PID}"
++INTERVAL_SECONDS="${TELEMETRY_INTERVAL_SECONDS:-60}"
++LOG_FILE="$SESSION_DIR/telemetry.log"
++
++if [[ "$SESSION_DIR" != "$MINT_ASCEND_ROOT/"* || ! -d "$SESSION_DIR" ]]; then
++    echo "Invalid persistent session directory: $SESSION_DIR" >&2
++    exit 2
++fi
++if ! [[ "$INTERVAL_SECONDS" =~ ^[1-9][0-9]*$ ]]; then
++    echo "TELEMETRY_INTERVAL_SECONDS must be a positive integer" >&2
++    exit 2
++fi
++
++while kill -0 "$MINT_PID" 2>/dev/null || kill -0 "$PI05_PID" 2>/dev/null; do
++    {
++        printf '\n===== %s =====\n' "$(date --iso-8601=seconds)"
++        ps -p "$MINT_PID,$PI05_PID" -o pid,ppid,stat,etime,%cpu,%mem,rss,cmd || true
++        npu-smi info || true
++    } >>"$LOG_FILE" 2>&1
++    sleep "$INTERVAL_SECONDS"
++done
++
++printf '\n===== %s training processes exited =====\n' "$(date --iso-8601=seconds)" >>"$LOG_FILE"
+diff --git a/ascend-v062/project/scripts/download_mint_assets.sh b/ascend-v062/project/scripts/download_mint_assets.sh
+new file mode 100755
+index 0000000..915778f
+--- /dev/null
++++ b/ascend-v062/project/scripts/download_mint_assets.sh
+@@ -0,0 +1,50 @@
++#!/usr/bin/env bash
++
++set -eo pipefail
++
++SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
++source "$SCRIPT_DIR/env.sh"
++
++COMPONENT="${1:-all}"
++MINT_REVISION="9e5c72e4044d94c3f77046427db84b84f3f68fb1"
++TOKENIZER_REVISION="cf061fe46497f95e768f845f007646a85c883df3"
++PI05_BASE_REVISION="b211f3d44c36b6acfcf7ae94a64e8e96f75a64ba"
++
++case "$COMPONENT" in
++    checkpoint|tokenizer|base|all) ;;
++    *) echo "Usage: $0 [checkpoint|tokenizer|base|all]" >&2; exit 2 ;;
++esac
++
++for destination in "$MINT_CHECKPOINT" "$MINT_TOKENIZER" "$MINT_PI05_BASE"; do
++    destination="$(realpath -m "$destination")"
++    if [[ "$destination" != "$MINT_ASCEND_ROOT/"* ]]; then
++        echo "Refusing non-persistent download directory: $destination" >&2
++        exit 2
++    fi
++done
++
++if [[ "$COMPONENT" == "checkpoint" || "$COMPONENT" == "all" ]]; then
++    hf download huangrm/MINT-libero \
++        --revision "$MINT_REVISION" \
++        --local-dir "$MINT_CHECKPOINT"
++fi
++
++if [[ "$COMPONENT" == "tokenizer" || "$COMPONENT" == "all" ]]; then
++    hf download huangrm/MINT-tokenizer-libero \
++        --revision "$TOKENIZER_REVISION" \
++        --local-dir "$MINT_TOKENIZER"
++fi
++
++if [[ "$COMPONENT" == "base" || "$COMPONENT" == "all" ]]; then
++    hf download lerobot/pi05_base \
++        --revision "$PI05_BASE_REVISION" \
++        --local-dir "$MINT_PI05_BASE"
++fi
++
++printf '%s\n' \
++    "mint_checkpoint=$MINT_CHECKPOINT" \
++    "mint_revision=$MINT_REVISION" \
++    "mint_tokenizer=$MINT_TOKENIZER" \
++    "tokenizer_revision=$TOKENIZER_REVISION" \
++    "pi05_base=$MINT_PI05_BASE" \
++    "pi05_base_revision=$PI05_BASE_REVISION"
+diff --git a/ascend-v062/project/scripts/env.sh b/ascend-v062/project/scripts/env.sh
+new file mode 100755
+index 0000000..f26aa99
+--- /dev/null
++++ b/ascend-v062/project/scripts/env.sh
+@@ -0,0 +1,39 @@
++#!/usr/bin/env bash
++
++if [[ -z "${ASCEND_VLA_PERSISTENT_ROOT:-}" ]]; then
++    echo "必须先显式设置 ASCEND_VLA_PERSISTENT_ROOT" >&2
++    return 2 2>/dev/null || exit 2
++fi
++
++SCRIPT_PATH="$(realpath "${BASH_SOURCE[0]}")"
++if [[ "$SCRIPT_PATH" == /opt/ascend-vla/src/* ]]; then
++    source /opt/ascend-vla/activate-v062.sh || {
++        status=$?
++        return "$status" 2>/dev/null || exit "$status"
++    }
++    export MINT_ASCEND_ROOT="$ASCEND_VLA_PERSISTENT_ROOT"
++    MINT_PROJECT_ROOT=/opt/ascend-vla/src/MINT
++else
++    export MINT_ASCEND_ROOT="$ASCEND_VLA_PERSISTENT_ROOT"
++
++    LEROBOT_ENV="$MINT_ASCEND_ROOT/projects/lerobot-ascend/scripts/ascend/env.sh"
++    if [[ ! -f "$LEROBOT_ENV" ]]; then
++        echo "LeRobot Ascend environment is missing: $LEROBOT_ENV" >&2
++        return 2 2>/dev/null || exit 2
++    fi
++    source "$LEROBOT_ENV"
++    MINT_PROJECT_ROOT="$MINT_ASCEND_ROOT/projects/MINT"
++fi
++
++export MINT_PROJECT_ROOT
++export MINT_PLUGIN_ROOT="$MINT_PROJECT_ROOT/lerobot_policy_mint"
++export PYTHONPATH="$MINT_PLUGIN_ROOT/src${PYTHONPATH:+:$PYTHONPATH}"
++export MINT_CHECKPOINT="$MINT_ASCEND_ROOT/models/mint_libero"
++export MINT_TOKENIZER="$MINT_ASCEND_ROOT/models/mint_tokenizer_libero"
++export MINT_PI05_BASE="${MINT_PI05_BASE:-$MINT_ASCEND_ROOT/models/pi05_base}"
++export MINT_OUTPUT_ROOT="$LEROBOT_OUTPUT_ROOT/mint"
++
++mkdir -p \
++    "$MINT_OUTPUT_ROOT" \
++    "$MINT_ASCEND_ROOT/models" \
++    "$MINT_ASCEND_ROOT/outputs/downloads"
+diff --git a/ascend-v062/project/scripts/eval_joint_formal_8npu.sh b/ascend-v062/project/scripts/eval_joint_formal_8npu.sh
+new file mode 100755
+index 0000000..7ef9b94
+--- /dev/null
++++ b/ascend-v062/project/scripts/eval_joint_formal_8npu.sh
+@@ -0,0 +1,76 @@
++#!/usr/bin/env bash
++
++set -eo pipefail
++
++SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
++source "$SCRIPT_DIR/env.sh"
++
++PI05_CHECKPOINT="${1:-$MINT_ASCEND_ROOT/models/pi05_libero_finetuned}"
++MINT_CHECKPOINT="${2:-$MINT_ASCEND_ROOT/models/mint_libero}"
++RUN_TAG="${3:-joint_formal_8npu_$(date +%Y%m%d_%H%M%S)}"
++CONTROL_DIR="$MINT_OUTPUT_ROOT/joint-eval/$RUN_TAG"
++PI05_RUN_NAME="${RUN_TAG}_pi05_lerobot_v062"
++MINT_RUN_NAME="${RUN_TAG}_mint_lerobot_v043"
++PI05_SCRIPT="$MINT_ASCEND_ROOT/projects/lerobot-ascend/scripts/ascend/eval_pi05_official_4npu.sh"
++MINT_SCRIPT="$MINT_ASCEND_ROOT/projects/lerobot-v043-ascend/scripts/ascend/eval_mint_official_4npu.sh"
++
++if [[ -e "$CONTROL_DIR" ]]; then
++    echo "Refusing to overwrite existing control directory: $CONTROL_DIR" >&2
++    exit 2
++fi
++for required in "$PI05_SCRIPT" "$MINT_SCRIPT" "$PI05_CHECKPOINT" "$MINT_CHECKPOINT"; do
++    if [[ ! -e "$required" ]]; then
++        echo "Required path is missing: $required" >&2
++        exit 2
++    fi
++done
++NPU_COUNT="$(python -c 'import torch; print(torch.npu.device_count())')"
++if (( NPU_COUNT < 8 )); then
++    echo "Eight visible NPUs are required, found $NPU_COUNT" >&2
++    exit 2
++fi
++
++mkdir -p "$CONTROL_DIR"
++printf '%s\n' \
++    "run_tag=$RUN_TAG" \
++    "npu_count=$NPU_COUNT" \
++    "pi05_checkpoint=$PI05_CHECKPOINT" \
++    "mint_checkpoint=$MINT_CHECKPOINT" \
++    "pi05_devices=0,1,2,3" \
++    "mint_devices=4,5,6,7" \
++    "pi05_run_name=$PI05_RUN_NAME" \
++    "mint_run_name=$MINT_RUN_NAME" \
++    "storage_is_shared=true" \
++    "eval_batch_size=1" \
++    >"$CONTROL_DIR/manifest.txt"
++npu-smi info >"$CONTROL_DIR/npu_smi_before.txt" 2>&1
++
++bash "$PI05_SCRIPT" \
++    "$PI05_CHECKPOINT" "$PI05_RUN_NAME" 10 10 1000 0,1,2,3 \
++    >"$CONTROL_DIR/pi05_controller.log" 2>&1 &
++PI05_PID=$!
++bash "$MINT_SCRIPT" \
++    "$MINT_CHECKPOINT" "$MINT_RUN_NAME" 50 4 42 4,5,6,7 \
++    >"$CONTROL_DIR/mint_controller.log" 2>&1 &
++MINT_PID=$!
++printf 'pi05_pid=%s\nmint_pid=%s\n' "$PI05_PID" "$MINT_PID" | tee "$CONTROL_DIR/processes.txt"
++
++set +e
++wait "$PI05_PID"
++PI05_STATUS=$?
++wait "$MINT_PID"
++MINT_STATUS=$?
++set -e
++printf 'pi05_exit=%s\nmint_exit=%s\n' "$PI05_STATUS" "$MINT_STATUS" | tee "$CONTROL_DIR/exit_status.txt"
++npu-smi info >"$CONTROL_DIR/npu_smi_after.txt" 2>&1
++
++if (( PI05_STATUS != 0 || MINT_STATUS != 0 )); then
++    echo "At least one formal evaluation controller failed" >&2
++    exit 1
++fi
++
++python "$SCRIPT_DIR/generate_libero_report.py" \
++    "$MINT_ASCEND_ROOT/outputs/mint-v043/eval/$MINT_RUN_NAME" \
++    --primary-label "MINT Ascend (LeRobot 0.4.3 formal)" \
++    --pi05-dir "$MINT_ASCEND_ROOT/outputs/eval/$PI05_RUN_NAME" \
++    --output-dir "$CONTROL_DIR/report"
+diff --git a/ascend-v062/project/scripts/eval_libero.sh b/ascend-v062/project/scripts/eval_libero.sh
+new file mode 100755
+index 0000000..6d5e5af
+--- /dev/null
++++ b/ascend-v062/project/scripts/eval_libero.sh
+@@ -0,0 +1,66 @@
++#!/usr/bin/env bash
++
++set -eo pipefail
++
++SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
++source "$SCRIPT_DIR/env.sh"
++
++CHECKPOINT="${1:-$MINT_CHECKPOINT}"
++OUTPUT_DIR="${2:-$MINT_OUTPUT_ROOT/eval/smoke_$(date +%Y%m%d_%H%M%S)}"
++SUITE="${3:-libero_spatial}"
++TASK_IDS="${4:-[0]}"
++N_EPISODES="${5:-1}"
++N_ACTION_STEPS="${6:-4}"
++SEED="${7:-42}"
++EPISODE_LENGTH="${8:-auto}"
++
++OUTPUT_DIR="$(realpath -m "$OUTPUT_DIR")"
++if [[ "$OUTPUT_DIR" != "$MINT_ASCEND_ROOT/"* ]]; then
++    echo "Refusing non-persistent output directory: $OUTPUT_DIR" >&2
++    exit 2
++fi
++if [[ -e "$OUTPUT_DIR" ]]; then
++    echo "Refusing to overwrite existing output directory: $OUTPUT_DIR" >&2
++    exit 2
++fi
++
++python "$SCRIPT_DIR/preflight_mint.py" --checkpoint "$CHECKPOINT" --require-weights
++mkdir -p "$OUTPUT_DIR"
++LOG_FILE="$OUTPUT_DIR/eval.log"
++
++printf '%s\n' \
++    "checkpoint=$CHECKPOINT" \
++    "output_dir=$OUTPUT_DIR" \
++    "suite=$SUITE" \
++    "task_ids=$TASK_IDS" \
++    "n_episodes=$N_EPISODES" \
++    "n_action_steps=$N_ACTION_STEPS" \
++    "seed=$SEED" \
++    "episode_length=$EPISODE_LENGTH" | tee "$LOG_FILE"
++npu-smi info 2>&1 | tee -a "$LOG_FILE"
++
++EVAL_ARGS=(
++    "--discover_packages_path=lerobot_policy_mint"
++    "--policy.path=$CHECKPOINT"
++    "--policy.device=npu"
++    "--policy.n_action_steps=$N_ACTION_STEPS"
++    "--policy.compile_model=false"
++    "--env.type=libero"
++    "--env.task=$SUITE"
++    "--env.max_parallel_tasks=1"
++    "--eval.batch_size=1"
++    "--eval.n_episodes=$N_EPISODES"
++    "--eval.recording=false"
++    "--output_dir=$OUTPUT_DIR"
++    "--seed=$SEED"
++)
++if [[ "$TASK_IDS" != "all" ]]; then
++    EVAL_ARGS+=("--env.task_ids=$TASK_IDS")
++fi
++if [[ "$EPISODE_LENGTH" != "auto" ]]; then
++    EVAL_ARGS+=("--env.episode_length=$EPISODE_LENGTH")
++fi
++
++lerobot-eval "${EVAL_ARGS[@]}" 2>&1 | tee -a "$LOG_FILE"
++python "$MINT_ASCEND_ROOT/projects/lerobot-ascend/scripts/ascend/validate_eval_artifacts.py" \
++    "$OUTPUT_DIR" 2>&1 | tee -a "$LOG_FILE"
+diff --git a/ascend-v062/project/scripts/eval_libero_benchmark.sh b/ascend-v062/project/scripts/eval_libero_benchmark.sh
+new file mode 100755
+index 0000000..a89d72f
+--- /dev/null
++++ b/ascend-v062/project/scripts/eval_libero_benchmark.sh
+@@ -0,0 +1,45 @@
++#!/usr/bin/env bash
++
++set -eo pipefail
++
++SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
++source "$SCRIPT_DIR/env.sh"
++
++CHECKPOINT="${1:-$MINT_CHECKPOINT}"
++EPISODES_PER_TASK="${2:-50}"
++RUN_NAME="${3:-mint_libero_benchmark_$(date +%Y%m%d_%H%M%S)}"
++N_ACTION_STEPS="${4:-4}"
++SEED="${5:-42}"
++ROOT_OUTPUT="$MINT_OUTPUT_ROOT/eval/$RUN_NAME"
++
++if [[ -e "$ROOT_OUTPUT" ]]; then
++    echo "Refusing to overwrite existing output directory: $ROOT_OUTPUT" >&2
++    exit 2
++fi
++mkdir -p "$ROOT_OUTPUT"
++printf '%s\n' \
++    "protocol_id=mint-paper-alignment-50eps-per-task" \
++    "comparison_target=MINT-4B_97.4_99.6_98.2_97.8" \
++    "framework=lerobot-current-ascend" \
++    "checkpoint=$CHECKPOINT" \
++    "episodes_per_task=$EPISODES_PER_TASK" \
++    "tasks_per_suite=10" \
++    "suite_rollouts=$((10 * EPISODES_PER_TASK))" \
++    "total_rollouts=$((40 * EPISODES_PER_TASK))" \
++    "n_action_steps=$N_ACTION_STEPS" \
++    "seed=$SEED" \
++    "suites=libero_spatial,libero_object,libero_goal,libero_10" \
++    >"$ROOT_OUTPUT/benchmark_manifest.txt"
++
++for suite in libero_spatial libero_object libero_goal libero_10; do
++    "$SCRIPT_DIR/eval_libero.sh" \
++        "$CHECKPOINT" \
++        "$ROOT_OUTPUT/${suite}" \
++        "$suite" \
++        all \
++        "$EPISODES_PER_TASK" \
++        "$N_ACTION_STEPS" \
++        "$SEED"
++done
++
++python "$SCRIPT_DIR/generate_libero_report.py" "$ROOT_OUTPUT"
+diff --git a/ascend-v062/project/scripts/eval_mint_official_4npu.sh b/ascend-v062/project/scripts/eval_mint_official_4npu.sh
+new file mode 100755
+index 0000000..81e1c38
+--- /dev/null
++++ b/ascend-v062/project/scripts/eval_mint_official_4npu.sh
+@@ -0,0 +1,102 @@
++#!/usr/bin/env bash
++
++set -eo pipefail
++
++SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
++source "$SCRIPT_DIR/env.sh"
++
++CHECKPOINT="${1:-$MINT_CHECKPOINT}"
++RUN_NAME="${2:-mint_current_50eps_4npu_$(date +%Y%m%d_%H%M%S)}"
++EPISODES_PER_TASK="${3:-50}"
++N_ACTION_STEPS="${4:-4}"
++SEED="${5:-42}"
++DEVICE_IDS_CSV="${6:-0,1,2,3}"
++TASK_IDS="${7:-all}"
++TASKS_PER_SUITE="${8:-10}"
++ROOT_OUTPUT="$MINT_OUTPUT_ROOT/eval/$RUN_NAME"
++SUITES=(libero_spatial libero_object libero_goal libero_10)
++IFS=',' read -r -a DEVICE_IDS <<<"$DEVICE_IDS_CSV"
++
++for value in "$EPISODES_PER_TASK" "$N_ACTION_STEPS" "$SEED" "$TASKS_PER_SUITE"; do
++    if ! [[ "$value" =~ ^[0-9]+$ ]]; then
++        echo "Episodes, action steps, and seed must be non-negative integers" >&2
++        exit 2
++    fi
++done
++if (( EPISODES_PER_TASK == 0 || N_ACTION_STEPS == 0 || TASKS_PER_SUITE == 0 )); then
++    echo "Episodes, action steps, and tasks per suite must be positive" >&2
++    exit 2
++fi
++if (( ${#DEVICE_IDS[@]} != ${#SUITES[@]} )); then
++    echo "Exactly four comma-separated NPU device IDs are required" >&2
++    exit 2
++fi
++declare -A SEEN_DEVICES=()
++for device in "${DEVICE_IDS[@]}"; do
++    if ! [[ "$device" =~ ^[0-9]+$ ]] || [[ -n "${SEEN_DEVICES[$device]:-}" ]]; then
++        echo "NPU device IDs must be unique non-negative integers: $DEVICE_IDS_CSV" >&2
++        exit 2
++    fi
++    SEEN_DEVICES[$device]=1
++done
++if [[ -e "$ROOT_OUTPUT" ]]; then
++    echo "Refusing to overwrite existing output directory: $ROOT_OUTPUT" >&2
++    exit 2
++fi
++
++mkdir -p "$ROOT_OUTPUT"
++printf '%s\n' \
++    "protocol_id=mint-paper-alignment-50eps-per-task" \
++    "comparison_target=MINT-4B_97.4_99.6_98.2_97.8" \
++    "framework=lerobot-current-ascend" \
++    "checkpoint=$CHECKPOINT" \
++    "episodes_per_task=$EPISODES_PER_TASK" \
++    "task_ids=$TASK_IDS" \
++    "tasks_per_suite=$TASKS_PER_SUITE" \
++    "suite_rollouts=$((TASKS_PER_SUITE * EPISODES_PER_TASK))" \
++    "total_rollouts=$((4 * TASKS_PER_SUITE * EPISODES_PER_TASK))" \
++    "eval_batch_size=1" \
++    "parallelization=suite-sharded-one-suite-per-npu" \
++    "n_action_steps=$N_ACTION_STEPS" \
++    "seed=$SEED" \
++    "device_ids=$DEVICE_IDS_CSV" \
++    "suites=${SUITES[*]}" \
++    >"$ROOT_OUTPUT/benchmark_manifest.txt"
++
++PIDS=()
++for index in "${!SUITES[@]}"; do
++    suite="${SUITES[$index]}"
++    device="${DEVICE_IDS[$index]}"
++    ASCEND_RT_VISIBLE_DEVICES="$device" "$SCRIPT_DIR/eval_libero.sh" \
++        "$CHECKPOINT" \
++        "$ROOT_OUTPUT/$suite" \
++        "$suite" \
++        "$TASK_IDS" \
++        "$EPISODES_PER_TASK" \
++        "$N_ACTION_STEPS" \
++        "$SEED" \
++        >"$ROOT_OUTPUT/${suite}_lane.log" 2>&1 &
++    PIDS+=("$!")
++    printf 'npu=%s suite=%s pid=%s\n' "$device" "$suite" "$!" | tee -a "$ROOT_OUTPUT/processes.txt"
++done
++
++FAILED=0
++for index in "${!PIDS[@]}"; do
++    set +e
++    wait "${PIDS[$index]}"
++    status=$?
++    set -e
++    printf 'npu=%s suite=%s exit=%s\n' \
++        "${DEVICE_IDS[$index]}" "${SUITES[$index]}" "$status" | tee -a "$ROOT_OUTPUT/exit_status.txt"
++    if (( status != 0 )); then
++        FAILED=1
++    fi
++done
++if (( FAILED != 0 )); then
++    echo "At least one MINT current-framework evaluation lane failed" >&2
++    exit 1
++fi
++
++python "$SCRIPT_DIR/generate_libero_report.py" \
++    "$ROOT_OUTPUT" \
++    --primary-label "MINT Ascend (LeRobot 0.6.2 formal)"
+diff --git a/ascend-v062/project/scripts/finalize_libero_formal_campaign.sh b/ascend-v062/project/scripts/finalize_libero_formal_campaign.sh
+new file mode 100755
+index 0000000..be5ec4c
+--- /dev/null
++++ b/ascend-v062/project/scripts/finalize_libero_formal_campaign.sh
+@@ -0,0 +1,122 @@
++#!/usr/bin/env bash
++
++set -eo pipefail
++
++SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
++source "$SCRIPT_DIR/env.sh"
++
++MINT_CURRENT_DIR="${1:?Usage: $0 MINT_CURRENT_DIR MINT_V043_DIR PI05_CURRENT_DIR PI05_V043_DIR OUTPUT_DIR [TIMEOUT_SECONDS]}"
++MINT_V043_DIR="${2:?Usage: $0 MINT_CURRENT_DIR MINT_V043_DIR PI05_CURRENT_DIR PI05_V043_DIR OUTPUT_DIR [TIMEOUT_SECONDS]}"
++PI05_CURRENT_DIR="${3:?Usage: $0 MINT_CURRENT_DIR MINT_V043_DIR PI05_CURRENT_DIR PI05_V043_DIR OUTPUT_DIR [TIMEOUT_SECONDS]}"
++PI05_V043_DIR="${4:?Usage: $0 MINT_CURRENT_DIR MINT_V043_DIR PI05_CURRENT_DIR PI05_V043_DIR OUTPUT_DIR [TIMEOUT_SECONDS]}"
++OUTPUT_DIR="${5:?Usage: $0 MINT_CURRENT_DIR MINT_V043_DIR PI05_CURRENT_DIR PI05_V043_DIR OUTPUT_DIR [TIMEOUT_SECONDS]}"
++TIMEOUT_SECONDS="${6:-129600}"
++POLL_SECONDS="${FORMAL_REPORT_POLL_SECONDS:-60}"
++MINT_CURRENT_EXPECTED_FILES="${MINT_CURRENT_EXPECTED_FILES:-4}"
++MINT_V043_EXPECTED_FILES="${MINT_V043_EXPECTED_FILES:-8}"
++PI05_CURRENT_EXPECTED_FILES="${PI05_CURRENT_EXPECTED_FILES:-4}"
++PI05_V043_EXPECTED_FILES="${PI05_V043_EXPECTED_FILES:-4}"
++
++for variable in MINT_CURRENT_DIR MINT_V043_DIR PI05_CURRENT_DIR PI05_V043_DIR OUTPUT_DIR; do
++    value="$(realpath -m "${!variable}")"
++    if [[ "$value" != "$MINT_ASCEND_ROOT/"* ]]; then
++        echo "$variable is outside the persistent root: $value" >&2
++        exit 2
++    fi
++    printf -v "$variable" '%s' "$value"
++done
++for value in \
++    "$TIMEOUT_SECONDS" \
++    "$POLL_SECONDS" \
++    "$MINT_CURRENT_EXPECTED_FILES" \
++    "$MINT_V043_EXPECTED_FILES" \
++    "$PI05_CURRENT_EXPECTED_FILES" \
++    "$PI05_V043_EXPECTED_FILES"; do
++    if ! [[ "$value" =~ ^[1-9][0-9]*$ ]]; then
++        echo "Timeout and polling interval must be positive integers" >&2
++        exit 2
++    fi
++done
++if [[ -e "$OUTPUT_DIR" ]]; then
++    echo "Refusing to overwrite existing output directory: $OUTPUT_DIR" >&2
++    exit 2
++fi
++
++mkdir -p "$OUTPUT_DIR"
++PROGRESS_LOG="$OUTPUT_DIR/finalizer.log"
++printf '%s\n' \
++    "mint_current_dir=$MINT_CURRENT_DIR" \
++    "mint_v043_dir=$MINT_V043_DIR" \
++    "pi05_current_dir=$PI05_CURRENT_DIR" \
++    "pi05_v043_dir=$PI05_V043_DIR" \
++    "expected_eval_files=$MINT_CURRENT_EXPECTED_FILES,$MINT_V043_EXPECTED_FILES,$PI05_CURRENT_EXPECTED_FILES,$PI05_V043_EXPECTED_FILES" \
++    "expected_rollouts_per_model=2000" \
++    "expected_rollouts_per_suite=500" \
++    "timeout_seconds=$TIMEOUT_SECONDS" \
++    "poll_seconds=$POLL_SECONDS" \
++    "started_at=$(date --iso-8601=seconds)" \
++    >"$OUTPUT_DIR/finalizer_manifest.txt"
++
++eval_file_count() {
++    if [[ ! -d "$1" ]]; then
++        echo 0
++        return
++    fi
++    find "$1" -type f -name eval_info.json 2>/dev/null | wc -l
++}
++
++deadline=$((SECONDS + TIMEOUT_SECONDS))
++while true; do
++    mint_current_count="$(eval_file_count "$MINT_CURRENT_DIR")"
++    mint_v043_count="$(eval_file_count "$MINT_V043_DIR")"
++    pi05_current_count="$(eval_file_count "$PI05_CURRENT_DIR")"
++    pi05_v043_count="$(eval_file_count "$PI05_V043_DIR")"
++    printf '%s mint_current=%s/%s mint_v043=%s/%s pi05_current=%s/%s pi05_v043=%s/%s\n' \
++        "$(date --iso-8601=seconds)" \
++        "$mint_current_count" "$MINT_CURRENT_EXPECTED_FILES" \
++        "$mint_v043_count" "$MINT_V043_EXPECTED_FILES" \
++        "$pi05_current_count" "$PI05_CURRENT_EXPECTED_FILES" \
++        "$pi05_v043_count" "$PI05_V043_EXPECTED_FILES" \
++        >>"$PROGRESS_LOG"
++    if (( mint_current_count == MINT_CURRENT_EXPECTED_FILES \
++        && mint_v043_count == MINT_V043_EXPECTED_FILES \
++        && pi05_current_count == PI05_CURRENT_EXPECTED_FILES \
++        && pi05_v043_count == PI05_V043_EXPECTED_FILES )); then
++        break
++    fi
++    if (( SECONDS >= deadline )); then
++        echo "Timed out waiting for all formal evaluation artifacts" | tee -a "$PROGRESS_LOG" >&2
++        exit 1
++    fi
++    sleep "$POLL_SECONDS"
++done
++
++python "$SCRIPT_DIR/generate_libero_report.py" \
++    "$MINT_CURRENT_DIR" \
++    --output-dir "$OUTPUT_DIR/report" \
++    --primary-label "MINT Ascend (LeRobot 0.6.2, 50 episodes/task)" \
++    --mint-v043-dir "$MINT_V043_DIR" \
++    --pi05-dir "$PI05_CURRENT_DIR" \
++    --pi05-v043-dir "$PI05_V043_DIR" \
++    >"$OUTPUT_DIR/report_generator.log" 2>&1
++
++python - "$OUTPUT_DIR/report/report.json" <<'PY'
++import json
++import sys
++
++report = json.load(open(sys.argv[1], encoding="utf-8"))
++if report["trials"] != 2000:
++    raise RuntimeError(f"Primary MINT trial count is {report['trials']}, expected 2000")
++for row in report["per_suite"]:
++    for field in ("trials", "mint_v043_trials", "pi05_npu_trials", "pi05_v043_trials"):
++        if row[field] != 500:
++            raise RuntimeError(
++                f"{row['suite']} {field} is {row[field]}, expected 500"
++            )
++PY
++
++printf '%s\n' \
++    "status=passed" \
++    "completed_at=$(date --iso-8601=seconds)" \
++    "report=$OUTPUT_DIR/report/report.json" \
++    >"$OUTPUT_DIR/result.txt"
+diff --git a/ascend-v062/project/scripts/generate_libero_report.py b/ascend-v062/project/scripts/generate_libero_report.py
+new file mode 100644
+index 0000000..89d997b
+--- /dev/null
++++ b/ascend-v062/project/scripts/generate_libero_report.py
+@@ -0,0 +1,488 @@
++#!/usr/bin/env python
++
++from __future__ import annotations
++
++import argparse
++import csv
++import json
++import math
++import os
++from pathlib import Path
++from typing import Any
++
++import matplotlib
++
++matplotlib.use("Agg")
++import matplotlib.pyplot as plt  # noqa: E402
++
++
++SUITES = ("libero_spatial", "libero_object", "libero_goal", "libero_10")
++DISPLAY_NAMES = {
++    "libero_spatial": "Spatial",
++    "libero_object": "Object",
++    "libero_goal": "Goal",
++    "libero_10": "LIBERO-10",
++}
++MINT_PUBLISHED = {
++    "libero_spatial": 97.4,
++    "libero_object": 99.6,
++    "libero_goal": 98.2,
++    "libero_10": 97.8,
++}
++PI05_LEROBOT_PUBLISHED = {
++    "libero_spatial": 97.0,
++    "libero_object": 99.0,
++    "libero_goal": 98.0,
++    "libero_10": 96.0,
++}
++
++
++def wilson_interval(successes: int, trials: int, z: float = 1.959963984540054) -> tuple[float, float]:
++    if trials <= 0:
++        return math.nan, math.nan
++    p = successes / trials
++    denominator = 1 + z**2 / trials
++    center = (p + z**2 / (2 * trials)) / denominator
++    margin = z * math.sqrt(p * (1 - p) / trials + z**2 / (4 * trials**2)) / denominator
++    return 100 * max(0.0, center - margin), 100 * min(1.0, center + margin)
++
++
++def read_eval(path: Path) -> list[dict[str, Any]]:
++    payload = json.loads(path.read_text(encoding="utf-8"))
++    rows = []
++    for item in payload["per_task"]:
++        suite = str(item["task_group"])
++        if suite not in SUITES:
++            continue
++        successes = [bool(value) for value in item["metrics"]["successes"]]
++        rows.append(
++            {
++                "suite": suite,
++                "task_id": int(item["task_id"]),
++                "successes": sum(successes),
++                "trials": len(successes),
++                "videos": len(item["metrics"].get("video_paths", [])),
++                "source": str(path.resolve()),
++            }
++        )
++    return rows
++
++
++def aggregate(rows: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
++    task_groups: dict[tuple[str, int], dict[str, Any]] = {}
++    for row in rows:
++        key = (row["suite"], row["task_id"])
++        target = task_groups.setdefault(
++            key,
++            {"suite": row["suite"], "task_id": row["task_id"], "successes": 0, "trials": 0, "videos": 0},
++        )
++        for field in ("successes", "trials", "videos"):
++            target[field] += row[field]
++
++    per_task = []
++    for key in sorted(task_groups, key=lambda item: (SUITES.index(item[0]), item[1])):
++        row = task_groups[key]
++        low, high = wilson_interval(row["successes"], row["trials"])
++        row["success_rate_pct"] = 100 * row["successes"] / row["trials"]
++        row["wilson_95_low_pct"] = low
++        row["wilson_95_high_pct"] = high
++        per_task.append(row)
++
++    per_suite = []
++    for suite in SUITES:
++        suite_rows = [row for row in per_task if row["suite"] == suite]
++        successes = sum(row["successes"] for row in suite_rows)
++        trials = sum(row["trials"] for row in suite_rows)
++        videos = sum(row["videos"] for row in suite_rows)
++        low, high = wilson_interval(successes, trials)
++        per_suite.append(
++            {
++                "suite": suite,
++                "display_name": DISPLAY_NAMES[suite],
++                "successes": successes,
++                "trials": trials,
++                "success_rate_pct": 100 * successes / trials if trials else math.nan,
++                "wilson_95_low_pct": low,
++                "wilson_95_high_pct": high,
++                "videos": videos,
++                "mint_published_pct": MINT_PUBLISHED[suite],
++                "pi05_lerobot_published_pct": PI05_LEROBOT_PUBLISHED[suite],
++            }
++        )
++    return per_task, per_suite
++
++
++def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
++    with path.open("w", newline="", encoding="utf-8") as output:
++        writer = csv.DictWriter(output, fieldnames=list(rows[0]))
++        writer.writeheader()
++        writer.writerows(rows)
++
++
++def plot(
++    output_dir: Path,
++    per_suite: list[dict[str, Any]],
++    primary_label: str,
++    baseline_by_suite: dict[str, dict[str, Any]] | None = None,
++    pi05_by_suite: dict[str, dict[str, Any]] | None = None,
++    mint_v043_by_suite: dict[str, dict[str, Any]] | None = None,
++    pi05_v043_by_suite: dict[str, dict[str, Any]] | None = None,
++) -> None:
++    x_values = list(range(len(per_suite)))
++    series: list[tuple[str, list[float], str, list[list[float]] | None]] = [
++        ("MINT published", [row["mint_published_pct"] for row in per_suite], "#2f6f9f", None),
++        (
++            "PI0.5 LeRobot published",
++            [row["pi05_lerobot_published_pct"] for row in per_suite],
++            "#d47a2c",
++            None,
++        ),
++    ]
++    if baseline_by_suite:
++        baseline = [baseline_by_suite[row["suite"]] for row in per_suite]
++        baseline_rates = [row["success_rate_pct"] for row in baseline]
++        series.append(
++            (
++                "MINT Ascend before semantic fix",
++                baseline_rates,
++                "#9a6aa6",
++                [
++                    [
++                        value - row["wilson_95_low_pct"]
++                        for value, row in zip(baseline_rates, baseline, strict=True)
++                    ],
++                    [
++                        row["wilson_95_high_pct"] - value
++                        for value, row in zip(baseline_rates, baseline, strict=True)
++                    ],
++                ],
++            )
++        )
++    aligned_rates = [row["success_rate_pct"] for row in per_suite]
++    series.append(
++        (
++            primary_label,
++            aligned_rates,
++            "#31845b",
++            [
++                [
++                    value - row["wilson_95_low_pct"]
++                    for value, row in zip(aligned_rates, per_suite, strict=True)
++                ],
++                [
++                    row["wilson_95_high_pct"] - value
++                    for value, row in zip(aligned_rates, per_suite, strict=True)
++                ],
++            ],
++        )
++    )
++    if mint_v043_by_suite:
++        mint_v043 = [mint_v043_by_suite[row["suite"]] for row in per_suite]
++        mint_v043_rates = [row["success_rate_pct"] for row in mint_v043]
++        series.append(
++            (
++                "MINT Ascend (LeRobot 0.4.3)",
++                mint_v043_rates,
++                "#607d3b",
++                [
++                    [
++                        value - row["wilson_95_low_pct"]
++                        for value, row in zip(mint_v043_rates, mint_v043, strict=True)
++                    ],
++                    [
++                        row["wilson_95_high_pct"] - value
++                        for value, row in zip(mint_v043_rates, mint_v043, strict=True)
++                    ],
++                ],
++            )
++        )
++    if pi05_by_suite:
++        pi05 = [pi05_by_suite[row["suite"]] for row in per_suite]
++        pi05_rates = [row["success_rate_pct"] for row in pi05]
++        series.append(
++            (
++                "PI0.5 Ascend (LeRobot 0.6.2)",
++                pi05_rates,
++                "#b85c45",
++                [
++                    [
++                        value - row["wilson_95_low_pct"]
++                        for value, row in zip(pi05_rates, pi05, strict=True)
++                    ],
++                    [
++                        row["wilson_95_high_pct"] - value
++                        for value, row in zip(pi05_rates, pi05, strict=True)
++                    ],
++                ],
++            )
++        )
++    if pi05_v043_by_suite:
++        pi05_v043 = [pi05_v043_by_suite[row["suite"]] for row in per_suite]
++        pi05_v043_rates = [row["success_rate_pct"] for row in pi05_v043]
++        series.append(
++            (
++                "PI0.5 Ascend (LeRobot 0.4.3)",
++                pi05_v043_rates,
++                "#8c6d31",
++                [
++                    [
++                        value - row["wilson_95_low_pct"]
++                        for value, row in zip(pi05_v043_rates, pi05_v043, strict=True)
++                    ],
++                    [
++                        row["wilson_95_high_pct"] - value
++                        for value, row in zip(pi05_v043_rates, pi05_v043, strict=True)
++                    ],
++                ],
++            )
++        )
++
++    width = min(0.22, 0.82 / len(series))
++    figure, axis = plt.subplots(figsize=(13, 6), constrained_layout=True)
++    center = (len(series) - 1) / 2
++    for index, (label, values, color, yerr) in enumerate(series):
++        axis.bar(
++            [value + (index - center) * width for value in x_values],
++            values,
++            width,
++            label=label,
++            color=color,
++            yerr=yerr,
++            capsize=3,
++        )
++    axis.set_title("LIBERO published results vs Ascend NPU reproduction")
++    axis.set_ylabel("Success rate (%)")
++    axis.set_xticks(x_values, [row["display_name"] for row in per_suite])
++    axis.set_ylim(80, 102.5)
++    axis.grid(axis="y", alpha=0.25)
++    axis.legend(
++        loc="upper center",
++        bbox_to_anchor=(0.5, -0.1),
++        ncols=min(3, len(series)),
++        fontsize=8,
++    )
++    figure.savefig(output_dir / "libero_success_comparison.png", dpi=180)
++    plt.close(figure)
++
++
++def main() -> None:
++    persistent_root = Path(os.environ["MINT_ASCEND_ROOT"]).resolve()
++    parser = argparse.ArgumentParser()
++    parser.add_argument("benchmark_dir", type=Path)
++    parser.add_argument("--output-dir", type=Path)
++    parser.add_argument(
++        "--primary-label",
++        default="MINT Ascend (LeRobot 0.6.2)",
++        help="Label for benchmark_dir in tables and plots.",
++    )
++    parser.add_argument(
++        "--baseline-dir",
++        type=Path,
++        help="Optional pre-fix benchmark directory to include in the comparison report.",
++    )
++    parser.add_argument(
++        "--pi05-dir",
++        type=Path,
++        help="Optional PI0.5 NPU four-suite benchmark directory to include in the report.",
++    )
++    parser.add_argument(
++        "--mint-v043-dir",
++        type=Path,
++        help="Optional MINT four-suite benchmark produced with the pinned LeRobot 0.4.3 line.",
++    )
++    parser.add_argument(
++        "--pi05-v043-dir",
++        type=Path,
++        help="Optional PI0.5 four-suite benchmark produced with the pinned LeRobot 0.4.3 line.",
++    )
++    args = parser.parse_args()
++
++    benchmark_dir = args.benchmark_dir.resolve()
++    output_dir = (args.output_dir or benchmark_dir / "report").resolve()
++    for path in (benchmark_dir, output_dir):
++        if not path.is_relative_to(persistent_root):
++            raise RuntimeError(f"Path is outside persistent root: {path}")
++
++    eval_paths = sorted(benchmark_dir.glob("**/eval_info.json"))
++    if not eval_paths:
++        raise FileNotFoundError(f"No eval_info.json files below {benchmark_dir}")
++    raw_rows = [row for path in eval_paths for row in read_eval(path)]
++    per_task, per_suite = aggregate(raw_rows)
++    baseline_eval_paths: list[Path] = []
++    baseline_by_suite = None
++    if args.baseline_dir:
++        baseline_dir = args.baseline_dir.resolve()
++        if not baseline_dir.is_relative_to(persistent_root):
++            raise RuntimeError(f"Path is outside persistent root: {baseline_dir}")
++        baseline_eval_paths = sorted(baseline_dir.glob("**/eval_info.json"))
++        if not baseline_eval_paths:
++            raise FileNotFoundError(f"No eval_info.json files below {baseline_dir}")
++        baseline_rows = [row for path in baseline_eval_paths for row in read_eval(path)]
++        _, baseline_per_suite = aggregate(baseline_rows)
++        baseline_by_suite = {row["suite"]: row for row in baseline_per_suite}
++        for row in per_suite:
++            baseline = baseline_by_suite[row["suite"]]
++            row["pre_fix_successes"] = baseline["successes"]
++            row["pre_fix_trials"] = baseline["trials"]
++            row["pre_fix_success_rate_pct"] = baseline["success_rate_pct"]
++    pi05_eval_paths: list[Path] = []
++    pi05_by_suite = None
++    if args.pi05_dir:
++        pi05_dir = args.pi05_dir.resolve()
++        if not pi05_dir.is_relative_to(persistent_root):
++            raise RuntimeError(f"Path is outside persistent root: {pi05_dir}")
++        pi05_eval_paths = sorted(pi05_dir.glob("**/eval_info.json"))
++        if not pi05_eval_paths:
++            raise FileNotFoundError(f"No eval_info.json files below {pi05_dir}")
++        pi05_rows = [row for path in pi05_eval_paths for row in read_eval(path)]
++        _, pi05_per_suite = aggregate(pi05_rows)
++        pi05_by_suite = {row["suite"]: row for row in pi05_per_suite}
++        for row in per_suite:
++            pi05 = pi05_by_suite[row["suite"]]
++            row["pi05_npu_successes"] = pi05["successes"]
++            row["pi05_npu_trials"] = pi05["trials"]
++            row["pi05_npu_success_rate_pct"] = pi05["success_rate_pct"]
++    mint_v043_eval_paths: list[Path] = []
++    mint_v043_by_suite = None
++    if args.mint_v043_dir:
++        mint_v043_dir = args.mint_v043_dir.resolve()
++        if not mint_v043_dir.is_relative_to(persistent_root):
++            raise RuntimeError(f"Path is outside persistent root: {mint_v043_dir}")
++        mint_v043_eval_paths = sorted(mint_v043_dir.glob("**/eval_info.json"))
++        if not mint_v043_eval_paths:
++            raise FileNotFoundError(f"No eval_info.json files below {mint_v043_dir}")
++        mint_v043_rows = [row for path in mint_v043_eval_paths for row in read_eval(path)]
++        _, mint_v043_per_suite = aggregate(mint_v043_rows)
++        mint_v043_by_suite = {row["suite"]: row for row in mint_v043_per_suite}
++        missing = set(SUITES) - {suite for suite, row in mint_v043_by_suite.items() if row["trials"]}
++        if missing:
++            raise RuntimeError(f"MINT LeRobot 0.4.3 benchmark is incomplete: {sorted(missing)}")
++        for row in per_suite:
++            mint_v043 = mint_v043_by_suite[row["suite"]]
++            row["mint_v043_successes"] = mint_v043["successes"]
++            row["mint_v043_trials"] = mint_v043["trials"]
++            row["mint_v043_success_rate_pct"] = mint_v043["success_rate_pct"]
++    pi05_v043_eval_paths: list[Path] = []
++    pi05_v043_by_suite = None
++    if args.pi05_v043_dir:
++        pi05_v043_dir = args.pi05_v043_dir.resolve()
++        if not pi05_v043_dir.is_relative_to(persistent_root):
++            raise RuntimeError(f"Path is outside persistent root: {pi05_v043_dir}")
++        pi05_v043_eval_paths = sorted(pi05_v043_dir.glob("**/eval_info.json"))
++        if not pi05_v043_eval_paths:
++            raise FileNotFoundError(f"No eval_info.json files below {pi05_v043_dir}")
++        pi05_v043_rows = [row for path in pi05_v043_eval_paths for row in read_eval(path)]
++        _, pi05_v043_per_suite = aggregate(pi05_v043_rows)
++        pi05_v043_by_suite = {row["suite"]: row for row in pi05_v043_per_suite}
++        missing = set(SUITES) - {suite for suite, row in pi05_v043_by_suite.items() if row["trials"]}
++        if missing:
++            raise RuntimeError(f"PI0.5 LeRobot 0.4.3 benchmark is incomplete: {sorted(missing)}")
++        for row in per_suite:
++            pi05_v043 = pi05_v043_by_suite[row["suite"]]
++            row["pi05_v043_successes"] = pi05_v043["successes"]
++            row["pi05_v043_trials"] = pi05_v043["trials"]
++            row["pi05_v043_success_rate_pct"] = pi05_v043["success_rate_pct"]
++    output_dir.mkdir(parents=True, exist_ok=True)
++    write_csv(output_dir / "per_task.csv", per_task)
++    write_csv(output_dir / "per_suite.csv", per_suite)
++    plot(
++        output_dir,
++        per_suite,
++        args.primary_label,
++        baseline_by_suite,
++        pi05_by_suite,
++        mint_v043_by_suite,
++        pi05_v043_by_suite,
++    )
++
++    trials = sum(row["trials"] for row in per_suite)
++    successes = sum(row["successes"] for row in per_suite)
++    payload = {
++        "benchmark_dir": str(benchmark_dir),
++        "primary_label": args.primary_label,
++        "eval_files": [str(path.resolve()) for path in eval_paths],
++        "baseline_eval_files": [str(path.resolve()) for path in baseline_eval_paths],
++        "pi05_eval_files": [str(path.resolve()) for path in pi05_eval_paths],
++        "mint_v043_eval_files": [str(path.resolve()) for path in mint_v043_eval_paths],
++        "pi05_v043_eval_files": [str(path.resolve()) for path in pi05_v043_eval_paths],
++        "successes": successes,
++        "trials": trials,
++        "success_rate_pct": 100 * successes / trials,
++        "video_count": sum(row["videos"] for row in per_suite),
++        "pi05_video_count": (
++            sum(row["videos"] for row in pi05_by_suite.values()) if pi05_by_suite else 0
++        ),
++        "per_suite": per_suite,
++        "per_task": per_task,
++        "published_sources": {
++            "MINT": "arXiv:2602.08602, main LIBERO results",
++            "PI0.5 LeRobot": "LeRobot docs/source/pi05.mdx, LIBERO benchmark results",
++        },
++    }
++    (output_dir / "report.json").write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
++
++    lines = [
++        "# MINT LIBERO Ascend NPU report",
++        "",
++        f"- Aggregate: {successes}/{trials} ({100 * successes / trials:.2f}%)",
++        f"- Referenced rollout videos: {payload['video_count']}",
++        f"- Evaluation files: {len(eval_paths)}",
++        "",
++    ]
++    columns = ["Suite", "Published MINT", "Published PI0.5"]
++    if baseline_by_suite:
++        columns.append("MINT before fix")
++    columns.append(args.primary_label)
++    if mint_v043_by_suite:
++        columns.append("MINT Ascend 0.4.3")
++    if pi05_by_suite:
++        columns.append("PI0.5 Ascend 0.6.2")
++    if pi05_v043_by_suite:
++        columns.append("PI0.5 Ascend 0.4.3")
++    columns.extend([f"95% Wilson CI ({args.primary_label})", "Primary videos"])
++    lines.extend(
++        [
++            "| " + " | ".join(columns) + " |",
++            "|---|" + "|".join("---:" for _ in columns[1:]) + "|",
++        ]
++    )
++    for row in per_suite:
++        values = [
++            row["display_name"],
++            f"{row['mint_published_pct']:.1f}%",
++            f"{row['pi05_lerobot_published_pct']:.1f}%",
++        ]
++        if baseline_by_suite:
++            values.append(
++                f"{row['pre_fix_successes']}/{row['pre_fix_trials']} "
++                f"({row['pre_fix_success_rate_pct']:.1f}%)"
++            )
++        values.append(f"{row['successes']}/{row['trials']} ({row['success_rate_pct']:.1f}%)")
++        if mint_v043_by_suite:
++            values.append(
++                f"{row['mint_v043_successes']}/{row['mint_v043_trials']} "
++                f"({row['mint_v043_success_rate_pct']:.1f}%)"
++            )
++        if pi05_by_suite:
++            values.append(
++                f"{row['pi05_npu_successes']}/{row['pi05_npu_trials']} "
++                f"({row['pi05_npu_success_rate_pct']:.1f}%)"
++            )
++        if pi05_v043_by_suite:
++            values.append(
++                f"{row['pi05_v043_successes']}/{row['pi05_v043_trials']} "
++                f"({row['pi05_v043_success_rate_pct']:.1f}%)"
++            )
++        values.extend(
++            [
++                f"[{row['wilson_95_low_pct']:.1f}, {row['wilson_95_high_pct']:.1f}]",
++                str(row["videos"]),
++            ]
++        )
++        lines.append("| " + " | ".join(values) + " |")
++    (output_dir / "REPORT.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
++    print(json.dumps({key: payload[key] for key in ("successes", "trials", "success_rate_pct", "video_count")}, indent=2))
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/ascend-v062/project/scripts/generate_mint_runtime_report.py b/ascend-v062/project/scripts/generate_mint_runtime_report.py
+new file mode 100644
+index 0000000..4dbc5c9
+--- /dev/null
++++ b/ascend-v062/project/scripts/generate_mint_runtime_report.py
+@@ -0,0 +1,123 @@
++#!/usr/bin/env python
++
++from __future__ import annotations
++
++import argparse
++import csv
++import json
++import os
++from pathlib import Path
++from typing import Any
++
++import matplotlib
++
++matplotlib.use("Agg")
++import matplotlib.pyplot as plt  # noqa: E402
++
++
++def read_result(path: Path) -> dict[str, Any]:
++    text = path.read_text(encoding="utf-8", errors="replace").rstrip()
++    start = text.rfind("\n{")
++    if start < 0:
++        raise ValueError(f"No JSON result found in {path}")
++    return json.loads(text[start + 1 :])
++
++
++def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
++    with path.open("w", newline="", encoding="utf-8") as output:
++        writer = csv.DictWriter(output, fieldnames=list(rows[0]))
++        writer.writeheader()
++        writer.writerows(rows)
++
++
++def plot(path: Path, rows: list[dict[str, Any]]) -> None:
++    batches = [row["batch_size"] for row in rows]
++    labels = [str(batch) for batch in batches]
++    figure, axes = plt.subplots(1, 3, figsize=(12.5, 4.2), constrained_layout=True)
++
++    axes[0].plot(labels, [row["chunk_seconds_mean"] for row in rows], marker="o", label="Mean")
++    axes[0].plot(labels, [row["chunk_seconds_p95"] for row in rows], marker="s", label="P95")
++    axes[0].set_title("Action-chunk latency")
++    axes[0].set_xlabel("Batch size")
++    axes[0].set_ylabel("Seconds per batch")
++    axes[0].legend()
++
++    axes[1].bar(labels, [row["samples_per_second"] for row in rows], color="#2f6f9f")
++    axes[1].set_title("Inference throughput")
++    axes[1].set_xlabel("Batch size")
++    axes[1].set_ylabel("Samples per second")
++
++    axes[2].bar(labels, [row["max_memory_gib"] for row in rows], color="#31845b")
++    axes[2].set_title("Peak allocated memory")
++    axes[2].set_xlabel("Batch size")
++    axes[2].set_ylabel("GiB")
++
++    for axis in axes:
++        axis.grid(axis="y", alpha=0.25)
++    figure.suptitle("MINT Ascend 910B inference scaling during concurrent LIBERO evaluation")
++    figure.savefig(path, dpi=180)
++    plt.close(figure)
++
++
++def main() -> None:
++    persistent_root = Path(os.environ["MINT_ASCEND_ROOT"]).resolve()
++    parser = argparse.ArgumentParser()
++    parser.add_argument("benchmark_dir", type=Path)
++    parser.add_argument("--output-dir", type=Path)
++    args = parser.parse_args()
++
++    benchmark_dir = args.benchmark_dir.resolve()
++    output_dir = (args.output_dir or benchmark_dir / "report").resolve()
++    for path in (benchmark_dir, output_dir):
++        if not path.is_relative_to(persistent_root):
++            raise RuntimeError(f"Path is outside persistent root: {path}")
++
++    log_paths = sorted(benchmark_dir.glob("inference_fp32_batch*_concurrent_eval.log"))
++    if not log_paths:
++        raise FileNotFoundError(f"No concurrent inference logs below {benchmark_dir}")
++
++    rows = []
++    for log_path in log_paths:
++        result = read_result(log_path)
++        batch_size = int(result["batch_size"])
++        mean_seconds = float(result["run_seconds_mean"])
++        rows.append(
++            {
++                "batch_size": batch_size,
++                "chunk_seconds_mean": mean_seconds,
++                "chunk_seconds_median": float(result["run_seconds_median"]),
++                "chunk_seconds_p95": float(result["run_seconds_p95"]),
++                "chunk_seconds_min": float(result["run_seconds_min"]),
++                "chunk_seconds_max": float(result["run_seconds_max"]),
++                "samples_per_second": batch_size / mean_seconds,
++                "per_sample_seconds": mean_seconds / batch_size,
++                "max_memory_gib": float(result["max_memory_gib"]),
++                "build_seconds": float(result["build_seconds"]),
++                "warmup_runs": int(result["warmup_runs"]),
++                "timed_runs": int(result["timed_runs"]),
++                "finite_actions": bool(result["finite_actions"]),
++                "source_log": str(log_path),
++            }
++        )
++    rows.sort(key=lambda row: row["batch_size"])
++    baseline = rows[0]["samples_per_second"]
++    for row in rows:
++        row["throughput_speedup_vs_batch1"] = row["samples_per_second"] / baseline
++
++    output_dir.mkdir(parents=True, exist_ok=True)
++    write_csv(output_dir / "runtime_scaling.csv", rows)
++    payload = {
++        "scope": "MINT public LIBERO checkpoint on one Ascend 910B2C",
++        "concurrent_load": "separate NPU running the 200-episode LIBERO benchmark",
++        "checkpoint_build_time_excluded_from_chunk_latency": True,
++        "rows": rows,
++    }
++    (output_dir / "runtime_scaling.json").write_text(
++        json.dumps(payload, indent=2) + "\n", encoding="utf-8"
++    )
++    plot(output_dir / "runtime_scaling.png", rows)
++    print(json.dumps(payload, indent=2))
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/ascend-v062/project/scripts/hash_safetensors_tensors.py b/ascend-v062/project/scripts/hash_safetensors_tensors.py
+new file mode 100644
+index 0000000..3f45d30
+--- /dev/null
++++ b/ascend-v062/project/scripts/hash_safetensors_tensors.py
+@@ -0,0 +1,67 @@
++#!/usr/bin/env python3
++
++import argparse
++import hashlib
++import json
++from collections import Counter
++from pathlib import Path
++
++from safetensors import safe_open
++
++
++def main() -> None:
++    parser = argparse.ArgumentParser(
++        description="Hash safetensors values independently of file header and tensor layout order."
++    )
++    parser.add_argument("path", type=Path)
++    parser.add_argument(
++        "--include-prefix",
++        default=None,
++        help="Only hash tensor keys with this prefix.",
++    )
++    args = parser.parse_args()
++
++    digest = hashlib.sha256()
++    dtype_counts: Counter[str] = Counter()
++    parameter_count = 0
++    with safe_open(args.path, framework="pt", device="cpu") as checkpoint:
++        keys = sorted(
++            key
++            for key in checkpoint.keys()
++            if args.include_prefix is None or key.startswith(args.include_prefix)
++        )
++        if not keys:
++            raise ValueError(f"No tensors matched prefix: {args.include_prefix!r}")
++        metadata = checkpoint.metadata()
++        for key in keys:
++            tensor = checkpoint.get_tensor(key)
++            digest.update(key.encode("utf-8"))
++            digest.update(b"\0")
++            digest.update(str(tensor.dtype).encode("ascii"))
++            digest.update(b"\0")
++            digest.update(json.dumps(list(tensor.shape), separators=(",", ":")).encode("ascii"))
++            digest.update(b"\0")
++            digest.update(memoryview(tensor.numpy()))
++            dtype_counts[str(tensor.dtype)] += 1
++            parameter_count += tensor.numel()
++
++    print(
++        json.dumps(
++            {
++                "path": str(args.path.resolve()),
++                "file_size": args.path.stat().st_size,
++                "tensor_count": len(keys),
++                "parameter_count": parameter_count,
++                "dtype_counts": dict(sorted(dtype_counts.items())),
++                "metadata": metadata,
++                "include_prefix": args.include_prefix,
++                "canonical_tensor_sha256": digest.hexdigest(),
++            },
++            indent=2,
++            sort_keys=True,
++        )
++    )
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/ascend-v062/project/scripts/launch_dual_12h.sh b/ascend-v062/project/scripts/launch_dual_12h.sh
+new file mode 100755
+index 0000000..d404250
+--- /dev/null
++++ b/ascend-v062/project/scripts/launch_dual_12h.sh
+@@ -0,0 +1,123 @@
++#!/usr/bin/env bash
++
++set -eo pipefail
++
++SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
++source "$SCRIPT_DIR/env.sh"
++
++RUN_TAG="${1:-dual_12h_$(date +%Y%m%d_%H%M%S)}"
++DURATION="${2:-12h}"
++MINT_MICRO_BATCH="${MINT_MICRO_BATCH:-32}"
++PI05_MICRO_BATCH="${PI05_MICRO_BATCH:-16}"
++MINT_SAVE_UPDATES="${MINT_SAVE_UPDATES:-200}"
++PI05_SAVE_UPDATES="${PI05_SAVE_UPDATES:-100}"
++MINT_OPTIMIZER_UPDATES="${MINT_OPTIMIZER_UPDATES:-30000}"
++PI05_OPTIMIZER_UPDATES="${PI05_OPTIMIZER_UPDATES:-6000}"
++PI05_CHECKPOINT="$MINT_ASCEND_ROOT/models/pi05_libero_base"
++DATASET="$HF_LEROBOT_HOME/lerobot/libero"
++SESSION_DIR="$LEROBOT_OUTPUT_ROOT/dual_12h/$RUN_TAG"
++PI05_TRAIN="$MINT_ASCEND_ROOT/projects/lerobot-ascend/scripts/ascend/train_libero_reproduction.sh"
++MINT_BASE_SHA256="0eb11ca9587678c1d2ef8cf32807c29f8ce53a2bfdfc1aa4a4c96f16fca59b0f"
++PI05_BASE_SHA256="21b8711787c4a75861b02cff6aa81675a3a943d32b435a68262ac4461e476ba4"
++TOKENIZER_SHA256="f0c4bebe96be6d3db9f45321d16623b56dea78c5772b8205ac7b45cb8c123ccc"
++
++verify_sha256() {
++    local path="$1"
++    local expected="$2"
++    local actual
++    actual="$(sha256sum "$path" | cut -d ' ' -f 1)"
++    if [[ "$actual" != "$expected" ]]; then
++        echo "SHA256 mismatch for $path: expected=$expected actual=$actual" >&2
++        exit 2
++    fi
++}
++
++if [[ -e "$SESSION_DIR" ]]; then
++    echo "Refusing to overwrite existing session directory: $SESSION_DIR" >&2
++    exit 2
++fi
++python "$SCRIPT_DIR/preflight_mint.py" \
++    --tokenizer "$MINT_TOKENIZER" \
++    --dataset "$DATASET" \
++    --require-complete-dataset
++for required in \
++    "$MINT_PI05_BASE/model.safetensors" \
++    "$PI05_CHECKPOINT/model.safetensors" \
++    "$MINT_TOKENIZER/ms_vqvae.pth" \
++    "$DATASET/meta/info.json"; do
++    if [[ ! -f "$required" ]]; then
++        echo "Required training asset is incomplete: $required" >&2
++        exit 2
++    fi
++done
++if (( $(find "$DATASET" -type f -name '*.incomplete' | wc -l) > 0 )); then
++    echo "LIBERO dataset still contains incomplete downloads" >&2
++    exit 2
++fi
++verify_sha256 "$MINT_PI05_BASE/model.safetensors" "$MINT_BASE_SHA256"
++verify_sha256 "$PI05_CHECKPOINT/model.safetensors" "$PI05_BASE_SHA256"
++verify_sha256 "$MINT_TOKENIZER/ms_vqvae.pth" "$TOKENIZER_SHA256"
++if [[ "$(torchrun --help >/dev/null 2>&1; echo $?)" != "0" ]]; then
++    echo "torchrun is unavailable" >&2
++    exit 2
++fi
++
++mkdir -p "$SESSION_DIR"
++printf '%s\n' \
++    "run_tag=$RUN_TAG" \
++    "duration=$DURATION" \
++    "mint_visible_device=0" \
++    "pi05_visible_device=1" \
++    "mint_micro_batch=$MINT_MICRO_BATCH" \
++    "pi05_micro_batch=$PI05_MICRO_BATCH" \
++    "mint_effective_global_batch=128" \
++    "mint_language_embedding=plain_nn_embedding_from_pinned_transformers_branch" \
++    "pi05_effective_global_batch=256" \
++    "mint_recipe_source=arXiv:2602.08602v3 Appendix Table VI" \
++    "pi05_recipe=published_v044" \
++    "pi05_recipe_source=pi05_libero_finetuned_v044 train_config.json" \
++    "pi05_normalization=MEAN_STD" \
++    "pi05_n_action_steps=50_during_training_10_during_evaluation" \
++    "pi05_empty_cameras=1" \
++    "mint_save_every_updates=$MINT_SAVE_UPDATES" \
++    "pi05_save_every_updates=$PI05_SAVE_UPDATES" \
++    "mint_scheduler_warmup_updates=1000" \
++    "mint_scheduler_decay_updates=30000" \
++    "pi05_scheduler_warmup_updates=1000" \
++    "pi05_scheduler_decay_updates=6000" \
++    "dataset=$DATASET" \
++    "mint_base=$MINT_PI05_BASE" \
++    "mint_base_sha256=$MINT_BASE_SHA256" \
++    "mint_tokenizer=$MINT_TOKENIZER" \
++    "mint_tokenizer_sha256=$TOKENIZER_SHA256" \
++    "pi05_base=$PI05_CHECKPOINT" \
++    "pi05_base_sha256=$PI05_BASE_SHA256" \
++    "started_at=$(date --iso-8601=seconds)" >"$SESSION_DIR/manifest.txt"
++npu-smi info >"$SESSION_DIR/npu_before.txt" 2>&1
++
++nohup timeout --signal=TERM --kill-after=5m "$DURATION" \
++    env ASCEND_RT_VISIBLE_DEVICES=0 \
++    "$SCRIPT_DIR/train_libero_reproduction.sh" \
++    1 "$MINT_MICRO_BATCH" "${RUN_TAG}_mint" \
++    "$MINT_OPTIMIZER_UPDATES" "$MINT_SAVE_UPDATES" \
++    >"$SESSION_DIR/mint_launcher.log" 2>&1 </dev/null &
++MINT_PID=$!
++
++nohup timeout --signal=TERM --kill-after=5m "$DURATION" \
++    env ASCEND_RT_VISIBLE_DEVICES=1 PI05_RECIPE=published_v044 \
++    "$PI05_TRAIN" \
++    1 "$PI05_MICRO_BATCH" "${RUN_TAG}_pi05" "$PI05_CHECKPOINT" \
++    "$PI05_OPTIMIZER_UPDATES" "$PI05_SAVE_UPDATES" \
++    >"$SESSION_DIR/pi05_launcher.log" 2>&1 </dev/null &
++PI05_PID=$!
++
++nohup timeout --signal=TERM "$DURATION" \
++    "$SCRIPT_DIR/collect_npu_telemetry.sh" "$SESSION_DIR" "$MINT_PID" "$PI05_PID" \
++    >"$SESSION_DIR/telemetry_launcher.log" 2>&1 </dev/null &
++TELEMETRY_PID=$!
++
++printf '%s\n' "$MINT_PID" >"$SESSION_DIR/mint.pid"
++printf '%s\n' "$PI05_PID" >"$SESSION_DIR/pi05.pid"
++printf '%s\n' "$TELEMETRY_PID" >"$SESSION_DIR/telemetry.pid"
++printf 'session_dir=%s\nmint_pid=%s\npi05_pid=%s\ntelemetry_pid=%s\n' \
++    "$SESSION_DIR" "$MINT_PID" "$PI05_PID" "$TELEMETRY_PID"
+diff --git a/ascend-v062/project/scripts/launch_joint_8npu_12h.sh b/ascend-v062/project/scripts/launch_joint_8npu_12h.sh
+new file mode 100755
+index 0000000..d34b947
+--- /dev/null
++++ b/ascend-v062/project/scripts/launch_joint_8npu_12h.sh
+@@ -0,0 +1,139 @@
++#!/usr/bin/env bash
++
++set -eo pipefail
++
++SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
++source "$SCRIPT_DIR/env.sh"
++
++RUN_TAG="${1:-joint_8npu_12h_$(date +%Y%m%d_%H%M%S)}"
++DURATION="${2:-12h}"
++MINT_MICRO_BATCH="${MINT_MICRO_BATCH:-8}"
++PI05_MICRO_BATCH="${PI05_MICRO_BATCH:-16}"
++MINT_SAVE_UPDATES="${MINT_SAVE_UPDATES:-200}"
++PI05_SAVE_UPDATES="${PI05_SAVE_UPDATES:-100}"
++MINT_OPTIMIZER_UPDATES="${MINT_OPTIMIZER_UPDATES:-30000}"
++PI05_OPTIMIZER_UPDATES="${PI05_OPTIMIZER_UPDATES:-6000}"
++PI05_CHECKPOINT="$MINT_ASCEND_ROOT/models/pi05_libero_base"
++DATASET="$HF_LEROBOT_HOME/lerobot/libero"
++SESSION_DIR="$LEROBOT_OUTPUT_ROOT/joint_8npu_12h/$RUN_TAG"
++PI05_TRAIN="$MINT_ASCEND_ROOT/projects/lerobot-ascend/scripts/ascend/train_libero_reproduction.sh"
++MINT_BASE_SHA256="0eb11ca9587678c1d2ef8cf32807c29f8ce53a2bfdfc1aa4a4c96f16fca59b0f"
++PI05_BASE_SHA256="21b8711787c4a75861b02cff6aa81675a3a943d32b435a68262ac4461e476ba4"
++TOKENIZER_SHA256="f0c4bebe96be6d3db9f45321d16623b56dea78c5772b8205ac7b45cb8c123ccc"
++
++for value in "$MINT_MICRO_BATCH" "$PI05_MICRO_BATCH"; do
++    if ! [[ "$value" =~ ^[1-9][0-9]*$ ]]; then
++        echo "Micro batches must be positive integers" >&2
++        exit 2
++    fi
++done
++MINT_SAMPLES_PER_MICRO_STEP=$((4 * MINT_MICRO_BATCH))
++PI05_SAMPLES_PER_MICRO_STEP=$((4 * PI05_MICRO_BATCH))
++if (( 128 % MINT_SAMPLES_PER_MICRO_STEP != 0 || 256 % PI05_SAMPLES_PER_MICRO_STEP != 0 )); then
++    echo "Official global batches must be divisible by four processes times the micro batch" >&2
++    exit 2
++fi
++MINT_GRAD_ACCUM=$((128 / MINT_SAMPLES_PER_MICRO_STEP))
++PI05_GRAD_ACCUM=$((256 / PI05_SAMPLES_PER_MICRO_STEP))
++
++verify_sha256() {
++    local path="$1"
++    local expected="$2"
++    local actual
++    actual="$(sha256sum "$path" | cut -d ' ' -f 1)"
++    if [[ "$actual" != "$expected" ]]; then
++        echo "SHA256 mismatch for $path: expected=$expected actual=$actual" >&2
++        exit 2
++    fi
++}
++
++if [[ -e "$SESSION_DIR" ]]; then
++    echo "Refusing to overwrite existing session directory: $SESSION_DIR" >&2
++    exit 2
++fi
++python "$SCRIPT_DIR/preflight_mint.py" \
++    --tokenizer "$MINT_TOKENIZER" \
++    --dataset "$DATASET" \
++    --require-complete-dataset
++NPU_COUNT="$(python -c 'import torch; print(torch.npu.device_count())')"
++if (( NPU_COUNT < 8 )); then
++    echo "Eight visible NPUs are required, found $NPU_COUNT" >&2
++    exit 2
++fi
++for required in \
++    "$MINT_PI05_BASE/model.safetensors" \
++    "$PI05_CHECKPOINT/model.safetensors" \
++    "$MINT_TOKENIZER/ms_vqvae.pth" \
++    "$DATASET/meta/info.json"; do
++    if [[ ! -f "$required" ]]; then
++        echo "Required training asset is incomplete: $required" >&2
++        exit 2
++    fi
++done
++if (( $(find "$DATASET" -type f -name '*.incomplete' | wc -l) > 0 )); then
++    echo "LIBERO dataset still contains incomplete downloads" >&2
++    exit 2
++fi
++verify_sha256 "$MINT_PI05_BASE/model.safetensors" "$MINT_BASE_SHA256"
++verify_sha256 "$PI05_CHECKPOINT/model.safetensors" "$PI05_BASE_SHA256"
++verify_sha256 "$MINT_TOKENIZER/ms_vqvae.pth" "$TOKENIZER_SHA256"
++
++mkdir -p "$SESSION_DIR"
++printf '%s\n' \
++    "run_tag=$RUN_TAG" \
++    "duration=$DURATION" \
++    "npu_count=$NPU_COUNT" \
++    "mint_visible_devices=0,1,2,3" \
++    "pi05_visible_devices=4,5,6,7" \
++    "mint_num_processes=4" \
++    "pi05_num_processes=4" \
++    "mint_micro_batch_per_process=$MINT_MICRO_BATCH" \
++    "pi05_micro_batch_per_process=$PI05_MICRO_BATCH" \
++    "mint_gradient_accumulation=$MINT_GRAD_ACCUM" \
++    "pi05_gradient_accumulation=$PI05_GRAD_ACCUM" \
++    "mint_effective_global_batch=128" \
++    "pi05_effective_global_batch=256" \
++    "mint_recipe_source=arXiv:2602.08602v3 Appendix Table VI" \
++    "pi05_recipe=published_v044" \
++    "pi05_recipe_source=pi05_libero_finetuned_v044 train_config.json" \
++    "mint_optimizer_updates=$MINT_OPTIMIZER_UPDATES" \
++    "pi05_optimizer_updates=$PI05_OPTIMIZER_UPDATES" \
++    "mint_save_every_updates=$MINT_SAVE_UPDATES" \
++    "pi05_save_every_updates=$PI05_SAVE_UPDATES" \
++    "dataset=$DATASET" \
++    "mint_base=$MINT_PI05_BASE" \
++    "mint_base_sha256=$MINT_BASE_SHA256" \
++    "mint_tokenizer=$MINT_TOKENIZER" \
++    "mint_tokenizer_sha256=$TOKENIZER_SHA256" \
++    "pi05_base=$PI05_CHECKPOINT" \
++    "pi05_base_sha256=$PI05_BASE_SHA256" \
++    "started_at=$(date --iso-8601=seconds)" \
++    >"$SESSION_DIR/manifest.txt"
++npu-smi info >"$SESSION_DIR/npu_before.txt" 2>&1
++
++nohup timeout --signal=TERM --kill-after=5m "$DURATION" \
++    env ASCEND_RT_VISIBLE_DEVICES=0,1,2,3 \
++    "$SCRIPT_DIR/train_libero_reproduction.sh" \
++    4 "$MINT_MICRO_BATCH" "${RUN_TAG}_mint" \
++    "$MINT_OPTIMIZER_UPDATES" "$MINT_SAVE_UPDATES" \
++    >"$SESSION_DIR/mint_launcher.log" 2>&1 </dev/null &
++MINT_PID=$!
++
++nohup timeout --signal=TERM --kill-after=5m "$DURATION" \
++    env ASCEND_RT_VISIBLE_DEVICES=4,5,6,7 PI05_RECIPE=published_v044 \
++    "$PI05_TRAIN" \
++    4 "$PI05_MICRO_BATCH" "${RUN_TAG}_pi05" "$PI05_CHECKPOINT" \
++    "$PI05_OPTIMIZER_UPDATES" "$PI05_SAVE_UPDATES" \
++    >"$SESSION_DIR/pi05_launcher.log" 2>&1 </dev/null &
++PI05_PID=$!
++
++nohup timeout --signal=TERM "$DURATION" \
++    "$SCRIPT_DIR/collect_npu_telemetry.sh" "$SESSION_DIR" "$MINT_PID" "$PI05_PID" \
++    >"$SESSION_DIR/telemetry_launcher.log" 2>&1 </dev/null &
++TELEMETRY_PID=$!
++
++printf '%s\n' "$MINT_PID" >"$SESSION_DIR/mint.pid"
++printf '%s\n' "$PI05_PID" >"$SESSION_DIR/pi05.pid"
++printf '%s\n' "$TELEMETRY_PID" >"$SESSION_DIR/telemetry.pid"
++printf 'session_dir=%s\nmint_pid=%s\npi05_pid=%s\ntelemetry_pid=%s\n' \
++    "$SESSION_DIR" "$MINT_PID" "$PI05_PID" "$TELEMETRY_PID"
+diff --git a/ascend-v062/project/scripts/launch_mint_4npu_12h.sh b/ascend-v062/project/scripts/launch_mint_4npu_12h.sh
+new file mode 100755
+index 0000000..cd191a3
+--- /dev/null
++++ b/ascend-v062/project/scripts/launch_mint_4npu_12h.sh
+@@ -0,0 +1,155 @@
++#!/usr/bin/env bash
++
++set -eo pipefail
++
++SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
++source "$SCRIPT_DIR/env.sh"
++
++RUN_TAG="${1:-mint_4npu_12h_$(date +%Y%m%d_%H%M%S)}"
++DURATION="${2:-12h}"
++DEVICE_IDS_CSV="${3:-0,1,2,3}"
++NUM_PROCESSES="${MINT_NUM_PROCESSES:-4}"
++MICRO_BATCH="${MINT_MICRO_BATCH:-8}"
++SAVE_UPDATES="${MINT_SAVE_UPDATES:-1000}"
++OPTIMIZER_UPDATES="${MINT_OPTIMIZER_UPDATES:-30000}"
++TARGET_GLOBAL_BATCH=128
++DATASET="$HF_LEROBOT_HOME/lerobot/libero"
++TRAIN_RUN_NAME="${RUN_TAG}_mint"
++TRAIN_OUTPUT="$MINT_OUTPUT_ROOT/train/$TRAIN_RUN_NAME"
++SESSION_DIR="$LEROBOT_OUTPUT_ROOT/mint_${NUM_PROCESSES}npu_12h/$RUN_TAG"
++BASE_SHA256="0eb11ca9587678c1d2ef8cf32807c29f8ce53a2bfdfc1aa4a4c96f16fca59b0f"
++TOKENIZER_SHA256="f0c4bebe96be6d3db9f45321d16623b56dea78c5772b8205ac7b45cb8c123ccc"
++IFS=',' read -r -a DEVICE_IDS <<<"$DEVICE_IDS_CSV"
++
++for value in "$NUM_PROCESSES" "$MICRO_BATCH" "$SAVE_UPDATES" "$OPTIMIZER_UPDATES"; do
++    if ! [[ "$value" =~ ^[1-9][0-9]*$ ]]; then
++        echo "Batch size, save interval, and optimizer updates must be positive integers" >&2
++        exit 2
++    fi
++done
++if (( ${#DEVICE_IDS[@]} != NUM_PROCESSES )); then
++    echo "Expected $NUM_PROCESSES comma-separated NPU device IDs, got ${#DEVICE_IDS[@]}" >&2
++    exit 2
++fi
++declare -A SEEN_DEVICES=()
++for device in "${DEVICE_IDS[@]}"; do
++    if ! [[ "$device" =~ ^[0-9]+$ ]] || [[ -n "${SEEN_DEVICES[$device]:-}" ]]; then
++        echo "NPU device IDs must be unique non-negative integers: $DEVICE_IDS_CSV" >&2
++        exit 2
++    fi
++    SEEN_DEVICES[$device]=1
++done
++SAMPLES_PER_MICRO_STEP=$((NUM_PROCESSES * MICRO_BATCH))
++if (( TARGET_GLOBAL_BATCH % SAMPLES_PER_MICRO_STEP != 0 )); then
++    echo "Global batch 128 must be divisible by process count times micro batch" >&2
++    exit 2
++fi
++GRAD_ACCUM=$((TARGET_GLOBAL_BATCH / SAMPLES_PER_MICRO_STEP))
++
++verify_sha256() {
++    local path="$1"
++    local expected="$2"
++    local actual
++    actual="$(sha256sum "$path" | cut -d ' ' -f 1)"
++    if [[ "$actual" != "$expected" ]]; then
++        echo "SHA256 mismatch for $path: expected=$expected actual=$actual" >&2
++        exit 2
++    fi
++}
++
++if [[ -e "$SESSION_DIR" || -e "$TRAIN_OUTPUT" ]]; then
++    echo "Refusing to overwrite an existing session or training directory" >&2
++    exit 2
++fi
++python "$SCRIPT_DIR/preflight_mint.py" \
++    --tokenizer "$MINT_TOKENIZER" \
++    --dataset "$DATASET" \
++    --require-complete-dataset
++NPU_COUNT="$(python -c 'import torch; print(torch.npu.device_count())')"
++if (( NPU_COUNT < NUM_PROCESSES )); then
++    echo "$NUM_PROCESSES visible NPUs are required, found $NPU_COUNT" >&2
++    exit 2
++fi
++for device in "${DEVICE_IDS[@]}"; do
++    if (( device >= NPU_COUNT )); then
++        echo "NPU device $device is outside the visible range 0-$((NPU_COUNT - 1))" >&2
++        exit 2
++    fi
++done
++for required in \
++    "$MINT_PI05_BASE/model.safetensors" \
++    "$MINT_TOKENIZER/ms_vqvae.pth" \
++    "$DATASET/meta/info.json"; do
++    if [[ ! -f "$required" ]]; then
++        echo "Required training asset is incomplete: $required" >&2
++        exit 2
++    fi
++done
++if (( $(find "$DATASET" -type f -name '*.incomplete' | wc -l) > 0 )); then
++    echo "LIBERO dataset still contains incomplete downloads" >&2
++    exit 2
++fi
++verify_sha256 "$MINT_PI05_BASE/model.safetensors" "$BASE_SHA256"
++verify_sha256 "$MINT_TOKENIZER/ms_vqvae.pth" "$TOKENIZER_SHA256"
++
++mkdir -p "$SESSION_DIR"
++printf '%s\n' \
++    "run_tag=$RUN_TAG" \
++    "hostname=$(hostname)" \
++    "duration=$DURATION" \
++    "visible_devices=$DEVICE_IDS_CSV" \
++    "num_processes=$NUM_PROCESSES" \
++    "micro_batch_per_process=$MICRO_BATCH" \
++    "gradient_accumulation_steps=$GRAD_ACCUM" \
++    "effective_global_batch=$TARGET_GLOBAL_BATCH" \
++    "optimizer_updates=$OPTIMIZER_UPDATES" \
++    "trainer_micro_steps=$((OPTIMIZER_UPDATES * GRAD_ACCUM))" \
++    "save_every_optimizer_updates=$SAVE_UPDATES" \
++    "recipe_source=arXiv:2602.08602v3_Appendix_Table_VI" \
++    "optimizer=AdamW" \
++    "learning_rate=2e-4" \
++    "betas=0.9,0.95" \
++    "weight_decay=0.01" \
++    "chunk_size=16" \
++    "scheduler=cosine_decay_with_warmup" \
++    "scheduler_warmup_optimizer_updates=1000" \
++    "scheduler_decay_optimizer_updates=30000" \
++    "dataset=$DATASET" \
++    "dataset_revision=a1aaacb7f6cd6ee5fb43120f673cebb0cfea7dd4" \
++    "dataset_frames=273465" \
++    "dataset_episodes=1693" \
++    "initialization=$MINT_PI05_BASE" \
++    "initialization_sha256=$BASE_SHA256" \
++    "initialization_scope=pi05_PaliGemma_backbone_only" \
++    "action_expert_initialization=random_as_specified_by_paper" \
++    "tokenizer=$MINT_TOKENIZER/ms_vqvae.pth" \
++    "tokenizer_sha256=$TOKENIZER_SHA256" \
++    "training_output=$TRAIN_OUTPUT" \
++    "resume_script=$SCRIPT_DIR/resume_libero_train.sh" \
++    "resume_by_optimizer_update_script=$SCRIPT_DIR/resume_mint_reproduction.sh" \
++    "started_at=$(date --iso-8601=seconds)" \
++    >"$SESSION_DIR/manifest.txt"
++sha256sum \
++    "$SCRIPT_DIR/launch_mint_4npu_12h.sh" \
++    "$SCRIPT_DIR/train_libero_reproduction.sh" \
++    "$SCRIPT_DIR/resume_libero_train.sh" \
++    "$SCRIPT_DIR/resume_mint_reproduction.sh" \
++    >"$SESSION_DIR/script_sha256.txt"
++npu-smi info >"$SESSION_DIR/npu_before.txt" 2>&1
++
++nohup timeout --signal=TERM --kill-after=5m "$DURATION" \
++    env ASCEND_RT_VISIBLE_DEVICES="$DEVICE_IDS_CSV" \
++    "$SCRIPT_DIR/train_libero_reproduction.sh" \
++    "$NUM_PROCESSES" "$MICRO_BATCH" "$TRAIN_RUN_NAME" "$OPTIMIZER_UPDATES" "$SAVE_UPDATES" true \
++    >"$SESSION_DIR/mint_launcher.log" 2>&1 </dev/null &
++MINT_PID=$!
++
++nohup timeout --signal=TERM "$DURATION" \
++    "$SCRIPT_DIR/collect_npu_telemetry.sh" "$SESSION_DIR" "$MINT_PID" "$MINT_PID" \
++    >"$SESSION_DIR/telemetry_launcher.log" 2>&1 </dev/null &
++TELEMETRY_PID=$!
++
++printf '%s\n' "$MINT_PID" >"$SESSION_DIR/mint.pid"
++printf '%s\n' "$TELEMETRY_PID" >"$SESSION_DIR/telemetry.pid"
++printf 'session_dir=%s\nmint_pid=%s\ntelemetry_pid=%s\n' \
++    "$SESSION_DIR" "$MINT_PID" "$TELEMETRY_PID"
+diff --git a/ascend-v062/project/scripts/launch_mint_8npu_12h.sh b/ascend-v062/project/scripts/launch_mint_8npu_12h.sh
+new file mode 100755
+index 0000000..d935d38
+--- /dev/null
++++ b/ascend-v062/project/scripts/launch_mint_8npu_12h.sh
+@@ -0,0 +1,11 @@
++#!/usr/bin/env bash
++
++set -eo pipefail
++
++SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
++RUN_TAG="${1:-mint_8npu_12h_$(date +%Y%m%d_%H%M%S)}"
++DURATION="${2:-12h}"
++DEVICE_IDS_CSV="${3:-0,1,2,3,4,5,6,7}"
++
++MINT_NUM_PROCESSES=8 exec "$SCRIPT_DIR/launch_mint_4npu_12h.sh" \
++    "$RUN_TAG" "$DURATION" "$DEVICE_IDS_CSV"
+diff --git a/ascend-v062/project/scripts/monitor_dual_training.sh b/ascend-v062/project/scripts/monitor_dual_training.sh
+new file mode 100755
+index 0000000..55b770f
+--- /dev/null
++++ b/ascend-v062/project/scripts/monitor_dual_training.sh
+@@ -0,0 +1,48 @@
++#!/usr/bin/env bash
++
++set -eo pipefail
++
++SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
++source "$SCRIPT_DIR/env.sh"
++
++SESSION_DIR="${1:?Usage: $0 SESSION_DIR}"
++if [[ "$SESSION_DIR" != "$MINT_ASCEND_ROOT/"* || ! -d "$SESSION_DIR" ]]; then
++    echo "Invalid persistent session directory: $SESSION_DIR" >&2
++    exit 2
++fi
++
++for name in mint pi05; do
++    pid_file="$SESSION_DIR/$name.pid"
++    if [[ ! -f "$pid_file" ]]; then
++        echo "$name: missing pid file"
++        continue
++    fi
++    pid="$(<"$pid_file")"
++    if kill -0 "$pid" 2>/dev/null; then
++        echo "$name: running pid=$pid"
++    else
++        echo "$name: stopped pid=$pid"
++    fi
++    echo "$name recent log:"
++    tail -n 20 "$SESSION_DIR/${name}_launcher.log" 2>/dev/null || true
++    echo "$name error scan:"
++    if command -v rg >/dev/null 2>&1; then
++        rg -i "out of memory|oom|traceback|runtimeerror|hccl.*error|acl.*error" \
++            "$SESSION_DIR/${name}_launcher.log" 2>/dev/null \
++            | rg -vi "libtorchcodec loading traceback" | tail -n 10 || true
++    else
++        grep -Ei "out of memory|oom|traceback|runtimeerror|hccl.*error|acl.*error" \
++            "$SESSION_DIR/${name}_launcher.log" 2>/dev/null \
++            | grep -Eiv "libtorchcodec loading traceback" | tail -n 10 || true
++    fi
++done
++
++echo "telemetry recent log:"
++tail -n 80 "$SESSION_DIR/telemetry.log" 2>/dev/null || true
++echo "telemetry launcher errors:"
++tail -n 20 "$SESSION_DIR/telemetry_launcher.log" 2>/dev/null || true
++
++npu-smi info
++find "$LEROBOT_OUTPUT_ROOT/train" "$MINT_OUTPUT_ROOT/train" \
++    -path "*/checkpoints/*/pretrained_model/model.safetensors" \
++    -printf '%T@ %s %p\n' 2>/dev/null | sort -nr | head -n 10
+diff --git a/ascend-v062/project/scripts/preflight_mint.py b/ascend-v062/project/scripts/preflight_mint.py
+new file mode 100644
+index 0000000..de40e71
+--- /dev/null
++++ b/ascend-v062/project/scripts/preflight_mint.py
+@@ -0,0 +1,116 @@
++#!/usr/bin/env python
++
++import argparse
++import json
++import os
++from pathlib import Path
++
++import torch
++import torch_npu  # noqa: F401
++
++
++def require_file(path: Path, minimum_bytes: int = 1) -> None:
++    if not path.is_file() or path.stat().st_size < minimum_bytes:
++        raise FileNotFoundError(f"Missing or incomplete file: {path}")
++
++
++def main() -> None:
++    parser = argparse.ArgumentParser()
++    parser.add_argument("--checkpoint", type=Path)
++    parser.add_argument("--tokenizer", type=Path)
++    parser.add_argument("--dataset", type=Path)
++    parser.add_argument("--require-weights", action="store_true")
++    parser.add_argument("--require-complete-dataset", action="store_true")
++    args = parser.parse_args()
++
++    from lerobot.configs.policies import PreTrainedConfig
++    from lerobot.policies import get_policy_class
++    import lerobot_policy_mint  # noqa: F401
++    from lerobot.processor import ProcessorStepRegistry
++    from lerobot_policy_mint.processor_mint import MINTPrepareStateTokenizerProcessorStep
++
++    if not torch.npu.is_available():
++        raise RuntimeError("torch.npu is not available")
++    torch.npu.set_device(0)
++    probe = torch.ones((32, 32), device="npu", dtype=torch.bfloat16)
++    torch.npu.synchronize()
++    if not torch.isfinite(probe @ probe).all().item():
++        raise RuntimeError("NPU bfloat16 matmul returned non-finite values")
++
++    if "mint" not in PreTrainedConfig.get_known_choices():
++        raise RuntimeError("MINT policy was not registered")
++    if get_policy_class("mint").__name__ != "MINTPolicy":
++        raise RuntimeError("MINT policy class resolution failed")
++
++    prompt_step = ProcessorStepRegistry.get("pi05_prepare_state_tokenizer_processor_step")
++    expect_legacy_prompt = os.environ.get("MINT_USE_CURRENT_PI05_STATE_PROMPT") != "1"
++    if expect_legacy_prompt and prompt_step is not MINTPrepareStateTokenizerProcessorStep:
++        raise RuntimeError(
++            "The public MINT checkpoint would use the current 8-token PI0.5 state prompt "
++            "instead of its LeRobot v0.4.3 32-token training prompt"
++        )
++
++    result = {
++        "npu_count": torch.npu.device_count(),
++        "npu_name": torch.npu.get_device_name(0),
++        "mint_registered": True,
++        "mint_legacy_pi05_prompt_compatibility": (
++            prompt_step is MINTPrepareStateTokenizerProcessorStep
++        ),
++        "mint_prompt_state_dimensions": 32 if expect_legacy_prompt else 8,
++    }
++
++    if args.checkpoint:
++        require_file(args.checkpoint / "config.json")
++        with (args.checkpoint / "config.json").open() as config_file:
++            config = json.load(config_file)
++        if config.get("type") != "mint":
++            raise ValueError(f"Expected a MINT checkpoint, got type={config.get('type')!r}")
++        for filename in ("policy_preprocessor.json", "policy_postprocessor.json"):
++            require_file(args.checkpoint / filename)
++        if args.require_weights:
++            require_file(args.checkpoint / "model.safetensors", minimum_bytes=1_000_000_000)
++        result["checkpoint"] = str(args.checkpoint)
++
++    if args.tokenizer:
++        require_file(args.tokenizer / "ms_vqvae.pth", minimum_bytes=100_000_000)
++        result["tokenizer"] = str(args.tokenizer)
++
++    if args.dataset:
++        require_file(args.dataset / "meta" / "info.json")
++        with (args.dataset / "meta" / "info.json").open() as info_file:
++            dataset_info = json.load(info_file)
++        data_files = list((args.dataset / "data").glob("**/*.parquet"))
++        video_files = list((args.dataset / "videos").glob("**/*.mp4"))
++        incomplete_files = list(args.dataset.glob("**/*.incomplete"))
++        if args.require_complete_dataset:
++            expected = {
++                "total_episodes": 1693,
++                "total_frames": 273465,
++                "data_files": 377,
++                "video_files": 74,
++            }
++            actual = {
++                "total_episodes": dataset_info.get("total_episodes"),
++                "total_frames": dataset_info.get("total_frames"),
++                "data_files": len(data_files),
++                "video_files": len(video_files),
++            }
++            if actual != expected or incomplete_files:
++                raise RuntimeError(
++                    "Incomplete lerobot/libero revision "
++                    "a1aaacb7f6cd6ee5fb43120f673cebb0cfea7dd4: "
++                    f"expected={expected}, actual={actual}, incomplete_files={len(incomplete_files)}"
++                )
++        result["dataset"] = str(args.dataset)
++        result["dataset_total_episodes"] = dataset_info.get("total_episodes")
++        result["dataset_total_frames"] = dataset_info.get("total_frames")
++        result["dataset_data_files"] = len(data_files)
++        result["dataset_video_files"] = len(video_files)
++        result["dataset_incomplete_files"] = len(incomplete_files)
++
++    print(json.dumps(result, indent=2))
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/ascend-v062/project/scripts/queue_mint_dual_framework_report.sh b/ascend-v062/project/scripts/queue_mint_dual_framework_report.sh
+new file mode 100755
+index 0000000..eb4a458
+--- /dev/null
++++ b/ascend-v062/project/scripts/queue_mint_dual_framework_report.sh
+@@ -0,0 +1,93 @@
++#!/usr/bin/env bash
++
++set -eo pipefail
++
++SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
++source "$SCRIPT_DIR/env.sh"
++set -u
++
++CURRENT_DIR="${1:?Usage: $0 CURRENT_DIR V043_DIR OUTPUT_DIR [TIMEOUT_SECONDS]}"
++V043_DIR="${2:?Usage: $0 CURRENT_DIR V043_DIR OUTPUT_DIR [TIMEOUT_SECONDS]}"
++OUTPUT_DIR="${3:?Usage: $0 CURRENT_DIR V043_DIR OUTPUT_DIR [TIMEOUT_SECONDS]}"
++TIMEOUT_SECONDS="${4:-172800}"
++POLL_SECONDS="${MINT_REPORT_POLL_SECONDS:-60}"
++
++for variable in CURRENT_DIR V043_DIR OUTPUT_DIR; do
++    value="$(realpath -m "${!variable}")"
++    if [[ "$value" != "$MINT_ASCEND_ROOT/"* ]]; then
++        echo "$variable is outside the persistent root: $value" >&2
++        exit 2
++    fi
++    printf -v "$variable" '%s' "$value"
++done
++for value in "$TIMEOUT_SECONDS" "$POLL_SECONDS"; do
++    if ! [[ "$value" =~ ^[1-9][0-9]*$ ]]; then
++        echo "Timeout and polling interval must be positive integers" >&2
++        exit 2
++    fi
++done
++if [[ -e "$OUTPUT_DIR" ]]; then
++    echo "Refusing to overwrite existing output directory: $OUTPUT_DIR" >&2
++    exit 2
++fi
++
++mkdir -p "$OUTPUT_DIR"
++LOG_FILE="$OUTPUT_DIR/controller.log"
++exec > >(tee -a "$LOG_FILE") 2>&1
++
++printf '%s\n' \
++    "current_dir=$CURRENT_DIR" \
++    "v043_dir=$V043_DIR" \
++    "expected_eval_files_per_framework=4" \
++    "expected_rollouts_per_framework=2000" \
++    "timeout_seconds=$TIMEOUT_SECONDS" \
++    "started_at=$(date --iso-8601=seconds)"
++
++eval_file_count() {
++    if [[ ! -d "$1" ]]; then
++        echo 0
++        return
++    fi
++    find "$1" -type f -name eval_info.json | wc -l
++}
++
++deadline=$((SECONDS + TIMEOUT_SECONDS))
++while true; do
++    current_count="$(eval_file_count "$CURRENT_DIR")"
++    v043_count="$(eval_file_count "$V043_DIR")"
++    printf '%s current=%s/4 v043=%s/4\n' \
++        "$(date --iso-8601=seconds)" "$current_count" "$v043_count"
++    if [[ "$current_count" == 4 && "$v043_count" == 4 ]]; then
++        break
++    fi
++    if (( SECONDS >= deadline )); then
++        echo "Timed out waiting for MINT evaluation artifacts" >&2
++        exit 1
++    fi
++    sleep "$POLL_SECONDS"
++done
++
++python "$SCRIPT_DIR/generate_libero_report.py" \
++    "$CURRENT_DIR" \
++    --output-dir "$OUTPUT_DIR/report" \
++    --primary-label "MINT 60K Ascend (LeRobot 0.6.2)" \
++    --mint-v043-dir "$V043_DIR"
++
++python - "$OUTPUT_DIR/report/report.json" <<'PY'
++import json
++import sys
++
++report = json.load(open(sys.argv[1], encoding="utf-8"))
++if report["trials"] != 2000:
++    raise RuntimeError(f"Current-framework trials={report['trials']}, expected 2000")
++for row in report["per_suite"]:
++    if row["trials"] != 500 or row["mint_v043_trials"] != 500:
++        raise RuntimeError(
++            f"{row['suite']} trials={row['trials']}, "
++            f"v043_trials={row['mint_v043_trials']}; expected 500 each"
++        )
++PY
++
++printf 'status=complete\ncompleted_at=%s\nreport=%s\n' \
++    "$(date --iso-8601=seconds)" "$OUTPUT_DIR/report/report.json" \
++    | tee "$OUTPUT_DIR/status.txt"
+diff --git a/ascend-v062/project/scripts/record_environment.sh b/ascend-v062/project/scripts/record_environment.sh
+new file mode 100755
+index 0000000..79d9fd6
+--- /dev/null
++++ b/ascend-v062/project/scripts/record_environment.sh
+@@ -0,0 +1,84 @@
++#!/usr/bin/env bash
++
++set -eo pipefail
++
++SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
++source "$SCRIPT_DIR/env.sh"
++
++LEROBOT_PROJECT_ROOT="$MINT_ASCEND_ROOT/projects/lerobot-ascend"
++PYTHON_ENV_ROOT="$MINT_ASCEND_ROOT/envs/lerobot-npu"
++SNAPSHOT_NAME="${1:-ascend_vla_$(date +%Y%m%d_%H%M%S)}"
++OUTPUT_DIR="$MINT_ASCEND_ROOT/outputs/manifests/$SNAPSHOT_NAME"
++if [[ -e "$OUTPUT_DIR" ]]; then
++    echo "Refusing to overwrite existing manifest directory: $OUTPUT_DIR" >&2
++    exit 2
++fi
++mkdir -p "$OUTPUT_DIR"
++
++{
++    printf 'created_at=%s\n' "$(date --iso-8601=seconds)"
++    printf 'persistent_root=%s\n' "$MINT_ASCEND_ROOT"
++    printf 'python=%s\n' "$(command -v python)"
++    printf 'python_version=%s\n' "$(python --version 2>&1)"
++    printf 'lerobot_project=%s\n' "$LEROBOT_PROJECT_ROOT"
++    printf 'mint_project=%s\n' "$MINT_PROJECT_ROOT"
++    printf 'python_environment=%s\n' "$PYTHON_ENV_ROOT"
++    printf 'python_environment_size=%s\n' "$(du -sh "$PYTHON_ENV_ROOT" | cut -f1)"
++    printf 'ascend_toolkit_size=%s\n' "$(du -sh /usr/local/Ascend | cut -f1)"
++    printf 'model_root=%s\n' "$MINT_ASCEND_ROOT/models"
++    printf 'dataset_root=%s\n' "$HF_LEROBOT_HOME"
++    printf 'output_root=%s\n' "$LEROBOT_OUTPUT_ROOT"
++    printf 'cache_root=%s\n' "$HF_HOME"
++    printf 'mint_load_mode=PYTHONPATH plugin, not pip-installed\n'
++} >"$OUTPUT_DIR/storage_and_runtime.txt"
++
++python - <<'PY' >"$OUTPUT_DIR/core_versions.txt"
++import accelerate
++import lerobot
++import torch
++import torch_npu
++import transformers
++
++print(f"torch={torch.__version__}")
++print(f"torch_npu={torch_npu.__version__}")
++print(f"transformers={transformers.__version__}")
++print(f"lerobot={lerobot.__version__}")
++print(f"accelerate={accelerate.__version__}")
++print(f"npu_available={torch.npu.is_available()}")
++print(f"npu_count={torch.npu.device_count()}")
++for index in range(torch.npu.device_count()):
++    print(f"npu_{index}={torch.npu.get_device_name(index)}")
++PY
++
++python -m pip freeze --all >"$OUTPUT_DIR/pip_freeze.txt"
++npu-smi info >"$OUTPUT_DIR/npu_smi.txt" 2>&1
++uname -a >"$OUTPUT_DIR/uname.txt"
++find /usr/local/Ascend -maxdepth 4 -type f \
++    \( -name 'version.cfg' -o -name 'version.info' -o -name 'version.properties' \) \
++    -print -exec sed -n '1,120p' {} \; >"$OUTPUT_DIR/ascend_versions.txt" 2>&1
++
++record_repository() {
++    local repository="$1"
++    local name="$2"
++    local fallback_commit="$3"
++    if git -C "$repository" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
++        git -C "$repository" rev-parse HEAD >"$OUTPUT_DIR/${name}_commit.txt"
++        git -C "$repository" status --short >"$OUTPUT_DIR/${name}_status.txt"
++        git -C "$repository" diff --binary >"$OUTPUT_DIR/${name}_npu_changes.patch"
++    else
++        printf '%s\n' "$fallback_commit" >"$OUTPUT_DIR/${name}_commit.txt"
++        printf 'deployment copy without .git metadata\n' >"$OUTPUT_DIR/${name}_status.txt"
++        : >"$OUTPUT_DIR/${name}_npu_changes.patch"
++    fi
++}
++
++record_repository "$LEROBOT_PROJECT_ROOT" lerobot "deployment commit unavailable"
++record_repository "$MINT_PROJECT_ROOT" mint "59fa23d0537f545ca07b7d111a9f5697bbabe11e"
++find "$MINT_PROJECT_ROOT/lerobot_policy_mint" "$MINT_PROJECT_ROOT/scripts/ascend" \
++    -type f ! -path '*/__pycache__/*' -exec sha256sum {} \; \
++    >"$OUTPUT_DIR/mint_deployment_sha256.txt"
++find "$LEROBOT_PROJECT_ROOT/src/lerobot" "$LEROBOT_PROJECT_ROOT/scripts/ascend" \
++    -type f ! -path '*/__pycache__/*' -exec sha256sum {} \; \
++    >"$OUTPUT_DIR/lerobot_deployment_sha256.txt"
++
++printf 'environment_manifest=%s\n' "$OUTPUT_DIR"
+diff --git a/ascend-v062/project/scripts/resume_libero_train.sh b/ascend-v062/project/scripts/resume_libero_train.sh
+new file mode 100755
+index 0000000..59ed1f1
+--- /dev/null
++++ b/ascend-v062/project/scripts/resume_libero_train.sh
+@@ -0,0 +1,42 @@
++#!/usr/bin/env bash
++
++set -eo pipefail
++
++SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
++source "$SCRIPT_DIR/env.sh"
++
++PRETRAINED_DIR="${1:?Usage: $0 PRETRAINED_MODEL_DIR TARGET_STEPS NUM_PROCESSES [RUN_NAME]}"
++TARGET_STEPS="${2:?Usage: $0 PRETRAINED_MODEL_DIR TARGET_STEPS NUM_PROCESSES [RUN_NAME]}"
++NUM_PROCESSES="${3:?Usage: $0 PRETRAINED_MODEL_DIR TARGET_STEPS NUM_PROCESSES [RUN_NAME]}"
++RUN_NAME="${4:-mint_libero_npu_resume_$(date +%Y%m%d_%H%M%S)}"
++OUTPUT_DIR="$MINT_OUTPUT_ROOT/train/$RUN_NAME"
++TRAIN_CONFIG="$PRETRAINED_DIR/train_config.json"
++TRAINING_STATE="$(dirname -- "$PRETRAINED_DIR")/training_state"
++
++if [[ ! -f "$TRAIN_CONFIG" || ! -f "$TRAINING_STATE/training_step.json" ]]; then
++    echo "Incomplete resumable checkpoint: $PRETRAINED_DIR" >&2
++    exit 2
++fi
++if [[ -e "$OUTPUT_DIR" ]]; then
++    echo "Refusing to overwrite existing run directory: $OUTPUT_DIR" >&2
++    exit 2
++fi
++
++mkdir -p "$OUTPUT_DIR"
++LOG_FILE="$OUTPUT_DIR/resume.log"
++printf '%s\n' \
++    "pretrained_dir=$PRETRAINED_DIR" \
++    "training_state=$TRAINING_STATE" \
++    "target_steps=$TARGET_STEPS" \
++    "num_processes=$NUM_PROCESSES" \
++    "output_dir=$OUTPUT_DIR" | tee "$LOG_FILE"
++
++torchrun --standalone --nproc-per-node="$NUM_PROCESSES" "$(command -v lerobot-train)" \
++    "--discover_packages_path=lerobot_policy_mint" \
++    "--config_path=$TRAIN_CONFIG" \
++    "--resume=true" \
++    "--steps=$TARGET_STEPS" \
++    "--output_dir=$OUTPUT_DIR" \
++    "--job_name=$RUN_NAME" \
++    "--save_checkpoint=true" \
++    "--wandb.enable=false" 2>&1 | tee -a "$LOG_FILE"
+diff --git a/ascend-v062/project/scripts/resume_mint_reproduction.sh b/ascend-v062/project/scripts/resume_mint_reproduction.sh
+new file mode 100755
+index 0000000..06c3889
+--- /dev/null
++++ b/ascend-v062/project/scripts/resume_mint_reproduction.sh
+@@ -0,0 +1,66 @@
++#!/usr/bin/env bash
++
++set -eo pipefail
++
++SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
++source "$SCRIPT_DIR/env.sh"
++
++PRETRAINED_DIR="${1:?Usage: $0 PRETRAINED_MODEL_DIR TARGET_OPTIMIZER_UPDATES DEVICE_IDS_CSV [RUN_NAME]}"
++TARGET_OPTIMIZER_UPDATES="${2:?Usage: $0 PRETRAINED_MODEL_DIR TARGET_OPTIMIZER_UPDATES DEVICE_IDS_CSV [RUN_NAME]}"
++DEVICE_IDS_CSV="${3:?Usage: $0 PRETRAINED_MODEL_DIR TARGET_OPTIMIZER_UPDATES DEVICE_IDS_CSV [RUN_NAME]}"
++RUN_NAME="${4:-mint_libero_npu_resume_$(date +%Y%m%d_%H%M%S)}"
++TRAIN_CONFIG="$PRETRAINED_DIR/train_config.json"
++
++if ! [[ "$TARGET_OPTIMIZER_UPDATES" =~ ^[1-9][0-9]*$ ]]; then
++    echo "TARGET_OPTIMIZER_UPDATES must be a positive integer" >&2
++    exit 2
++fi
++if [[ ! -f "$TRAIN_CONFIG" ]]; then
++    echo "Missing checkpoint training config: $TRAIN_CONFIG" >&2
++    exit 2
++fi
++
++read -r MICRO_BATCH GRAD_ACCUM NUM_PROCESSES < <(
++    python - "$TRAIN_CONFIG" <<'PY'
++import json
++import sys
++
++config = json.load(open(sys.argv[1], encoding="utf-8"))
++print(
++    config["batch_size"],
++    config["accelerator"]["gradient_accumulation"]["steps"],
++    config["parallelism"]["dp_replicate"],
++)
++PY
++)
++IFS=',' read -r -a DEVICE_IDS <<<"$DEVICE_IDS_CSV"
++if (( ${#DEVICE_IDS[@]} != NUM_PROCESSES )); then
++    echo "Checkpoint requires $NUM_PROCESSES devices, got ${#DEVICE_IDS[@]}" >&2
++    exit 2
++fi
++declare -A SEEN_DEVICES=()
++for device in "${DEVICE_IDS[@]}"; do
++    if ! [[ "$device" =~ ^[0-9]+$ ]] || [[ -n "${SEEN_DEVICES[$device]:-}" ]]; then
++        echo "NPU device IDs must be unique non-negative integers: $DEVICE_IDS_CSV" >&2
++        exit 2
++    fi
++    SEEN_DEVICES[$device]=1
++done
++if (( MICRO_BATCH * GRAD_ACCUM * NUM_PROCESSES != 128 )); then
++    echo "Checkpoint does not preserve the official global batch 128" >&2
++    exit 2
++fi
++
++TARGET_MICRO_STEPS=$((TARGET_OPTIMIZER_UPDATES * GRAD_ACCUM))
++printf '%s\n' \
++    "checkpoint=$PRETRAINED_DIR" \
++    "target_optimizer_updates=$TARGET_OPTIMIZER_UPDATES" \
++    "target_micro_steps=$TARGET_MICRO_STEPS" \
++    "micro_batch_per_process=$MICRO_BATCH" \
++    "gradient_accumulation_steps=$GRAD_ACCUM" \
++    "num_processes=$NUM_PROCESSES" \
++    "effective_global_batch=128" \
++    "visible_devices=$DEVICE_IDS_CSV"
++
++ASCEND_RT_VISIBLE_DEVICES="$DEVICE_IDS_CSV" "$SCRIPT_DIR/resume_libero_train.sh" \
++    "$PRETRAINED_DIR" "$TARGET_MICRO_STEPS" "$NUM_PROCESSES" "$RUN_NAME"
+diff --git a/ascend-v062/project/scripts/smoke_mint_model.py b/ascend-v062/project/scripts/smoke_mint_model.py
+new file mode 100644
+index 0000000..baa8e94
+--- /dev/null
++++ b/ascend-v062/project/scripts/smoke_mint_model.py
+@@ -0,0 +1,183 @@
++#!/usr/bin/env python
++
++import argparse
++import json
++import math
++from pathlib import Path
++import statistics
++import time
++
++import torch
++import torch_npu  # noqa: F401
++
++from lerobot_policy_mint.configuration_mint import MINTConfig
++from lerobot.configs.policies import PreTrainedConfig
++from lerobot_policy_mint.modeling_mint import MINTPolicy, MINTPytorch
++
++
++def synchronize() -> None:
++    torch.npu.synchronize()
++
++
++def main() -> None:
++    parser = argparse.ArgumentParser()
++    parser.add_argument("--mode", choices=("inference", "training"), default="inference")
++    parser.add_argument("--batch-size", type=int, default=1)
++    parser.add_argument("--images", type=int, default=2)
++    parser.add_argument("--token-length", type=int, default=32)
++    parser.add_argument("--warmup", type=int, default=1)
++    parser.add_argument("--repeats", type=int, default=5)
++    parser.add_argument("--optimizer-step", action="store_true")
++    parser.add_argument("--checkpoint", type=Path)
++    parser.add_argument("--output-json", type=Path)
++    args = parser.parse_args()
++
++    if (
++        args.batch_size < 1
++        or args.images < 1
++        or args.token_length < 1
++        or args.warmup < 0
++        or args.repeats < 1
++    ):
++        raise ValueError("batch size, image count, and token length must be positive")
++    if not torch.npu.is_available():
++        raise RuntimeError("torch.npu is not available")
++    if args.optimizer_step and args.mode != "training":
++        raise ValueError("--optimizer-step requires --mode=training")
++
++    torch.manual_seed(42)
++    torch.npu.set_device(0)
++    device = torch.device("npu:0")
++    build_started = time.perf_counter()
++    if args.checkpoint is None:
++        config = MINTConfig(
++            device="npu",
++            dtype="bfloat16",
++            compile_model=False,
++            gradient_checkpointing=args.mode == "training",
++        )
++        model = MINTPytorch(config).to(device)
++        scope = "random-weight structure-only smoke; not a quality result"
++    else:
++        config = PreTrainedConfig.from_pretrained(
++            args.checkpoint,
++            cli_overrides=[
++                "--device=npu",
++                "--compile_model=false",
++                f"--gradient_checkpointing={str(args.mode == 'training').lower()}",
++            ],
++        )
++        if config.type != "mint":
++            raise ValueError(f"Expected MINT checkpoint, got {config.type!r}")
++        policy = MINTPolicy.from_pretrained(args.checkpoint, config=config)
++        model = policy.model
++        scope = f"pretrained checkpoint: {args.checkpoint}"
++    synchronize()
++    build_seconds = time.perf_counter() - build_started
++
++    images = [
++        torch.randn(
++            args.batch_size,
++            3,
++            224,
++            224,
++            device=device,
++            dtype=torch.float32,
++        )
++        for _ in range(args.images)
++    ]
++    image_masks = [torch.ones(args.batch_size, device=device, dtype=torch.bool) for _ in images]
++    tokens = torch.zeros(
++        args.batch_size,
++        args.token_length,
++        device=device,
++        dtype=torch.long,
++    )
++    token_masks = torch.ones_like(tokens, dtype=torch.bool)
++
++    if args.mode == "inference":
++        model.eval()
++        with torch.no_grad():
++            for _ in range(args.warmup):
++                model.sample_actions(images, image_masks, tokens, token_masks, sample_top_k=1)
++                synchronize()
++            run_times = []
++            for _ in range(args.repeats):
++                run_started = time.perf_counter()
++                action_chunk, intention = model.sample_actions(
++                    images,
++                    image_masks,
++                    tokens,
++                    token_masks,
++                    sample_top_k=1,
++                )
++                synchronize()
++                run_times.append(time.perf_counter() - run_started)
++        loss = None
++    else:
++        model.train()
++        model.gradient_checkpointing_enable()
++        optimizer = None
++        if args.optimizer_step:
++            optimizer = torch.optim.AdamW(
++                (parameter for parameter in model.parameters() if parameter.requires_grad),
++                lr=2e-4,
++                betas=(0.9, 0.95),
++                eps=1e-8,
++                weight_decay=0.01,
++            )
++        actions = torch.randn(
++            args.batch_size,
++            config.chunk_size,
++            config.max_action_dim,
++            device=device,
++            dtype=torch.float32,
++        ).clamp(-1, 1)
++        run_started = time.perf_counter()
++        loss = model(images, image_masks, tokens, token_masks, actions).mean()
++        loss.backward()
++        finite_output_gradient = torch.isfinite(model.vq_code_out_proj.weight.grad).all().item()
++        if optimizer is not None:
++            optimizer.step()
++            optimizer.zero_grad(set_to_none=True)
++        synchronize()
++        run_times = [time.perf_counter() - run_started]
++        action_chunk = None
++        intention = None
++
++    result = {
++        "scope": scope,
++        "mode": args.mode,
++        "device": torch.npu.get_device_name(0),
++        "batch_size": args.batch_size,
++        "image_count": args.images,
++        "image_dtype": str(images[0].dtype),
++        "token_length": args.token_length,
++        "build_seconds": round(build_seconds, 4),
++        "warmup_runs": args.warmup if args.mode == "inference" else 0,
++        "timed_runs": len(run_times),
++        "optimizer_step": args.optimizer_step,
++        "run_seconds_mean": round(statistics.mean(run_times), 4),
++        "run_seconds_median": round(statistics.median(run_times), 4),
++        "run_seconds_p95": round(sorted(run_times)[math.ceil(0.95 * len(run_times)) - 1], 4),
++        "run_seconds_min": round(min(run_times), 4),
++        "run_seconds_max": round(max(run_times), 4),
++        "max_memory_gib": round(torch.npu.max_memory_allocated() / 1024**3, 4),
++    }
++    if action_chunk is not None and intention is not None:
++        result["action_shape"] = list(action_chunk.shape)
++        result["intention_shape"] = list(intention.shape)
++        result["finite_actions"] = torch.isfinite(action_chunk).all().item()
++    if loss is not None:
++        result["loss"] = loss.item()
++        result["finite_loss"] = torch.isfinite(loss).item()
++        result["finite_output_gradient"] = finite_output_gradient
++    rendered = json.dumps(result, indent=2)
++    if args.output_json is not None:
++        args.output_json.parent.mkdir(parents=True, exist_ok=True)
++        args.output_json.write_text(rendered + "\n", encoding="utf-8")
++    print(rendered)
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/ascend-v062/project/scripts/smoke_mint_ops.py b/ascend-v062/project/scripts/smoke_mint_ops.py
+new file mode 100644
+index 0000000..2245642
+--- /dev/null
++++ b/ascend-v062/project/scripts/smoke_mint_ops.py
+@@ -0,0 +1,57 @@
++#!/usr/bin/env python
++
++import json
++
++import torch
++import torch.nn.functional as F
++import torch_npu  # noqa: F401
++
++
++def main() -> None:
++    if not torch.npu.is_available():
++        raise RuntimeError("torch.npu is not available")
++    torch.npu.set_device(0)
++    device = torch.device("npu:0")
++
++    image = torch.randn(2, 3, 32, 32, device=device, dtype=torch.bfloat16)
++    area = F.interpolate(image, size=(16, 16), mode="area")
++    bilinear = F.interpolate(image, size=(24, 24), mode="bilinear", align_corners=False)
++
++    conv = torch.nn.Conv1d(32, 48, kernel_size=3, padding=1, device=device, dtype=torch.bfloat16)
++    conv_out = conv(torch.randn(2, 32, 16, device=device, dtype=torch.bfloat16))
++
++    embedding = torch.nn.Embedding(512, 32, device=device, dtype=torch.bfloat16)
++    logits = torch.randn(2, 16, 512, device=device, dtype=torch.float32)
++    indices = logits.argmax(dim=-1)
++    embedded = embedding(indices)
++    sampled = torch.multinomial(logits.softmax(dim=-1).reshape(-1, 512), num_samples=1)
++
++    sorted_logits, sorted_indices = logits.sort(dim=-1)
++    remove = sorted_logits.softmax(dim=-1).cumsum(dim=-1) <= 0.1
++    scattered = remove.scatter(-1, sorted_indices, remove)
++    masked = logits.masked_fill(scattered, -torch.inf)
++
++    loss = area.float().square().mean()
++    loss = loss + bilinear.float().square().mean() + conv_out.float().square().mean()
++    finite_masked = masked.nan_to_num(nan=0.0, posinf=0.0, neginf=0.0)
++    loss = loss + embedded.float().square().mean() + finite_masked.square().mean()
++    loss.backward()
++    torch.npu.synchronize()
++
++    result = {
++        "device": torch.npu.get_device_name(0),
++        "area_shape": list(area.shape),
++        "bilinear_shape": list(bilinear.shape),
++        "conv1d_shape": list(conv_out.shape),
++        "embedding_shape": list(embedded.shape),
++        "multinomial_shape": list(sampled.shape),
++        "finite_gradients": all(
++            parameter.grad is not None and torch.isfinite(parameter.grad).all().item()
++            for parameter in [conv.weight, embedding.weight]
++        ),
++    }
++    print(json.dumps(result, indent=2))
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/ascend-v062/project/scripts/train_libero_reproduction.sh b/ascend-v062/project/scripts/train_libero_reproduction.sh
+new file mode 100755
+index 0000000..c0da7c7
+--- /dev/null
++++ b/ascend-v062/project/scripts/train_libero_reproduction.sh
+@@ -0,0 +1,137 @@
++#!/usr/bin/env bash
++
++set -eo pipefail
++
++SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
++source "$SCRIPT_DIR/env.sh"
++
++NUM_PROCESSES="${1:-4}"
++MICRO_BATCH="${2:-8}"
++RUN_NAME="${3:-mint_libero_npu_reproduction_$(date +%Y%m%d_%H%M%S)}"
++OPTIMIZER_UPDATES="${4:-30000}"
++SAVE_EVERY_UPDATES="${5:-2000}"
++SAVE_CHECKPOINT="${6:-true}"
++TARGET_GLOBAL_BATCH=128
++DATASET="$HF_LEROBOT_HOME/lerobot/libero"
++OUTPUT_DIR="$MINT_OUTPUT_ROOT/train/$RUN_NAME"
++
++for value in "$NUM_PROCESSES" "$MICRO_BATCH" "$OPTIMIZER_UPDATES" "$SAVE_EVERY_UPDATES"; do
++    if ! [[ "$value" =~ ^[1-9][0-9]*$ ]]; then
++        echo "NUM_PROCESSES, MICRO_BATCH, and OPTIMIZER_UPDATES must be positive integers" >&2
++        exit 2
++    fi
++done
++if [[ "$SAVE_CHECKPOINT" != "true" && "$SAVE_CHECKPOINT" != "false" ]]; then
++    echo "SAVE_CHECKPOINT must be true or false" >&2
++    exit 2
++fi
++
++SAMPLES_PER_MICRO_STEP=$((NUM_PROCESSES * MICRO_BATCH))
++if (( TARGET_GLOBAL_BATCH % SAMPLES_PER_MICRO_STEP != 0 )); then
++    echo "128 must be divisible by NUM_PROCESSES * MICRO_BATCH" >&2
++    exit 2
++fi
++GRAD_ACCUM=$((TARGET_GLOBAL_BATCH / SAMPLES_PER_MICRO_STEP))
++MICRO_STEPS=$((OPTIMIZER_UPDATES * GRAD_ACCUM))
++WARMUP_STEPS=$((1000 * GRAD_ACCUM))
++DECAY_STEPS=$((30000 * GRAD_ACCUM))
++SAVE_FREQ=$((SAVE_EVERY_UPDATES * GRAD_ACCUM))
++
++if [[ -e "$OUTPUT_DIR" ]]; then
++    echo "Refusing to overwrite existing run directory: $OUTPUT_DIR" >&2
++    exit 2
++fi
++python "$SCRIPT_DIR/preflight_mint.py" \
++    --tokenizer "$MINT_TOKENIZER" \
++    --dataset "$DATASET" \
++    --require-complete-dataset
++if [[ ! -f "$MINT_PI05_BASE/model.safetensors" ]]; then
++    echo "PI0.5 base checkpoint is incomplete: $MINT_PI05_BASE" >&2
++    exit 2
++fi
++
++mkdir -p "$(dirname -- "$OUTPUT_DIR")"
++LOG_FILE="$OUTPUT_DIR.bootstrap.log"
++retain_log() {
++    if [[ -f "$LOG_FILE" ]]; then
++        mkdir -p "$OUTPUT_DIR"
++        mv "$LOG_FILE" "$OUTPUT_DIR/train.log"
++    fi
++}
++trap retain_log EXIT
++
++printf '%s\n' \
++    "initialization=$MINT_PI05_BASE" \
++    "tokenizer=$MINT_TOKENIZER/ms_vqvae.pth" \
++    "dataset=$DATASET" \
++    "output_dir=$OUTPUT_DIR" \
++    "num_processes=$NUM_PROCESSES" \
++    "micro_batch_per_process=$MICRO_BATCH" \
++    "gradient_accumulation_steps=$GRAD_ACCUM" \
++    "effective_global_batch=$TARGET_GLOBAL_BATCH" \
++    "official_recipe_source=arXiv:2602.08602v3 Appendix Table VI and LIBERO implementation details" \
++    "official_hardware=4xNVIDIA_H200" \
++    "official_learning_rate=2e-4" \
++    "official_optimizer=AdamW_betas_0.9_0.95_weight_decay_0.01" \
++    "official_training_iterations=30000" \
++    "official_dataset=joint_4_suite_LIBERO_273465_frames" \
++    "initialization_scope=pi05_PaliGemma_backbone_only" \
++    "action_expert_initialization=random_as_specified_by_paper" \
++    "optimizer_updates=$OPTIMIZER_UPDATES" \
++    "save_every_optimizer_updates=$SAVE_EVERY_UPDATES" \
++    "save_checkpoint=$SAVE_CHECKPOINT" \
++    "trainer_micro_steps=$MICRO_STEPS" \
++    "scheduler_steps_per_optimizer_update=$GRAD_ACCUM" \
++    "scheduler_warmup_optimizer_updates=1000" \
++    "scheduler_decay_optimizer_updates=30000" \
++    "scheduler_warmup_steps=$WARMUP_STEPS" \
++    "scheduler_decay_steps=$DECAY_STEPS" | tee "$LOG_FILE"
++npu-smi info 2>&1 | tee -a "$LOG_FILE"
++
++TRAIN_ARGS=(
++    "--discover_packages_path=lerobot_policy_mint"
++    "--dataset.repo_id=lerobot/libero"
++    "--dataset.root=$DATASET"
++    "--dataset.episodes=null"
++    "--dataset.revision=a1aaacb7f6cd6ee5fb43120f673cebb0cfea7dd4"
++    "--dataset.video_backend=pyav"
++    "--dataset.return_uint8=true"
++    "--policy.type=mint"
++    "--policy.pretrained_path=$MINT_PI05_BASE"
++    "--policy.vqvae_name_or_path=$MINT_TOKENIZER/ms_vqvae.pth"
++    "--policy.device=npu"
++    "--policy.dtype=bfloat16"
++    "--policy.compile_model=false"
++    "--policy.gradient_checkpointing=true"
++    "--policy.push_to_hub=false"
++    "--policy.chunk_size=16"
++    "--use_policy_training_preset=false"
++    "--optimizer.type=adamw"
++    "--optimizer.lr=2e-4"
++    "--optimizer.betas=[0.9,0.95]"
++    "--optimizer.eps=1e-8"
++    "--optimizer.weight_decay=0.01"
++    "--optimizer.grad_clip_norm=1.0"
++    "--scheduler.type=cosine_decay_with_warmup"
++    "--scheduler.num_warmup_steps=$WARMUP_STEPS"
++    "--scheduler.num_decay_steps=$DECAY_STEPS"
++    "--scheduler.peak_lr=2e-4"
++    "--scheduler.decay_lr=2e-5"
++    "--accelerator.gradient_accumulation.steps=$GRAD_ACCUM"
++    "--output_dir=$OUTPUT_DIR"
++    "--job_name=$RUN_NAME"
++    "--steps=$MICRO_STEPS"
++    "--batch_size=$MICRO_BATCH"
++    "--num_workers=4"
++    "--env_eval_freq=0"
++    "--eval_steps=0"
++    "--log_freq=$GRAD_ACCUM"
++    "--save_checkpoint=$SAVE_CHECKPOINT"
++    "--save_freq=$SAVE_FREQ"
++    "--ema.enable=false"
++    "--wandb.enable=false"
++    "--seed=42"
++)
++
++torchrun --standalone --nproc-per-node="$NUM_PROCESSES" "$(command -v lerobot-train)" \
++    "${TRAIN_ARGS[@]}" 2>&1 | tee -a "$LOG_FILE"
+diff --git a/ascend-v062/project/scripts/train_libero_smoke.sh b/ascend-v062/project/scripts/train_libero_smoke.sh
+new file mode 100755
+index 0000000..720d010
+--- /dev/null
++++ b/ascend-v062/project/scripts/train_libero_smoke.sh
+@@ -0,0 +1,85 @@
++#!/usr/bin/env bash
++
++set -eo pipefail
++
++SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
++source "$SCRIPT_DIR/env.sh"
++
++STEPS="${1:-2}"
++BATCH_SIZE="${2:-1}"
++RUN_NAME="${3:-mint_libero_npu_smoke_$(date +%Y%m%d_%H%M%S)}"
++CHECKPOINT="${4:-$MINT_CHECKPOINT}"
++EPISODES="${5:-[0]}"
++SAVE_CHECKPOINT="${6:-true}"
++DATASET="$HF_LEROBOT_HOME/lerobot/libero"
++OUTPUT_DIR="$MINT_OUTPUT_ROOT/train/$RUN_NAME"
++
++if ! [[ "$STEPS" =~ ^[1-9][0-9]*$ && "$BATCH_SIZE" =~ ^[1-9][0-9]*$ ]]; then
++    echo "STEPS and BATCH_SIZE must be positive integers" >&2
++    exit 2
++fi
++if [[ "$SAVE_CHECKPOINT" != "true" && "$SAVE_CHECKPOINT" != "false" ]]; then
++    echo "SAVE_CHECKPOINT must be true or false" >&2
++    exit 2
++fi
++if [[ -e "$OUTPUT_DIR" ]]; then
++    echo "Refusing to overwrite existing run directory: $OUTPUT_DIR" >&2
++    exit 2
++fi
++
++python "$SCRIPT_DIR/preflight_mint.py" \
++    --checkpoint "$CHECKPOINT" \
++    --dataset "$DATASET" \
++    --require-weights
++
++mkdir -p "$(dirname -- "$OUTPUT_DIR")"
++LOG_FILE="$OUTPUT_DIR.bootstrap.log"
++retain_log() {
++    if [[ -f "$LOG_FILE" ]]; then
++        mkdir -p "$OUTPUT_DIR"
++        mv "$LOG_FILE" "$OUTPUT_DIR/train.log"
++    fi
++}
++trap retain_log EXIT
++
++printf '%s\n' \
++    "checkpoint=$CHECKPOINT" \
++    "dataset=$DATASET" \
++    "episodes=$EPISODES" \
++    "output_dir=$OUTPUT_DIR" \
++    "steps=$STEPS" \
++    "batch_size=$BATCH_SIZE" \
++    "save_checkpoint=$SAVE_CHECKPOINT" | tee "$LOG_FILE"
++npu-smi info 2>&1 | tee -a "$LOG_FILE"
++
++lerobot-train \
++    "--discover_packages_path=lerobot_policy_mint" \
++    "--dataset.repo_id=lerobot/libero" \
++    "--dataset.root=$DATASET" \
++    "--dataset.episodes=$EPISODES" \
++    "--dataset.revision=a1aaacb7f6cd6ee5fb43120f673cebb0cfea7dd4" \
++    "--dataset.video_backend=pyav" \
++    "--dataset.return_uint8=true" \
++    "--policy.path=$CHECKPOINT" \
++    "--policy.device=npu" \
++    "--policy.dtype=bfloat16" \
++    "--policy.compile_model=false" \
++    "--policy.gradient_checkpointing=true" \
++    "--policy.push_to_hub=false" \
++    "--policy.optimizer_lr=2e-4" \
++    "--policy.scheduler_warmup_steps=1" \
++    "--policy.scheduler_decay_steps=$STEPS" \
++    "--output_dir=$OUTPUT_DIR" \
++    "--job_name=$RUN_NAME" \
++    "--steps=$STEPS" \
++    "--batch_size=$BATCH_SIZE" \
++    "--num_workers=0" \
++    "--persistent_workers=false" \
++    "--env_eval_freq=0" \
++    "--eval_steps=0" \
++    "--log_freq=1" \
++    "--save_checkpoint=$SAVE_CHECKPOINT" \
++    "--save_freq=$STEPS" \
++    "--ema.enable=false" \
++    "--wandb.enable=false" \
++    "--seed=42" 2>&1 | tee -a "$LOG_FILE"
+diff --git a/ascend-v062/project/scripts/validate_mint_base_resume.sh b/ascend-v062/project/scripts/validate_mint_base_resume.sh
+new file mode 100755
+index 0000000..0f30d70
+--- /dev/null
++++ b/ascend-v062/project/scripts/validate_mint_base_resume.sh
+@@ -0,0 +1,139 @@
++#!/usr/bin/env bash
++
++set -eo pipefail
++
++SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
++source "$SCRIPT_DIR/env.sh"
++
++RUN_NAME="${1:-mint_base_resume_validation_$(date +%Y%m%d_%H%M%S)}"
++BASE_CHECKPOINT="${2:-$MINT_PI05_BASE}"
++SMOKE_STEPS="${3:-2}"
++RESUME_TARGET_STEPS="${4:-3}"
++DATASET="$HF_LEROBOT_HOME/lerobot/libero"
++RESULT_DIR="$MINT_OUTPUT_ROOT/validation/$RUN_NAME"
++SMOKE_RUN="${RUN_NAME}_smoke"
++RESUME_RUN="${RUN_NAME}_resume"
++SMOKE_OUTPUT="$MINT_OUTPUT_ROOT/train/$SMOKE_RUN"
++
++for value in "$SMOKE_STEPS" "$RESUME_TARGET_STEPS"; do
++    if ! [[ "$value" =~ ^[1-9][0-9]*$ ]]; then
++        echo "Smoke and resume steps must be positive integers" >&2
++        exit 2
++    fi
++done
++if (( RESUME_TARGET_STEPS <= SMOKE_STEPS )); then
++    echo "Resume target must be greater than smoke steps" >&2
++    exit 2
++fi
++if [[ -e "$RESULT_DIR" || -e "$SMOKE_OUTPUT" ]]; then
++    echo "Refusing to overwrite an existing validation or training directory" >&2
++    exit 2
++fi
++
++mkdir -p "$RESULT_DIR" "$(dirname -- "$SMOKE_OUTPUT")"
++printf '%s\n' \
++    "initialization=$BASE_CHECKPOINT" \
++    "initialization_scope=pi05_PaliGemma_backbone_only" \
++    "action_expert_initialization=random" \
++    "tokenizer=$MINT_TOKENIZER/ms_vqvae.pth" \
++    "dataset=$DATASET" \
++    "dataset_episodes=[0]" \
++    "smoke_steps=$SMOKE_STEPS" \
++    "resume_target_steps=$RESUME_TARGET_STEPS" \
++    "smoke_run=$SMOKE_RUN" \
++    "resume_run=$RESUME_RUN" \
++    >"$RESULT_DIR/manifest.txt"
++
++python "$MINT_ASCEND_ROOT/projects/lerobot-ascend/scripts/ascend/preflight_pi05_train.py" \
++    --checkpoint "$BASE_CHECKPOINT" \
++    --dataset "$DATASET" \
++    --output-dir "$SMOKE_OUTPUT" \
++    >"$RESULT_DIR/pi05_base_preflight.json"
++python "$SCRIPT_DIR/preflight_mint.py" \
++    --tokenizer "$MINT_TOKENIZER" \
++    --dataset "$DATASET" \
++    --require-complete-dataset \
++    >"$RESULT_DIR/mint_preflight.json"
++
++lerobot-train \
++    "--discover_packages_path=lerobot_policy_mint" \
++    "--dataset.repo_id=lerobot/libero" \
++    "--dataset.root=$DATASET" \
++    "--dataset.episodes=[0]" \
++    "--dataset.revision=a1aaacb7f6cd6ee5fb43120f673cebb0cfea7dd4" \
++    "--dataset.video_backend=pyav" \
++    "--dataset.return_uint8=true" \
++    "--policy.type=mint" \
++    "--policy.pretrained_path=$BASE_CHECKPOINT" \
++    "--policy.vqvae_name_or_path=$MINT_TOKENIZER/ms_vqvae.pth" \
++    "--policy.device=npu" \
++    "--policy.dtype=bfloat16" \
++    "--policy.compile_model=false" \
++    "--policy.gradient_checkpointing=true" \
++    "--policy.push_to_hub=false" \
++    "--policy.chunk_size=16" \
++    "--use_policy_training_preset=false" \
++    "--optimizer.type=adamw" \
++    "--optimizer.lr=2e-4" \
++    "--optimizer.betas=[0.9,0.95]" \
++    "--optimizer.eps=1e-8" \
++    "--optimizer.weight_decay=0.01" \
++    "--optimizer.grad_clip_norm=1.0" \
++    "--scheduler.type=cosine_decay_with_warmup" \
++    "--scheduler.num_warmup_steps=1" \
++    "--scheduler.num_decay_steps=$SMOKE_STEPS" \
++    "--scheduler.peak_lr=2e-4" \
++    "--scheduler.decay_lr=2e-5" \
++    "--output_dir=$SMOKE_OUTPUT" \
++    "--job_name=$SMOKE_RUN" \
++    "--steps=$SMOKE_STEPS" \
++    "--batch_size=1" \
++    "--num_workers=0" \
++    "--persistent_workers=false" \
++    "--env_eval_freq=0" \
++    "--eval_steps=0" \
++    "--log_freq=1" \
++    "--save_checkpoint=true" \
++    "--save_freq=$SMOKE_STEPS" \
++    "--ema.enable=false" \
++    "--wandb.enable=false" \
++    "--seed=42" \
++    >"$RESULT_DIR/smoke_train.log" 2>&1
++
++SMOKE_CHECKPOINT="$SMOKE_OUTPUT/checkpoints/$(printf '%06d' "$SMOKE_STEPS")/pretrained_model"
++if [[ ! -f "$SMOKE_CHECKPOINT/model.safetensors" ]]; then
++    echo "Smoke checkpoint was not saved at the expected path: $SMOKE_CHECKPOINT" >&2
++    exit 1
++fi
++
++"$SCRIPT_DIR/resume_libero_train.sh" \
++    "$SMOKE_CHECKPOINT" "$RESUME_TARGET_STEPS" 1 "$RESUME_RUN" \
++    >"$RESULT_DIR/resume_launcher.log" 2>&1
++
++RESUMED_CHECKPOINT="$MINT_OUTPUT_ROOT/train/$RESUME_RUN/checkpoints/$(printf '%06d' "$RESUME_TARGET_STEPS")/pretrained_model"
++if [[ ! -f "$RESUMED_CHECKPOINT/model.safetensors" ]]; then
++    echo "Resumed checkpoint was not saved at the expected path: $RESUMED_CHECKPOINT" >&2
++    exit 1
++fi
++
++python "$SCRIPT_DIR/smoke_mint_model.py" \
++    --checkpoint "$RESUMED_CHECKPOINT" \
++    --warmup 1 \
++    --repeats 3 \
++    --output-json "$RESULT_DIR/reload_inference.json" \
++    >"$RESULT_DIR/reload_inference.log" 2>&1
++python - "$RESULT_DIR/reload_inference.json" <<'PY'
++import json
++import math
++import sys
++
++result = json.load(open(sys.argv[1], encoding="utf-8"))
++if not result.get("finite_actions") or not math.isfinite(result["run_seconds_mean"]):
++    raise RuntimeError(f"Invalid resumed MINT inference result: {result}")
++PY
++
++printf '%s\n' \
++    "smoke_checkpoint=$SMOKE_CHECKPOINT" \
++    "resumed_checkpoint=$RESUMED_CHECKPOINT" \
++    "status=passed" \
++    >"$RESULT_DIR/result.txt"
+diff --git a/ascend-v062/project/scripts/verify_training_stability.py b/ascend-v062/project/scripts/verify_training_stability.py
+new file mode 100644
+index 0000000..c778853
+--- /dev/null
++++ b/ascend-v062/project/scripts/verify_training_stability.py
+@@ -0,0 +1,138 @@
++#!/usr/bin/env python
++
++from __future__ import annotations
++
++import argparse
++import json
++import math
++import re
++import statistics
++from pathlib import Path
++
++
++ERROR_PATTERN = re.compile(
++    r"out of memory|\boom\b|traceback|runtimeerror|hccl.*error|acl.*error|\bnan\b|\binf\b",
++    flags=re.IGNORECASE,
++)
++STEP_PATTERN = re.compile(
++    r"step:(?P<step>[0-9.]+[kKmM]?)\s+smpl:(?P<samples>[0-9.]+[kKmM]?).*?"
++    r"updt_s:(?P<update>[0-9.]+).*?step_s:(?P<step_s>[0-9.]+).*?"
++    r"smp/s:(?P<throughput>[0-9.]+).*?mem_gb:(?P<memory>[0-9.]+)"
++)
++PROGRESS_PATTERN = re.compile(r"Training:.*?\|\s*(?P<step>\d+)/(?P<total>\d+)")
++
++
++def parse_number(value: str) -> float:
++    suffix = value[-1].lower()
++    multiplier = {"k": 1_000.0, "m": 1_000_000.0}.get(suffix, 1.0)
++    return float(value[:-1] if multiplier != 1.0 else value) * multiplier
++
++
++def find_error_lines(text: str) -> list[str]:
++    errors = []
++    inside_codec_traceback = False
++    for line in text.splitlines():
++        lowered = line.lower()
++        if "start of libtorchcodec loading traceback" in lowered:
++            inside_codec_traceback = True
++            continue
++        if "end of libtorchcodec loading traceback" in lowered:
++            inside_codec_traceback = False
++            continue
++        if not inside_codec_traceback and ERROR_PATTERN.search(line):
++            errors.append(line)
++    return errors
++
++
++def main() -> None:
++    parser = argparse.ArgumentParser()
++    parser.add_argument("session_dir", type=Path)
++    parser.add_argument("--minimum-log-points", type=int, default=5)
++    parser.add_argument(
++        "--jobs",
++        nargs="+",
++        choices=("mint", "pi05"),
++        default=("mint", "pi05"),
++        help="Training launcher logs to validate.",
++    )
++    args = parser.parse_args()
++
++    session_dir = args.session_dir.resolve()
++    manifest_path = session_dir / "manifest.txt"
++    manifest_text = manifest_path.read_text(encoding="utf-8", errors="replace") if manifest_path.is_file() else ""
++    grad_accum_match = re.search(r"^gradient_accumulation_steps=(\d+)$", manifest_text, re.MULTILINE)
++    grad_accum = int(grad_accum_match.group(1)) if grad_accum_match else 1
++    rows = []
++    errors = []
++    per_job = {}
++    for job in args.jobs:
++        log_path = session_dir / f"{job}_launcher.log"
++        if not log_path.is_file():
++            raise FileNotFoundError(log_path)
++        text = log_path.read_text(encoding="utf-8", errors="replace")
++        job_rows = []
++        for match in STEP_PATTERN.finditer(text):
++            row = {key: parse_number(value) for key, value in match.groupdict().items()}
++            row["job"] = job
++            rows.append(row)
++            job_rows.append(row)
++        progress_rows = [
++            (int(match.group("step")), int(match.group("total")))
++            for match in PROGRESS_PATTERN.finditer(text)
++        ]
++        last_progress_step = max((step for step, _ in progress_rows), default=None)
++        total_progress_steps = max((total for _, total in progress_rows), default=None)
++        step_seconds = [row["step_s"] for row in job_rows]
++        sorted_step_seconds = sorted(step_seconds)
++        p95_index = max(0, math.ceil(0.95 * len(sorted_step_seconds)) - 1)
++        job_errors = find_error_lines(text)
++        errors.extend(f"{job}: {line}" for line in job_errors)
++        per_job[job] = {
++            "log": str(log_path),
++            "log_points": len(job_rows),
++            "last_step": job_rows[-1]["step"] if job_rows else None,
++            "last_progress_micro_step": last_progress_step,
++            "total_micro_steps": total_progress_steps,
++            "gradient_accumulation_steps": grad_accum,
++            "last_optimizer_update": last_progress_step // grad_accum if last_progress_step is not None else None,
++            "mean_step_s": statistics.mean(step_seconds) if step_seconds else None,
++            "median_step_s": statistics.median(step_seconds) if step_seconds else None,
++            "p95_step_s": sorted_step_seconds[p95_index] if step_seconds else None,
++            "mean_samples_per_s": (
++                sum(row["throughput"] for row in job_rows) / len(job_rows) if job_rows else None
++            ),
++            "peak_memory_gib": max((row["memory"] for row in job_rows), default=None),
++            "error_lines": len(job_errors),
++        }
++
++    stable = all(item["log_points"] >= args.minimum_log_points for item in per_job.values()) and not errors
++    outputs_dir = session_dir.parent.parent
++    checkpoint_files = sorted(
++        [
++            *outputs_dir.glob("train/**/model.safetensors"),
++            *outputs_dir.glob("mint/train/**/model.safetensors"),
++        ],
++        key=lambda path: path.stat().st_mtime,
++    )
++    result = {
++        "stable": stable,
++        "minimum_log_points": args.minimum_log_points,
++        "jobs": per_job,
++        "error_lines": errors[:50],
++        "finite_metrics": all(
++            math.isfinite(value)
++            for row in rows
++            for key, value in row.items()
++            if key != "job"
++        ),
++        "checkpoint_files_seen": [str(path.resolve()) for path in checkpoint_files[-10:]],
++    }
++    output_path = session_dir / "stability_report.json"
++    output_path.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
++    print(json.dumps(result, indent=2))
++    if not stable or not result["finite_metrics"]:
++        raise SystemExit(1)
++
++
++if __name__ == "__main__":
++    main()

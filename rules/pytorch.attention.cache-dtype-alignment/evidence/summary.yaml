@@ -1,0 +1,66 @@
+schema_version: 1.0.0
+rule_id: pytorch.attention.cache-dtype-alignment
+status: exploratory_source_evidence
+sources:
+  - path: ../../../cases/MINT/comparisons/patches/supplemental-official-declared-59fa23d_vs_ascend-v043-package.patch
+    result: exact_prefix_source_change_recovered
+  - path: ../../../cases/MINT/evidence/npu/candidate_checks.json
+    test_id: sdpa_mixed_dtype_control
+    result: failed_with_expected_same_dtype_error
+  - path: ../../../cases/MINT/evidence/npu/candidate_checks.json
+    test_id: sdpa_aligned_dtype
+    result: passed_fixed_input_metrics_recorded
+  - path: ../../../cases/MINT/evidence/npu/cache_dtype_operator_ab.json
+    result: paired_functional_and_cast_overhead_ab_passed
+  - path: ../../../cases/MINT/evidence/npu/cache_dtype_model_inference_ab.json
+    result: fixed_checkpoint_baseline_failed_candidate_passed
+  - path: ../../../cases/MINT/evidence/npu/cache_dtype_model_training_ab.json
+    result: inference_only_scope_control_passed
+  - path: ../../../cases/validation-projects/reports/static_validation.json
+    project: LeRobot@4aaff99be4a1d81568c08c8f0296b41b40c99ec4
+    result: pi0_adapter_matched_and_codemod_validated
+  - path: ../../../cases/validation-projects/reports/static_validation.json
+    project: OpenPI@215abfb217dbac7d5f1273282331b9b1866c0479
+    result: pi0_adapter_matched_and_codemod_validated
+observations:
+  aligned_max_abs_error: 0.008095860481262207
+  aligned_rmse: 0.0011905167355689536
+  aligned_cosine_similarity: 0.9999948790364719
+  aligned_median_seconds: 0.00006681936793029308
+  aligned_p95_seconds: 0.00007664365693926811
+  aligned_peak_allocated_bytes: 33775104
+  operator_ab:
+    repeats_per_variant: 50
+    timing_order: alternating_ab_ba
+    baseline_behavior: mixed_dtype_rejected
+    candidate_vs_cpu_fp32_max_abs_error: 0.008938491344451904
+    candidate_vs_cpu_fp32_cosine_similarity: 0.9999944534767344
+    candidate_median_ratio_vs_prealigned_control: 1.1457632372844193
+    candidate_minus_control_peak_increment_bytes: 17408
+  fixed_checkpoint_inference:
+    checkpoint_sha256: e0248497a1a9b750249ac65945baa53ab2ad57a8e9941229a7bf3ed0e6d218c9
+    baseline: failed_same_dtype_contract_before_output
+    candidate: passed_five_repeats
+    candidate_median_seconds: 0.07075968198478222
+    candidate_p95_seconds: 0.07271448988467455
+    candidate_peak_allocated_bytes: 8006022656
+    action_shape: [1, 16, 7]
+    logit_shapes: [[1, 1, 512], [1, 2, 512], [1, 4, 512]]
+    baseline_delta_status: undefined_no_baseline_output
+  training_scope_control:
+    baseline_candidate_loss_max_abs_error: 0.0
+    baseline_candidate_selected_gradient_max_abs_error: 0.0
+    baseline_candidate_peak_memory_difference_bytes: 0
+environment:
+  device: Ascend910B2C
+  torch: 2.9.0+cpu
+  torch_npu: 2.9.0
+static_external_coverage:
+  snapshot_hashes_verified: true
+  projects: [LeRobot, OpenPI]
+  model_families: [MINT, PI0]
+  runtime_status: pending
+missing:
+  - An independently valid model reference path for paired action/logit deltas and thresholds
+  - CUDA cached-attention comparison
+  - Runtime and model-level validation for both non-MINT source snapshots

@@ -1,0 +1,43 @@
+{
+  "approved_rule_count": 0,
+  "generated_from": "rules/*/manifest.yaml",
+  "rules": [
+    {
+      "classification": "numerical_precision",
+      "id": "pytorch.attention.cache-dtype-alignment",
+      "manifest_sha256": "831c7aafa8e8951fba4dee80971c574b9cef2048866cb1c7ffeb4e81e1be9051",
+      "package": "pytorch.attention.cache-dtype-alignment",
+      "package_sha256": "ff1c359bcf73f1327a56ddef481bbd510a1f17547f8267e1a62f2f59ff5c4a6b",
+      "risk": "high",
+      "status": "candidate",
+      "summary": "Align embeddings entering a recognized KV-cache attention boundary to the projection weight dtype.",
+      "title": "Cached attention boundary dtype alignment",
+      "version": "0.1.0"
+    },
+    {
+      "classification": "operator_implementation",
+      "id": "pytorch.npu.compile-capability-fallback",
+      "manifest_sha256": "852a11263248dd5c3acca0e94eedc82b18f3f60f684f2f649138f7006b9fe42c",
+      "package": "pytorch.npu.compile-capability-fallback",
+      "package_sha256": "8d90672d1af9ecf7ffe18f2cec0c4de4f9821f123bebc1b9f95cadb8c98e8309",
+      "risk": "medium",
+      "status": "candidate",
+      "summary": "Keep eager execution available when a recognized configuration would request an unverified NPU compile path.",
+      "title": "NPU torch.compile capability fallback",
+      "version": "0.1.0"
+    },
+    {
+      "classification": "numerical_precision",
+      "id": "pytorch.npu.sinusoidal-fp64-fallback",
+      "manifest_sha256": "482190868ee076a062c7330a66ddd0abfb924652ccc863e59ee46218ecbbfae4",
+      "package": "pytorch.npu.sinusoidal-fp64-fallback",
+      "package_sha256": "01670ed7b8971cc697c343b85f9c70e0e762b30842e70c3075a965410ad36357",
+      "risk": "medium",
+      "status": "candidate",
+      "summary": "Use FP32 only at a recognized sinusoidal safe-dtype boundary when NPU FP64 is unsuitable.",
+      "title": "NPU sinusoidal FP64 capability fallback",
+      "version": "0.2.0"
+    }
+  ],
+  "schema_version": "1.0.0"
+}

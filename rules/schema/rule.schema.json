@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://n2s.local/schemas/rule.schema.json",
+  "title": "N2S migration rule package",
+  "type": "object",
+  "required": [
+    "schema_version", "id", "version", "title", "status", "summary", "classification",
+    "risk", "scope", "source_cases", "applicability", "contract", "change", "impact",
+    "automation", "verification", "evidence", "promotion", "rollback", "approval"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "id": {"type": "string", "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"},
+    "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "title": {"type": "string", "minLength": 1},
+    "status": {"enum": ["principle", "candidate", "approved"]},
+    "summary": {"type": "string", "minLength": 1},
+    "classification": {"enum": ["numerical_precision", "operator_implementation", "device_library_replacement", "framework_api", "checkpoint_release_semantics", "model_semantics"]},
+    "risk": {"enum": ["low", "medium", "high"]},
+    "scope": {
+      "type": "object",
+      "required": ["ecosystem", "frameworks", "devices", "modes", "code_shapes"],
+      "properties": {
+        "ecosystem": {"const": "pytorch-torch-npu"},
+        "frameworks": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "devices": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "modes": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "code_shapes": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "source_cases": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "applicability": {
+      "type": "object",
+      "required": ["preconditions", "exclusions", "unknowns_fail_closed"],
+      "properties": {
+        "preconditions": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "exclusions": {"type": "array", "items": {"type": "string"}},
+        "unknowns_fail_closed": {"const": true}
+      },
+      "additionalProperties": false
+    },
+    "contract": {
+      "type": "object",
+      "required": ["before", "after", "invariants"],
+      "properties": {
+        "before": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "after": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "invariants": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "change": {
+      "type": "object",
+      "required": ["rationale", "method", "before_example", "after_example"],
+      "properties": {
+        "rationale": {"type": "string"}, "method": {"type": "string"},
+        "before_example": {"type": "string"}, "after_example": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "impact": {
+      "type": "object",
+      "required": ["functional", "numerical", "performance", "memory", "benefits", "drawbacks", "side_effects"],
+      "properties": {
+        "functional": {"type": "string"}, "numerical": {"type": "string"},
+        "performance": {"type": "string"}, "memory": {"type": "string"},
+        "benefits": {"type": "array", "items": {"type": "string"}},
+        "drawbacks": {"type": "array", "items": {"type": "string"}},
+        "side_effects": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "automation": {
+      "type": "object",
+      "required": ["detector", "codemod", "validator", "language", "auto_apply", "fail_closed"],
+      "properties": {
+        "detector": {"type": "string"}, "codemod": {"type": "string"},
+        "validator": {"type": "string"}, "language": {"const": "python-libcst-1.9.0"},
+        "auto_apply": {"type": "boolean"}, "fail_closed": {"const": true}
+      },
+      "additionalProperties": false
+    },
+    "verification": {
+      "type": "object",
+      "required": ["acceptance_contract", "commands"],
+      "properties": {
+        "acceptance_contract": {
+          "type": "object",
+          "required": ["functional", "numerical", "performance", "memory"],
+          "properties": {
+            "functional": {"type": "string"}, "numerical": {"type": "string"},
+            "performance": {"type": "string"}, "memory": {"type": "string"}
+          },
+          "additionalProperties": false
+        },
+        "commands": {"type": "array", "items": {"type": "array", "minItems": 1, "items": {"type": "string"}}}
+      },
+      "additionalProperties": false
+    },
+    "evidence": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "promotion": {
+      "type": "object", "required": ["requirements", "blockers"],
+      "properties": {
+        "requirements": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "blockers": {"type": "array", "items": {"type": "string"}}
+      }, "additionalProperties": false
+    },
+    "rollback": {"type": "string", "minLength": 1},
+    "approval": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object", "required": ["approver", "approved_at", "evidence_revision", "scope", "limitations"],
+          "properties": {
+            "approver": {"type": "string"}, "approved_at": {"type": "string", "format": "date-time"},
+            "evidence_revision": {"type": "string"}, "scope": {"type": "string"},
+            "limitations": {"type": "array", "items": {"type": "string"}}
+          }, "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "approved"}}},
+      "then": {
+        "properties": {
+          "automation": {"properties": {"auto_apply": {"const": true}}},
+          "approval": {"type": "object"},
+          "verification": {"properties": {"commands": {"minItems": 1}}},
+          "promotion": {"properties": {"blockers": {"maxItems": 0}}}
+        }
+      },
+      "else": {
+        "properties": {"automation": {"properties": {"auto_apply": {"const": false}}}, "approval": {"type": "null"}}
+      }
+    }
+  ],
+  "additionalProperties": false
+}

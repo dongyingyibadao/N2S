@@ -1,0 +1,192 @@
+{
+  "schema_version": "1.0.0",
+  "case": "MINT",
+  "generated_at": "2026-08-31T12:11:25.879740+00:00",
+  "promotion_status": "exploratory",
+  "backend": "npu",
+  "environment": {
+    "device": "Ascend910B2C",
+    "device_index": 0,
+    "torch": "2.9.0+cpu",
+    "torch_npu": "2.9.0",
+    "python": "3.12.14",
+    "platform": "Linux-5.15.0-119-generic-x86_64-with-glibc2.39"
+  },
+  "tests": [
+    {
+      "id": "compile_capability_model_training_ab",
+      "classification": "operator_implementation",
+      "status": "passed",
+      "evidence_status": "npu_passed",
+      "seed": 42,
+      "input": {
+        "sha256": "523605c00e1b5faec5fc651e24ff57d6774273f6db4bccb216ccc04c04dbbdd6",
+        "batch_size": 1,
+        "image_count": 2,
+        "image_shape": [
+          1,
+          3,
+          224,
+          224
+        ],
+        "image_dtype": "torch.float32",
+        "token_shape": [
+          1,
+          32
+        ],
+        "action_shape": [
+          1,
+          16,
+          7
+        ],
+        "mode": "training",
+        "warmup": 0,
+        "repeats": 1,
+        "variant_order": "baseline,candidate"
+      },
+      "checkpoint": {
+        "path": "/inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/workspace/models/mint_libero",
+        "files": [
+          {
+            "path": "config.json",
+            "size_bytes": 2218,
+            "sha256": "ed42dc9b5bda71e1bc8d56184f42dcdfc0c42fc2387f07501b7e97e23504d6c2"
+          },
+          {
+            "path": "model.safetensors",
+            "size_bytes": 7054844856,
+            "sha256": "e0248497a1a9b750249ac65945baa53ab2ad57a8e9941229a7bf3ed0e6d218c9"
+          }
+        ]
+      },
+      "samples": [
+        6.596068704966456
+      ],
+      "metrics": {
+        "functional_outcome": "baseline_failed_candidate_passed"
+      },
+      "memory": {
+        "baseline": {
+          "starting_allocated_bytes": 7925365248,
+          "peak_allocated_bytes": 7983819264,
+          "peak_increment_bytes": 58454016
+        },
+        "candidate": {
+          "starting_allocated_bytes": 7925365248,
+          "peak_allocated_bytes": 36402145792,
+          "peak_increment_bytes": 28476780544
+        }
+      },
+      "exception": null,
+      "acceptance": "record_only_no_unified_threshold",
+      "variants": {
+        "baseline": {
+          "variant": "baseline",
+          "status": "failed",
+          "backend": "npu",
+          "rule": "compile",
+          "mode": "training",
+          "seed": 42,
+          "source_sha256": "8c13a143a086e60b56b19508496e0bd880a9a8613e168913e28044511c3e8282",
+          "samples": [],
+          "metrics": {
+            "build_seconds": 43.70665166899562,
+            "time_to_exception_seconds": 3.267611853312701
+          },
+          "memory": {
+            "starting_allocated_bytes": 7925365248,
+            "peak_allocated_bytes": 7983819264,
+            "peak_increment_bytes": 58454016
+          },
+          "exception": {
+            "type": "BackendCompilerFailed",
+            "message": "backend='inductor' raised:\nModuleNotFoundError: No module named 'triton'\n\nSet TORCHDYNAMO_VERBOSE=1 for the internal stack trace (please do this especially if you're reporting a bug to PyTorch). For even more developer context, set TORCH_LOGS=\"+dynamo\"\n",
+            "traceback_tail": "    _InductorNpuRegistry.register_inductor_npu()\n  File \"/opt/ascend-vla/envs/lerobot-npu/lib/python3.12/site-packages/torch_npu/utils/_dynamo.py\", line 118, in register_inductor_npu\n    from torch_npu import _inductor\n  File \"/opt/ascend-vla/envs/lerobot-npu/lib/python3.12/site-packages/torch_npu/_inductor/__init__.py\", line 13, in <module>\n    from . import config as npu_config\n  File \"/opt/ascend-vla/envs/lerobot-npu/lib/python3.12/site-packages/torch_npu/_inductor/config.py\", line 6, in <module>\n    from triton.runtime.driver import driver\ntorch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:\nModuleNotFoundError: No module named 'triton'\n\nSet TORCHDYNAMO_VERBOSE=1 for the internal stack trace (please do this especially if you're reporting a bug to PyTorch). For even more developer context, set TORCH_LOGS=\"+dynamo\"\n"
+          },
+          "scope": "pretrained checkpoint: /inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/workspace/models/mint_libero",
+          "environment": {
+            "device": "Ascend910B2C",
+            "device_index": 0,
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0",
+            "python": "3.12.14",
+            "platform": "Linux-5.15.0-119-generic-x86_64-with-glibc2.39"
+          },
+          "imported_source": {
+            "path": "/tmp/n2s-compile-ab-g72_l59z/variants/baseline/src/lerobot_policy_mint/modeling_mint.py",
+            "sha256": "8c13a143a086e60b56b19508496e0bd880a9a8613e168913e28044511c3e8282"
+          }
+        },
+        "candidate": {
+          "variant": "candidate",
+          "status": "passed",
+          "backend": "npu",
+          "rule": "compile",
+          "mode": "training",
+          "seed": 42,
+          "source_sha256": "f01b09e5e88020e394fb3338948386b7c70fbd1dee8b8ac60e66869d4e26f47a",
+          "samples": [
+            6.596068704966456
+          ],
+          "metrics": {
+            "build_seconds": 46.97398050734773,
+            "median_seconds": 6.596068704966456,
+            "p95_seconds": 6.596068704966456,
+            "loss": 16.260555267333984,
+            "finite_loss": true,
+            "selected_gradient": {
+              "shape": [
+                512,
+                1024
+              ],
+              "dtype": "torch.float32",
+              "finite": true,
+              "content_sha256": "dfcd1e090d272a8bffef89ceccf537832d36b0c4eb99ac507d22881b8561d236"
+            },
+            "optimizer_updates": 1
+          },
+          "memory": {
+            "starting_allocated_bytes": 7925365248,
+            "peak_allocated_bytes": 36402145792,
+            "peak_increment_bytes": 28476780544
+          },
+          "exception": null,
+          "scope": "pretrained checkpoint: /inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/workspace/models/mint_libero",
+          "environment": {
+            "device": "Ascend910B2C",
+            "device_index": 0,
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0",
+            "python": "3.12.14",
+            "platform": "Linux-5.15.0-119-generic-x86_64-with-glibc2.39"
+          },
+          "imported_source": {
+            "path": "/tmp/n2s-compile-ab-g72_l59z/variants/candidate/src/lerobot_policy_mint/modeling_mint.py",
+            "sha256": "f01b09e5e88020e394fb3338948386b7c70fbd1dee8b8ac60e66869d4e26f47a"
+          }
+        }
+      },
+      "processes": {
+        "baseline": {
+          "returncode": 0,
+          "stdout_tail": "Loading model from: /inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/workspace/models/mint_libero\nAll pretrained keys loaded successfully",
+          "stderr_tail": "/opt/ascend-vla/envs/lerobot-npu/lib/python3.12/site-packages/torch/__init__.py:1617: UserWarning: Please use the new API settings to control TF32 behavior, such as torch.backends.cudnn.conv.fp32_precision = 'tf32' or torch.backends.cuda.matmul.fp32_precision = 'ieee'. Old settings, e.g, torch.backends.cuda.matmul.allow_tf32 = True, torch.backends.cudnn.allow_tf32 = True, allowTF32CuDNN() and allowTF32CuBLAS() will be deprecated after Pytorch 2.9. Please see https://pytorch.org/docs/main/notes/cuda.html#tensorfloat-32-tf32-on-ampere-and-later-devices (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:80.)\n  _C._set_float32_matmul_precision(precision)"
+        },
+        "candidate": {
+          "returncode": 0,
+          "stdout_tail": "Loading model from: /inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/workspace/models/mint_libero\nAll pretrained keys loaded successfully",
+          "stderr_tail": "WARNING:root:torch.compile is disabled for MINT on Ascend NPU; using eager execution."
+        }
+      },
+      "source": {
+        "candidate_root": "/inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/N2S/cases/MINT/sources/ascend-v062/lerobot_policy_mint/src",
+        "candidate_modeling_sha256": "f01b09e5e88020e394fb3338948386b7c70fbd1dee8b8ac60e66869d4e26f47a",
+        "baseline_modeling_sha256": "8c13a143a086e60b56b19508496e0bd880a9a8613e168913e28044511c3e8282",
+        "baseline_to_candidate_diff_sha256": "def0b421ffa907088993cf0831ad36b86734548db6ec334ed8277a49a4830b72",
+        "baseline_to_candidate_diff": "--- baseline/modeling_mint.py\n+++ candidate/modeling_mint.py\n@@ -589,11 +589,13 @@\n         self.gradient_checkpointing_enabled = False\n \n         # Compile model if requested\n-        if config.compile_model:\n+        if config.compile_model and not str(config.device).startswith(\"npu\"):\n             torch.set_float32_matmul_precision(\"high\")\n             self.sample_actions = torch.compile(self.sample_actions, mode=config.compile_mode)\n             # Also compile the main forward pass used during training\n             self.forward = torch.compile(self.forward, mode=config.compile_mode)\n+        elif config.compile_model:\n+            logging.warning(\"torch.compile is disabled for MINT on Ascend NPU; using eager execution.\")\n \n         if config.vqvae_name_or_path:\n             self.multi_scale_vqvae.load_vqvae_weights(config.vqvae_name_or_path)\n",
+        "matched_helper_call_count": null
+      },
+      "baseline_samples": []
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.DS_Store
+
+# NVIDIA captures are returned separately and reviewed before admission.
+cases/MINT/cuda/results-*/
+cases/MINT/evidence/cuda-blocks/

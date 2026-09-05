@@ -1,0 +1,270 @@
+{
+  "projects": [
+    {
+      "name": "LeRobot",
+      "remote": "https://github.com/huggingface/lerobot.git",
+      "revision": "4aaff99be4a1d81568c08c8f0296b41b40c99ec4",
+      "root": "lerobot-4aaff99",
+      "rule_results": [
+        {
+          "candidate_changes": [
+            {
+              "adapters": [
+                "default"
+              ],
+              "path": "src/lerobot/policies/pi0/modeling_pi0.py",
+              "source_sha256": "d49e0ade33734a0723d82198a4774ddb9745c004d45feb4a8db1aec528b8af77",
+              "transformed_sha256": "472bfe6cd23200966017865fa8e6061e0d503c32b233f13c5159f139e03d1200"
+            }
+          ],
+          "expected_finding_count": 1,
+          "findings": [
+            {
+              "column": 8,
+              "id": "pytorch.attention.cache-dtype-alignment:src/lerobot/policies/pi0/modeling_pi0.py:671:prefix-cache-boundary",
+              "line": 671,
+              "message": "recognized unaligned prefix embedding before cached attention",
+              "metadata": {
+                "dtype_expression": "self.paligemma_with_expert.paligemma.model.language_model.layers[0].self_attn.q_proj.weight.dtype",
+                "tensor": "prefix_embs"
+              },
+              "path": "src/lerobot/policies/pi0/modeling_pi0.py",
+              "risk": "high",
+              "rule_id": "pytorch.attention.cache-dtype-alignment",
+              "rule_status": "candidate",
+              "rule_version": "0.1.0"
+            }
+          ],
+          "model_families": [
+            "PI0"
+          ],
+          "observed_finding_count": 1,
+          "outcome": "matched",
+          "refusal": null,
+          "rule_id": "pytorch.attention.cache-dtype-alignment",
+          "validation": "passed"
+        },
+        {
+          "candidate_changes": [
+            {
+              "adapters": [
+                "default"
+              ],
+              "path": "src/lerobot/policies/pi0/modeling_pi0.py",
+              "source_sha256": "d49e0ade33734a0723d82198a4774ddb9745c004d45feb4a8db1aec528b8af77",
+              "transformed_sha256": "287dd89965589e7b677d234c5bdfddce06aa0a84bac28cfbb8632fa68713ec72"
+            },
+            {
+              "adapters": [
+                "default"
+              ],
+              "path": "src/lerobot/policies/smolvla/modeling_smolvla.py",
+              "source_sha256": "37b1d56f37510732a087cf5c32c05cd15d6234201a3f002f108ec4c53438cc7d",
+              "transformed_sha256": "967c51f5e2c78135af431762a551b1bc1ad624a7fb69f868a01cdf79b692a7eb"
+            }
+          ],
+          "expected_finding_count": 2,
+          "findings": [
+            {
+              "column": 8,
+              "id": "pytorch.npu.compile-capability-fallback:src/lerobot/policies/pi0/modeling_pi0.py:441:compile-config-guard",
+              "line": 441,
+              "message": "recognized config-controlled torch.compile block without NPU fallback",
+              "metadata": {
+                "compile_calls": 2,
+                "config_name": "config"
+              },
+              "path": "src/lerobot/policies/pi0/modeling_pi0.py",
+              "risk": "medium",
+              "rule_id": "pytorch.npu.compile-capability-fallback",
+              "rule_status": "candidate",
+              "rule_version": "0.1.0"
+            },
+            {
+              "column": 8,
+              "id": "pytorch.npu.compile-capability-fallback:src/lerobot/policies/smolvla/modeling_smolvla.py:534:compile-config-guard",
+              "line": 534,
+              "message": "recognized config-controlled torch.compile block without NPU fallback",
+              "metadata": {
+                "compile_calls": 2,
+                "config_name": "config"
+              },
+              "path": "src/lerobot/policies/smolvla/modeling_smolvla.py",
+              "risk": "medium",
+              "rule_id": "pytorch.npu.compile-capability-fallback",
+              "rule_status": "candidate",
+              "rule_version": "0.1.0"
+            }
+          ],
+          "model_families": [
+            "PI0",
+            "SmolVLA"
+          ],
+          "observed_finding_count": 2,
+          "outcome": "matched",
+          "refusal": null,
+          "rule_id": "pytorch.npu.compile-capability-fallback",
+          "validation": "passed"
+        },
+        {
+          "candidate_changes": [
+            {
+              "adapters": [
+                "lerobot-shared-safe-dtype"
+              ],
+              "path": "src/lerobot/utils/device_utils.py",
+              "source_sha256": "b4612793643feb15794cd55c39ba4671d2a1fa9f649116c91d563316cf6ace0c",
+              "transformed_sha256": "71a78ce2021e1e9351f4216dbc79ee6af19a1539fdfcdc85778bd51c575b4cbb"
+            }
+          ],
+          "expected_finding_count": 1,
+          "findings": [
+            {
+              "column": 4,
+              "id": "pytorch.npu.sinusoidal-fp64-fallback:src/lerobot/utils/device_utils.py:92:lerobot-shared-safe-dtype",
+              "line": 92,
+              "message": "recognized LeRobot shared MPS-only float64 fallback used by VLA sinusoidal helpers",
+              "metadata": {
+                "adapter": "lerobot-shared-safe-dtype",
+                "device_name": "device",
+                "dtype_name": "dtype",
+                "strategy": "extend-mps-guard"
+              },
+              "path": "src/lerobot/utils/device_utils.py",
+              "risk": "medium",
+              "rule_id": "pytorch.npu.sinusoidal-fp64-fallback",
+              "rule_status": "candidate",
+              "rule_version": "0.2.0"
+            }
+          ],
+          "model_families": [
+            "PI0",
+            "SmolVLA"
+          ],
+          "observed_finding_count": 1,
+          "outcome": "matched",
+          "refusal": null,
+          "rule_id": "pytorch.npu.sinusoidal-fp64-fallback",
+          "validation": "passed"
+        }
+      ],
+      "snapshot_file_count": 12,
+      "snapshot_hashes_verified": true,
+      "snapshot_manifest_sha256": "0f5eda291efab61f371f4a6df3bc2eec574f4059f0f4232c9c3fcf63df232de9"
+    },
+    {
+      "name": "OpenPI",
+      "remote": "https://github.com/Physical-Intelligence/openpi.git",
+      "revision": "215abfb217dbac7d5f1273282331b9b1866c0479",
+      "root": "openpi-215abfb",
+      "rule_results": [
+        {
+          "candidate_changes": [
+            {
+              "adapters": [
+                "default"
+              ],
+              "path": "src/openpi/models_pytorch/pi0_pytorch.py",
+              "source_sha256": "dcd7b6f508808ce4b7170a1720a4c62c6da04edae3652d16c94a469dca924e16",
+              "transformed_sha256": "e8a17835a3eb6915beaa3055152bd82e554f9bb558ec7b79d913df4d8de236e3"
+            }
+          ],
+          "expected_finding_count": 1,
+          "findings": [
+            {
+              "column": 8,
+              "id": "pytorch.attention.cache-dtype-alignment:src/openpi/models_pytorch/pi0_pytorch.py:386:prefix-cache-boundary",
+              "line": 386,
+              "message": "recognized unaligned prefix embedding before cached attention",
+              "metadata": {
+                "dtype_expression": "self.paligemma_with_expert.paligemma.language_model.layers[0].self_attn.q_proj.weight.dtype",
+                "tensor": "prefix_embs"
+              },
+              "path": "src/openpi/models_pytorch/pi0_pytorch.py",
+              "risk": "high",
+              "rule_id": "pytorch.attention.cache-dtype-alignment",
+              "rule_status": "candidate",
+              "rule_version": "0.1.0"
+            }
+          ],
+          "model_families": [
+            "PI0"
+          ],
+          "observed_finding_count": 1,
+          "outcome": "matched",
+          "refusal": null,
+          "rule_id": "pytorch.attention.cache-dtype-alignment",
+          "validation": "passed"
+        },
+        {
+          "candidate_changes": [],
+          "expected_finding_count": 0,
+          "findings": [],
+          "model_families": [
+            "PI0"
+          ],
+          "observed_finding_count": 0,
+          "outcome": "rejected",
+          "refusal": {
+            "evidence": {
+              "compile_condition_present": true,
+              "config_device_field_present": false,
+              "constructor_device_expression_present": false,
+              "torch_compile_present": true
+            },
+            "fail_closed": true,
+            "reason": "The compile block is controlled by config.pytorch_compile_mode, and no constructor-time config.device field or expression proves the execution backend."
+          },
+          "rule_id": "pytorch.npu.compile-capability-fallback",
+          "validation": "passed"
+        },
+        {
+          "candidate_changes": [
+            {
+              "adapters": [
+                "openpi-local-safe-dtype"
+              ],
+              "path": "src/openpi/models_pytorch/pi0_pytorch.py",
+              "source_sha256": "dcd7b6f508808ce4b7170a1720a4c62c6da04edae3652d16c94a469dca924e16",
+              "transformed_sha256": "27dd93b059d366b4a6c3535d10e65f7c71c84815831d3f8a9698a87e1a439f91"
+            }
+          ],
+          "expected_finding_count": 1,
+          "findings": [
+            {
+              "column": 0,
+              "id": "pytorch.npu.sinusoidal-fp64-fallback:src/openpi/models_pytorch/pi0_pytorch.py:14:openpi-local-safe-dtype",
+              "line": 14,
+              "message": "recognized OpenPI-local sinusoidal safe-dtype helper without an NPU float64 fallback",
+              "metadata": {
+                "adapter": "openpi-local-safe-dtype",
+                "device_name": "device_type",
+                "dtype_name": "target_dtype",
+                "strategy": "insert-npu-guard"
+              },
+              "path": "src/openpi/models_pytorch/pi0_pytorch.py",
+              "risk": "medium",
+              "rule_id": "pytorch.npu.sinusoidal-fp64-fallback",
+              "rule_status": "candidate",
+              "rule_version": "0.2.0"
+            }
+          ],
+          "model_families": [
+            "PI0"
+          ],
+          "observed_finding_count": 1,
+          "outcome": "matched",
+          "refusal": null,
+          "rule_id": "pytorch.npu.sinusoidal-fp64-fallback",
+          "validation": "passed"
+        }
+      ],
+      "snapshot_file_count": 10,
+      "snapshot_hashes_verified": true,
+      "snapshot_manifest_sha256": "52e5b92cd778f49bf67ebe3e0efb3c1c9188d8b1ed3925da1607bd080d733b73"
+    }
+  ],
+  "registry_sha256": "076d2d556f019809e408d3dae1445ee551fe28fbf72662edb1b2df72079f7311",
+  "schema_version": "1.0.0",
+  "status": "passed"
+}

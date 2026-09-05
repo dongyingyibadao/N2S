@@ -1,0 +1,22 @@
+{
+  "scope": "random-weight structure-only smoke; not a quality result",
+  "mode": "training",
+  "device": "Ascend910B2C",
+  "batch_size": 1,
+  "image_count": 2,
+  "image_dtype": "torch.float32",
+  "token_length": 32,
+  "build_seconds": 39.716,
+  "warmup_runs": 0,
+  "timed_runs": 1,
+  "optimizer_step": true,
+  "run_seconds_mean": 6.6575,
+  "run_seconds_median": 6.6575,
+  "run_seconds_p95": 6.6575,
+  "run_seconds_min": 6.6575,
+  "run_seconds_max": 6.6575,
+  "max_memory_gib": 33.9021,
+  "loss": 6.38011360168457,
+  "finite_loss": true,
+  "finite_output_gradient": true
+}

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema_version", "case", "promotion_status", "items"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "case": {"const": "MINT"},
+    "promotion_status": {"const": "exploratory"},
+    "provenance_warning": {"type": "string"},
+    "evidence_refs": {"type": "array", "items": {"type": "string"}},
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "comparisons", "classification", "scope", "change", "provenance", "evidence_status", "promotion_status", "benefits", "drawbacks", "rollback", "untested", "generality_assessment", "candidate_rule_id", "promotion_blockers", "case_only_reason"],
+        "properties": {
+          "promotion_status": {"const": "exploratory"},
+          "classification": {"type": "string"},
+          "generality_assessment": {"enum": ["general_candidate", "compatibility_candidate", "case_only"]},
+          "candidate_rule_id": {"type": ["string", "null"]},
+          "promotion_blockers": {"type": "array", "items": {"type": "string"}},
+          "case_only_reason": {"type": ["string", "null"]},
+          "evidence_status": {
+            "type": "object",
+            "required": ["static_analysis", "npu", "cuda"]
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": false
+}

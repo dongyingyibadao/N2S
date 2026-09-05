@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://n2s.local/schemas/registry.schema.json",
+  "type": "object",
+  "required": ["schema_version", "generated_from", "approved_rule_count", "rules"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "generated_from": {"const": "rules/*/manifest.yaml"},
+    "approved_rule_count": {"type": "integer", "minimum": 0},
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "version", "title", "status", "classification", "risk", "summary", "package", "manifest_sha256", "package_sha256"],
+        "properties": {
+          "id": {"type": "string"}, "version": {"type": "string"}, "title": {"type": "string"},
+          "status": {"enum": ["principle", "candidate", "approved"]},
+          "classification": {"type": "string"}, "risk": {"type": "string"}, "summary": {"type": "string"},
+          "package": {"type": "string"},
+          "manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "package_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

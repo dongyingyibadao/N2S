@@ -1,0 +1,44 @@
+{
+  "promotion_status": "exploratory",
+  "tools": {
+    "npu-smi": {
+      "status": "exploratory_validated",
+      "path": "/usr/local/bin/npu-smi",
+      "returncode": 0,
+      "required_fields": {
+        "NPU": true,
+        "Name": true,
+        "Health": true,
+        "Power(W)": true,
+        "Temp(C)": true,
+        "Memory-Usage(MB)": true
+      },
+      "samples_seconds": [
+        1.7642595851793885,
+        1.8062939420342445,
+        1.75896230712533,
+        1.7970803468488157,
+        1.795171394944191
+      ],
+      "median_seconds": 1.795171394944191,
+      "p95_seconds": 1.8062939420342445,
+      "stderr": ""
+    },
+    "msprof": {
+      "status": "available_unvalidated",
+      "path": "/usr/local/Ascend/cann-8.5.0/bin/msprof",
+      "warning": "Availability is not profiler/dump overhead validation."
+    },
+    "msaccucmp": {
+      "status": "not_available",
+      "path": null,
+      "warning": "Availability is not profiler/dump overhead validation."
+    },
+    "torch_npu.contrib.transfer_to_npu": {
+      "status": "experimental",
+      "import_available": false,
+      "import_error": "ModuleNotFoundError: No module named 'distutils.compilers.errors'",
+      "warning": "Not invoked: isolated functional, numerical, performance and monkey-patch A/B is pending."
+    }
+  }
+}

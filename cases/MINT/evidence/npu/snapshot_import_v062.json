@@ -1,0 +1,14 @@
+{
+  "expected_source": "/inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/N2S/cases/MINT/sources/ascend-v062/lerobot_policy_mint/src",
+  "python": "3.12.14",
+  "status": "passed",
+  "imported_files": {
+    "package": "/inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/N2S/cases/MINT/sources/ascend-v062/lerobot_policy_mint/src/lerobot_policy_mint/__init__.py",
+    "configuration": "/inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/N2S/cases/MINT/sources/ascend-v062/lerobot_policy_mint/src/lerobot_policy_mint/configuration_mint.py",
+    "mint_utils": "/inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/N2S/cases/MINT/sources/ascend-v062/lerobot_policy_mint/src/lerobot_policy_mint/mint_utils.py",
+    "modeling": "/inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/N2S/cases/MINT/sources/ascend-v062/lerobot_policy_mint/src/lerobot_policy_mint/modeling_mint.py",
+    "processor": "/inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/N2S/cases/MINT/sources/ascend-v062/lerobot_policy_mint/src/lerobot_policy_mint/processor_mint.py"
+  },
+  "wrong_source_files": [],
+  "lerobot_version": "0.6.2"
+}

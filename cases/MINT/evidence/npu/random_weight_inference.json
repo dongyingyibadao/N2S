@@ -1,0 +1,29 @@
+{
+  "scope": "random-weight structure-only smoke; not a quality result",
+  "mode": "inference",
+  "device": "Ascend910B2C",
+  "batch_size": 1,
+  "image_count": 2,
+  "image_dtype": "torch.float32",
+  "token_length": 32,
+  "build_seconds": 40.2824,
+  "warmup_runs": 0,
+  "timed_runs": 1,
+  "optimizer_step": false,
+  "run_seconds_mean": 5.5174,
+  "run_seconds_median": 5.5174,
+  "run_seconds_p95": 5.5174,
+  "run_seconds_min": 5.5174,
+  "run_seconds_max": 5.5174,
+  "max_memory_gib": 7.4562,
+  "action_shape": [
+    1,
+    16,
+    7
+  ],
+  "intention_shape": [
+    1,
+    32
+  ],
+  "finite_actions": true
+}

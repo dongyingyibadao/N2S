@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "N2S candidate rule maintainer review",
+  "type": "object",
+  "required": [
+    "schema_version", "rule_id", "rule_version", "current_status", "auto_apply",
+    "review_status", "recommendation", "evidence_paths", "observed_scope",
+    "thresholds", "required_before_decision", "rollback", "decision", "approver",
+    "decided_at", "approved_scope", "limitations", "evidence_revision"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "rule_id": {"type": "string"},
+    "rule_version": {"type": "string"},
+    "current_status": {"const": "candidate"},
+    "auto_apply": {"const": false},
+    "review_status": {"enum": ["pending_maintainer", "agent_assessed"]},
+    "recommendation": {
+      "enum": ["remain_candidate", "reject_current_scope_or_redesign"]
+    },
+    "evidence_paths": {"type": "array", "minItems": 2, "items": {"type": "string"}},
+    "observed_scope": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "thresholds": {
+      "type": "object",
+      "required": ["functional", "numerical", "performance", "memory"],
+      "additionalProperties": false,
+      "properties": {
+        "functional": {"type": ["object", "null"]},
+        "numerical": {"type": ["object", "null"]},
+        "performance": {"type": ["object", "null"]},
+        "memory": {"type": ["object", "null"]}
+      }
+    },
+    "required_before_decision": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "rollback": {"type": "string"},
+    "decision": {"type": ["string", "null"], "enum": [null, "approved", "remain_candidate", "rejected"]},
+    "approver": {"type": ["string", "null"]},
+    "decided_at": {"type": ["string", "null"], "format": "date-time"},
+    "approved_scope": {"type": ["string", "null"]},
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "evidence_revision": {
+      "type": "object",
+      "required": ["repository_commit", "registry_sha256"],
+      "additionalProperties": false,
+      "properties": {
+        "repository_commit": {"type": ["string", "null"]},
+        "registry_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

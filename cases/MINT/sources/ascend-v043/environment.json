@@ -1,0 +1,14 @@
+{
+  "captured_utc": "2026-08-30",
+  "device": "Ascend910B2C",
+  "device_count_visible": 16,
+  "cann": "8.5.0 V100R001C25SPC001B232",
+  "npu_smi": "25.0.rc1.1",
+  "python": "3.12.14",
+  "torch": "2.9.0+cpu",
+  "torch_npu": "2.9.0",
+  "transformers": "4.53.3 (source overlay)",
+  "lerobot": "0.4.3 source overlay; package __version__ reports 0.6.2",
+  "numpy": "2.2.6",
+  "activation": "/opt/ascend-vla/activate-v043.sh"
+}

@@ -1,0 +1,44 @@
+ .../package/pyproject.toml                         |   6 +-
+ .../package/src/lerobot_policy_mint/__init__.py    |  29 +-
+ .../src/lerobot_policy_mint/modeling_mint.py       | 244 ++++++-----
+ .../src/lerobot_policy_mint/processor_mint.py      |   3 +-
+ .../project/scripts/EVALUATION_PROTOCOLS.md        |  41 ++
+ /dev/null => ascend-v062/project/scripts/README.md | 201 +++++++++
+ .../project/scripts/VERSION_MATRIX.md              |  35 ++
+ .../project/scripts/assemble_pi05_base_upload.sh   |  73 +++
+ .../project/scripts/collect_npu_telemetry.sh       |  32 ++
+ .../project/scripts/download_mint_assets.sh        |  50 +++
+ /dev/null => ascend-v062/project/scripts/env.sh    |  39 ++
+ .../project/scripts/eval_joint_formal_8npu.sh      |  76 ++++
+ .../project/scripts/eval_libero.sh                 |  66 +++
+ .../project/scripts/eval_libero_benchmark.sh       |  45 ++
+ .../project/scripts/eval_mint_official_4npu.sh     | 102 +++++
+ .../scripts/eval_v043_aligned.sh => /dev/null      |  75 ----
+ .../dev/null                                       |  82 ----
+ .../scripts/finalize_libero_formal_campaign.sh     | 122 ++++++
+ .../project/scripts/generate_libero_report.py      | 488 +++++++++++++++++++++
+ .../scripts/generate_mint_runtime_report.py        | 123 ++++++
+ .../project/scripts/hash_safetensors_tensors.py    |  67 +++
+ .../project/scripts/launch_dual_12h.sh             | 123 ++++++
+ .../project/scripts/launch_joint_8npu_12h.sh       | 139 ++++++
+ .../project/scripts/launch_mint_4npu_12h.sh        | 155 +++++++
+ .../project/scripts/launch_mint_8npu_12h.sh        |  11 +
+ .../scripts/lerobot_eval_aligned.py => /dev/null   |  35 --
+ .../project/scripts/monitor_dual_training.sh       |  48 ++
+ .../project/scripts/preflight_mint.py              | 116 +++++
+ .../scripts/prepare_mint_base_v043.sh => /dev/null |  45 --
+ .../scripts/queue_mint_dual_framework_report.sh    |  93 ++++
+ .../project/scripts/record_environment.sh          |  84 ++++
+ .../project/scripts/resume_libero_train.sh         |  42 ++
+ .../project/scripts/resume_mint_reproduction.sh    |  66 +++
+ .../scripts/run_mint_v043_campaign.sh => /dev/null |  47 --
+ .../scripts/run_pi05_v043_campaign.sh => /dev/null |  31 --
+ .../project/scripts/smoke_mint_model.py            | 183 ++++++++
+ .../project/scripts/smoke_mint_ops.py              |  57 +++
+ .../project/scripts/train_libero_reproduction.sh   | 137 ++++++
+ .../project/scripts/train_libero_smoke.sh          |  85 ++++
+ .../scripts/train_mint_v043.sh => /dev/null        | 125 ------
+ .../scripts/train_pi05_v043.sh => /dev/null        | 123 ------
+ .../project/scripts/validate_mint_base_resume.sh   | 139 ++++++
+ .../project/scripts/verify_training_stability.py   | 138 ++++++
+ 43 files changed, 3343 insertions(+), 678 deletions(-)

@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0.0",
+  "case": "MINT",
+  "generated_at": "2026-08-30T09:17:08.415267+00:00",
+  "promotion_status": "exploratory",
+  "backend": "cuda",
+  "environment": {
+    "torch": "2.9.0+cpu",
+    "platform": "Linux-5.15.0-119-generic-x86_64-with-glibc2.39"
+  },
+  "tests": [
+    {
+      "id": "backend_availability",
+      "classification": "device_library_replacement",
+      "status": "pending_cuda",
+      "evidence_status": "pending_cuda",
+      "seed": 42,
+      "input": {},
+      "checkpoint": null,
+      "samples": [],
+      "metrics": {},
+      "memory": {},
+      "exception": {
+        "type": "BackendUnavailable",
+        "message": "torch.cuda.is_available() is false",
+        "traceback_tail": ""
+      },
+      "acceptance": "record_only_no_unified_threshold"
+    }
+  ]
+}

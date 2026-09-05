@@ -1,0 +1,218 @@
+{
+  "schema_version": "1.0.0",
+  "case": "MINT",
+  "generated_at": "2026-08-31T11:24:47.751650+00:00",
+  "promotion_status": "exploratory",
+  "backend": "npu",
+  "environment": {
+    "device": "Ascend910B2C",
+    "device_index": 0,
+    "torch": "2.9.0+cpu",
+    "torch_npu": "2.9.0",
+    "python": "3.12.14",
+    "platform": "Linux-5.15.0-119-generic-x86_64-with-glibc2.39"
+  },
+  "tests": [
+    {
+      "id": "cache_dtype_model_training_ab",
+      "classification": "numerical_precision",
+      "status": "passed",
+      "evidence_status": "npu_passed",
+      "seed": 42,
+      "input": {
+        "sha256": "523605c00e1b5faec5fc651e24ff57d6774273f6db4bccb216ccc04c04dbbdd6",
+        "batch_size": 1,
+        "image_count": 2,
+        "image_shape": [
+          1,
+          3,
+          224,
+          224
+        ],
+        "image_dtype": "torch.float32",
+        "token_shape": [
+          1,
+          32
+        ],
+        "action_shape": [
+          1,
+          16,
+          7
+        ],
+        "mode": "training",
+        "warmup": 0,
+        "repeats": 1,
+        "variant_order": "baseline,candidate"
+      },
+      "checkpoint": {
+        "path": "/inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/workspace/models/mint_libero",
+        "files": [
+          {
+            "path": "config.json",
+            "size_bytes": 2218,
+            "sha256": "ed42dc9b5bda71e1bc8d56184f42dcdfc0c42fc2387f07501b7e97e23504d6c2"
+          },
+          {
+            "path": "model.safetensors",
+            "size_bytes": 7054844856,
+            "sha256": "e0248497a1a9b750249ac65945baa53ab2ad57a8e9941229a7bf3ed0e6d218c9"
+          }
+        ]
+      },
+      "samples": [
+        6.7296242523007095
+      ],
+      "metrics": {
+        "functional_outcome": "baseline_passed_candidate_passed",
+        "candidate_vs_baseline": {
+          "loss": {
+            "max_abs_error": 0.0,
+            "max_relative_error": 0.0,
+            "rmse": 0.0,
+            "cosine_similarity": 1.0
+          },
+          "selected_gradient": {
+            "max_abs_error": 0.0,
+            "max_relative_error": 0.0,
+            "rmse": 0.0,
+            "cosine_similarity": 1.0000000000000908
+          }
+        },
+        "candidate_median_ratio": 1.0211483960019458
+      },
+      "memory": {
+        "baseline": {
+          "starting_allocated_bytes": 7925365248,
+          "peak_allocated_bytes": 36402145792,
+          "peak_increment_bytes": 28476780544
+        },
+        "candidate": {
+          "starting_allocated_bytes": 7925365248,
+          "peak_allocated_bytes": 36402145792,
+          "peak_increment_bytes": 28476780544
+        },
+        "candidate_minus_baseline_peak_allocated_bytes": 0
+      },
+      "exception": null,
+      "acceptance": "record_only_no_unified_threshold",
+      "variants": {
+        "baseline": {
+          "variant": "baseline",
+          "status": "passed",
+          "backend": "npu",
+          "mode": "training",
+          "seed": 42,
+          "source_sha256": "4abb8cc9d231087ea6cf3b65d883bee8a78a4718b2d0eca1851586334bbb0228",
+          "samples": [
+            6.59025101410225
+          ],
+          "metrics": {
+            "build_seconds": 44.17969886539504,
+            "median_seconds": 6.59025101410225,
+            "p95_seconds": 6.59025101410225,
+            "loss": 16.260555267333984,
+            "finite_loss": true,
+            "selected_gradient": {
+              "shape": [
+                512,
+                1024
+              ],
+              "dtype": "torch.float32",
+              "finite": true,
+              "content_sha256": "dfcd1e090d272a8bffef89ceccf537832d36b0c4eb99ac507d22881b8561d236"
+            },
+            "optimizer_updates": 1
+          },
+          "memory": {
+            "starting_allocated_bytes": 7925365248,
+            "peak_allocated_bytes": 36402145792,
+            "peak_increment_bytes": 28476780544
+          },
+          "exception": null,
+          "scope": "pretrained checkpoint: /inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/workspace/models/mint_libero",
+          "environment": {
+            "device": "Ascend910B2C",
+            "device_index": 0,
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0",
+            "python": "3.12.14",
+            "platform": "Linux-5.15.0-119-generic-x86_64-with-glibc2.39"
+          },
+          "imported_source": {
+            "path": "/tmp/n2s-cache-dtype-ab-dbytdldh/variants/baseline/src/lerobot_policy_mint/modeling_mint.py",
+            "sha256": "4abb8cc9d231087ea6cf3b65d883bee8a78a4718b2d0eca1851586334bbb0228"
+          }
+        },
+        "candidate": {
+          "variant": "candidate",
+          "status": "passed",
+          "backend": "npu",
+          "mode": "training",
+          "seed": 42,
+          "source_sha256": "f01b09e5e88020e394fb3338948386b7c70fbd1dee8b8ac60e66869d4e26f47a",
+          "samples": [
+            6.7296242523007095
+          ],
+          "metrics": {
+            "build_seconds": 47.72340038185939,
+            "median_seconds": 6.7296242523007095,
+            "p95_seconds": 6.7296242523007095,
+            "loss": 16.260555267333984,
+            "finite_loss": true,
+            "selected_gradient": {
+              "shape": [
+                512,
+                1024
+              ],
+              "dtype": "torch.float32",
+              "finite": true,
+              "content_sha256": "dfcd1e090d272a8bffef89ceccf537832d36b0c4eb99ac507d22881b8561d236"
+            },
+            "optimizer_updates": 1
+          },
+          "memory": {
+            "starting_allocated_bytes": 7925365248,
+            "peak_allocated_bytes": 36402145792,
+            "peak_increment_bytes": 28476780544
+          },
+          "exception": null,
+          "scope": "pretrained checkpoint: /inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/workspace/models/mint_libero",
+          "environment": {
+            "device": "Ascend910B2C",
+            "device_index": 0,
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0",
+            "python": "3.12.14",
+            "platform": "Linux-5.15.0-119-generic-x86_64-with-glibc2.39"
+          },
+          "imported_source": {
+            "path": "/tmp/n2s-cache-dtype-ab-dbytdldh/variants/candidate/src/lerobot_policy_mint/modeling_mint.py",
+            "sha256": "f01b09e5e88020e394fb3338948386b7c70fbd1dee8b8ac60e66869d4e26f47a"
+          }
+        }
+      },
+      "processes": {
+        "baseline": {
+          "returncode": 0,
+          "stdout_tail": "Loading model from: /inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/workspace/models/mint_libero\nAll pretrained keys loaded successfully",
+          "stderr_tail": ""
+        },
+        "candidate": {
+          "returncode": 0,
+          "stdout_tail": "Loading model from: /inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/workspace/models/mint_libero\nAll pretrained keys loaded successfully",
+          "stderr_tail": ""
+        }
+      },
+      "source": {
+        "candidate_root": "/inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/N2S/cases/MINT/sources/ascend-v062/lerobot_policy_mint/src",
+        "candidate_modeling_sha256": "f01b09e5e88020e394fb3338948386b7c70fbd1dee8b8ac60e66869d4e26f47a",
+        "baseline_modeling_sha256": "4abb8cc9d231087ea6cf3b65d883bee8a78a4718b2d0eca1851586334bbb0228",
+        "baseline_to_candidate_diff_sha256": "9e10f0c92d1d022ed0a05ff711b0dcf72156d57fc2515f47d43de4a177f46b44",
+        "baseline_to_candidate_diff": "--- baseline/modeling_mint.py\n+++ candidate/modeling_mint.py\n@@ -785,6 +785,11 @@\n         \"\"\"Do a full inference forward and compute the action.\"\"\"\n \n         prefix_embs, prefix_pad_masks, prefix_att_masks = self.embed_prefix(images, img_masks, tokens, masks)\n+        prefix_dtype = (\n+            self.paligemma_with_expert.paligemma.model.language_model.layers[0]\n+            .self_attn.q_proj.weight.dtype\n+        )\n+        prefix_embs = prefix_embs.to(dtype=prefix_dtype)\n         prefix_att_2d_masks = make_att_2d_masks(prefix_pad_masks, prefix_att_masks)\n         prefix_position_ids = torch.cumsum(prefix_pad_masks, dim=1) - 1\n \n"
+      },
+      "baseline_samples": [
+        6.59025101410225
+      ]
+    }
+  ]
+}

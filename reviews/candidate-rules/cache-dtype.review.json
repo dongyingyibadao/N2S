@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0.0",
+  "rule_id": "pytorch.attention.cache-dtype-alignment",
+  "rule_version": "0.1.0",
+  "current_status": "candidate",
+  "auto_apply": false,
+  "review_status": "agent_assessed",
+  "recommendation": "remain_candidate",
+  "evidence_paths": [
+    "rules/pytorch.attention.cache-dtype-alignment/evidence/summary.yaml",
+    "cases/MINT/evidence/npu/cache_dtype_operator_ab.json",
+    "cases/MINT/evidence/npu/cache_dtype_model_inference_ab.json",
+    "cases/MINT/evidence/npu/cache_dtype_model_training_ab.json",
+    "cases/validation-projects/reports/static_validation.json"
+  ],
+  "observed_scope": [
+    "Ascend910B2C torch 2.9.0 plus torch-npu 2.9.0 MINT fixed checkpoint",
+    "LeRobot PI0 and OpenPI PI0 fixed-revision static adapter validation",
+    "Standard PyTorch SDPA mixed BF16 query and FP32 key/value control"
+  ],
+  "thresholds": {
+    "functional": null,
+    "numerical": null,
+    "performance": null,
+    "memory": null
+  },
+  "required_before_decision": [
+    "Run and return the fixed-input CUDA block A/B capture",
+    "Provide an independently valid model output reference because the MINT baseline fails before output",
+    "Run model-level A/B on both non-MINT snapshots or replace them with executable pinned projects",
+    "Approve separate numerical, performance, and memory limits for the exact prefix-cache adapter"
+  ],
+  "rollback": "Remove the local prefix dtype lookup and cast only after the complete prefix/cache/query path is configured and verified in one intended dtype.",
+  "decision": "remain_candidate",
+  "approver": "codex-agent-evidence-review",
+  "decided_at": "2026-09-01T06:05:26Z",
+  "approved_scope": null,
+  "limitations": [
+    "No fused, quantized, FP8, intentionally heterogeneous QKV, suffix, or mask adapter is covered",
+    "Static non-MINT matches are not runtime evidence"
+  ],
+  "evidence_revision": {
+    "repository_commit": null,
+    "registry_sha256": "076d2d556f019809e408d3dae1445ee551fe28fbf72662edb1b2df72079f7311"
+  }
+}

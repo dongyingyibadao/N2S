@@ -1,0 +1,245 @@
+{
+  "schema_version": "1.0.0",
+  "case": "MINT",
+  "generated_at": "2026-08-31T12:17:59.486188+00:00",
+  "promotion_status": "exploratory",
+  "backend": "npu",
+  "environment": {
+    "device": "Ascend910B2C",
+    "device_index": 0,
+    "torch": "2.9.0+cpu",
+    "torch_npu": "2.9.0",
+    "python": "3.12.14",
+    "platform": "Linux-5.15.0-119-generic-x86_64-with-glibc2.39"
+  },
+  "tests": [
+    {
+      "id": "sinusoidal_fp64_model_training_ab",
+      "classification": "numerical_precision",
+      "status": "passed",
+      "evidence_status": "npu_passed",
+      "seed": 42,
+      "input": {
+        "sha256": "523605c00e1b5faec5fc651e24ff57d6774273f6db4bccb216ccc04c04dbbdd6",
+        "batch_size": 1,
+        "image_count": 2,
+        "image_shape": [
+          1,
+          3,
+          224,
+          224
+        ],
+        "image_dtype": "torch.float32",
+        "token_shape": [
+          1,
+          32
+        ],
+        "action_shape": [
+          1,
+          16,
+          7
+        ],
+        "mode": "training",
+        "warmup": 0,
+        "repeats": 1,
+        "variant_order": "baseline,candidate"
+      },
+      "checkpoint": {
+        "path": "/inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/workspace/models/mint_libero",
+        "files": [
+          {
+            "path": "config.json",
+            "size_bytes": 2218,
+            "sha256": "ed42dc9b5bda71e1bc8d56184f42dcdfc0c42fc2387f07501b7e97e23504d6c2"
+          },
+          {
+            "path": "model.safetensors",
+            "size_bytes": 7054844856,
+            "sha256": "e0248497a1a9b750249ac65945baa53ab2ad57a8e9941229a7bf3ed0e6d218c9"
+          }
+        ]
+      },
+      "samples": [
+        6.677625804208219
+      ],
+      "metrics": {
+        "functional_outcome": "baseline_passed_candidate_passed",
+        "candidate_vs_baseline": {
+          "loss": {
+            "max_abs_error": 0.0,
+            "max_relative_error": 0.0,
+            "rmse": 0.0,
+            "cosine_similarity": 1.0
+          },
+          "selected_gradient": {
+            "max_abs_error": 0.0,
+            "max_relative_error": 0.0,
+            "rmse": 0.0,
+            "cosine_similarity": 1.0000000000000908
+          },
+          "sinusoidal_probe": {
+            "max_abs_error": 0.00011957985683264116,
+            "max_relative_error": 62146464.02740922,
+            "rmse": 1.010636100968774e-05,
+            "cosine_similarity": 0.9999999998978629
+          }
+        },
+        "candidate_median_ratio": 1.0082509772466701
+      },
+      "memory": {
+        "baseline": {
+          "starting_allocated_bytes": 7925380608,
+          "peak_allocated_bytes": 36402161152,
+          "peak_increment_bytes": 28476780544
+        },
+        "candidate": {
+          "starting_allocated_bytes": 7925373440,
+          "peak_allocated_bytes": 36402153984,
+          "peak_increment_bytes": 28476780544
+        },
+        "candidate_minus_baseline_peak_allocated_bytes": -7168
+      },
+      "exception": null,
+      "acceptance": "record_only_no_unified_threshold",
+      "variants": {
+        "baseline": {
+          "variant": "baseline",
+          "status": "passed",
+          "backend": "npu",
+          "rule": "sinusoidal-fp64",
+          "mode": "training",
+          "seed": 42,
+          "source_sha256": "53a367080509d4d71bde25bbfa7c4c6a56c4af3e61032d10374e46b83efa1cef",
+          "samples": [
+            6.622979748994112
+          ],
+          "metrics": {
+            "build_seconds": 46.95913151698187,
+            "sinusoidal_probe": {
+              "shape": [
+                7,
+                256
+              ],
+              "dtype": "torch.float64",
+              "finite": true,
+              "content_sha256": "28f239dbabec56a5c9ff439c8e858505dee0c679ab00ef3adcc9d9ac18f0a05a"
+            },
+            "median_seconds": 6.622979748994112,
+            "p95_seconds": 6.622979748994112,
+            "loss": 16.260555267333984,
+            "finite_loss": true,
+            "selected_gradient": {
+              "shape": [
+                512,
+                1024
+              ],
+              "dtype": "torch.float32",
+              "finite": true,
+              "content_sha256": "dfcd1e090d272a8bffef89ceccf537832d36b0c4eb99ac507d22881b8561d236"
+            },
+            "optimizer_updates": 1
+          },
+          "memory": {
+            "starting_allocated_bytes": 7925380608,
+            "peak_allocated_bytes": 36402161152,
+            "peak_increment_bytes": 28476780544
+          },
+          "exception": null,
+          "scope": "pretrained checkpoint: /inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/workspace/models/mint_libero",
+          "environment": {
+            "device": "Ascend910B2C",
+            "device_index": 0,
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0",
+            "python": "3.12.14",
+            "platform": "Linux-5.15.0-119-generic-x86_64-with-glibc2.39"
+          },
+          "imported_source": {
+            "path": "/tmp/n2s-sinusoidal-fp64-ab-wqvtxp76/variants/baseline/src/lerobot_policy_mint/modeling_mint.py",
+            "sha256": "53a367080509d4d71bde25bbfa7c4c6a56c4af3e61032d10374e46b83efa1cef"
+          }
+        },
+        "candidate": {
+          "variant": "candidate",
+          "status": "passed",
+          "backend": "npu",
+          "rule": "sinusoidal-fp64",
+          "mode": "training",
+          "seed": 42,
+          "source_sha256": "f01b09e5e88020e394fb3338948386b7c70fbd1dee8b8ac60e66869d4e26f47a",
+          "samples": [
+            6.677625804208219
+          ],
+          "metrics": {
+            "build_seconds": 43.76856344100088,
+            "sinusoidal_probe": {
+              "shape": [
+                7,
+                256
+              ],
+              "dtype": "torch.float32",
+              "finite": true,
+              "content_sha256": "3c12cf8ac31114b01d8ef7c232a3d251a798fe493b661a747e9c9b817f98174a"
+            },
+            "median_seconds": 6.677625804208219,
+            "p95_seconds": 6.677625804208219,
+            "loss": 16.260555267333984,
+            "finite_loss": true,
+            "selected_gradient": {
+              "shape": [
+                512,
+                1024
+              ],
+              "dtype": "torch.float32",
+              "finite": true,
+              "content_sha256": "dfcd1e090d272a8bffef89ceccf537832d36b0c4eb99ac507d22881b8561d236"
+            },
+            "optimizer_updates": 1
+          },
+          "memory": {
+            "starting_allocated_bytes": 7925373440,
+            "peak_allocated_bytes": 36402153984,
+            "peak_increment_bytes": 28476780544
+          },
+          "exception": null,
+          "scope": "pretrained checkpoint: /inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/workspace/models/mint_libero",
+          "environment": {
+            "device": "Ascend910B2C",
+            "device_index": 0,
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0",
+            "python": "3.12.14",
+            "platform": "Linux-5.15.0-119-generic-x86_64-with-glibc2.39"
+          },
+          "imported_source": {
+            "path": "/tmp/n2s-sinusoidal-fp64-ab-wqvtxp76/variants/candidate/src/lerobot_policy_mint/modeling_mint.py",
+            "sha256": "f01b09e5e88020e394fb3338948386b7c70fbd1dee8b8ac60e66869d4e26f47a"
+          }
+        }
+      },
+      "processes": {
+        "baseline": {
+          "returncode": 0,
+          "stdout_tail": "Loading model from: /inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/workspace/models/mint_libero\nAll pretrained keys loaded successfully",
+          "stderr_tail": ""
+        },
+        "candidate": {
+          "returncode": 0,
+          "stdout_tail": "Loading model from: /inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/workspace/models/mint_libero\nAll pretrained keys loaded successfully",
+          "stderr_tail": ""
+        }
+      },
+      "source": {
+        "candidate_root": "/inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/N2S/cases/MINT/sources/ascend-v062/lerobot_policy_mint/src",
+        "candidate_modeling_sha256": "f01b09e5e88020e394fb3338948386b7c70fbd1dee8b8ac60e66869d4e26f47a",
+        "baseline_modeling_sha256": "53a367080509d4d71bde25bbfa7c4c6a56c4af3e61032d10374e46b83efa1cef",
+        "baseline_to_candidate_diff_sha256": "098731f57aec8edec13f8a57816d5294ba6e3495724c91721f820cc7236e6147",
+        "baseline_to_candidate_diff": "--- baseline/modeling_mint.py\n+++ candidate/modeling_mint.py\n@@ -66,7 +66,7 @@\n \n def get_safe_dtype(target_dtype, device_type):\n     \"\"\"Get a safe dtype for the given device type.\"\"\"\n-    if device_type == \"mps\" and target_dtype == torch.float64:\n+    if device_type in {\"mps\", \"npu\"} and target_dtype == torch.float64:\n         return torch.float32\n     if device_type == \"cpu\":\n         # CPU doesn't support bfloat16, use float32 instead\n",
+        "matched_helper_call_count": 0
+      },
+      "baseline_samples": [
+        6.622979748994112
+      ]
+    }
+  ]
+}

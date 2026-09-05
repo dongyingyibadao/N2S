@@ -1,0 +1,450 @@
+{
+  "schema_version": "1.0.0",
+  "case": "MINT",
+  "generated_at": "2026-08-31T11:36:06.015287+00:00",
+  "promotion_status": "exploratory",
+  "backend": "npu",
+  "environment": {
+    "device": "Ascend910B2C",
+    "device_index": 0,
+    "torch": "2.9.0+cpu",
+    "python": "3.12.14",
+    "platform": "Linux-5.15.0-119-generic-x86_64-with-glibc2.39",
+    "torch_npu": "2.9.0"
+  },
+  "tests": [
+    {
+      "id": "sinusoidal_fp64_functional_ab",
+      "classification": "numerical_precision",
+      "status": "passed",
+      "evidence_status": "npu_passed",
+      "seed": 42,
+      "input": {
+        "time": [
+          0.0,
+          0.001,
+          0.01,
+          0.125,
+          0.5,
+          0.999,
+          1.0
+        ],
+        "cases": [
+          {
+            "dimension": 32,
+            "min_period": 0.004,
+            "max_period": 4.0
+          },
+          {
+            "dimension": 256,
+            "min_period": 0.004,
+            "max_period": 4.0
+          },
+          {
+            "dimension": 1024,
+            "min_period": 0.0001,
+            "max_period": 10000.0
+          }
+        ],
+        "baseline": "NPU float64",
+        "candidate": "NPU float32 fallback",
+        "reference": "CPU float64"
+      },
+      "checkpoint": null,
+      "samples": [],
+      "metrics": {
+        "baseline_all_cases_passed": true,
+        "candidate_all_cases_passed": true,
+        "fallback_functionally_required_in_this_environment": false
+      },
+      "memory": {},
+      "exception": null,
+      "acceptance": "record_only_no_unified_threshold",
+      "variants": {
+        "cases": [
+          {
+            "input": {
+              "dimension": 32,
+              "min_period": 0.004,
+              "max_period": 4.0
+            },
+            "baseline": {
+              "status": "passed",
+              "output_dtype": "torch.float64",
+              "finite_output": true,
+              "vs_cpu_fp64": {
+                "max_abs_error": 7.882583474838611e-15,
+                "max_relative_error": 0.0003061616997868383,
+                "rmse": 8.956636395960902e-16,
+                "cosine_similarity": 0.9999999999999999
+              }
+            },
+            "candidate": {
+              "status": "passed",
+              "output_dtype": "torch.float32",
+              "finite_output": true,
+              "vs_cpu_fp64": {
+                "max_abs_error": 7.119772366287469e-05,
+                "max_relative_error": 66600921.756367855,
+                "rmse": 1.2627619913225748e-05,
+                "cosine_similarity": 0.9999999998405432
+              },
+              "vs_baseline": {
+                "max_abs_error": 7.119772366287469e-05,
+                "max_relative_error": 66600921.756367855,
+                "rmse": 1.2627619913230665e-05,
+                "cosine_similarity": 0.9999999998405432
+              }
+            }
+          },
+          {
+            "input": {
+              "dimension": 256,
+              "min_period": 0.004,
+              "max_period": 4.0
+            },
+            "baseline": {
+              "status": "passed",
+              "output_dtype": "torch.float64",
+              "finite_output": true,
+              "vs_cpu_fp64": {
+                "max_abs_error": 3.297362383136715e-14,
+                "max_relative_error": 6.123233995736766e-05,
+                "rmse": 1.6812780579784474e-15,
+                "cosine_similarity": 1.0
+              }
+            },
+            "candidate": {
+              "status": "passed",
+              "output_dtype": "torch.float32",
+              "finite_output": true,
+              "vs_cpu_fp64": {
+                "max_abs_error": 0.00011957985683264116,
+                "max_relative_error": 66600921.756367855,
+                "rmse": 9.874227330530374e-06,
+                "cosine_similarity": 0.9999999999025011
+              },
+              "vs_baseline": {
+                "max_abs_error": 0.00011957985683264116,
+                "max_relative_error": 66600921.756367855,
+                "rmse": 9.874227330551663e-06,
+                "cosine_similarity": 0.999999999902501
+              }
+            }
+          },
+          {
+            "input": {
+              "dimension": 1024,
+              "min_period": 0.0001,
+              "max_period": 10000.0
+            },
+            "baseline": {
+              "status": "passed",
+              "output_dtype": "torch.float64",
+              "finite_output": true,
+              "vs_cpu_fp64": {
+                "max_abs_error": 1.4209119991726027e-14,
+                "max_relative_error": 1.2904848042618933e-12,
+                "rmse": 6.806140828081349e-16,
+                "cosine_similarity": 1.0
+              }
+            },
+            "candidate": {
+              "status": "passed",
+              "output_dtype": "torch.float32",
+              "finite_output": true,
+              "vs_cpu_fp64": {
+                "max_abs_error": 0.010269512865533403,
+                "max_relative_error": 2396951663.347888,
+                "rmse": 0.0003950577162775681,
+                "cosine_similarity": 0.9999998439294
+              },
+              "vs_baseline": {
+                "max_abs_error": 0.010269512865533403,
+                "max_relative_error": 2396951663.347888,
+                "rmse": 0.00039505771627756757,
+                "cosine_similarity": 0.9999998439294
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "sinusoidal_fp64_performance_ab",
+      "classification": "numerical_precision",
+      "status": "passed",
+      "evidence_status": "npu_passed",
+      "seed": 42,
+      "input": {
+        "time_shape": [
+          4096
+        ],
+        "dimension": 1024,
+        "min_period": 0.004,
+        "max_period": 4.0,
+        "warmup": 5,
+        "repeats_per_variant": 20,
+        "timing_order": "alternating AB/BA",
+        "baseline": "NPU float64",
+        "candidate": "NPU float32 fallback"
+      },
+      "checkpoint": null,
+      "samples": [
+        0.0003056824207305908,
+        0.0002542850561439991,
+        0.00018319766968488693,
+        0.00016081705689430237,
+        0.00019561080262064934,
+        0.00017084600403904915,
+        0.00019204989075660706,
+        0.00016446225345134735,
+        0.0001851031556725502,
+        0.00016426295042037964,
+        0.00031021609902381897,
+        0.0001771673560142517,
+        0.00022071227431297302,
+        0.0001562638208270073,
+        0.0002064993605017662,
+        0.0001710900105535984,
+        0.00018008705228567123,
+        0.0001697051338851452,
+        0.00019380729645490646,
+        0.00017200782895088196
+      ],
+      "metrics": {
+        "baseline": {
+          "count": 20,
+          "median_seconds": 0.07153288880363107,
+          "p95_seconds": 0.07205683598294854,
+          "min_seconds": 0.06946475710719824,
+          "max_seconds": 0.07322229072451591
+        },
+        "candidate": {
+          "count": 20,
+          "median_seconds": 0.00018164236098527908,
+          "p95_seconds": 0.0003056824207305908,
+          "min_seconds": 0.0001562638208270073,
+          "max_seconds": 0.00031021609902381897
+        },
+        "candidate_median_ratio": 0.002539284572777645,
+        "candidate_vs_baseline": {
+          "max_abs_error": 0.00022806946416933926,
+          "max_relative_error": 62146464.02740922,
+          "rmse": 1.1638429254538962e-05,
+          "cosine_similarity": 0.9999999998644236
+        }
+      },
+      "memory": {
+        "baseline": {
+          "starting_allocated_bytes": 50176,
+          "peak_allocated_bytes": 83947520,
+          "peak_increment_bytes": 83897344
+        },
+        "candidate": {
+          "starting_allocated_bytes": 50176,
+          "peak_allocated_bytes": 42000384,
+          "peak_increment_bytes": 41950208
+        },
+        "candidate_minus_baseline_peak_increment_bytes": -41947136
+      },
+      "exception": null,
+      "acceptance": "record_only_no_unified_threshold",
+      "baseline_samples": [
+        0.07322229072451591,
+        0.07205683598294854,
+        0.06946475710719824,
+        0.07158521423116326,
+        0.06959758326411247,
+        0.07191067701205611,
+        0.0696955043822527,
+        0.07181648397818208,
+        0.0694913282059133,
+        0.07149209780618548,
+        0.06957877008244395,
+        0.0718071493320167,
+        0.06960824085399508,
+        0.07170992298051715,
+        0.0695316712372005,
+        0.07157367980107665,
+        0.06958423182368279,
+        0.07183228386566043,
+        0.06976694194599986,
+        0.0716874860227108
+      ],
+      "variants": {
+        "baseline": {
+          "status": "passed",
+          "samples": [
+            0.07322229072451591,
+            0.07205683598294854,
+            0.06946475710719824,
+            0.07158521423116326,
+            0.06959758326411247,
+            0.07191067701205611,
+            0.0696955043822527,
+            0.07181648397818208,
+            0.0694913282059133,
+            0.07149209780618548,
+            0.06957877008244395,
+            0.0718071493320167,
+            0.06960824085399508,
+            0.07170992298051715,
+            0.0695316712372005,
+            0.07157367980107665,
+            0.06958423182368279,
+            0.07183228386566043,
+            0.06976694194599986,
+            0.0716874860227108
+          ]
+        },
+        "candidate": {
+          "status": "passed",
+          "samples": [
+            0.0003056824207305908,
+            0.0002542850561439991,
+            0.00018319766968488693,
+            0.00016081705689430237,
+            0.00019561080262064934,
+            0.00017084600403904915,
+            0.00019204989075660706,
+            0.00016446225345134735,
+            0.0001851031556725502,
+            0.00016426295042037964,
+            0.00031021609902381897,
+            0.0001771673560142517,
+            0.00022071227431297302,
+            0.0001562638208270073,
+            0.0002064993605017662,
+            0.0001710900105535984,
+            0.00018008705228567123,
+            0.0001697051338851452,
+            0.00019380729645490646,
+            0.00017200782895088196
+          ]
+        }
+      }
+    },
+    {
+      "id": "compile_capability_ab",
+      "classification": "operator_implementation",
+      "status": "passed",
+      "evidence_status": "npu_passed",
+      "seed": 42,
+      "input": {
+        "shape": [
+          128,
+          128
+        ],
+        "dtype": "float32",
+        "compile_mode": "max-autotune",
+        "warmup": 5,
+        "repeats": 20,
+        "baseline": "torch.compile requested",
+        "candidate": "observable eager fallback"
+      },
+      "checkpoint": null,
+      "samples": [
+        6.51269219815731e-05,
+        4.651444032788277e-05,
+        7.515493780374527e-05,
+        6.602378562092781e-05,
+        5.539320409297943e-05,
+        6.485078483819962e-05,
+        7.77500681579113e-05,
+        4.9474649131298065e-05,
+        5.7489145547151566e-05,
+        5.170423537492752e-05,
+        5.570100620388985e-05,
+        5.4620206356048584e-05,
+        4.7427136451005936e-05,
+        4.9865804612636566e-05,
+        5.8963894844055176e-05,
+        5.349377170205116e-05,
+        4.8465095460414886e-05,
+        5.5495183914899826e-05,
+        5.068676546216011e-05,
+        4.9750786274671555e-05
+      ],
+      "metrics": {
+        "functional_outcome": "compile_failed_eager_passed",
+        "compile_capability_available": false,
+        "triton_importable": false
+      },
+      "memory": {
+        "baseline": {
+          "starting_allocated_bytes": 66048,
+          "peak_allocated_bytes": 66048,
+          "peak_increment_bytes": 0
+        },
+        "candidate": {
+          "starting_allocated_bytes": 66048,
+          "peak_allocated_bytes": 330240,
+          "peak_increment_bytes": 264192
+        }
+      },
+      "exception": null,
+      "acceptance": "record_only_no_unified_threshold",
+      "variants": {
+        "baseline": {
+          "status": "failed",
+          "samples": [],
+          "metrics": {
+            "wrapper_creation_seconds": 0.03109627403318882,
+            "time_to_exception_seconds": 0.04908645432442427
+          },
+          "memory": {
+            "starting_allocated_bytes": 66048,
+            "peak_allocated_bytes": 66048,
+            "peak_increment_bytes": 0
+          },
+          "exception": {
+            "type": "BackendCompilerFailed",
+            "message": "backend='inductor' raised:\nModuleNotFoundError: No module named 'triton'\n\nSet TORCHDYNAMO_VERBOSE=1 for the internal stack trace (please do this especially if you're reporting a bug to PyTorch). For even more developer context, set TORCH_LOGS=\"+dynamo\"\n",
+            "traceback_tail": "    from torch_npu import _inductor\n  File \"/opt/ascend-vla/envs/lerobot-npu/lib/python3.12/site-packages/torch_npu/_inductor/__init__.py\", line 13, in <module>\n    from . import config as npu_config\n  File \"/opt/ascend-vla/envs/lerobot-npu/lib/python3.12/site-packages/torch_npu/_inductor/config.py\", line 6, in <module>\n    from triton.runtime.driver import driver\ntorch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:\nModuleNotFoundError: No module named 'triton'\n\nSet TORCHDYNAMO_VERBOSE=1 for the internal stack trace (please do this especially if you're reporting a bug to PyTorch). For even more developer context, set TORCH_LOGS=\"+dynamo\"\n"
+          }
+        },
+        "candidate": {
+          "status": "passed",
+          "samples": [
+            6.51269219815731e-05,
+            4.651444032788277e-05,
+            7.515493780374527e-05,
+            6.602378562092781e-05,
+            5.539320409297943e-05,
+            6.485078483819962e-05,
+            7.77500681579113e-05,
+            4.9474649131298065e-05,
+            5.7489145547151566e-05,
+            5.170423537492752e-05,
+            5.570100620388985e-05,
+            5.4620206356048584e-05,
+            4.7427136451005936e-05,
+            4.9865804612636566e-05,
+            5.8963894844055176e-05,
+            5.349377170205116e-05,
+            4.8465095460414886e-05,
+            5.5495183914899826e-05,
+            5.068676546216011e-05,
+            4.9750786274671555e-05
+          ],
+          "metrics": {
+            "count": 20,
+            "median_seconds": 5.500670522451401e-05,
+            "p95_seconds": 7.515493780374527e-05,
+            "min_seconds": 4.651444032788277e-05,
+            "max_seconds": 7.77500681579113e-05,
+            "finite_output": true
+          },
+          "memory": {
+            "starting_allocated_bytes": 66048,
+            "peak_allocated_bytes": 330240,
+            "peak_increment_bytes": 264192
+          },
+          "exception": null
+        }
+      },
+      "baseline_samples": []
+    }
+  ]
+}

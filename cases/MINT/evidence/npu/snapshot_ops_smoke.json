@@ -1,0 +1,30 @@
+{
+  "device": "Ascend910B2C",
+  "area_shape": [
+    2,
+    3,
+    16,
+    16
+  ],
+  "bilinear_shape": [
+    2,
+    3,
+    24,
+    24
+  ],
+  "conv1d_shape": [
+    2,
+    48,
+    16
+  ],
+  "embedding_shape": [
+    2,
+    16,
+    32
+  ],
+  "multinomial_shape": [
+    32,
+    1
+  ],
+  "finite_gradients": true
+}

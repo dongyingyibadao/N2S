@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "rule_id": "pytorch.npu.sinusoidal-fp64-fallback",
+  "rule_version": "0.2.0",
+  "current_status": "candidate",
+  "auto_apply": false,
+  "review_status": "agent_assessed",
+  "recommendation": "reject_current_scope_or_redesign",
+  "evidence_paths": [
+    "rules/pytorch.npu.sinusoidal-fp64-fallback/evidence/summary.yaml",
+    "cases/MINT/evidence/npu/runtime_rule_ab.json",
+    "cases/MINT/evidence/npu/sinusoidal_fp64_model_inference_ab.json",
+    "cases/MINT/evidence/npu/sinusoidal_fp64_model_training_ab.json",
+    "cases/validation-projects/reports/static_validation.json"
+  ],
+  "observed_scope": [
+    "Ascend910B2C torch 2.9.0 plus torch-npu 2.9.0 supports all tested FP64 sinusoidal shapes",
+    "FP32 is much faster for one 4096x1024 workload but changes numerical error by shape/range",
+    "LeRobot shared helper and OpenPI local helper fixed-revision static adapter validation"
+  ],
+  "thresholds": {
+    "functional": null,
+    "numerical": null,
+    "performance": null,
+    "memory": null
+  },
+  "required_before_decision": [
+    "Run and return the fixed-input CUDA block A/B capture",
+    "Choose whether the rule is a version-specific capability fallback or a performance optimization",
+    "Use a model whose live forward path calls the matched helper",
+    "Approve numerical limits separately for every declared dimension and period range",
+    "Run model-level A/B on both non-MINT snapshots"
+  ],
+  "rollback": "Restore the MPS-only condition or remove the OpenPI NPU guard, then rerun on a backend whose FP64 path is verified.",
+  "decision": "rejected",
+  "approver": "codex-agent-evidence-review",
+  "decided_at": "2026-09-01T06:05:26Z",
+  "approved_scope": null,
+  "limitations": [
+    "Current evidence contradicts a universal capability-required fallback rationale",
+    "The MINT full-model zero delta is vacuous because the matched helper call count is zero",
+    "The 1024-dimension wide-range max absolute error is 0.010269512865533403"
+  ],
+  "evidence_revision": {
+    "repository_commit": null,
+    "registry_sha256": "076d2d556f019809e408d3dae1445ee551fe28fbf72662edb1b2df72079f7311"
+  }
+}

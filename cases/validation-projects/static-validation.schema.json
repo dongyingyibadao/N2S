@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "N2S pinned source snapshot static validation",
+  "type": "object",
+  "required": ["schema_version", "status", "registry_sha256", "projects"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "status": {"const": "passed"},
+    "registry_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "projects": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": [
+          "name", "root", "remote", "revision", "snapshot_manifest_sha256",
+          "snapshot_file_count", "snapshot_hashes_verified", "rule_results"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {"type": "string"},
+          "root": {"type": "string"},
+          "remote": {"type": "string"},
+          "revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+          "snapshot_manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "snapshot_file_count": {"type": "integer", "minimum": 1},
+          "snapshot_hashes_verified": {"const": true},
+          "rule_results": {
+            "type": "array",
+            "minItems": 3,
+            "items": {
+              "type": "object",
+              "required": [
+                "rule_id", "outcome", "expected_finding_count", "observed_finding_count",
+                "model_families", "findings", "candidate_changes", "validation", "refusal"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "rule_id": {"type": "string"},
+                "outcome": {"enum": ["matched", "rejected"]},
+                "expected_finding_count": {"type": "integer", "minimum": 0},
+                "observed_finding_count": {"type": "integer", "minimum": 0},
+                "model_families": {"type": "array", "items": {"type": "string"}},
+                "findings": {"type": "array", "items": {"type": "object"}},
+                "candidate_changes": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["path", "source_sha256", "transformed_sha256", "adapters"],
+                    "additionalProperties": false,
+                    "properties": {
+                      "path": {"type": "string"},
+                      "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+                      "transformed_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+                      "adapters": {"type": "array", "items": {"type": "string"}}
+                    }
+                  }
+                },
+                "validation": {"const": "passed"},
+                "refusal": {"type": ["object", "null"]}
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

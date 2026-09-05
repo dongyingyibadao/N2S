@@ -1,0 +1,63 @@
+schema_version: 1.0.0
+rule_id: pytorch.npu.compile-capability-fallback
+status: exploratory_source_evidence
+sources:
+  - path: ../../../cases/MINT/comparisons/patches/supplemental-official-declared-59fa23d_vs_ascend-v043-package.patch
+    result: exact_source_change_recovered
+  - path: ../../../cases/MINT/evidence/npu/candidate_checks.json
+    test_id: compile_fixed_input
+    result: failed_as_expected_for_recorded_environment
+  - path: ../../../cases/MINT/evidence/npu/candidate_checks.json
+    test_id: eager_fixed_input
+    result: passed
+  - path: ../../../cases/MINT/evidence/npu/runtime_rule_ab.json
+    test_id: compile_capability_ab
+    result: compile_failed_missing_triton_eager_passed
+  - path: ../../../cases/MINT/evidence/npu/compile_model_inference_ab.json
+    result: fixed_checkpoint_compile_failed_missing_triton_eager_passed
+  - path: ../../../cases/MINT/evidence/npu/compile_model_training_ab.json
+    result: fixed_checkpoint_compile_failed_missing_triton_eager_optimizer_update_passed
+  - path: ../../../cases/validation-projects/reports/static_validation.json
+    project: LeRobot@4aaff99be4a1d81568c08c8f0296b41b40c99ec4
+    result: pi0_and_smolvla_adapters_matched_and_codemods_validated
+  - path: ../../../cases/validation-projects/reports/static_validation.json
+    project: OpenPI@215abfb217dbac7d5f1273282331b9b1866c0479
+    result: rejected_no_constructor_time_device_proof
+observations:
+  capability_probe:
+    compile_exception: BackendCompilerFailed caused by missing triton
+    triton_importable: false
+    compile_wrapper_creation_seconds: 0.03109627403318882
+    compile_time_to_exception_seconds: 0.04908645432442427
+    eager_median_seconds: 0.00005500670522451401
+    eager_p95_seconds: 0.00007515493780374527
+    eager_peak_increment_bytes: 264192
+  fixed_checkpoint_inference:
+    checkpoint_sha256: e0248497a1a9b750249ac65945baa53ab2ad57a8e9941229a7bf3ed0e6d218c9
+    compile_baseline: failed_missing_triton_after_first_invocation
+    compile_time_to_exception_seconds: 15.97792943706736
+    eager_candidate: passed_five_repeats
+    eager_median_seconds: 0.07377196568995714
+    eager_p95_seconds: 0.07543941773474216
+    eager_peak_allocated_bytes: 8006022656
+  fixed_checkpoint_training:
+    compile_baseline: failed_missing_triton
+    eager_candidate: passed_one_optimizer_update
+    finite_loss: true
+    finite_selected_gradient: true
+  interpretation: This proves one missing dependency capability outcome, not a universal NPU compile limitation.
+environment:
+  device: Ascend910B2C
+  torch: 2.9.0+cpu
+  torch_npu: 2.9.0
+static_external_coverage:
+  snapshot_hashes_verified: true
+  matched: [LeRobot-PI0, LeRobot-SmolVLA]
+  rejected: [OpenPI-PI0]
+  runtime_status: pending
+missing:
+  - Successful NPU compile control
+  - Fixed-output eager versus compile comparison
+  - Runtime validation for the LeRobot source snapshot and a second independently matchable project
+  - A second torch and torch-npu environment tuple
+  - CUDA compile and eager controls

@@ -1,0 +1,188 @@
+{
+  "schema_version": "1.0.0",
+  "case": "MINT",
+  "generated_at": "2026-08-30T09:17:30.407338+00:00",
+  "promotion_status": "exploratory",
+  "backend": "npu",
+  "environment": {
+    "device": "Ascend910B2C",
+    "torch": "2.9.0+cpu",
+    "torch_npu": "2.9.0",
+    "platform": "Linux-5.15.0-119-generic-x86_64-with-glibc2.39"
+  },
+  "tests": [
+    {
+      "id": "sinusoidal_fp32_fallback",
+      "classification": "numerical_precision",
+      "status": "passed",
+      "evidence_status": "npu_passed",
+      "seed": 42,
+      "input": {
+        "time": [
+          0.0,
+          0.001,
+          0.01,
+          0.125,
+          0.5,
+          0.999,
+          1.0
+        ],
+        "dimension": 256,
+        "min_period": 0.004,
+        "max_period": 4.0,
+        "reference": "CPU float64",
+        "candidate": "NPU float32"
+      },
+      "checkpoint": null,
+      "samples": [],
+      "metrics": {
+        "max_abs_error": 0.00011957985683264116,
+        "max_relative_error": 66600921.756367855,
+        "rmse": 9.874227330530374e-06,
+        "cosine_similarity": 0.9999999999025011
+      },
+      "memory": {},
+      "exception": null,
+      "acceptance": "record_only_no_unified_threshold"
+    },
+    {
+      "id": "eager_fixed_input",
+      "classification": "operator_implementation",
+      "status": "passed",
+      "evidence_status": "npu_passed",
+      "seed": 42,
+      "input": {
+        "shape": [
+          128,
+          128
+        ],
+        "dtype": "float32",
+        "warmup": 3,
+        "repeats": 10
+      },
+      "checkpoint": null,
+      "samples": [
+        4.6315137296915054e-05,
+        4.428299143910408e-05,
+        4.626298323273659e-05,
+        4.415912553668022e-05,
+        4.5034103095531464e-05,
+        4.2146071791648865e-05,
+        4.1495077311992645e-05,
+        4.2811036109924316e-05,
+        4.324223846197128e-05,
+        4.543503746390343e-05
+      ],
+      "metrics": {
+        "median_seconds": 4.422105848789215e-05,
+        "p95_seconds": 4.6315137296915054e-05,
+        "finite_output": true
+      },
+      "memory": {
+        "peak_allocated_bytes": 33718784
+      },
+      "exception": null,
+      "acceptance": "record_only_no_unified_threshold"
+    },
+    {
+      "id": "compile_fixed_input",
+      "classification": "operator_implementation",
+      "status": "failed",
+      "evidence_status": "npu_failed",
+      "seed": 42,
+      "input": {
+        "shape": [
+          128,
+          128
+        ],
+        "dtype": "float32",
+        "warmup": 3,
+        "repeats": 10,
+        "mode": "max-autotune"
+      },
+      "checkpoint": null,
+      "samples": [],
+      "metrics": {},
+      "memory": {},
+      "exception": {
+        "type": "BackendCompilerFailed",
+        "message": "backend='inductor' raised:\nModuleNotFoundError: No module named 'triton'\n\nSet TORCHDYNAMO_VERBOSE=1 for the internal stack trace (please do this especially if you're reporting a bug to PyTorch). For even more developer context, set TORCH_LOGS=\"+dynamo\"\n",
+        "traceback_tail": "    from . import config as npu_config\n  File \"/opt/ascend-vla/envs/lerobot-npu/lib/python3.12/site-packages/torch_npu/_inductor/config.py\", line 6, in <module>\n    from triton.runtime.driver import driver\ntorch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:\nModuleNotFoundError: No module named 'triton'\n\nSet TORCHDYNAMO_VERBOSE=1 for the internal stack trace (please do this especially if you're reporting a bug to PyTorch). For even more developer context, set TORCH_LOGS=\"+dynamo\"\n"
+      },
+      "acceptance": "record_only_no_unified_threshold",
+      "expected_control_for_npu_guard": true
+    },
+    {
+      "id": "sdpa_mixed_dtype_control",
+      "classification": "numerical_precision",
+      "status": "failed",
+      "evidence_status": "npu_failed",
+      "seed": 42,
+      "input": {
+        "qkv_shape": [
+          2,
+          4,
+          16,
+          32
+        ],
+        "query_dtype": "bfloat16",
+        "key_value_dtype": "float32"
+      },
+      "checkpoint": null,
+      "samples": [],
+      "metrics": {},
+      "memory": {},
+      "exception": {
+        "type": "RuntimeError",
+        "message": "Expected query, key, and value to have the same dtype, but got query.dtype: c10::BFloat16 key.dtype: float and value.dtype: float instead.\n[ERROR] 2026-08-30-09:17:30 (PID:665088, Device:0, RankID:-1) ERR01007 OPS feature not supported",
+        "traceback_tail": "Traceback (most recent call last):\n  File \"/inspire/sj-ssd3/project/robot-decision/laijunxi-CZXS25230141/N2S/cases/MINT/tests/candidate_checks.py\", line 266, in main\n    mixed_output = F.scaled_dot_product_attention(q, k_float, v_float)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: Expected query, key, and value to have the same dtype, but got query.dtype: c10::BFloat16 key.dtype: float and value.dtype: float instead.\n[ERROR] 2026-08-30-09:17:30 (PID:665088, Device:0, RankID:-1) ERR01007 OPS feature not supported"
+      },
+      "acceptance": "record_only_no_unified_threshold",
+      "expected_control_failure": true
+    },
+    {
+      "id": "sdpa_aligned_dtype",
+      "classification": "numerical_precision",
+      "status": "passed",
+      "evidence_status": "npu_passed",
+      "seed": 42,
+      "input": {
+        "qkv_shape": [
+          2,
+          4,
+          16,
+          32
+        ],
+        "query_key_value_dtype": "bfloat16",
+        "reference": "CPU float32"
+      },
+      "checkpoint": null,
+      "samples": [
+        7.27260485291481e-05,
+        6.653182208538055e-05,
+        6.732204928994179e-05,
+        6.384216248989105e-05,
+        6.458023563027382e-05,
+        6.465008482336998e-05,
+        6.61918893456459e-05,
+        7.054675370454788e-05,
+        7.664365693926811e-05,
+        6.710691377520561e-05
+      ],
+      "metrics": {
+        "max_abs_error": 0.008095860481262207,
+        "max_relative_error": 5.842226730525339,
+        "rmse": 0.0011905167355689536,
+        "cosine_similarity": 0.9999948790364719,
+        "median_seconds": 6.681936793029308e-05,
+        "p95_seconds": 7.664365693926811e-05,
+        "finite_output": true
+      },
+      "memory": {
+        "peak_allocated_bytes": 33775104
+      },
+      "exception": null,
+      "acceptance": "record_only_no_unified_threshold"
+    }
+  ]
+}

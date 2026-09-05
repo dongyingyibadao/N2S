@@ -1,0 +1,39 @@
+diff --git a/official-declared-59fa23d/package/src/lerobot_policy_mint/modeling_mint.py b/ascend-v043/package/src/lerobot_policy_mint/modeling_mint.py
+index 5fd8d23..85e1b28 100644
+--- a/official-declared-59fa23d/package/src/lerobot_policy_mint/modeling_mint.py
++++ b/ascend-v043/package/src/lerobot_policy_mint/modeling_mint.py
+@@ -66,7 +66,7 @@ class ActionSelectKwargs(TypedDict, total=False):
+ 
+ def get_safe_dtype(target_dtype, device_type):
+     """Get a safe dtype for the given device type."""
+-    if device_type == "mps" and target_dtype == torch.float64:
++    if device_type in {"mps", "npu"} and target_dtype == torch.float64:
+         return torch.float32
+     if device_type == "cpu":
+         # CPU doesn't support bfloat16, use float32 instead
+@@ -572,11 +572,13 @@ class MINTPytorch(nn.Module):
+         self.gradient_checkpointing_enabled = False
+ 
+         # Compile model if requested
+-        if config.compile_model:
++        if config.compile_model and not str(config.device).startswith("npu"):
+             torch.set_float32_matmul_precision("high")
+             self.sample_actions = torch.compile(self.sample_actions, mode=config.compile_mode)
+             # Also compile the main forward pass used during training
+             self.forward = torch.compile(self.forward, mode=config.compile_mode)
++        elif config.compile_model:
++            logging.warning("torch.compile is disabled for MINT on Ascend NPU; using eager execution.")
+ 
+         if config.vqvae_name_or_path:
+             self.multi_scale_vqvae.load_vqvae_weights(config.vqvae_name_or_path)
+@@ -766,6 +768,10 @@ class MINTPytorch(nn.Module):
+         """Do a full inference forward and compute the action."""
+ 
+         prefix_embs, prefix_pad_masks, prefix_att_masks = self.embed_prefix(images, img_masks, tokens, masks)
++        prefix_dtype = (
++            self.paligemma_with_expert.paligemma.language_model.layers[0].self_attn.q_proj.weight.dtype
++        )
++        prefix_embs = prefix_embs.to(dtype=prefix_dtype)
+         prefix_att_2d_masks = make_att_2d_masks(prefix_pad_masks, prefix_att_masks)
+         prefix_position_ids = torch.cumsum(prefix_pad_masks, dim=1) - 1
+ 

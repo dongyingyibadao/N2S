@@ -1,0 +1,85 @@
+schema_version: 1.0.0
+id: pytorch.attention.cache-dtype-alignment
+version: 0.1.0
+title: Cached attention boundary dtype alignment
+status: candidate
+summary: Align embeddings entering a recognized KV-cache attention boundary to the projection weight dtype.
+classification: numerical_precision
+risk: high
+scope:
+  ecosystem: pytorch-torch-npu
+  frameworks: ["PyTorch scaled_dot_product_attention", "Transformers cached attention adapters"]
+  devices: ["Ascend NPU", "CUDA reference pending"]
+  modes: [inference]
+  code_shapes:
+    - A prefix_embs tuple assignment from self.embed_prefix is followed by cached inputs_embeds use and one unambiguous q_proj.weight.dtype expression exists.
+source_cases:
+  - cases/MINT:prefix-embedding-dtype-alignment
+  - cases/MINT:suffix-query-kv-mask-dtype-alignment
+  - cases/validation-projects:lerobot-4aaff99-pi0-static
+  - cases/validation-projects:openpi-215abfb-pi0-static
+applicability:
+  preconditions:
+    - The attention projection weight dtype is the intended compute dtype.
+    - Prefix embeddings feed the cache-producing attention forward.
+    - detector.py finds exactly one projection dtype expression for the module.
+  exclusions:
+    - Quantized, FP8, custom-kernel, or intentionally heterogeneous Q/K/V attention.
+    - Training paths where the cast would change the intended gradient dtype policy.
+    - Attention implementations with separate query, key, value dtype contracts.
+  unknowns_fail_closed: true
+contract:
+  before:
+    - A recognized prefix embedding has no dtype alignment before cached inputs_embeds use.
+  after:
+    - The prefix embedding is converted to the inferred q_proj weight dtype immediately after construction.
+  invariants:
+    - Shapes, masks, positions, cache layout and model weights are unchanged.
+    - The conversion does not hard-code bfloat16 or float32.
+    - No project code imports N2S.
+change:
+  rationale: PyTorch SDPA requires compatible query, key and value dtypes; a cached prefix can otherwise diverge from later queries.
+  method: Read the projection weight dtype at the attention boundary and cast only the recognized prefix tensor before cache creation.
+  before_example: 'prefix_embs, prefix_pad_masks, prefix_att_masks = self.embed_prefix(...)'
+  after_example: 'prefix_embs = prefix_embs.to(dtype=prefix_dtype)'
+impact:
+  functional: The recognized cache path uses a prefix dtype compatible with its attention projection.
+  numerical: Fixed-checkpoint MINT baseline failed before producing outputs; the candidate produced finite action, intention and three logit scales, so baseline deltas are undefined rather than zero.
+  performance: A 50-repeat pre-aligned operator control measured candidate/control median ratio 1.1457632372844193; the failing model baseline cannot provide a paired runtime ratio.
+  memory: The operator cast control added 17408 bytes of peak increment; fixed-checkpoint candidate peak allocated memory was 8006022656 bytes.
+  benefits:
+    - Enforces the core same-dtype attention invariant at a concrete cache boundary.
+  drawbacks:
+    - A local cast can mask an upstream mixed-precision configuration error.
+  side_effects:
+    - May allocate and round prefix embeddings when their original dtype differs.
+automation:
+  detector: detector.py
+  codemod: codemod.py
+  validator: validator.py
+  language: python-libcst-1.9.0
+  auto_apply: false
+  fail_closed: true
+verification:
+  acceptance_contract:
+    functional: Cached inference, uncached control and fixed-shape SDPA execute without dtype errors for approved adapters.
+    numerical: Action/logit/top-k/loss deltas meet model-specific approved thresholds; thresholds are pending.
+    performance: Same-NPU raw timing samples, median and p95 include cast cost; no limit is approved yet.
+    memory: Same-NPU peak allocated memory includes converted prefix lifetime; no limit is approved yet.
+  commands: []
+evidence:
+  - evidence/summary.yaml
+promotion:
+  requirements:
+    - MINT plus two independent non-MINT projects and at least two attention/model families.
+    - Fixed checkpoint/input/seed action, logit, top-k, loss and finite-gradient comparisons as applicable.
+    - CPU FP32/high-precision or original CUDA reference and same-NPU timing/memory A/B.
+    - Separate adapters and thresholds for standard SDPA, fused attention and quantized paths.
+  blockers:
+    - The failing MINT baseline cannot provide paired action/logit deltas or a model performance ratio; an independently valid reference path is still needed for numerical thresholds.
+    - CUDA cache behavior is pending.
+    - LeRobot and OpenPI have passed static adapter validation only; their runtime/model evidence is pending.
+    - Current codemod covers only the recognized prefix adapter, not every Q/K/V/mask boundary.
+    - Target-project verification commands have not been approved.
+rollback: Remove the local cast only after the entire prefix, cache and query path is configured and verified in one intended dtype.
+approval: null

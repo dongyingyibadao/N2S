@@ -1,0 +1,12 @@
+{
+  "declared_revision": "59fa23d0537f545ca07b7d111a9f5697bbabe11e",
+  "temporary_fetch_attempted": true,
+  "temporary_fetch_status": "recovered_in_temporary_repository",
+  "recovered_readme_matches_snapshot": true,
+  "recovered_package_changed_files": 1,
+  "recovered_modeling_diff_hunks": 3,
+  "supplemental_patch": "patches/supplemental-official-declared-59fa23d_vs_ascend-v043-package.patch",
+  "comparison_baseline": "4eab5795345721001c412ff1ca2c886a11eab606",
+  "baseline_role": "reconstructable_same-version-neighbor",
+  "warning": "The planned comparison still uses 4eab579; do not attribute that complete diff to Ascend."
+}
