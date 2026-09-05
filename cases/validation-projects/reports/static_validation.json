@@ -32,7 +32,7 @@
               "risk": "high",
               "rule_id": "pytorch.attention.cache-dtype-alignment",
               "rule_status": "candidate",
-              "rule_version": "0.1.0"
+              "rule_version": "0.1.1"
             }
           ],
           "model_families": [
@@ -78,7 +78,7 @@
               "risk": "medium",
               "rule_id": "pytorch.npu.compile-capability-fallback",
               "rule_status": "candidate",
-              "rule_version": "0.1.0"
+              "rule_version": "0.1.1"
             },
             {
               "column": 8,
@@ -93,7 +93,7 @@
               "risk": "medium",
               "rule_id": "pytorch.npu.compile-capability-fallback",
               "rule_status": "candidate",
-              "rule_version": "0.1.0"
+              "rule_version": "0.1.1"
             }
           ],
           "model_families": [
@@ -134,7 +134,7 @@
               "risk": "medium",
               "rule_id": "pytorch.npu.sinusoidal-fp64-fallback",
               "rule_status": "candidate",
-              "rule_version": "0.2.0"
+              "rule_version": "0.2.1"
             }
           ],
           "model_families": [
@@ -184,7 +184,7 @@
               "risk": "high",
               "rule_id": "pytorch.attention.cache-dtype-alignment",
               "rule_status": "candidate",
-              "rule_version": "0.1.0"
+              "rule_version": "0.1.1"
             }
           ],
           "model_families": [
@@ -246,7 +246,7 @@
               "risk": "medium",
               "rule_id": "pytorch.npu.sinusoidal-fp64-fallback",
               "rule_status": "candidate",
-              "rule_version": "0.2.0"
+              "rule_version": "0.2.1"
             }
           ],
           "model_families": [
@@ -264,7 +264,7 @@
       "snapshot_manifest_sha256": "52e5b92cd778f49bf67ebe3e0efb3c1c9188d8b1ed3925da1607bd080d733b73"
     }
   ],
-  "registry_sha256": "076d2d556f019809e408d3dae1445ee551fe28fbf72662edb1b2df72079f7311",
+  "registry_sha256": "eb05d6b3706107912eca6ad4f0538d6a33a3223213457016cfe2e66709d56760",
   "schema_version": "1.0.0",
   "status": "passed"
 }

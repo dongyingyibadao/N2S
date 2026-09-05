@@ -78,7 +78,7 @@ promotion:
     - CPU FP64 or original CUDA reference and same-NPU before/after timing and memory.
     - Explicit approved thresholds for each declared dimension and period range.
   blockers:
-    - CUDA comparison is pending.
+    - CUDA functional and numerical comparison is captured on RTX 4090; idle-device timing is pending before any performance threshold.
     - Current torch 2.9.0 plus torch-npu 2.9.0 passed every tested FP64 shape, so a universal capability-fallback rationale is unsupported.
     - LeRobot and OpenPI passed static adapter validation only; weight-free helper integration evidence is pending before either adapter can be approved.
     - The fixed MINT model does not call the matched sinusoidal helper, so it cannot support a model-scoped claim; this does not block a redesigned shape-scoped module rule.

@@ -1,7 +1,7 @@
 # 证据索引
 
-`npu/` 保存当前 910B2C 的精简 JSON 和必要日志；`cuda/` 当前只保存 `pending_cuda`。大型权重、
-数据、CANN work 目录和 MP4 均不复制。
+`npu/` 保存当前 910B2C 的精简 JSON 和必要日志；`cuda/capture-20260905T081517Z/` 保存 RTX 4090
+上的正式 block bundle 回传。大型权重、数据、CANN work 目录和 MP4 均不复制。
 
 `npu/prior_run_summary.json` 是 2026-08-29 已完成的真实单步训练和三回合 LIBERO 推理摘要。
 `npu/original_files.sha256` 固定原始文件路径和哈希，`prior_training_excerpt.log` 保存判断训练完成
@@ -26,3 +26,9 @@ baseline/candidate 源码 SHA256 和完整的最小 unified diff。
 CUDA 回传必须来自 [cuda block bundle](../cuda/README.md)，包含三份模块级 JSON、必要日志、聚合
 manifest 和 `SHA256SUMS`。它不需要 checkpoint，也不产生模型级结论。当前目录中的旧
 `pending_cuda` 只证明无 NVIDIA 本机时的降级行为，不可用于审批。
+
+2026-09-05 capture 使用物理 GPU 1，通过 `CUDA_VISIBLE_DEVICES=1` 暴露为进程内 device 0。
+环境为 RTX 4090、driver 595.71.05、Python 3.12.13、PyTorch 2.9.0+cu128、Triton 3.5.0；
+preflight、三份 result schema、聚合 manifest 和完整目录 SHA256 均通过。采集期间四张卡各有约
+20% 的 `keep_multi_gpu_alive.py` 固定负载，因此功能与数值结果可用，原始计时保留但不得用于冻结
+性能阈值；批准性能范围前应在空闲卡复跑。

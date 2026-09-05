@@ -3,7 +3,10 @@
 以下项目均不阻止保存探索性案例。标为“广泛范围”或“模型范围”的项目只限制相应批准范围，
 不阻止模块级案例或范围严格限定的模块规则。
 
-- [ ] 在 CUDA 主机运行同一 sinusoidal、compile 和 SDPA block，回填三份模块级对照结果。
+- [x] 2026-09-05 已在 RTX 4090、PyTorch 2.9.0+cu128 上运行同一 sinusoidal、compile 和 SDPA
+  block，并回填三份模块级对照结果。
+- [ ] 在空闲 CUDA 卡复跑性能样本；当前 capture 的功能与数值结果有效，但计时期间四张卡均有
+  `keep_multi_gpu_alive.py` 固定负载，不用于冻结性能阈值。
 - [ ] 对 FP32 fallback、compile guard 和 dtype 对齐分别做同一 910B2C 的修改前后性能 A/B。
 - [ ] 模型范围：固定官方 checkpoint、输入和 seed，记录 action delta、各 scale top-k 一致率与 logits/loss。
 - [ ] integration/模型范围：在 0.4.3 和 0.6.2 两条线完成无权重最小调用链；需要模型声明时再做 checkpoint 交叉验证。
