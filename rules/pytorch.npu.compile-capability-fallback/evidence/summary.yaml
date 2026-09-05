@@ -13,6 +13,9 @@ sources:
   - path: ../../../cases/MINT/evidence/npu/runtime_rule_ab.json
     test_id: compile_capability_ab
     result: compile_failed_missing_triton_eager_passed
+  - path: ../../../cases/MINT/evidence/cuda/capture-20260905T081517Z/runtime_rule_ab.json
+    test_id: compile_capability_ab
+    result: cuda_compile_and_eager_passed
   - path: ../../../cases/MINT/evidence/npu/compile_model_inference_ab.json
     result: fixed_checkpoint_compile_failed_missing_triton_eager_passed
   - path: ../../../cases/MINT/evidence/npu/compile_model_training_ab.json
@@ -45,6 +48,14 @@ observations:
     eager_candidate: passed_one_optimizer_update
     finite_loss: true
     finite_selected_gradient: true
+  cuda_module:
+    device: NVIDIA GeForce RTX 4090
+    torch: 2.9.0+cu128
+    cuda_runtime: "12.8"
+    compile_capability_available: true
+    triton_importable: true
+    compiled_median_ratio_vs_eager: 1.860692097504121
+    timing_limitation: concurrent_keepalive_load
   interpretation: This proves one missing dependency capability outcome, not a universal NPU compile limitation.
 environment:
   device: Ascend910B2C
@@ -60,4 +71,4 @@ missing:
   - Fixed-output eager versus compile comparison
   - Weight-free branch integration for each source adapter intended for approval
   - A second torch and torch-npu environment tuple
-  - CUDA compile and eager controls
+  - Idle-device CUDA timing recapture before using CUDA timing in a performance threshold

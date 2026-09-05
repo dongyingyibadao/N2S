@@ -1,0 +1,16 @@
+{
+  "cudnn": 91002,
+  "device": "NVIDIA GeForce RTX 4090",
+  "device_count": 1,
+  "model_execution": false,
+  "model_parameters_loaded": false,
+  "python": "3.12.13",
+  "scope": "operator_block_ab",
+  "status": "passed",
+  "torch_cuda": "12.8",
+  "versions": {
+    "jsonschema": "4.26.0",
+    "torch": "2.9.0+cu128",
+    "triton": "3.5.0"
+  }
+}

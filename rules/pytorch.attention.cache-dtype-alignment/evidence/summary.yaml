@@ -12,6 +12,11 @@ sources:
     result: passed_fixed_input_metrics_recorded
   - path: ../../../cases/MINT/evidence/npu/cache_dtype_operator_ab.json
     result: paired_functional_and_cast_overhead_ab_passed
+  - path: ../../../cases/MINT/evidence/cuda/capture-20260905T081517Z/cache_dtype_operator_ab.json
+    result: cuda_mixed_dtype_rejected_aligned_candidate_passed
+  - path: ../../../cases/MINT/evidence/cuda/capture-20260905T081517Z/candidate_checks.json
+    test_id: sdpa_aligned_dtype
+    result: cuda_aligned_fixed_input_metrics_recorded
   - path: ../../../cases/MINT/evidence/npu/cache_dtype_model_inference_ab.json
     result: fixed_checkpoint_baseline_failed_candidate_passed
   - path: ../../../cases/MINT/evidence/npu/cache_dtype_model_training_ab.json
@@ -51,6 +56,16 @@ observations:
     baseline_candidate_loss_max_abs_error: 0.0
     baseline_candidate_selected_gradient_max_abs_error: 0.0
     baseline_candidate_peak_memory_difference_bytes: 0
+  cuda_module:
+    device: NVIDIA GeForce RTX 4090
+    torch: 2.9.0+cu128
+    cuda_runtime: "12.8"
+    baseline_behavior: mixed_dtype_rejected
+    candidate_vs_cpu_fp32_max_abs_error: 0.008938491344451904
+    candidate_vs_cpu_fp32_cosine_similarity: 0.9999944534767344
+    candidate_median_ratio_vs_prealigned_control: 1.7163611262721932
+    candidate_minus_control_peak_increment_bytes: 16384
+    timing_limitation: concurrent_keepalive_load
 environment:
   device: Ascend910B2C
   torch: 2.9.0+cpu
@@ -61,6 +76,6 @@ static_external_coverage:
   model_families: [MINT, PI0]
   runtime_status: pending
 missing:
-  - CUDA cached-attention comparison
+  - Idle-device CUDA timing recapture before approving a performance threshold
   - Weight-free cache-path integration validation for each non-MINT adapter intended for approval
   - An independently valid model reference path only before model-scoped action/logit or performance claims

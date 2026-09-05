@@ -9,7 +9,7 @@ risk: high
 scope:
   ecosystem: pytorch-torch-npu
   frameworks: ["PyTorch scaled_dot_product_attention", "Transformers cached attention adapters"]
-  devices: ["Ascend NPU", "CUDA reference pending"]
+  devices: ["Ascend NPU", "NVIDIA RTX 4090 CUDA reference"]
   modes: [inference]
   code_shapes:
     - A prefix_embs tuple assignment from self.embed_prefix is followed by cached inputs_embeds use and one unambiguous q_proj.weight.dtype expression exists.
@@ -79,7 +79,7 @@ promotion:
     - Separate adapters and thresholds for standard SDPA, fused attention and quantized paths.
   blockers:
     - The failing MINT baseline cannot provide paired action/logit deltas or a model performance ratio; this blocks model-scoped thresholds, not fixed-shape module assessment.
-    - CUDA cache behavior is pending.
+    - CUDA cache behavior is captured on RTX 4090; idle-device timing is pending before any performance threshold.
     - LeRobot and OpenPI have passed static adapter validation only; weight-free integration evidence is pending before either adapter can be approved.
     - Current codemod covers only the recognized prefix adapter, not every Q/K/V/mask boundary.
     - Target-project verification commands have not been approved.

@@ -1,0 +1,226 @@
+/tmp/n2s-cuda-formal-20260905T074032Z/n2s-cuda-block/.venv/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:279: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+/tmp/n2s-cuda-formal-20260905T074032Z/n2s-cuda-block/.venv/lib/python3.12/site-packages/torch/backends/cuda/__init__.py:131: UserWarning: Please use the new API settings to control TF32 behavior, such as torch.backends.cudnn.conv.fp32_precision = 'tf32' or torch.backends.cuda.matmul.fp32_precision = 'ieee'. Old settings, e.g, torch.backends.cuda.matmul.allow_tf32 = True, torch.backends.cudnn.allow_tf32 = True, allowTF32CuDNN() and allowTF32CuBLAS() will be deprecated after Pytorch 2.9. Please see https://pytorch.org/docs/main/notes/cuda.html#tensorfloat-32-tf32-on-ampere-and-later-devices (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:80.)
+  return torch._C._get_cublas_allow_tf32()
+/tmp/n2s-cuda-formal-20260905T074032Z/n2s-cuda-block/.venv/lib/python3.12/site-packages/torch/_inductor/compile_fx.py:312: UserWarning: TensorFloat32 tensor cores for float32 matrix multiplication available but not enabled. Consider setting `torch.set_float32_matmul_precision('high')` for better performance.
+  warnings.warn(
+Autotune Choices Stats:
+{"num_choices": 14, "num_triton_choices": 13, "best_kernel": "mm", "best_time": 0.005344000179320574, "best_triton_pos": 1, "best_triton_time": 0.008191999979317188, "best_triton_kernel": "triton_mm_0", "best_triton_kernel_desc": "ACC_TYPE='tl.float32', ALLOW_TF32=False, BLOCK_K=16, BLOCK_M=32, BLOCK_N=32, EVEN_K=True, GROUP_M=8, USE_FAST_ACCUM=False, num_stages=1, num_warps=2"}
+AUTOTUNE mm(128x128, 128x128)
+strides: [128, 1], [1, 128]
+dtypes: torch.float32, torch.float32
+  mm 0.0053 ms 100.0% 
+  triton_mm_0 0.0082 ms 65.2% ACC_TYPE='tl.float32', ALLOW_TF32=False, BLOCK_K=16, BLOCK_M=32, BLOCK_N=32, EVEN_K=True, GROUP_M=8, USE_FAST_ACCUM=False, num_stages=1, num_warps=2
+  triton_mm_1 0.0082 ms 65.2% ACC_TYPE='tl.float32', ALLOW_TF32=False, BLOCK_K=128, BLOCK_M=32, BLOCK_N=32, EVEN_K=True, GROUP_M=8, USE_FAST_ACCUM=False, num_stages=2, num_warps=4
+  triton_mm_3 0.0111 ms 48.1% ACC_TYPE='tl.float32', ALLOW_TF32=False, BLOCK_K=32, BLOCK_M=64, BLOCK_N=32, EVEN_K=True, GROUP_M=8, USE_FAST_ACCUM=False, num_stages=5, num_warps=8
+  triton_mm_2 0.0113 ms 47.4% ACC_TYPE='tl.float32', ALLOW_TF32=False, BLOCK_K=32, BLOCK_M=32, BLOCK_N=64, EVEN_K=True, GROUP_M=8, USE_FAST_ACCUM=False, num_stages=5, num_warps=8
+  triton_mm_5 0.0123 ms 43.5% ACC_TYPE='tl.float32', ALLOW_TF32=False, BLOCK_K=32, BLOCK_M=64, BLOCK_N=64, EVEN_K=True, GROUP_M=8, USE_FAST_ACCUM=False, num_stages=2, num_warps=4
+  triton_mm_4 0.0133 ms 40.1% ACC_TYPE='tl.float32', ALLOW_TF32=False, BLOCK_K=16, BLOCK_M=64, BLOCK_N=64, EVEN_K=True, GROUP_M=8, USE_FAST_ACCUM=False, num_stages=2, num_warps=4
+  triton_mm_7 0.0143 ms 37.4% ACC_TYPE='tl.float32', ALLOW_TF32=False, BLOCK_K=32, BLOCK_M=64, BLOCK_N=128, EVEN_K=True, GROUP_M=8, USE_FAST_ACCUM=False, num_stages=3, num_warps=4
+  triton_mm_9 0.0143 ms 37.3% ACC_TYPE='tl.float32', ALLOW_TF32=False, BLOCK_K=32, BLOCK_M=128, BLOCK_N=64, EVEN_K=True, GROUP_M=8, USE_FAST_ACCUM=False, num_stages=3, num_warps=4
+  triton_mm_6 0.0174 ms 30.7% ACC_TYPE='tl.float32', ALLOW_TF32=False, BLOCK_K=64, BLOCK_M=64, BLOCK_N=64, EVEN_K=True, GROUP_M=8, USE_FAST_ACCUM=False, num_stages=3, num_warps=8
+SingleProcess AUTOTUNE benchmarking takes 0.3178 seconds and 2.0097 seconds precompiling for 14 choices
+{
+  "schema_version": "1.0.0",
+  "case": "MINT",
+  "generated_at": "2026-09-05T08:12:28.612383+00:00",
+  "promotion_status": "exploratory",
+  "backend": "cuda",
+  "environment": {
+    "device": "NVIDIA GeForce RTX 4090",
+    "torch": "2.9.0+cu128",
+    "torch_cuda": null,
+    "platform": "Linux-5.15.0-141-generic-x86_64-with-glibc2.35"
+  },
+  "tests": [
+    {
+      "id": "sinusoidal_fp32_fallback",
+      "classification": "numerical_precision",
+      "status": "passed",
+      "evidence_status": "cuda_passed",
+      "seed": 42,
+      "input": {
+        "time": [
+          0.0,
+          0.001,
+          0.01,
+          0.125,
+          0.5,
+          0.999,
+          1.0
+        ],
+        "dimension": 256,
+        "min_period": 0.004,
+        "max_period": 4.0,
+        "reference": "CPU float64",
+        "candidate": "CUDA float32"
+      },
+      "checkpoint": null,
+      "samples": [],
+      "metrics": {
+        "max_abs_error": 0.00011960965915502886,
+        "max_relative_error": 66600914.48041024,
+        "rmse": 9.482247482036271e-06,
+        "cosine_similarity": 0.9999999999100883
+      },
+      "memory": {},
+      "exception": null,
+      "acceptance": "record_only_no_unified_threshold"
+    },
+    {
+      "id": "eager_fixed_input",
+      "classification": "operator_implementation",
+      "status": "passed",
+      "evidence_status": "cuda_passed",
+      "seed": 42,
+      "input": {
+        "shape": [
+          128,
+          128
+        ],
+        "dtype": "float32",
+        "warmup": 3,
+        "repeats": 10
+      },
+      "checkpoint": null,
+      "samples": [
+        7.485412061214447e-05,
+        7.055001333355904e-05,
+        6.730901077389717e-05,
+        0.0018803870771080256,
+        9.329407475888729e-05,
+        7.94080551713705e-05,
+        7.123011164367199e-05,
+        7.254187949001789e-05,
+        7.073208689689636e-05,
+        6.543495692312717e-05
+      ],
+      "metrics": {
+        "median_seconds": 7.188599556684494e-05,
+        "p95_seconds": 0.0018803870771080256,
+        "finite_output": true
+      },
+      "memory": {
+        "peak_allocated_bytes": 8859648
+      },
+      "exception": null,
+      "acceptance": "record_only_no_unified_threshold"
+    },
+    {
+      "id": "compile_fixed_input",
+      "classification": "operator_implementation",
+      "status": "passed",
+      "evidence_status": "cuda_passed",
+      "seed": 42,
+      "input": {
+        "shape": [
+          128,
+          128
+        ],
+        "dtype": "float32",
+        "warmup": 3,
+        "repeats": 10,
+        "mode": "max-autotune"
+      },
+      "checkpoint": null,
+      "samples": [
+        0.0001893958542495966,
+        0.0001444830559194088,
+        0.00012601399794220924,
+        0.00012216391041874886,
+        0.00011566607281565666,
+        0.00011270120739936829,
+        0.0001224640291184187,
+        0.00011363695375621319,
+        0.00011801999062299728,
+        0.00011210795491933823
+      ],
+      "metrics": {
+        "median_seconds": 0.00012009195052087307,
+        "p95_seconds": 0.0001893958542495966,
+        "finite_output": true,
+        "max_abs_error": 0.0,
+        "max_relative_error": 0.0,
+        "rmse": 0.0,
+        "cosine_similarity": 0.9999999999999996
+      },
+      "memory": {
+        "peak_allocated_bytes": 84422656
+      },
+      "exception": null,
+      "acceptance": "record_only_no_unified_threshold"
+    },
+    {
+      "id": "sdpa_mixed_dtype_control",
+      "classification": "numerical_precision",
+      "status": "failed",
+      "evidence_status": "cuda_failed",
+      "seed": 42,
+      "input": {
+        "qkv_shape": [
+          2,
+          4,
+          16,
+          32
+        ],
+        "query_dtype": "bfloat16",
+        "key_value_dtype": "float32"
+      },
+      "checkpoint": null,
+      "samples": [],
+      "metrics": {},
+      "memory": {},
+      "exception": {
+        "type": "RuntimeError",
+        "message": "Expected query, key, and value to have the same dtype, but got query.dtype: c10::BFloat16 key.dtype: float and value.dtype: float instead.",
+        "traceback_tail": "Traceback (most recent call last):\n  File \"/tmp/n2s-cuda-formal-20260905T074032Z/n2s-cuda-block/tests/candidate_checks.py\", line 266, in main\n    mixed_output = F.scaled_dot_product_attention(q, k_float, v_float)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: Expected query, key, and value to have the same dtype, but got query.dtype: c10::BFloat16 key.dtype: float and value.dtype: float instead."
+      },
+      "acceptance": "record_only_no_unified_threshold",
+      "expected_control_failure": true
+    },
+    {
+      "id": "sdpa_aligned_dtype",
+      "classification": "numerical_precision",
+      "status": "passed",
+      "evidence_status": "cuda_passed",
+      "seed": 42,
+      "input": {
+        "qkv_shape": [
+          2,
+          4,
+          16,
+          32
+        ],
+        "query_key_value_dtype": "bfloat16",
+        "reference": "CPU float32"
+      },
+      "checkpoint": null,
+      "samples": [
+        3.134319558739662e-05,
+        3.004586324095726e-05,
+        3.0306167900562286e-05,
+        2.912711352109909e-05,
+        2.9235845431685448e-05,
+        2.91608739644289e-05,
+        2.9193004593253136e-05,
+        2.9055168852210045e-05,
+        2.8606969863176346e-05,
+        2.8556911274790764e-05
+      ],
+      "metrics": {
+        "max_abs_error": 0.008095860481262207,
+        "max_relative_error": 5.842226730525339,
+        "rmse": 0.0011905167355689536,
+        "cosine_similarity": 0.9999948790364719,
+        "median_seconds": 2.917693927884102e-05,
+        "p95_seconds": 3.134319558739662e-05,
+        "finite_output": true
+      },
+      "memory": {
+        "peak_allocated_bytes": 230400
+      },
+      "exception": null,
+      "acceptance": "record_only_no_unified_threshold"
+    }
+  ]
+}

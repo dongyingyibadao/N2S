@@ -6,9 +6,15 @@ to distinguish the recorded decision from a pending human-maintainer review. The
 
 Current engineering recommendations:
 
+The review JSON files are pinned to the pre-CUDA evidence revision recorded inside each file. A verified RTX 4090
+module capture was added on 2026-09-05 after that assessment. It satisfies the functional and numerical CUDA block
+run item; its timing was collected under a concurrent keepalive load and must be repeated on an idle device before
+performance thresholds are frozen. The decisions below remain unchanged, but the JSON packets have not yet been
+reassessed against the new capture.
+
 | Rule | Recommendation | Main reason |
 |---|---|---|
-| cache dtype alignment | remain candidate | MINT candidate works, but the failing baseline gives no paired model delta; CUDA and non-MINT runtime are pending |
+| cache dtype alignment | remain candidate | MINT candidate and CUDA block work, but the failing model baseline gives no paired delta and adapter integration is pending |
 | compile capability fallback | remain candidate | one environment proves missing Triton only; no successful NPU compile control exists |
 | sinusoidal FP64 fallback | rejected in the current capability scope | tested NPU FP64 works; any replacement rule must be redesigned as a shape-scoped performance candidate |
 

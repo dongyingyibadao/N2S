@@ -34,7 +34,8 @@ NPU compile guard 和 prefix dtype 对齐。计划指定的三组比较仍使用
 ## 当前结论边界
 
 - 当前已确认 Ascend 910B2C 上的算子 smoke、单步训练和三回合 LIBERO 推理可运行。
-- CUDA 结果为 `pending_cuda`。
+- RTX 4090 CUDA 12.8 block 级功能与数值结果已回传；计时采集期间存在固定 keepalive 负载，
+  性能阈值审批前仍需空闲卡复测。
 - 不比较 H200、4090 与 910B 的绝对速度，不定义统一性能阈值。
 - 当前批准为通用规则的条目为零。
 - 三项精确 Ascend policy 修改已建立 `candidate` 规则包；候选状态不授权自动应用。
