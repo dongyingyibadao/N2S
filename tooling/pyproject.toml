@@ -16,6 +16,7 @@ dependencies = [
 [project.scripts]
 n2s-rules = "n2s_rules.cli:main"
 n2s-knowledge = "n2s_knowledge.cli:main"
+n2s-experiments = "n2s_experiments.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

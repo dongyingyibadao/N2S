@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0.0",
+  "id": "mint-rule-followups",
+  "models": ["MINT"],
+  "title": "Existing MINT evidence: remaining scoped integration questions",
+  "created_at": "2026-09-06T00:00:00+00:00",
+  "state": "open",
+  "generalization": "pending_validation",
+  "source": {"url": "https://github.com/RenMing-Huang/MINT.git", "baseline_revision": "691a5e650fbccceaf70568799294eba24f79e114"},
+  "goal": "Reuse the archived block evidence; define only the missing scoped probes. These are historical followups, not a new model experiment.",
+  "observations": "The 4090 functional/numerical controls are already recorded. All tasks here are draft until an owner supplies a concrete protocol and reviewed runner. No existing rule decision is changed.",
+  "knowledge_refs": ["evaluations/evidence-reuse.json", "reviews/candidate-rules/README.md"],
+  "related_rules": ["pytorch.attention.cache-dtype-alignment", "pytorch.npu.compile-capability-fallback", "pytorch.npu.sinusoidal-fp64-fallback"]
+}

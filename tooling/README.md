@@ -50,3 +50,10 @@ N2S/tooling/n2s-knowledge search "torch_npu" --scope manipulation
 ```
 
 同步、审阅、许可限制和接纳流程见 [upstreams/README.md](../upstreams/README.md)。
+
+## Case 实验工具
+
+`tooling/n2s-experiments` 提供 `probe`、`new`、`list`、`plan`、`run`、`record`、`attach`、
+`review`、`validate` 和 `publish-check`，所有结果为 JSON。它不修改或晋级现有规则，
+不执行 commit/push，不安装依赖，也不自动开始评测。详见
+[evaluations/README.md](../evaluations/README.md)。

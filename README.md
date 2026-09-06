@@ -34,6 +34,11 @@ N2S 用案例化证据记录模型从 NVIDIA/CUDA 软件栈迁移到昇腾/NPU �
 
 ## 分层验证
 
+未完成这些层级的错误报告也能先进入 [case 工单](cases/work-items/README.md)，保持
+`pending_validation`，不冒充已验证案例。跨硬件任务、证据复用和用户确认流程见
+[实验工作流](evaluations/README.md)；任意模型均使用同一份
+[工单与跨端复测指南](cases/work-items/EXPERIMENT_GUIDE.md)。
+
 - `module`：固定合成或录制输入下的局部 baseline/candidate A/B，是接收探索性案例的最低要求。
 - `integration`：不用外部权重，以最小调用链确认修改位置确实执行、输入输出契约保持成立。
 - `model`：加载 checkpoint 或执行端到端推理/训练，只在声明涉及模型输出、训练、checkpoint 语义

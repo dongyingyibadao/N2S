@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0.0", "id": "cuda-idle-performance", "case_id": "mint-rule-followups",
+  "title": "Optional idle CUDA timing, only when requesting a performance claim", "state": "draft",
+  "claim": "Measure same-device A/B timing without the concurrent load in the archived capture.",
+  "level": "module",
+  "requirements": {"backends": ["cuda"], "device_name_contains": ["RTX 4090"], "versions": {"torch": "2.9.0+cu128", "triton": "3.5.0"}},
+  "depends_on": [],
+  "evidence_refs": ["cases/MINT/evidence/cuda/capture-20260905T081517Z/cuda_validation_manifest.json"],
+  "protocol": {"input_description": "pending: select the specific performance claim, preserve original block inputs and verify exclusive device allocation", "seed": null, "assets": [], "variant": "control", "acceptance": "pending: freeze scoped timing/memory criteria; this is not required to reuse existing functional/numerical evidence", "comparison_key": "cuda-idle-performance"},
+  "execution": null
+}

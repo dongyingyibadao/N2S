@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0.0", "id": "fp64-scope-decision", "case_id": "mint-rule-followups",
+  "title": "Decide 310P-specific fallback scope before scheduling a new experiment", "state": "draft",
+  "claim": "A 310P-specific documented fallback is distinct from the rejected all-NPU capability rationale.",
+  "level": "observation",
+  "requirements": {"backends": ["npu"], "device_name_contains": ["310P"], "versions": {}},
+  "depends_on": [],
+  "evidence_refs": ["evaluations/evidence-reuse.json", "reviews/candidate-rules/sinusoidal-fp64.review.json"],
+  "protocol": {"input_description": "pending: human scope decision; no test should be run merely because a 910B is available", "seed": null, "assets": [], "variant": "control", "acceptance": "pending: choose a 310P integration question or a separate shape-scoped performance hypothesis", "comparison_key": "fp64-scope-decision"},
+  "execution": null
+}

@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "run_sha256", "reviewer", "reviewed_at", "conclusion", "summary", "generalization"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "run_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "reviewer": {"type": "string", "minLength": 1},
+    "reviewed_at": {"type": "string"},
+    "conclusion": {"enum": ["meets_task_acceptance", "does_not_meet", "inconclusive"]},
+    "summary": {"type": "string", "minLength": 1},
+    "generalization": {"const": "pending_validation"}
+  }
+}

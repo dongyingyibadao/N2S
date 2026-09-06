@@ -12,3 +12,6 @@ upstreams/_cache/
 # NVIDIA captures are returned separately and reviewed before admission.
 cases/MINT/cuda/results-*/
 cases/MINT/evidence/cuda-blocks/
+
+# Machine-local experiment plans, locks and unreviewed logs. Never publish these.
+evaluations/_local/

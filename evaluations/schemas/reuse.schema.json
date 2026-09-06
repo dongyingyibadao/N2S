@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "assessments"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "assessments": {"type": "array", "items": {
+      "type": "object", "additionalProperties": false,
+      "required": ["rule_id", "reviewer", "conclusion", "references", "reusable_claim", "scope", "not_covered", "next_tasks"],
+      "properties": {
+        "rule_id": {"type": "string"}, "reviewer": {"type": "string", "minLength": 1},
+        "conclusion": {"enum": ["partial_support", "different_scope", "counterevidence", "covered"]},
+        "references": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "reusable_claim": {"type": "string", "minLength": 1},
+        "scope": {"type": "string", "minLength": 1},
+        "not_covered": {"type": "array", "items": {"type": "string"}},
+        "next_tasks": {"type": "array", "items": {"type": "string"}}
+      }
+    }}
+  }
+}

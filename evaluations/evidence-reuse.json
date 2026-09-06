@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0.0",
+  "assessments": [
+    {
+      "rule_id": "pytorch.attention.cache-dtype-alignment",
+      "reviewer": "codex-agent-case-workflow-review-2026-09-06",
+      "conclusion": "partial_support",
+      "references": [
+        "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi05/infer_with_torch/modeling_pi05.patch",
+        "cases/MINT/evidence/npu/cache_dtype_operator_ab.json",
+        "cases/MINT/evidence/cuda/capture-20260905T081517Z/cache_dtype_operator_ab.json",
+        "reviews/candidate-rules/cache-dtype.review.json"
+      ],
+      "reusable_claim": "Existing N2S block evidence already covers the tested mixed-dtype SDPA failure and aligned control. Official mask/fusion changes are related, not proof of the exact N2S prefix-cache transformation.",
+      "scope": "Recorded Ascend910B2C torch 2.9.0/torch-npu 2.9.0 and RTX 4090 torch 2.9.0+cu128 block inputs only. Upstream mask evidence remains upstream_documented.",
+      "not_covered": ["Actual LeRobot/OpenPI adapter execution", "Unmeasured shapes or fused/quantized attention", "Model-level equivalence", "CUDA performance thresholds under idle load"],
+      "next_tasks": ["mint-rule-followups/cache-adapter-integration"]
+    },
+    {
+      "rule_id": "pytorch.npu.compile-capability-fallback",
+      "reviewer": "codex-agent-case-workflow-review-2026-09-06",
+      "conclusion": "different_scope",
+      "references": [
+        "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi0/infer_with_torch/README.md",
+        "cases/MINT/evidence/cuda/capture-20260905T081517Z/runtime_rule_ab.json",
+        "reviews/candidate-rules/compile.review.json"
+      ],
+      "reusable_claim": "The recorded CUDA compile/eager functional control is complete. Official graph recipes show scoped graph paths; OM export and DDP static_graph are not interchangeable with this compile backend.",
+      "scope": "CUDA control: RTX 4090 torch 2.9.0+cu128. NPU failure: the recorded missing-Triton environment only. Official PI0 graph recipe: Atlas A2 with its pinned software tuple, upstream_documented.",
+      "not_covered": ["Successful NPU control using the intended backend", "A second torch/torch-npu environment", "Actual adapter execution", "A universal all-NPU eager fallback"],
+      "next_tasks": ["mint-rule-followups/compile-supported-environment"]
+    },
+    {
+      "rule_id": "pytorch.npu.sinusoidal-fp64-fallback",
+      "reviewer": "codex-agent-case-workflow-review-2026-09-06",
+      "conclusion": "counterevidence",
+      "references": [
+        "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi05/infer_with_torch/modeling_pi05.patch",
+        "reviews/candidate-rules/sinusoidal-fp64.review.json"
+      ],
+      "reusable_claim": "The official PI0.5 310P patch explicitly documents an FP64-to-FP32 fallback. Existing 910B2C and RTX 4090 results contradict a universal unsupported-FP64 rationale. Reuse both facts without rerunning the same capability question.",
+      "scope": "Official reference: 310P, PyTorch 2.5.1, torch-npu 2.5.1.post1, CANN 8.2.RC1; upstream_documented, not locally verified. Local support evidence applies only to recorded 910B2C/4090 inputs and versions.",
+      "not_covered": ["Automatic application to every NPU", "A locally verified 310P helper integration", "FP32 error tolerance outside recorded shapes/ranges", "Any replacement performance rule"],
+      "next_tasks": ["mint-rule-followups/fp64-scope-decision"]
+    }
+  ]
+}

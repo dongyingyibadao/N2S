@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0.0", "id": "cache-adapter-integration", "case_id": "mint-rule-followups",
+  "title": "Weight-free cache path in an explicitly selected source adapter", "state": "draft",
+  "claim": "The selected actual helper/cache path executes and the local dtype correction preserves its declared contract.",
+  "level": "integration",
+  "requirements": {"backends": ["cuda", "npu"], "device_name_contains": [], "versions": {}},
+  "depends_on": [],
+  "evidence_refs": ["evaluations/evidence-reuse.json", "reviews/candidate-rules/cache-dtype.review.json"],
+  "protocol": {"input_description": "pending: select LeRobot or OpenPI revision, split into one task per adapter and fix synthetic inputs", "seed": null, "assets": [], "variant": "modified", "acceptance": "pending: assert helper call count, expected dtype and adapter-specific output error; no model claim", "comparison_key": "cache-adapter-integration"},
+  "execution": null
+}

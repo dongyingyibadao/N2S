@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0.0", "id": "compile-supported-environment", "case_id": "mint-rule-followups",
+  "title": "NPU compile capability in a supported, precisely pinned environment", "state": "draft",
+  "claim": "Determine the selected compile backend's capability, without extrapolating a missing dependency to every NPU.",
+  "level": "module",
+  "requirements": {"backends": ["npu"], "device_name_contains": [], "versions": {}},
+  "depends_on": [],
+  "evidence_refs": ["evaluations/evidence-reuse.json", "reviews/candidate-rules/compile.review.json"],
+  "protocol": {"input_description": "pending: fixed tensors, exact backend and second torch/torch-npu tuple", "seed": null, "assets": [], "variant": "control", "acceptance": "pending: compiled and eager paths execute with explicit output tolerance; missing packages count as environment blockers", "comparison_key": "compile-supported-environment"},
+  "execution": null
+}
