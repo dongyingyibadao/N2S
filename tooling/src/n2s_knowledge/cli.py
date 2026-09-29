@@ -28,9 +28,10 @@ def _parser():
     search.add_argument("query")
     search.add_argument("--scope")
     search.add_argument("--accepted-only", action="store_true")
+    search.add_argument("--include-community", action="store_true", help="also search pinned, selected LeRobot/OpenPI source snapshots")
     search.add_argument("--json", action="store_true")
 
-    show = subparsers.add_parser("show", help="display an exact upstream snapshot file")
+    show = subparsers.add_parser("show", help="display an exact official or selected community snapshot file")
     show.add_argument("uri")
 
     difference = subparsers.add_parser("diff", help="review upstream commits, paths and affected knowledge")
@@ -74,6 +75,13 @@ def _print_search(report):
         print(f"[{item['trust']}] {item['title']}")
         print(f"  {item['source']}@{item['revision']} {item['path']}")
         print(f"  {item['uri']}")
+        if item.get("coverage"):
+            print(f"  coverage: {item['coverage']}")
+        if item.get("n2s_validation"):
+            validation = item["n2s_validation"]
+            print(f"  N2S validation: {validation['status']} ({validation['level']})")
+        for relation in item.get("rule_relations", []):
+            print(f"  related rule: {relation['rule_id']} ({relation['relation']})")
         print(f"  local: {item['local_path'] or '-'}")
         print(f"  remote: {item['remote_url']}")
         if item["excerpt"]:
@@ -99,14 +107,15 @@ def main(argv=None):
                 _print_status(report)
             return 0
         if args.command == "search":
-            report = manager.search(args.query, scope=args.scope, accepted_only=args.accepted_only)
+            report = manager.search(args.query, scope=args.scope, accepted_only=args.accepted_only,
+                                    include_community=args.include_community)
             if args.json:
                 print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))
             else:
                 _print_search(report)
             return 0
         if args.command == "show":
-            result = manager.show(args.uri)
+            result = manager.show_community(args.uri) if args.uri.startswith("community://") else manager.show(args.uri)
             if result["content"] is None:
                 print("snapshot file is not available locally", file=sys.stderr)
                 print(f"fixed remote: {result['remote_url']}", file=sys.stderr)

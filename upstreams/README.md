@@ -4,6 +4,9 @@ This directory registers official sources and stores only N2S-authored metadata,
 reviews, and curated summaries. Official prose, patches, code, and license files are not committed into
 N2S. They are held under `upstreams/_cache/` as a local Git mirror and immutable read-only snapshots.
 
+Agent migration workflow, including selected LeRobot/OpenPI source snapshots and trust boundaries:
+[AGENT_USAGE.md](AGENT_USAGE.md).
+
 The only registered source is `cann-recipes-embodied-ai`, branch `master`. The initial accepted revision is
 `45d167135c81d97573bfbe0e564bb4a1d9642514`. The source repository uses Apache-2.0 at its root, includes
 separate model and third-party notices, and its disclaimer limits examples to reference and non-commercial
@@ -22,6 +25,8 @@ upstream bodies or patches as N2S-owned content.
   `n2s_validation` records whether N2S reproduced it.
 - `reviews/*.json`: explicit revision acceptance records. Acceptance never edits a migration rule.
 - `_cache/`: ignored mirror, snapshots, live index, current symlink, lock, and daily sync state.
+- `community-snapshots.json`: registry for the existing, selected LeRobot/OpenPI source snapshots under
+  `cases/validation-projects/`. These are not official Git mirrors or complete community repositories.
 
 ## Commands
 
@@ -30,8 +35,10 @@ tooling/n2s-knowledge refresh-if-due
 tooling/n2s-knowledge sync --force
 tooling/n2s-knowledge status --json
 tooling/n2s-knowledge search "fusion attention" --scope manipulation
+tooling/n2s-knowledge search "cache" --scope manipulation --accepted-only --include-community --json
 tooling/n2s-knowledge search "CANN 8.3" --accepted-only --json
 tooling/n2s-knowledge show upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi0/train/README.md
+tooling/n2s-knowledge show community://openpi@215abfb217dbac7d5f1273282331b9b1866c0479/src/openpi/models_pytorch/pi0_pytorch.py
 tooling/n2s-knowledge diff --from accepted --to live
 tooling/n2s-knowledge accept --source cann-recipes-embodied-ai --revision SHA --review REVIEW.json
 ```
@@ -46,6 +53,11 @@ No command checks out a worktree or executes upstream hooks, installers, Python,
 unreviewed revisions. `show` only reads an exact local snapshot; if it is absent, it prints the fixed remote
 URL. Performance entries retain device, card count, batch, model, dataset, and measurement context and must
 not be normalized across hardware.
+
+With `--include-community`, search also checks the selected local LeRobot/OpenPI files against their SHA256
+manifests and labels them `community_source_snapshot_static_only`. `--accepted-only` pins official results
+to the accepted revision; community files remain pinned to their own recorded commits. Static adapter checks
+are recorded separately in `cases/validation-projects/reports/static_validation.json`.
 
 ## Acceptance
 

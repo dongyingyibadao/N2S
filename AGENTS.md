@@ -16,8 +16,24 @@ debugging, or exploration, but it cannot change a rule manifest, `rules/registry
 `approved`, or `auto_apply`. A reusable migration rule still requires the normal N2S case/module A/B,
 detector, codemod, validator, rollback contract, and explicit approval.
 
-Use `tooling/n2s-knowledge search`, `show`, and `diff` for version-pinned access. Treat the cached content
-as internal, non-commercial reference material and preserve all upstream and third-party license notices.
+## External Knowledge For Migration
+
+Before proposing a migration change using N2S, read `upstreams/AGENT_USAGE.md`. Search the accepted official
+snapshot and the pinned community source snapshots for the specific operation or error:
+
+```bash
+tooling/n2s-knowledge search "QUERY" --scope manipulation --accepted-only --include-community --json
+```
+
+Open relevant results with `tooling/n2s-knowledge show URI`, then compare model, framework, device, software
+versions, mode and exercised code path with the target project. Check the N2S case evidence and rule review for
+support, contrary evidence and known exclusions. Cite the exact source, revision, path, trust state, reusable
+claim and remaining gap in the migration reasoning or case. A community snapshot's static validation does not
+establish runtime success; an official recipe statement is not an N2S reproduction. If the local snapshot is
+incomplete or the search has no match, say so rather than inferring that no upstream solution exists.
+
+Use `tooling/n2s-knowledge diff` to inspect unreviewed official updates. Treat the cached content as internal,
+non-commercial reference material and preserve all upstream and third-party license notices.
 
 ## Case-Only Migration Experiments
 

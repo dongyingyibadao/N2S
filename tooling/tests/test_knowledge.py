@@ -152,6 +152,57 @@ class KnowledgeSyncTests(unittest.TestCase):
     def tearDown(self):
         self.temporary.cleanup()
 
+    def make_community_snapshot(self):
+        snapshot = self.fixture.root / "cases/validation-projects/community-fixture"
+        snapshot.mkdir(parents=True)
+        source = {
+            "id": "community-fixture",
+            "snapshot_path": "cases/validation-projects/community-fixture",
+            "revision": self.fixture.accepted,
+            "scopes": ["manipulation"],
+            "browse_url_template": "https://example.invalid/community/blob/{revision}/{path}",
+            "coverage": "Selected files; static detector validation only",
+        }
+        contents = {
+            "LICENSE": "Fixture license\n",
+            "REMOTE": "https://example.invalid/community.git\n",
+            "REVISION": self.fixture.accepted + "\n",
+            "src/adapter.py": "# cache alignment fixture\nVALUE = 'community-needle'\n",
+        }
+        for relative, body in contents.items():
+            path = snapshot / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(body, encoding="utf-8")
+        (snapshot / "SHA256SUMS").write_text("".join(
+            f"{hashlib.sha256(body.encode()).hexdigest()}  {relative}\n"
+            for relative, body in sorted(contents.items())
+        ), encoding="utf-8")
+        (self.fixture.root / "upstreams/community-snapshots.json").write_text(
+            json.dumps({"schema_version": "1.0.0", "sources": [source]}), encoding="utf-8"
+        )
+        return snapshot
+
+    def test_selected_community_search_is_pinned_and_hash_checked(self):
+        snapshot = self.make_community_snapshot()
+        manager = self.fixture.manager()
+        result = manager.search("community-needle", scope="manipulation", accepted_only=True,
+                                include_community=True)
+        self.assertEqual(1, len(result["results"]))
+        item = result["results"][0]
+        self.assertEqual("community_source_snapshot_static_only", item["trust"])
+        self.assertEqual(self.fixture.accepted, item["revision"])
+        self.assertEqual("Selected files; static detector validation only", item["coverage"])
+        self.assertEqual("community-needle", manager.show_community(item["uri"])["content"].decode().split("'")[1])
+        self.assertEqual([], manager.search("community-needle", scope="other", include_community=True)["results"])
+        self.assertIsNone(manager.show_community(
+            f"community://community-fixture@{self.fixture.accepted}/not-captured.py"
+        )["content"])
+        with self.assertRaisesRegex(Exception, "unsafe community snapshot path"):
+            manager.show_community(f"community://community-fixture@{self.fixture.accepted}/../LICENSE")
+        (snapshot / "src/adapter.py").write_text("tampered\n", encoding="utf-8")
+        with self.assertRaisesRegex(Exception, "checksum mismatch"):
+            manager.search("community-needle", include_community=True)
+
     def test_initial_clone_snapshot_hash_index_and_search_contract(self):
         manager = self.fixture.manager()
         rules_before = (self.fixture.root / "rules" / "registry.json").read_bytes()
@@ -181,6 +232,10 @@ class KnowledgeSyncTests(unittest.TestCase):
             self.assertTrue(official[field])
         curated = manager.search("fusion attention", scope="manipulation", accepted_only=True)
         self.assertTrue(any(item["result_kind"] == "curated_knowledge" for item in curated["results"]))
+        curated_item = next(item for item in curated["results"] if item["result_kind"] == "curated_knowledge")
+        self.assertEqual({"level": "not_verified", "status": "upstream_documented"},
+                         curated_item["n2s_validation"])
+        self.assertEqual([], curated_item["rule_relations"])
 
         shown = manager.show(f"upstream://fixture-official@{self.fixture.accepted}/manipulation/pi0/README.md")
         self.assertIn(b"needle", shown["content"])

@@ -370,7 +370,64 @@ class KnowledgeManager:
             items.extend(catalog["items"])
         return items
 
-    def search(self, query, scope=None, accepted_only=False):
+    def _community_sources(self):
+        path = self.upstreams_root / "community-snapshots.json"
+        registry = _read_json(path)
+        _validate(registry, self.schemas_root / "community-snapshots.schema.json", "community snapshots")
+        sources = registry["sources"]
+        if len({item["id"] for item in sources}) != len(sources):
+            raise KnowledgeError("duplicate community snapshot source ID")
+        return {item["id"]: item for item in sources}
+
+    def _community_files(self, source):
+        snapshot = self.root / source["snapshot_path"]
+        if snapshot.is_symlink() or not snapshot.resolve().is_relative_to(self.root):
+            raise KnowledgeError("unsafe community snapshot directory")
+        remote = source["browse_url_template"].split("/blob/", 1)[0] + ".git"
+        for name, expected in (("REVISION", source["revision"]), ("REMOTE", remote)):
+            metadata = snapshot / name
+            if not metadata.is_file() or metadata.is_symlink() or metadata.read_text(encoding="utf-8").strip() != expected:
+                raise KnowledgeError(f"community snapshot metadata mismatch: {source['id']}/{name}")
+        manifest = snapshot / "SHA256SUMS"
+        if not manifest.is_file() or manifest.is_symlink():
+            raise KnowledgeError(f"community snapshot checksum manifest missing: {source['id']}")
+        files = {}
+        for line in manifest.read_text(encoding="utf-8").splitlines():
+            match = re.fullmatch(r"([0-9a-f]{64})  (.+)", line)
+            if not match:
+                raise KnowledgeError(f"invalid community snapshot checksum entry: {source['id']}")
+            relative = PurePosixPath(match.group(2))
+            if relative.is_absolute() or ".." in relative.parts or str(relative) in files:
+                raise KnowledgeError(f"unsafe community snapshot path: {source['id']}")
+            local = snapshot / str(relative)
+            if not local.is_file() or local.is_symlink() or not local.resolve().is_relative_to(snapshot):
+                raise KnowledgeError(f"community snapshot file missing or unsafe: {source['id']}/{relative}")
+            if hashlib.sha256(local.read_bytes()).hexdigest() != match.group(1):
+                raise KnowledgeError(f"community snapshot checksum mismatch: {source['id']}/{relative}")
+            files[str(relative)] = local
+        if not {"LICENSE", "REMOTE", "REVISION"}.issubset(files):
+            raise KnowledgeError(f"community snapshot provenance or license missing: {source['id']}")
+        return files
+
+    def show_community(self, uri):
+        match = re.fullmatch(r"community://([^@/]+)@([0-9a-f]{40})/(.+)", uri)
+        if not match:
+            raise KnowledgeError("expected community://SOURCE@FULL_REVISION/PATH")
+        source = self._community_sources().get(match.group(1))
+        if source is None or match.group(2) != source["revision"]:
+            raise KnowledgeError("unknown community source or revision")
+        relative = PurePosixPath(match.group(3))
+        if relative.is_absolute() or ".." in relative.parts:
+            raise KnowledgeError("unsafe community snapshot path")
+        files = self._community_files(source)
+        path = str(relative)
+        local = files.get(path)
+        remote = source["browse_url_template"].format(revision=source["revision"], path=quote(path, safe="/"))
+        return {"content": local.read_bytes() if local else None,
+                "local_path": str(local) if local else None, "remote_url": remote,
+                "revision": source["revision"]}
+
+    def search(self, query, scope=None, accepted_only=False, include_community=False):
         terms = [term.casefold() for term in query.split() if term]
         if not terms:
             raise KnowledgeError("search query cannot be empty")
@@ -387,12 +444,13 @@ class KnowledgeManager:
                 revision = reference["revision"]
                 path = reference["path"]
                 snapshot_path = self._snapshot(source, revision) / path
-                results.append(
-                    self._search_result(
-                        source, revision, path, item["title"], item["official_claim"]["summary"],
-                        "curated_knowledge", snapshot_path, item["type"],
-                    )
+                result = self._search_result(
+                    source, revision, path, item["title"], item["official_claim"]["summary"],
+                    "curated_knowledge", snapshot_path, item["type"],
                 )
+                result["n2s_validation"] = item["n2s_validation"]
+                result["rule_relations"] = item["rule_relations"]
+                results.append(result)
 
         for source in self.sources.values():
             state = self._load_state()["sources"].get(source["id"], {})
@@ -421,6 +479,27 @@ class KnowledgeManager:
                             "official_fulltext", local, entry["type"],
                         )
                     )
+        if include_community:
+            for source in self._community_sources().values():
+                if scope and scope not in source["scopes"]:
+                    continue
+                for path, local in self._community_files(source).items():
+                    if path in {"LICENSE", "LICENSE_GEMMA.txt", "REMOTE", "REVISION"} or path.startswith("LICENSE"):
+                        continue
+                    body = local.read_text(encoding="utf-8", errors="replace")
+                    if not all(term in f"{path}\n{body}".casefold() for term in terms):
+                        continue
+                    revision = source["revision"]
+                    results.append({
+                        "entry_type": "selected_source_file", "excerpt": self._excerpt(body, terms),
+                        "local_path": str(local), "path": path,
+                        "remote_url": source["browse_url_template"].format(revision=revision, path=quote(path, safe="/")),
+                        "result_kind": "community_source_snapshot", "revision": revision,
+                        "source": source["id"], "title": path,
+                        "trust": "community_source_snapshot_static_only",
+                        "uri": f"community://{source['id']}@{revision}/{path}",
+                        "coverage": source["coverage"],
+                    })
         results.sort(key=lambda item: (item["result_kind"], item["source"], item["path"], item["title"]))
         return {"query": query, "results": results[:200], "scope": scope}
 

@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0.0",
+  "sources": [
+    {
+      "id": "lerobot",
+      "snapshot_path": "cases/validation-projects/lerobot-4aaff99",
+      "revision": "4aaff99be4a1d81568c08c8f0296b41b40c99ec4",
+      "scopes": ["manipulation"],
+      "browse_url_template": "https://github.com/huggingface/lerobot/blob/{revision}/{path}",
+      "coverage": "Selected source files for detector/codemod static validation; no runtime or model validation"
+    },
+    {
+      "id": "openpi",
+      "snapshot_path": "cases/validation-projects/openpi-215abfb",
+      "revision": "215abfb217dbac7d5f1273282331b9b1866c0479",
+      "scopes": ["manipulation"],
+      "browse_url_template": "https://github.com/Physical-Intelligence/openpi/blob/{revision}/{path}",
+      "coverage": "Selected source files for detector/codemod static validation; no runtime or model validation"
+    }
+  ]
+}

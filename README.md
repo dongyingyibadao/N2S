@@ -17,6 +17,8 @@ N2S 用案例化证据记录模型从 NVIDIA/CUDA 软件栈迁移到昇腾/NPU �
 `upstreams/` 接入了固定版本的昇腾官方具身智能 recipe，作为环境配置、排障和探索参考。运行
 `tooling/n2s-knowledge refresh-if-due` 可按 UTC 日期至多检查一次更新；`search`、`show` 和 `diff`
 提供带 source、revision、路径与信任状态的访问。详见 [upstreams/README.md](upstreams/README.md)。
+Agent 使用前应按 [外部知识流程](upstreams/AGENT_USAGE.md) 同时检查固定官方版本与已保存的
+LeRobot/OpenPI 精选社区源码，并核对各自的验证范围。
 
 官方材料默认仅为 `upstream_documented`，不会自动改变以下规则状态、审批或 `auto_apply`。性能数字
 保留原设备、卡数、batch、模型、数据和测量口径，不作跨硬件归一化。

@@ -2,6 +2,9 @@
 
 This directory contains small, weight-free source snapshots used to test rule detectors and adapters against
 projects other than MINT. A snapshot is evidence about one fixed revision; it is not a vendored dependency.
+For Agent search and exact-version reading, use `tooling/n2s-knowledge search QUERY --include-community`
+and `tooling/n2s-knowledge show community://SOURCE@REVISION/PATH`; see
+[external-knowledge workflow](../../upstreams/AGENT_USAGE.md).
 
 | Project | Revision | Relevant code shapes |
 |---|---|---|
