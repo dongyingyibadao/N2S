@@ -4,12 +4,17 @@ import sys
 
 from .manager import KnowledgeError, KnowledgeManager
 from .paths import default_n2s_root
+from .references import ReferenceError, ReferenceLibrary
+
+
+TASKS = ["environment", "training", "inference", "distributed", "memory", "numerics", "performance", "simulation", "data"]
+STAGES = ["preparation", "troubleshooting", "optimization"]
 
 
 def _parser():
     parser = argparse.ArgumentParser(
         prog="n2s-knowledge",
-        description="Synchronize and query version-pinned official upstream knowledge without executing it",
+        description="Query official snapshots, community references and migration source links without executing them",
     )
     parser.add_argument("--root", default=str(default_n2s_root()), help="path to the N2S repository")
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -29,9 +34,23 @@ def _parser():
     search.add_argument("--scope")
     search.add_argument("--accepted-only", action="store_true")
     search.add_argument("--include-community", action="store_true", help="also search pinned, selected LeRobot/OpenPI source snapshots")
+    search.add_argument("--task", choices=TASKS, help="route reference-bundle results by task; official text remains searchable")
+    search.add_argument("--stage", choices=STAGES, help="route reference-bundle results by migration stage")
     search.add_argument("--json", action="store_true")
 
-    show = subparsers.add_parser("show", help="display an exact official or selected community snapshot file")
+    guide = subparsers.add_parser("guide", help="list relevant reference summaries, source links and limitations")
+    guide.add_argument("--task", choices=TASKS, required=True)
+    guide.add_argument("--stage", choices=STAGES)
+    guide.add_argument("--json", action="store_true")
+
+    bundle = subparsers.add_parser("import-bundle", help="verify and cache a registered reference bundle as read-only data")
+    bundle.add_argument("--source", required=True)
+    bundle.add_argument("--path", required=True, help="extracted directory containing the registered checksum manifest")
+
+    follow = subparsers.add_parser("follow", help="read a cataloged HTTPS link without executing its content")
+    follow.add_argument("url")
+
+    show = subparsers.add_parser("show", help="display an exact official, community or reference-bundle snapshot file")
     show.add_argument("uri")
 
     difference = subparsers.add_parser("diff", help="review upstream commits, paths and affected knowledge")
@@ -68,6 +87,14 @@ def _print_status(report):
         if item["license_warning"]:
             print("  warning: license files changed; automatic snapshot switching is blocked")
         print(f"  usage: {item['usage_warning']}")
+    _print_reference_status(report)
+
+
+def _print_reference_status(report):
+    for item in report.get("reference_bundles", []):
+        print(f"reference bundle {item['source']}: {item['status']} (captured {item['captured_at']})")
+        if item["status"] != "available":
+            print(f"  warning: {item['error'] or 'full text not imported on this host; summaries and links are available'}")
 
 
 def _print_search(report):
@@ -86,6 +113,16 @@ def _print_search(report):
         print(f"  remote: {item['remote_url']}")
         if item["excerpt"]:
             print(f"  {item['excerpt']}")
+        for key in ("evidence", "conditions", "limitations"):
+            if item.get(key):
+                print(f"  {key}: {item[key]}")
+        for link in item.get("links", []):
+            print(f"  source link: {link['url']} ({link['content_status']})")
+            if link.get("snapshot_uri"):
+                print(f"  pinned snapshot: {link['snapshot_uri']}")
+    if report.get("truncated"):
+        print(f"Showing {len(report['results'])} of {report['total_results']} matches; refine the query or use guide for reference routes.")
+    _print_reference_status(report)
 
 
 def main(argv=None):
@@ -108,17 +145,37 @@ def main(argv=None):
             return 0
         if args.command == "search":
             report = manager.search(args.query, scope=args.scope, accepted_only=args.accepted_only,
-                                    include_community=args.include_community)
+                                    include_community=args.include_community, task=args.task, stage=args.stage)
             if args.json:
                 print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))
             else:
                 _print_search(report)
             return 0
+        if args.command == "guide":
+            report = ReferenceLibrary(args.root).guide(args.task, args.stage)
+            if args.json:
+                print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))
+            else:
+                _print_search(report)
+            return 0
+        if args.command == "import-bundle":
+            report = ReferenceLibrary(args.root).import_bundle(args.source, args.path)
+            print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))
+            return 0
+        if args.command == "follow":
+            report = ReferenceLibrary(args.root).follow(args.url)
+            print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))
+            return 0 if report["status"] == "retrieved" else 3
         if args.command == "show":
-            result = manager.show_community(args.uri) if args.uri.startswith("community://") else manager.show(args.uri)
+            if args.uri.startswith("reference://"):
+                result = ReferenceLibrary(args.root).show(args.uri)
+            else:
+                result = manager.show_community(args.uri) if args.uri.startswith("community://") else manager.show(args.uri)
             if result["content"] is None:
                 print("snapshot file is not available locally", file=sys.stderr)
-                print(f"fixed remote: {result['remote_url']}", file=sys.stderr)
+                print(f"source link: {result['remote_url']}", file=sys.stderr)
+                if args.uri.startswith("reference://"):
+                    print("import the registered bundle for this exact offline version; its web source may require login", file=sys.stderr)
                 return 3
             sys.stdout.buffer.write(result["content"])
             return 0
@@ -135,7 +192,7 @@ def main(argv=None):
         if args.command == "accept":
             print(json.dumps(manager.accept(args.source, args.revision, args.review), ensure_ascii=False, sort_keys=True))
             return 0
-    except KnowledgeError as error:
+    except (KnowledgeError, ReferenceError, OSError) as error:
         print(f"error: {error}", file=sys.stderr)
         return 2
     return 2

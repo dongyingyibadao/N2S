@@ -18,7 +18,14 @@ N2S 用案例化证据记录模型从 NVIDIA/CUDA 软件栈迁移到昇腾/NPU �
 `tooling/n2s-knowledge refresh-if-due` 可按 UTC 日期至多检查一次更新；`search`、`show` 和 `diff`
 提供带 source、revision、路径与信任状态的访问。详见 [upstreams/README.md](upstreams/README.md)。
 Agent 使用前应按 [外部知识流程](upstreams/AGENT_USAGE.md) 同时检查固定官方版本与已保存的
-LeRobot/OpenPI 精选社区源码，并核对各自的验证范围。
+LeRobot/OpenPI 精选社区源码，以及 [昇腾参考资料任务目录](upstreams/REFERENCE_BUNDLES.md)，
+并核对各自的验证范围。资料包整理为 27 条来源/错误/优化入口，原文可校验导入只读本地缓存；
+另一台机器可直接使用摘要和链接，需要离线原文时单独导入授权资料包。
+
+Agent 应在迁移前按任务阅读、遇到问题重新深入链接查证、功能和精度通过后再查昇腾算子与
+性能优化。每次错误、数值问题、来源对照和修改及时追加 [case 反馈](cases/work-items/FEEDBACK_GUIDE.md)，
+结束前运行 `tooling/n2s-experiments workflow-check --case CASE_ID`，明确功能/精度/优化的缺口。
+失败和阻塞也能发布待验证工单，无需等待成功；维护 N2S 本身不授权模型实验。
 
 官方材料默认仅为 `upstream_documented`，不会自动改变以下规则状态、审批或 `auto_apply`。性能数字
 保留原设备、卡数、batch、模型、数据和测量口径，不作跨硬件归一化。

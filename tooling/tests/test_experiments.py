@@ -1,4 +1,5 @@
 import fcntl
+import io
 import json
 import os
 import shutil
@@ -6,8 +7,12 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from contextlib import redirect_stdout
 from pathlib import Path
 
+import jsonschema
+
+from n2s_experiments.cli import main as experiments_main
 from n2s_experiments.manager import ExperimentError, Experiments, ROOT, digest, file_hash, read_json
 
 
@@ -355,6 +360,135 @@ class ExperimentTests(unittest.TestCase):
         write_json(path, value)
         with self.assertRaisesRegex(ExperimentError, "provenance"):
             self.manager.validate()
+
+    def feedback_event(self, kind, stage="troubleshooting", **fields):
+        path = self.base / "feedback.json"
+        write_json(path, {"kind": kind, "stage": stage, "summary": "Fixture observation", **fields})
+        return self.manager.feedback("mint-trial", path, True)
+
+    def lookup_event(self, stage, resolves=None):
+        return self.feedback_event("lookup", stage, queries=["fusion RMSNorm"], resolves=resolves or [], source_checks=[{
+            "uri": "upstream://fixture@" + "a" * 40 + "/README.md", "url": "https://example.invalid/README.md",
+            "accessed_at": "2026-10-12", "status": "read", "trust": "accepted_upstream_documented",
+            "claim": "Fixture fused path", "applicability": "related", "comparison": "Actual target requires a measured A/B"}])
+
+    def validation_event(self, stage="optimization", **changes):
+        evidence = self.root / "cases/work-items/mint-trial/measurements.md"
+        evidence.write_text("Fixture official weights, fixed input, finite output, scoped error and same-device A/B")
+        validation = {"functional": "passed", "official_weights": True, "actual_backend": "npu", "finite_outputs": True,
+                      "accuracy": "passed", "accuracy_protocol": "Same official weights and input; agreed error <= 0.01",
+                      "optimization": "measured_improvement", "performance": {"metric": "step_seconds", "direction": "lower",
+                      "baseline": 2.0, "modified": 1.0, "same_device": True, "protocol": "Fixed batch, dtype, 5 warmup + 20 timed steps"}}
+        validation.update(changes)
+        return self.feedback_event("validation", stage, environment="fixture NPU only", validation=validation,
+                                   evidence_refs=["cases/work-items/mint-trial/measurements.md"])
+
+    def functional_event(self):
+        return self.validation_event(stage="troubleshooting", optimization="pending",
+                                     performance={"metric": "step_seconds", "direction": "lower", "baseline": None,
+                                                  "modified": None, "same_device": False, "protocol": "pending: optimization A/B"})
+
+    def test_feedback_records_each_error_and_three_stage_closure_without_device_use(self):
+        self.manager.probe = lambda python: self.fail("Feedback must not discover or use hardware")
+        self.lookup_event("preparation")
+        failure = self.feedback_event("numerical_issue", environment="fixture NPU BF16", error={
+            "type": "AccuracyMismatch", "message": "Error exceeds scoped tolerance", "expected": "<=0.01", "observed": "0.2"})
+        self.assertIn(failure["id"], self.manager.workflow_check("mint-trial")["unresolved_events"])
+        self.lookup_event("troubleshooting", [failure["id"]])
+        self.functional_event()
+        self.lookup_event("optimization")
+        self.validation_event()
+        self.feedback_event("resolution", resolves=[failure["id"]],
+                            evidence_refs=["cases/work-items/mint-trial/measurements.md"])
+        report = self.manager.workflow_check("mint-trial")
+        self.assertTrue(report["completion_ready"])
+        self.assertEqual("pending_validation", report["generalization"])
+        issue_path = self.root / "cases/work-items/mint-trial/issue.json"
+        issue = read_json(issue_path)
+        issue["state"] = "resolved"
+        write_json(issue_path, issue)
+        self.assertEqual("valid", self.manager.validate()["status"])
+        self.assertEqual(self.before, self.manager.protected())
+
+    def test_missing_accuracy_cross_device_timing_and_false_gain_do_not_complete_case(self):
+        self.lookup_event("preparation")
+        self.functional_event()
+        self.lookup_event("optimization")
+        self.validation_event(accuracy="pending")
+        self.assertIn("agreed_accuracy_comparison_not_verified", self.manager.workflow_check("mint-trial")["gaps"])
+        performance = {"metric": "step_seconds", "direction": "lower", "baseline": 1.0, "modified": 2.0,
+                       "same_device": False, "protocol": "GPU vs NPU"}
+        self.validation_event(performance=performance)
+        self.assertIn("same_device_optimization_gain_not_verified", self.manager.workflow_check("mint-trial")["gaps"])
+        issue_path = self.root / "cases/work-items/mint-trial/issue.json"
+        issue = read_json(issue_path)
+        issue["state"] = "resolved"
+        write_json(issue_path, issue)
+        with self.assertRaisesRegex(ExperimentError, "incomplete migration workflow"):
+            self.manager.validate()
+
+    def test_open_incomplete_cases_publish_and_feedback_history_is_immutable(self):
+        self.lookup_event("preparation")
+        record = self.feedback_event("failure", environment="fixture missing dependency", error={
+            "type": "ModuleNotFoundError", "message": "Missing package", "expected": "Load model", "observed": "Import failure"})
+        command("git", "add", "cases/work-items/mint-trial", cwd=self.root)
+        self.manager.publish_check("mint-trial")
+        self.assertFalse(self.manager.workflow_check("mint-trial")["completion_ready"])
+        command("git", "commit", "-m", "fixture feedback", cwd=self.root)
+        event = read_json(record["event"])
+        event["summary"] = "rewritten"
+        write_json(Path(record["event"]), event)
+        command("git", "add", "cases/work-items/mint-trial", cwd=self.root)
+        with self.assertRaisesRegex(ExperimentError, "immutable"):
+            self.manager.publish_check("mint-trial")
+
+    def test_feedback_requires_sanitization_pinned_citations_and_unchanged_evidence(self):
+        path = self.base / "feedback.json"
+        write_json(path, {"kind": "change", "stage": "troubleshooting", "summary": "Change", "rollback": "Restore recorded variant"})
+        with self.assertRaisesRegex(ExperimentError, "confirm-sanitized"):
+            self.manager.feedback("mint-trial", path, False)
+        write_json(path, {"kind": "lookup", "stage": "preparation", "summary": "Unpinned citation", "queries": ["fusion"],
+                          "source_checks": [{"uri": "upstream://fixture@master/README.md", "url": None,
+                              "accessed_at": "2026-10-12", "status": "read", "trust": "accepted_upstream_documented",
+                              "claim": "Fusion", "applicability": "related", "comparison": "Version not fixed"}]})
+        with self.assertRaises(jsonschema.ValidationError):
+            self.manager.feedback("mint-trial", path, True)
+        self.lookup_event("preparation")
+        self.functional_event()
+        self.lookup_event("optimization")
+        self.validation_event()
+        evidence = self.root / "cases/work-items/mint-trial/measurements.md"
+        evidence.write_text("tampered measurements")
+        with self.assertRaisesRegex(ExperimentError, "checksum mismatch"):
+            self.manager.workflow_check("mint-trial")
+
+    def test_optimization_requires_prior_functional_accuracy_and_final_revalidation(self):
+        self.lookup_event("preparation")
+        self.lookup_event("optimization")
+        self.validation_event()
+        gaps = self.manager.workflow_check("mint-trial")["gaps"]
+        self.assertIn("functional_and_accuracy_check_must_precede_optimization_lookup", gaps)
+        self.lookup_event("optimization")
+        self.assertIn("optimization_lookup_must_precede_final_validation", self.manager.workflow_check("mint-trial")["gaps"])
+        self.validation_event()
+        self.assertTrue(self.manager.workflow_check("mint-trial")["completion_ready"])
+        self.feedback_event("change", "optimization", rollback="Restore last reviewed variant")
+        self.assertIn("work_after_last_validation_needs_revalidation", self.manager.workflow_check("mint-trial")["gaps"])
+
+    def test_workflow_check_exit_code_distinguishes_missing_evidence_from_ready_for_review(self):
+        argv = ["--root", str(self.root), "workflow-check", "--case", "mint-trial"]
+        output = io.StringIO()
+        with redirect_stdout(output):
+            self.assertEqual(1, experiments_main(argv))
+        self.assertFalse(json.loads(output.getvalue())["completion_ready"])
+        self.lookup_event("preparation")
+        self.functional_event()
+        self.lookup_event("optimization")
+        self.validation_event()
+        output = io.StringIO()
+        with redirect_stdout(output):
+            self.assertEqual(0, experiments_main(argv))
+        self.assertEqual("ready_for_review", json.loads(output.getvalue())["status"])
 
 
 if __name__ == "__main__":

@@ -203,6 +203,44 @@ class KnowledgeSyncTests(unittest.TestCase):
         with self.assertRaisesRegex(Exception, "checksum mismatch"):
             manager.search("community-needle", include_community=True)
 
+    def test_combined_search_keeps_git_and_bundle_revisions_and_trust_separate(self):
+        self.make_community_snapshot()
+        upstreams = self.fixture.root / "upstreams"
+        catalog_path = upstreams / "catalogs/fixture.json"
+        catalog_path.parent.mkdir()
+        catalog_path.write_text(json.dumps({"schema_version": "1.0.0", "items": [{
+            "id": "R01", "source": "fixture-reference", "title": "needle training reference",
+            "summary": "needle training reference", "tasks": ["training"], "stages": ["optimization"],
+            "scopes": ["general"], "keywords": ["needle"], "evidence": "reported_smoke",
+            "conditions": "Mock inputs only", "limitations": "No official-weight accuracy",
+            "references": [{"path": "README.md"}], "links": [{"url": "https://example.invalid/docs",
+                "label": "Original", "authority": "community", "content_status": "partial", "revision": None}]
+        }]}), encoding="utf-8")
+        revision = "b" * 64
+        (upstreams / "reference-bundles.json").write_text(json.dumps({"schema_version": "1.0.0", "bundles": [{
+            "id": "fixture-reference", "revision": revision, "captured_at": "2026-10-05",
+            "origin_url": "https://example.invalid/docs", "catalog": "upstreams/catalogs/fixture.json",
+            "manifest_path": "manifest.json", "extra_files": [], "coverage": "Bundle fixture",
+            "usage_restrictions": "Internal reference only", "missing_sources": []
+        }]}), encoding="utf-8")
+        manager = self.fixture.manager()
+        manager.refresh()
+        report = manager.search("needle", scope="manipulation", accepted_only=True, include_community=True,
+                                task="training", stage="optimization")
+        self.assertEqual({"official_fulltext", "community_source_snapshot", "reference_catalog"},
+                         {item["result_kind"] for item in report["results"]})
+        for item in report["results"]:
+            for field in ("source", "revision", "path", "trust", "uri", "local_path", "remote_url"):
+                self.assertIn(field, item)
+            if item["source"] == "fixture-reference":
+                self.assertEqual(revision, item["revision"])
+                self.assertEqual("community_reference_bundle", item["trust"])
+                self.assertIsNone(item["local_path"])
+            else:
+                self.assertEqual(self.fixture.accepted, item["revision"])
+        self.assertEqual("not_imported", report["reference_bundles"][0]["status"])
+        self.assertFalse(report["truncated"])
+
     def test_initial_clone_snapshot_hash_index_and_search_contract(self):
         manager = self.fixture.manager()
         rules_before = (self.fixture.root / "rules" / "registry.json").read_bytes()

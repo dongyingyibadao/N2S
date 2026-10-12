@@ -1,0 +1,24 @@
+{
+  "stage": "troubleshooting",
+  "kind": "validation",
+  "summary": "REPLACE: 功能、精度、性能分别达到的层级和待办",
+  "environment": "REPLACE: 实际硬件和软件版本",
+  "evidence_refs": ["cases/work-items/CASE_ID/measurement-01.md"],
+  "validation": {
+    "functional": "pending",
+    "official_weights": false,
+    "actual_backend": "npu",
+    "finite_outputs": false,
+    "accuracy": "pending",
+    "accuracy_protocol": "pending: 固定权重和输入、参考结果、指标与事先认可的容差",
+    "optimization": "pending",
+    "performance": {
+      "metric": "step_seconds",
+      "direction": "lower",
+      "baseline": null,
+      "modified": null,
+      "same_device": false,
+      "protocol": "pending: 固定同设备/卡数、版本、输入/权重、dtype/batch，记录同步、预热、重复测量"
+    }
+  }
+}

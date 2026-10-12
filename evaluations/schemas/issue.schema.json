@@ -10,6 +10,7 @@
     "created_at": {"type": "string", "minLength": 1},
     "state": {"enum": ["open", "resolved", "withdrawn"]},
     "generalization": {"const": "pending_validation"},
+    "maintenance_workflow": {"const": "three_stage_v1"},
     "source": {
       "type": "object", "additionalProperties": false,
       "required": ["url", "baseline_revision"],

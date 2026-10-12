@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0.0",
+  "bundles": [
+    {
+      "id": "ascend-reference-20261005",
+      "revision": "b83a696461745e01f8e44e8a2e672db9fdadca7d66b6e19d7eaaaac53b5081a8",
+      "captured_at": "2026-10-05",
+      "origin_url": "https://sii-czxy.feishu.cn/docx/NwxrdHTD1ohfvSxm732cT2mUngb",
+      "catalog": "upstreams/catalogs/ascend-reference-20261005.json",
+      "manifest_path": "核验/文件清单.json",
+      "extra_files": [],
+      "coverage": "User-provided reference bundle captured 2026-10-05, main document revision 7; 164 main messages, 54 thread replies, 15 images and three original attachments. Git material is links only. Static bundle integrity is not runtime validation.",
+      "usage_restrictions": "Internal reference. Retain original provenance and third-party notices. Full documents, chats, screenshots, scripts, private resource locations and external Git bodies are cached locally and must not be republished as N2S-owned content. Only N2S-authored summaries and reviewed source metadata are tracked.",
+      "missing_sources": [
+        "pi05/docs/BATCH_SIZE_20260909.md 正文未取得",
+        "两条已删除消息正文不可恢复",
+        "部分 Git 子目录仅取得静态页面或概述；需要读取固定版本正文",
+        "npu-smi 动态页面正文未取得，命令来自截图",
+        "DA3/Conda/RoboTwin/fastwam 等历史问题未闭环"
+      ]
+    }
+  ]
+}

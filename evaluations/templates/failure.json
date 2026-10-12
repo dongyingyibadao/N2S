@@ -1,0 +1,13 @@
+{
+  "stage": "troubleshooting",
+  "kind": "failure",
+  "summary": "REPLACE: 首个因果异常与当前阻塞",
+  "environment": "REPLACE: 实际设备、卡数、Python、驱动、CANN、torch/torch_npu、框架版本",
+  "error": {
+    "type": "REPLACE: 实际异常类型或数值问题类型",
+    "message": "REPLACE: 脱敏后的原错误信息",
+    "expected": "REPLACE: 固定输入与期望行为/数值",
+    "observed": "REPLACE: 实际失败阶段与测量",
+    "stack_excerpt": "REPLACE: 脱敏关键堆栈、目标路径和调用点"
+  }
+}

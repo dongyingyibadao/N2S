@@ -7,7 +7,7 @@ N2S. They are held under `upstreams/_cache/` as a local Git mirror and immutable
 Agent migration workflow, including selected LeRobot/OpenPI source snapshots and trust boundaries:
 [AGENT_USAGE.md](AGENT_USAGE.md).
 
-The only registered source is `cann-recipes-embodied-ai`, branch `master`. The initial accepted revision is
+The only registered official Git mirror is `cann-recipes-embodied-ai`, branch `master`. The initial accepted revision is
 `45d167135c81d97573bfbe0e564bb4a1d9642514`. The source repository uses Apache-2.0 at its root, includes
 separate model and third-party notices, and its disclaimer limits examples to reference and non-commercial
 use. N2S therefore manages the cache as internal non-commercial reference material and does not republish
@@ -27,6 +27,9 @@ upstream bodies or patches as N2S-owned content.
 - `_cache/`: ignored mirror, snapshots, live index, current symlink, lock, and daily sync state.
 - `community-snapshots.json`: registry for the existing, selected LeRobot/OpenPI source snapshots under
   `cases/validation-projects/`. These are not official Git mirrors or complete community repositories.
+- `reference-bundles.json`, `catalogs/*.json`: pinned user-provided reference bundles and N2S-authored task,
+  error and optimization routes. Original documents, discussions, screenshots and attachments are imported
+  as verified, read-only data under `_cache/reference-bundles/`. See [REFERENCE_BUNDLES.md](REFERENCE_BUNDLES.md).
 
 ## Commands
 
@@ -37,6 +40,10 @@ tooling/n2s-knowledge status --json
 tooling/n2s-knowledge search "fusion attention" --scope manipulation
 tooling/n2s-knowledge search "cache" --scope manipulation --accepted-only --include-community --json
 tooling/n2s-knowledge search "CANN 8.3" --accepted-only --json
+tooling/n2s-knowledge guide --task training --stage preparation --json
+tooling/n2s-knowledge guide --task numerics --stage troubleshooting --json
+tooling/n2s-knowledge guide --task performance --stage optimization --json
+tooling/n2s-knowledge import-bundle --source ascend-reference-20261005 --path /path/to/昇腾卡参考资料
 tooling/n2s-knowledge show upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi0/train/README.md
 tooling/n2s-knowledge show community://openpi@215abfb217dbac7d5f1273282331b9b1866c0479/src/openpi/models_pytorch/pi0_pytorch.py
 tooling/n2s-knowledge diff --from accepted --to live
@@ -58,6 +65,13 @@ With `--include-community`, search also checks the selected local LeRobot/OpenPI
 manifests and labels them `community_source_snapshot_static_only`. `--accepted-only` pins official results
 to the accepted revision; community files remain pinned to their own recorded commits. Static adapter checks
 are recorded separately in `cases/validation-projects/reports/static_validation.json`.
+
+Reference summaries and cataloged source links are always searchable. Imported originals are also searched
+with manifest SHA256 revisions and `community_reference_bundle` trust, independently of official acceptance.
+`--task` and `--stage` route reference results; they do not suppress matching official content. `follow URL`
+reads cataloged HTTPS text with response SHA256/time and `retrieved_unreviewed` trust; it does not execute,
+mirror or claim runtime verification. Other hosts use the tracked summaries/links, and import the authorized
+bundle separately when full offline originals are needed. Missing bodies and access failures stay explicit.
 
 ## Acceptance
 

@@ -45,6 +45,12 @@ def parser():
     for flag in ("run", "reviewer", "summary"):
         review.add_argument("--" + flag, required=True)
     review.add_argument("--conclusion", required=True, choices=["meets_task_acceptance", "does_not_meet", "inconclusive"])
+    feedback = subs.add_parser("feedback", help="append an immediate source comparison, error or numerical observation; no probe/execution")
+    feedback.add_argument("--case", required=True)
+    feedback.add_argument("--file", required=True, help="sanitized JSON matching feedback.schema.json (generated fields omitted)")
+    feedback.add_argument("--confirm-sanitized", action="store_true")
+    workflow = subs.add_parser("workflow-check", help="check three-stage lookup and migration/optimization completion evidence")
+    workflow.add_argument("--case", required=True)
     validate = subs.add_parser("validate")
     validate.add_argument("--case")
     publish = subs.add_parser("publish-check", help="validate case-only staged paths; no commit or push")
@@ -74,10 +80,16 @@ def main(argv=None):
             value = manager.review(args.run, args.reviewer, args.conclusion, args.summary)
         elif args.command == "validate":
             value = manager.validate(args.case)
+        elif args.command == "feedback":
+            value = manager.feedback(args.case, args.file, args.confirm_sanitized)
+        elif args.command == "workflow-check":
+            value = manager.workflow_check(args.case)
         else:
             value = manager.publish_check(args.case)
         print(json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True))
         if args.command == "run" and value["status"] != "command_succeeded":
+            return 1
+        if args.command == "workflow-check" and not value["completion_ready"]:
             return 1
         return 0
     except (ExperimentError, OSError, ValueError, subprocess.SubprocessError, jsonschema.ValidationError) as error:

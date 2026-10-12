@@ -1,4 +1,4 @@
-# n2s-rules 工具
+# N2S 维护工具
 
 该工具把规则应用设计成 fail-closed 事务。依赖固定为 LibCST 1.9.0、PyYAML 6.0.3 和
 jsonschema 4.26.0；可以直接使用仓库入口，也可以安装 `N2S/tooling`。
@@ -47,13 +47,21 @@ Python 文件不 import N2S。rollback 会先确认文件仍等于本次改写�
 N2S/tooling/n2s-knowledge refresh-if-due
 N2S/tooling/n2s-knowledge status
 N2S/tooling/n2s-knowledge search "torch_npu" --scope manipulation
+N2S/tooling/n2s-knowledge guide --task training --stage preparation --json
+N2S/tooling/n2s-knowledge search "RMSNorm" --stage optimization --accepted-only --include-community --json
 ```
 
 同步、审阅、许可限制和接纳流程见 [upstreams/README.md](../upstreams/README.md)。
+资料包任务目录默认参与搜索；`guide` 按任务/阶段给出原文入口和链接，`show` 读固定本地文件，
+`follow URL` 只读已登记 HTTPS 正文并返回时间与哈希。另一台机器用 `import-bundle --source ID
+--path DIRECTORY` 导入同版本原资料；原文保持 ignored。详见
+[REFERENCE_BUNDLES.md](../upstreams/REFERENCE_BUNDLES.md)。
 
 ## Case 实验工具
 
 `tooling/n2s-experiments` 提供 `probe`、`new`、`list`、`plan`、`run`、`record`、`attach`、
-`review`、`validate` 和 `publish-check`，所有结果为 JSON。它不修改或晋级现有规则，
+`review`、`feedback`、`workflow-check`、`validate` 和 `publish-check`，所有结果为 JSON。它不修改或晋级现有规则，
 不执行 commit/push，不安装依赖，也不自动开始评测。详见
 [evaluations/README.md](../evaluations/README.md)。
+`feedback` 在迁移各节点追加脱敏事件，不探测硬件；`workflow-check` 列出三阶段查阅与功能、
+精度、优化证据的缺口。使用 [即时反馈指南](../cases/work-items/FEEDBACK_GUIDE.md)，不等成功再录入。

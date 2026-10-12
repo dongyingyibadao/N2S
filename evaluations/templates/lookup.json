@@ -1,0 +1,19 @@
+{
+  "stage": "preparation",
+  "kind": "lookup",
+  "summary": "REPLACE: 任务、采用或拒绝的依据及剩余差距",
+  "queries": ["REPLACE: 实际执行的查询与范围"],
+  "source_checks": [
+    {
+      "uri": "reference://SOURCE@MANIFEST_SHA256/PATH",
+      "url": null,
+      "accessed_at": "REPLACE: 实际读取的 UTC 时间",
+      "status": "partial",
+      "trust": "community_reference_bundle",
+      "claim": "REPLACE: 阅读的实际正文声明及验证范围",
+      "applicability": "unknown",
+      "comparison": "REPLACE: 模型、版本、设备、模式、输入与实际执行路径的差异"
+    }
+  ],
+  "resolves": []
+}

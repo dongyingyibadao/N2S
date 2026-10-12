@@ -1,0 +1,1363 @@
+{
+  "schema_version": "1.0.0",
+  "items": [
+    {
+      "id": "R01",
+      "source": "ascend-reference-20261005",
+      "title": "学院部署配方与环境选择",
+      "summary": "按模型系列、量化、输入输出长度、并发、DP/TP 和镜像选择完整配方；旧统一镜像与独立推理镜像的 Conda 初始化不同。",
+      "tasks": [
+        "environment",
+        "inference",
+        "distributed",
+        "performance"
+      ],
+      "stages": [
+        "preparation",
+        "troubleshooting",
+        "optimization"
+      ],
+      "keywords": [
+        "镜像",
+        "CANN",
+        "vLLM",
+        "SGLang",
+        "GLM",
+        "Kimi",
+        "MiniMax",
+        "DeepSeek",
+        "Nex",
+        "Qwen",
+        "Gemma4",
+        "GPT-OSS",
+        "MiMo"
+      ],
+      "evidence": "documented",
+      "conditions": "2026-10-05 保存的学院文档；统一镜像 <v4.2 使用 ascend-infer，≥v4.2 与独立镜像按正文核对。",
+      "limitations": "支持人员报告热门模型在学院环境验证；不证明文档所有配方、当前版本或用户负载均成功。模型标题与命令可能不一致，按原文确认。",
+      "references": [
+        {
+          "path": "文档/学院版模型部署文档.md"
+        },
+        {
+          "path": "文档/学院版模型部署文档_可见评论.txt"
+        },
+        {
+          "path": "群聊记录/群历史.md"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://my.feishu.cn/wiki/Xd17wxH52ierSfknRIXcQWionuf",
+          "label": "学院部署原文",
+          "authority": "internal_support",
+          "content_status": "requires_login",
+          "revision": null
+        }
+      ],
+      "scopes": [
+        "general"
+      ]
+    },
+    {
+      "id": "R02",
+      "source": "ascend-reference-20261005",
+      "title": "ascend-docker 镜像的软件栈",
+      "summary": "通过镜像仓库了解框架组成、构建和质量看护，选择与训练或推理任务匹配的版本。",
+      "tasks": [
+        "environment",
+        "training",
+        "inference"
+      ],
+      "stages": [
+        "preparation",
+        "troubleshooting"
+      ],
+      "keywords": [
+        "ascend-a2-ubuntu",
+        "ascend-910b-ubuntu",
+        "Conda",
+        "镜像",
+        "驱动"
+      ],
+      "evidence": "documented",
+      "conditions": "资料包记录读取了项目概述；学院历史推荐 v4.2 与部分配方 3.5.8。",
+      "limitations": "历史镜像名称不代表当前最新版；项目概述没有覆盖所有模型或 CANN/驱动组合。",
+      "references": [
+        {
+          "path": "昇腾卡使用优化与Debug参考手册.md"
+        },
+        {
+          "path": "文档/学院版模型部署文档.md"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://gitcode.com/Ascend-SACT/ascend-docker",
+          "label": "ascend-docker",
+          "authority": "official",
+          "content_status": "bundle_reports_read",
+          "revision": null
+        }
+      ],
+      "scopes": [
+        "general"
+      ]
+    },
+    {
+      "id": "R03",
+      "source": "ascend-reference-20261005",
+      "title": "vLLM Ascend 版本、修复和配置迁移",
+      "summary": "对照插件与 vLLM、CANN、PyTorch、torch_npu 的组合，定位模型支持、算子与数值修复及被移除的优化开关。",
+      "tasks": [
+        "environment",
+        "inference",
+        "numerics",
+        "performance"
+      ],
+      "stages": [
+        "preparation",
+        "troubleshooting",
+        "optimization"
+      ],
+      "keywords": [
+        "vllm-ascend",
+        "release notes",
+        "精度",
+        "quantization",
+        "graph",
+        "MTP",
+        "FlashComm"
+      ],
+      "evidence": "documented",
+      "conditions": "完整文字快照包含多个发布版本；群分享锚点为 v0.20.2rc1，快照也包含 v0.23.0 等版本。",
+      "limitations": "latest 文档是可变入口；不能跨版本照搬开关或把推理优化当作 PyTorch 训练实现。",
+      "references": [
+        {
+          "path": "文档/vLLM Ascend发布说明_读取快照.txt"
+        },
+        {
+          "path": "昇腾卡使用优化与Debug参考手册.md"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://docs.vllm.ai/projects/vllm-ascend-cn/zh-cn/latest/user_guide/release_notes.html#v0-20-2rc1-2026-06-03",
+          "label": "vLLM Ascend 发布说明",
+          "authority": "community",
+          "content_status": "bundle_reports_read",
+          "revision": null
+        }
+      ],
+      "scopes": [
+        "general"
+      ]
+    },
+    {
+      "id": "R04",
+      "source": "ascend-reference-20261005",
+      "title": "ascend-test 模型适配与测试入口",
+      "summary": "学院配方无对应模型时，到 ascend-test 找同模型或近似架构的部署及部分训练用例，核对其版本、补丁和参数。",
+      "tasks": [
+        "environment",
+        "training",
+        "inference"
+      ],
+      "stages": [
+        "preparation",
+        "troubleshooting"
+      ],
+      "keywords": [
+        "ascend-test",
+        "适配用例",
+        "模型支持",
+        "测试"
+      ],
+      "evidence": "documented",
+      "conditions": "资料包只读取项目概述，未逐个运行；仓库 30+ 场景和群内 100+ 模型统计口径不同。",
+      "limitations": "有些适配 PR 尚未合入主版本；相近架构仅提供线索，不能作为目标项目已跑通证据。",
+      "references": [
+        {
+          "path": "昇腾卡使用优化与Debug参考手册.md"
+        },
+        {
+          "path": "群聊记录/群历史.md"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://gitcode.com/Ascend-SACT/ascend-test",
+          "label": "ascend-test",
+          "authority": "official",
+          "content_status": "bundle_reports_read",
+          "revision": null
+        }
+      ],
+      "scopes": [
+        "general"
+      ]
+    },
+    {
+      "id": "R05",
+      "source": "ascend-reference-20261005",
+      "title": "MindSpeed-MM 多模态训练与融合算子",
+      "summary": "训练能启动但低吞吐、低占用时，按模型查多模态训练框架的 FSDP2、融合 attention/RMSNorm/MLP 及分布式配置。",
+      "tasks": [
+        "training",
+        "distributed",
+        "performance"
+      ],
+      "stages": [
+        "preparation",
+        "troubleshooting",
+        "optimization"
+      ],
+      "keywords": [
+        "MindSpeed-MM",
+        "VLM",
+        "FSDP2",
+        "融合算子",
+        "低利用率",
+        "低吞吐",
+        "attention",
+        "RMSNorm",
+        "MLP"
+      ],
+      "evidence": "documented",
+      "conditions": "资料包已读取项目概述，支持矩阵来自 2026-09-07 截图；部分条目标为 beta。",
+      "limitations": "支持截图是当时状态，须读取具体样例与实现；不能推定所有模型和特性稳定或有性能增益。",
+      "references": [
+        {
+          "path": "昇腾卡使用优化与Debug参考手册.md"
+        },
+        {
+          "path": "群聊记录/群历史.md"
+        },
+        {
+          "path": "截图/message-146.png"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://gitcode.com/Ascend/MindSpeed-MM",
+          "label": "MindSpeed-MM",
+          "authority": "official",
+          "content_status": "bundle_reports_read",
+          "revision": null
+        }
+      ],
+      "scopes": [
+        "general"
+      ]
+    },
+    {
+      "id": "R06",
+      "source": "ascend-reference-20261005",
+      "title": "Qwen3.5 训练样例与低吞吐排查",
+      "summary": "按模型大小查 qwen3_5 样例的算子扩展、训练脚本和 YAML，核对融合、精度、数据与分布式设置。",
+      "tasks": [
+        "training",
+        "performance",
+        "distributed"
+      ],
+      "stages": [
+        "preparation",
+        "troubleshooting",
+        "optimization"
+      ],
+      "keywords": [
+        "qwen3_5",
+        "Qwen3.5",
+        "0.8B",
+        "4B",
+        "9B",
+        "27B",
+        "install_extensions",
+        "FSDP2",
+        "利用率"
+      ],
+      "evidence": "documented",
+      "conditions": "2026-09-07 回复明确 4B、9B、27B 可参考；截图列出更多脚本。",
+      "limitations": "资料包未取得目录完整 README；0.8B 低性能没有最终闭环，不能编造安装命令或声称已解决。",
+      "references": [
+        {
+          "path": "昇腾卡使用优化与Debug参考手册.md"
+        },
+        {
+          "path": "群聊记录/群历史.md"
+        },
+        {
+          "path": "截图/message-148.png"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://gitcode.com/Ascend/MindSpeed-MM/tree/master/examples/qwen3_5",
+          "label": "Qwen3.5 训练样例",
+          "authority": "official",
+          "content_status": "partial",
+          "revision": null
+        }
+      ],
+      "scopes": [
+        "general"
+      ]
+    },
+    {
+      "id": "R07",
+      "source": "ascend-reference-20261005",
+      "title": "官方具身 recipe 的迁移与优化入口",
+      "summary": "按模型、设备和模式查 PI0、PI0.5、ACT、SmolVLA、OpenVLA 等 recipe，再按融合算子、图模式、并行、量化能力继续核对。",
+      "tasks": [
+        "training",
+        "inference",
+        "performance",
+        "numerics"
+      ],
+      "stages": [
+        "preparation",
+        "troubleshooting",
+        "optimization"
+      ],
+      "keywords": [
+        "PI0",
+        "PI0.5",
+        "pi05",
+        "ACT",
+        "SmolVLA",
+        "OpenVLA",
+        "GR00T",
+        "Spirit",
+        "图模式",
+        "attention",
+        "QKV",
+        "MLP"
+      ],
+      "evidence": "documented",
+      "conditions": "N2S 已有完整官方镜像及固定接纳索引；资料包本身仅保留 Git 链接。",
+      "limitations": "recipe 的原模型实现、设备、输入、权重及版本必须与目标匹配；官方声明与 N2S 复现分开记录。",
+      "references": [
+        {
+          "path": "昇腾卡使用优化与Debug参考手册.md"
+        },
+        {
+          "path": "群聊记录/群历史.md"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://gitcode.com/cann/cann-recipes-embodied-ai",
+          "label": "CANN 具身 recipe",
+          "authority": "official",
+          "content_status": "bundle_reports_read",
+          "revision": null,
+          "snapshot_uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/README.md"
+        }
+      ],
+      "scopes": [
+        "manipulation",
+        "training",
+        "inference"
+      ]
+    },
+    {
+      "id": "R08",
+      "source": "ascend-reference-20261005",
+      "title": "PI0 310P OM 离线推理",
+      "summary": "OM 路线用于静态图部署推理，应核对导出、转换、精度处理与 310P 环境。",
+      "tasks": [
+        "inference",
+        "numerics"
+      ],
+      "stages": [
+        "preparation",
+        "troubleshooting"
+      ],
+      "keywords": [
+        "PI0",
+        "OM",
+        "310P",
+        "离线推理",
+        "模型转换"
+      ],
+      "evidence": "documented",
+      "conditions": "官方总入口及路径将此路线列为 Ascend 310P；固定 recipe 原文可在 N2S 镜像打开。",
+      "limitations": "不能作为 OpenPI 训练或 Atlas A2 训练指导；资料包抓取没有完整子目录正文。",
+      "references": [
+        {
+          "path": "昇腾卡使用优化与Debug参考手册.md"
+        },
+        {
+          "path": "群聊记录/群历史.md"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://gitcode.com/cann/cann-recipes-embodied-ai/blob/master/manipulation/pi0/infer_with_om/README.md",
+          "label": "PI0 OM README",
+          "authority": "official",
+          "content_status": "partial",
+          "revision": null,
+          "snapshot_uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi0/infer_with_om/README.md"
+        }
+      ],
+      "scopes": [
+        "manipulation"
+      ]
+    },
+    {
+      "id": "R09",
+      "source": "ascend-reference-20261005",
+      "title": "PI0 训练 recipe 与原仓实现的区别",
+      "summary": "查官方 pi0/train 的训练、评测和梯度检查点、DDP static_graph 等优化，再核对目标仓库实现。",
+      "tasks": [
+        "training",
+        "distributed",
+        "performance"
+      ],
+      "stages": [
+        "preparation",
+        "troubleshooting",
+        "optimization"
+      ],
+      "keywords": [
+        "PI0",
+        "openpi",
+        "LeRobot",
+        "8卡",
+        "DDP",
+        "static_graph",
+        "gradient checkpointing"
+      ],
+      "evidence": "documented",
+      "conditions": "总 README 记录 Atlas A2、8 卡分布式训练；N2S 接纳 recipe 的实现与 OpenPI 原仓需分别比较。",
+      "limitations": "模型名称相同不保证框架、数据接口、权重与代码路径相同；静态图不能无条件应用到动态图。",
+      "references": [
+        {
+          "path": "昇腾卡使用优化与Debug参考手册.md"
+        },
+        {
+          "path": "群聊记录/群历史.md"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://gitcode.com/cann/cann-recipes-embodied-ai/tree/master/manipulation/pi0/train",
+          "label": "PI0 训练目录",
+          "authority": "official",
+          "content_status": "partial",
+          "revision": null,
+          "snapshot_uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi0/train/README.md"
+        }
+      ],
+      "scopes": [
+        "manipulation",
+        "training"
+      ]
+    },
+    {
+      "id": "R10",
+      "source": "ascend-reference-20261005",
+      "title": "DrivingSDK 具身与驾驶模型样例",
+      "summary": "与 CANN recipe 交叉查 PI-0.5、PI-0、Lingbot-vla、OpenVLA、Cosmos 等适配实现和优化。",
+      "tasks": [
+        "training",
+        "inference",
+        "performance"
+      ],
+      "stages": [
+        "preparation",
+        "troubleshooting",
+        "optimization"
+      ],
+      "keywords": [
+        "DrivingSDK",
+        "Pi-0.5",
+        "PI0.5",
+        "Lingbot-vla",
+        "Cosmos",
+        "OpenVLA"
+      ],
+      "evidence": "documented",
+      "conditions": "资料包读取目录概况并用截图核对模型名称。",
+      "limitations": "具体模型 README 未逐项取得；每个样例单独确认硬件、依赖、版本与许可证。",
+      "references": [
+        {
+          "path": "昇腾卡使用优化与Debug参考手册.md"
+        },
+        {
+          "path": "截图/message-84.png"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://gitcode.com/Ascend/DrivingSDK/tree/master/model_examples",
+          "label": "DrivingSDK model_examples",
+          "authority": "official",
+          "content_status": "partial",
+          "revision": null
+        }
+      ],
+      "scopes": [
+        "manipulation",
+        "training",
+        "inference"
+      ]
+    },
+    {
+      "id": "R11",
+      "source": "ascend-reference-20261005",
+      "title": "Wan2.2 5B 官方训练路线",
+      "summary": "Wan/diffusion 训练先查 MindSpeed-MM Wan2.2 5B；保留 Diffusers + DeepSpeed + Accelerate 原路线时再对照 GLD 经验。",
+      "tasks": [
+        "training",
+        "distributed",
+        "performance"
+      ],
+      "stages": [
+        "preparation",
+        "troubleshooting",
+        "optimization"
+      ],
+      "keywords": [
+        "Wan2.2",
+        "diffusion",
+        "5B",
+        "MindSpeed-MM",
+        "DeepSpeed",
+        "Accelerate"
+      ],
+      "evidence": "documented",
+      "conditions": "2026-08-07 技术支持提供的训练参考目录。",
+      "limitations": "HTTP 200 没有带来完整正文；GLD 的原仓补丁路线与官方框架不同，不能混为同一验证。",
+      "references": [
+        {
+          "path": "昇腾卡使用优化与Debug参考手册.md"
+        },
+        {
+          "path": "群聊记录/话题53_Wan与部署.md"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://gitcode.com/Ascend/MindSpeed-MM/tree/master/examples/wan2.2/5B",
+          "label": "Wan2.2 5B 样例",
+          "authority": "official",
+          "content_status": "partial",
+          "revision": null
+        }
+      ],
+      "scopes": [
+        "training"
+      ]
+    },
+    {
+      "id": "R12",
+      "source": "ascend-reference-20261005",
+      "title": "MOVA 固定 NPU 适配提交",
+      "summary": "按设备发现、HCCL、autocast、显存/RNG API、FSDP LoRA 和 NPU attention/RMSNorm/rotary 查看真实设备分支。",
+      "tasks": [
+        "training",
+        "inference",
+        "distributed",
+        "performance"
+      ],
+      "stages": [
+        "preparation",
+        "troubleshooting",
+        "optimization"
+      ],
+      "keywords": [
+        "MOVA",
+        "torch_npu",
+        "autocast",
+        "RNG",
+        "HCCL",
+        "FSDP",
+        "RMSNorm",
+        "rotary",
+        "Ulysses",
+        "Ring",
+        "torchcodec",
+        "ARM64"
+      ],
+      "evidence": "documented",
+      "conditions": "固定提交 61e39c2；资料包记录推荐 910B ≥64GB/卡、8 卡、CANN ≥8.3.RC2、PyTorch ≥2.8、匹配 torch_npu、Python ≥3.11。",
+      "limitations": "提交页曾超时，固定 ASCEND_SUPPORTS.md 曾可读；LoRA 推理、SGLang TODO 和 ARM64 torchcodec 约束仍须确认。",
+      "references": [
+        {
+          "path": "昇腾卡使用优化与Debug参考手册.md"
+        },
+        {
+          "path": "群聊记录/群历史.md"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://raw.githubusercontent.com/OpenMOSS/MOVA/61e39c2e6e9b9047fb086112ab9bfae8d5b74182/ASCEND_SUPPORTS.md",
+          "label": "固定版本 ASCEND_SUPPORTS.md",
+          "authority": "community",
+          "content_status": "bundle_reports_read",
+          "revision": "61e39c2e6e9b9047fb086112ab9bfae8d5b74182"
+        },
+        {
+          "url": "https://github.com/OpenMOSS/MOVA/commit/61e39c2e6e9b9047fb086112ab9bfae8d5b74182",
+          "label": "MOVA NPU 适配提交",
+          "authority": "community",
+          "content_status": "partial",
+          "revision": "61e39c2e6e9b9047fb086112ab9bfae8d5b74182"
+        }
+      ],
+      "scopes": [
+        "general"
+      ]
+    },
+    {
+      "id": "R13",
+      "source": "ascend-reference-20261005",
+      "title": "单机环境模板的可借鉴部分",
+      "summary": "参考设备发现、可见卡、PET 分布式变量、CANN/ATB、HCCL、缓存及日志配置，并按真实拓扑审查每项设置。",
+      "tasks": [
+        "environment",
+        "distributed",
+        "memory",
+        "performance"
+      ],
+      "stages": [
+        "preparation",
+        "troubleshooting",
+        "optimization"
+      ],
+      "keywords": [
+        "share.bashrc",
+        "107020",
+        "HCCL",
+        "ACLNN_CACHE_LIMIT",
+        "HOST_CACHE_CAPACITY",
+        "TASK_QUEUE_ENABLE",
+        "MULTI_STREAM_MEMORY_REUSE",
+        "set -u"
+      ],
+      "evidence": "template_only",
+      "conditions": "单机快速验证模板；16 卡两个 P8 mesh 的 HCCL_INTRA_ROCE_ENABLE 示例。",
+      "limitations": "原脚本写目录、软链接和 /etc/hosts，不可直接 source；延长超时不能修复死锁，缓存可能增 host 内存，网卡须按多节点实况核对。",
+      "references": [
+        {
+          "path": "附件/share.bashrc"
+        },
+        {
+          "path": "昇腾卡使用优化与Debug参考手册.md"
+        },
+        {
+          "path": "群聊记录/群历史.md"
+        }
+      ],
+      "links": [],
+      "scopes": [
+        "general"
+      ]
+    },
+    {
+      "id": "R14",
+      "source": "ascend-reference-20261005",
+      "title": "GLD 原 GPU 训练管线迁移断点",
+      "summary": "检查 CUDA-only 默认设备、BF16 守卫、通信后端、设备绑定、同步、显存、seed/RNG 与启动脚本的实际执行分支。",
+      "tasks": [
+        "training",
+        "environment",
+        "distributed",
+        "memory"
+      ],
+      "stages": [
+        "preparation",
+        "troubleshooting"
+      ],
+      "keywords": [
+        "GLD",
+        "Wan",
+        "cuda",
+        "npu",
+        "BF16",
+        "autocast",
+        "hccl",
+        "nccl",
+        "seed",
+        "RNG",
+        "zero3_init_flag",
+        "SDPA"
+      ],
+      "evidence": "reported_smoke",
+      "conditions": "原 H200 管线保留 torch + DeepSpeed ZeRO-3 + Accelerate；报告目标 910B2C 64GB、CANN 9.0.0、torch 2.11.0+cpu、torch_npu 2.11.0.rc4、DeepSpeed 0.18.9、Accelerate 1.12.0、Diffusers 0.39.0、Transformers 5.12.1。",
+      "limitations": "这组版本为报告所述，不是通用推荐；SDPA 到融合 attention 的实际调度也需在目标版本核对。",
+      "references": [
+        {
+          "path": "附件/GLD Wan2.2训练管线昇腾适配方案-v1.md"
+        },
+        {
+          "path": "附件/GLD Wan2.2训练管线昇腾适配结果-v1.md"
+        },
+        {
+          "path": "昇腾卡使用优化与Debug参考手册.md"
+        }
+      ],
+      "links": [],
+      "scopes": [
+        "general"
+      ]
+    },
+    {
+      "id": "R15",
+      "source": "ascend-reference-20261005",
+      "title": "GLD 冒烟结果与未覆盖的真实训练",
+      "summary": "报告处理 import 链、shell 初始化、accelerate 路径、2 卡 OOM 与 episode 分片错误，8/16 卡两步冒烟及 checkpoint 保存。",
+      "tasks": [
+        "training",
+        "memory",
+        "data",
+        "numerics"
+      ],
+      "stages": [
+        "preparation",
+        "troubleshooting"
+      ],
+      "keywords": [
+        "GLD",
+        "OOM",
+        "checkpoint",
+        "mock",
+        "random weights",
+        "depth_anything_3",
+        "Cannot shard"
+      ],
+      "evidence": "reported_smoke",
+      "conditions": "Wan stage2；随机 transformer + mock 数据。8 卡 loss 4.5946→4.5226，16 卡 4.5667→4.4850；16 卡报告 18GB/64GB，8 卡 checkpoint 约171GB。",
+      "limitations": "未覆盖真实 transformer 权重、真实数据、精度对齐或长训练；两步下降不证明收敛。DA3 分支报错不能由 stage2 通过覆盖。",
+      "references": [
+        {
+          "path": "附件/GLD Wan2.2训练管线昇腾适配结果-v1.md"
+        },
+        {
+          "path": "附件/GLD Wan2.2训练管线昇腾适配方案-v1.md"
+        },
+        {
+          "path": "群聊记录/话题77_GLD报错.md"
+        }
+      ],
+      "links": [],
+      "scopes": [
+        "general"
+      ]
+    },
+    {
+      "id": "R16",
+      "source": "ascend-reference-20261005",
+      "title": "HBM 监控与 batch/显存解释",
+      "summary": "区分 npu-smi HBM-Usage 的周期采样与框架峰值；对齐 DDP 固定权重/梯度/优化器状态、激活和梯度检查点。",
+      "tasks": [
+        "memory",
+        "training",
+        "performance"
+      ],
+      "stages": [
+        "preparation",
+        "troubleshooting",
+        "optimization"
+      ],
+      "keywords": [
+        "npu-smi",
+        "HBM-Usage",
+        "batch_size",
+        "显存",
+        "峰值",
+        "DDP",
+        "gradient checkpointing",
+        "memory_allocated",
+        "memory_reserved"
+      ],
+      "evidence": "reported_short_run",
+      "conditions": "资料包引用 A2 npu-smi watch；PI0.5 两卡 DDP BF16 截图中单卡 batch 1/8/16 的峰值 45.82/45.86/47.20 GiB，预热后 step 1.22/2.66/4.83 秒；新增组各5次参数更新。",
+      "limitations": "batch 报告全文未取得、峰值采集方法未给出；未覆盖长训练/checkpoint，不证明显存采样错误或通用最佳 batch。官方动态页面快照主要是导航，命令来自截图。",
+      "references": [
+        {
+          "path": "昇腾卡使用优化与Debug参考手册.md"
+        },
+        {
+          "path": "截图/message-155.png"
+        },
+        {
+          "path": "截图/message-162.png"
+        },
+        {
+          "path": "文档/npu-smi官方页面_读取快照.txt"
+        },
+        {
+          "path": "群聊记录/群历史.md"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://www.hiascend.com/document/detail/zh/HDK/latest/A2/A2npu/npusmi_0013.html",
+          "label": "npu-smi 官方页面",
+          "authority": "official",
+          "content_status": "partial",
+          "revision": null
+        }
+      ],
+      "scopes": [
+        "general"
+      ]
+    },
+    {
+      "id": "R17",
+      "source": "ascend-reference-20261005",
+      "title": "公共权重、数据迁移与权限",
+      "summary": "跨 NVIDIA/昇腾区域的数据和权重按需搬运；核对资产可用性、管理员写权限和项目访问范围。",
+      "tasks": [
+        "data",
+        "environment"
+      ],
+      "stages": [
+        "preparation",
+        "troubleshooting"
+      ],
+      "keywords": [
+        "下载慢",
+        "weights",
+        "权重",
+        "数据搬运",
+        "审批",
+        "Eco-Tech",
+        "w4a8",
+        "w8a8"
+      ],
+      "evidence": "historical_resource",
+      "conditions": "资料包记录两区存储不互通，公共模型目录及2026-09-03历史位置；数据任务由运营协助，审批属项目管理员。",
+      "limitations": "不把历史目录写作可用资产或配额保证；不要公开个人路径、发起拷贝或自动通知人员。量化模型精度须逐模型核对。",
+      "references": [
+        {
+          "path": "昇腾卡使用优化与Debug参考手册.md"
+        },
+        {
+          "path": "群聊记录/群历史.md"
+        },
+        {
+          "path": "截图/message-71.png"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://qz.sii.edu.cn/userCenter",
+          "label": "平台数据转移",
+          "authority": "platform",
+          "content_status": "requires_login",
+          "revision": null
+        },
+        {
+          "url": "https://modelscope.cn/organization/Eco-Tech",
+          "label": "Eco-Tech 昇腾量化模型",
+          "authority": "community",
+          "content_status": "partial",
+          "revision": null
+        }
+      ],
+      "scopes": [
+        "general"
+      ]
+    },
+    {
+      "id": "R18",
+      "source": "ascend-reference-20261005",
+      "title": "仿真闭环与策略模型分开验证",
+      "summary": "RoboTwin 的仿真、渲染、cuRobo/pytorch3d CUDA 依赖与策略训练不同；原文有远程策略服务和本地模拟器拆分的线索。",
+      "tasks": [
+        "simulation",
+        "inference"
+      ],
+      "stages": [
+        "preparation",
+        "troubleshooting"
+      ],
+      "keywords": [
+        "RoboTwin",
+        "SAPIEN",
+        "cuRobo",
+        "pytorch3d",
+        "CUDA-only",
+        "remote policy",
+        "闭环"
+      ],
+      "evidence": "unresolved",
+      "conditions": "2026-08-12—17 群话题未闭环；资料包记录读取 main README 的远程策略说明。",
+      "limitations": "没有学院 NPU 全流程成功证据；拆分方案仍需核对 adapter、网络、输入/动作归一化、频率及成功率。main 需另固定 commit。",
+      "references": [
+        {
+          "path": "昇腾卡使用优化与Debug参考手册.md"
+        },
+        {
+          "path": "群聊记录/话题73_RoboTwin.md"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://raw.githubusercontent.com/robotwin-Platform/RoboTwin/main/README.md",
+          "label": "RoboTwin README",
+          "authority": "community",
+          "content_status": "bundle_reports_read",
+          "revision": null
+        },
+        {
+          "url": "https://github.com/robotwin-Platform/RoboTwin",
+          "label": "RoboTwin 仓库",
+          "authority": "community",
+          "content_status": "partial",
+          "revision": null
+        }
+      ],
+      "scopes": [
+        "manipulation",
+        "simulation"
+      ]
+    },
+    {
+      "id": "R19",
+      "source": "ascend-reference-20261005",
+      "title": "vLLM 后端插件设计 RFC",
+      "summary": "Hardware pluggable RFC 用于理解 vLLM 后端解耦；运行和性能设置返回版本化部署、发布说明。",
+      "tasks": [
+        "environment",
+        "inference"
+      ],
+      "stages": [
+        "preparation"
+      ],
+      "keywords": [
+        "RFC",
+        "Hardware pluggable",
+        "vLLM",
+        "11162",
+        "插件"
+      ],
+      "evidence": "documented",
+      "conditions": "群链接经过 GitCode 跳转到 vllm-project/vllm issue #11162。",
+      "limitations": "资料包只抓取跳转页，未取得 issue 正文；不能由设计 RFC 推断任何具体模型已支持。",
+      "references": [
+        {
+          "path": "昇腾卡使用优化与Debug参考手册.md"
+        },
+        {
+          "path": "群聊记录/群历史.md"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://github.com/vllm-project/vllm/issues/11162",
+          "label": "Hardware pluggable RFC",
+          "authority": "community",
+          "content_status": "not_read",
+          "revision": null
+        }
+      ],
+      "scopes": [
+        "general"
+      ]
+    },
+    {
+      "id": "R20",
+      "source": "ascend-reference-20261005",
+      "title": "GLD 历史实例与资源线索",
+      "summary": "资料包保留旧 GPU 实例和适配目录作为溯源；现场工作应定位当前用户明确授权的项目 checkout。",
+      "tasks": [
+        "environment",
+        "training"
+      ],
+      "stages": [
+        "preparation",
+        "troubleshooting"
+      ],
+      "keywords": [
+        "GLD",
+        "历史实例",
+        "权限",
+        "源码定位"
+      ],
+      "evidence": "historical_resource",
+      "conditions": "2026-08-07、13 的群历史定位，仅在本地完整资料包中保存具体实例信息。",
+      "limitations": "实例存在性及权限未核对，不能把旧实例作为当前实验或自动进入运行。",
+      "references": [
+        {
+          "path": "昇腾卡使用优化与Debug参考手册.md"
+        },
+        {
+          "path": "群聊记录/群历史.md"
+        }
+      ],
+      "links": [],
+      "scopes": [
+        "general"
+      ]
+    },
+    {
+      "id": "D01",
+      "source": "ascend-reference-20261005",
+      "title": "未上 NPU、BF16 未启用和分布式后端错误",
+      "summary": "按实际张量/执行设备选择 npu、BF16 autocast、hccl 和 local_rank；torch.cuda.is_available-only 的默认分支可能把 NPU 留在 CPU/FP32。",
+      "tasks": [
+        "training",
+        "inference",
+        "distributed",
+        "memory"
+      ],
+      "stages": [
+        "troubleshooting"
+      ],
+      "keywords": [
+        "跑CPU",
+        "FP32",
+        "BF16",
+        "autocast",
+        "device.type",
+        "nccl",
+        "gloo",
+        "hccl",
+        "torch.npu.set_device"
+      ],
+      "evidence": "reported_smoke",
+      "conditions": "GLD stage2 在给定版本的冒烟报告及 MOVA 固定适配提交。",
+      "limitations": "API 名称替换不保证所有 dtype/shape/通信路径支持；保留 CUDA 路径并确认真实修改被执行。",
+      "references": [
+        {
+          "path": "附件/GLD Wan2.2训练管线昇腾适配方案-v1.md"
+        },
+        {
+          "path": "附件/GLD Wan2.2训练管线昇腾适配结果-v1.md"
+        },
+        {
+          "path": "昇腾卡使用优化与Debug参考手册.md"
+        }
+      ],
+      "links": [],
+      "scopes": [
+        "general"
+      ]
+    },
+    {
+      "id": "D02",
+      "source": "ascend-reference-20261005",
+      "title": "导入链、Conda、启动脚本报错的范围",
+      "summary": "depth_anything_3 的可选 import 解耦只对不依赖 DA3 的 stage2 适用；set -u/source 与 accelerate 路径已有报告处理，torchvision.io.video、DA3 和 Conda 初始化仍有未解决记录。",
+      "tasks": [
+        "environment",
+        "training"
+      ],
+      "stages": [
+        "troubleshooting"
+      ],
+      "keywords": [
+        "ModuleNotFoundError",
+        "depth_anything_3",
+        "torchvision.io.video",
+        "CondaError",
+        "conda init",
+        "accelerate: command not found",
+        "nounset",
+        "set_env.sh",
+        "ERR99999"
+      ],
+      "evidence": "unresolved",
+      "conditions": "GLD stage2 与 DA3 level1 属不同启动分支；ERR99999 是包装错误，优先读取第一条 Python 异常。",
+      "limitations": "不要吞掉必需依赖异常或假设镜像有 gld 环境；后续 DA3 报错没有最终修复证据。",
+      "references": [
+        {
+          "path": "附件/GLD Wan2.2训练管线昇腾适配结果-v1.md"
+        },
+        {
+          "path": "昇腾卡使用优化与Debug参考手册.md"
+        },
+        {
+          "path": "群聊记录/话题77_GLD报错.md"
+        },
+        {
+          "path": "截图/thread-77-2.png"
+        },
+        {
+          "path": "截图/thread-77-4.png"
+        }
+      ],
+      "links": [],
+      "scopes": [
+        "general"
+      ]
+    },
+    {
+      "id": "D03",
+      "source": "ascend-reference-20261005",
+      "title": "ZeRO-3 OOM、分片容量与数据集分片",
+      "summary": "查参数/梯度缓冲、真实加载权重、卡数和 sampler；Cannot shard 1 episodes across world_size=8 要核对 episode 数。",
+      "tasks": [
+        "memory",
+        "training",
+        "distributed",
+        "data"
+      ],
+      "stages": [
+        "troubleshooting"
+      ],
+      "keywords": [
+        "ZeRO-3",
+        "OOM",
+        "Cannot shard 1 episodes across world_size=8",
+        "sampler",
+        "DataLoader",
+        "mock"
+      ],
+      "evidence": "reported_smoke",
+      "conditions": "GLD 2 卡 OOM，扩8/16卡及增加 mock episode 后短步成功。",
+      "limitations": "扩卡增加通信与资源需求，须获用户授权；mock 的通过不能证明正式数据、真实权重或精度。",
+      "references": [
+        {
+          "path": "附件/GLD Wan2.2训练管线昇腾适配结果-v1.md"
+        },
+        {
+          "path": "附件/GLD Wan2.2训练管线昇腾适配方案-v1.md"
+        },
+        {
+          "path": "昇腾卡使用优化与Debug参考手册.md"
+        }
+      ],
+      "links": [],
+      "scopes": [
+        "general"
+      ]
+    },
+    {
+      "id": "D04",
+      "source": "ascend-reference-20261005",
+      "title": "DeepSpeed #7078 是预案而非已验证修复",
+      "summary": "GLD 方案列过梯度错误与 dummy_loss 预案；实际 random 冒烟未触发该风险，应先对照目标版本的原 issue。",
+      "tasks": [
+        "training",
+        "distributed",
+        "numerics"
+      ],
+      "stages": [
+        "troubleshooting"
+      ],
+      "keywords": [
+        "DeepSpeed",
+        "7078",
+        "dummy_loss",
+        "gradient",
+        "zero3_init_flag"
+      ],
+      "evidence": "unresolved",
+      "conditions": "报告明确 #7078 和 zero3_init_flag 风险未触发。",
+      "limitations": "不能加入未触发的 workaround 或把预案写成已验证修复；需要确认参数语义和对梯度的影响。",
+      "references": [
+        {
+          "path": "附件/GLD Wan2.2训练管线昇腾适配方案-v1.md"
+        },
+        {
+          "path": "附件/GLD Wan2.2训练管线昇腾适配结果-v1.md"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://github.com/microsoft/DeepSpeed/issues/7078",
+          "label": "DeepSpeed issue #7078",
+          "authority": "community",
+          "content_status": "not_read",
+          "revision": null
+        }
+      ],
+      "scopes": [
+        "general"
+      ]
+    },
+    {
+      "id": "O01",
+      "source": "ascend-reference-20261005",
+      "title": "Ascend 训练优化的调查入口",
+      "summary": "功能和精度通过后，按 profiler 瓶颈查融合 attention/QKV/RMSNorm/MLP、rotary、host同步、缓存、checkpoint 粒度、DDP static_graph、图模式与通信重叠。",
+      "tasks": [
+        "training",
+        "performance",
+        "distributed",
+        "memory"
+      ],
+      "stages": [
+        "optimization"
+      ],
+      "keywords": [
+        "训练效率",
+        "性能优化",
+        "profiler",
+        "融合算子",
+        "attention",
+        "QKV",
+        "RMSNorm",
+        "MLP",
+        "rotary",
+        "checkpoint",
+        "static_graph",
+        "hostbound",
+        "graph"
+      ],
+      "evidence": "documented",
+      "conditions": "CANN recipe、MindSpeed-MM、DrivingSDK、MOVA、环境模板各有线索，适用范围需逐项回读。",
+      "limitations": "先固定同设备、权重/数据、dtype、batch、卡数和版本再测预热后step/吞吐、峰值显存及数值；无 profiling/实际路径证据不能宣称优化成功。",
+      "references": [
+        {
+          "path": "昇腾卡使用优化与Debug参考手册.md"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://gitcode.com/cann/cann-recipes-embodied-ai",
+          "label": "官方具身优化",
+          "authority": "official",
+          "content_status": "bundle_reports_read",
+          "revision": null,
+          "snapshot_uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/README.md"
+        },
+        {
+          "url": "https://gitcode.com/Ascend/MindSpeed-MM",
+          "label": "多模态训练优化",
+          "authority": "official",
+          "content_status": "bundle_reports_read",
+          "revision": null
+        },
+        {
+          "url": "https://gitcode.com/Ascend/DrivingSDK/tree/master/model_examples",
+          "label": "DrivingSDK 算子样例",
+          "authority": "official",
+          "content_status": "partial",
+          "revision": null
+        }
+      ],
+      "scopes": [
+        "general"
+      ]
+    },
+    {
+      "id": "O02",
+      "source": "ascend-reference-20261005",
+      "title": "推理调优要匹配负载和版本",
+      "summary": "按 TPOT/RPS、上下文、并发、量化与 DP/TP 选择配方；检查图模式、CPU绑定、prefix cache、MTP 与编译同步等版本化能力。",
+      "tasks": [
+        "inference",
+        "performance",
+        "distributed"
+      ],
+      "stages": [
+        "optimization",
+        "troubleshooting"
+      ],
+      "keywords": [
+        "TPOT",
+        "RPS",
+        "DP",
+        "TP",
+        "prefix caching",
+        "CPU binding",
+        "MTP",
+        "graph",
+        "max-model-len"
+      ],
+      "evidence": "documented",
+      "conditions": "Qwen3.6-27B 示例 DP×TP=16；3.5-35B-A3B 交互配方限制 DP=1。",
+      "limitations": "不能在2卡实例直接照搬16卡命令；1M标题与32768参数矛盾需确认；vLLM 推理配方不能替代训练优化。",
+      "references": [
+        {
+          "path": "文档/Qwen部署配方.md"
+        },
+        {
+          "path": "文档/学院版模型部署文档.md"
+        },
+        {
+          "path": "文档/vLLM Ascend发布说明_读取快照.txt"
+        },
+        {
+          "path": "昇腾卡使用优化与Debug参考手册.md"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://docs.vllm.ai/projects/vllm-ascend-cn/zh-cn/latest/user_guide/release_notes.html#v0-20-2rc1-2026-06-03",
+          "label": "版本化发布说明",
+          "authority": "community",
+          "content_status": "bundle_reports_read",
+          "revision": null
+        }
+      ],
+      "scopes": [
+        "general"
+      ]
+    },
+    {
+      "id": "N01",
+      "source": "ascend-reference-20261005",
+      "title": "融合、量化和精度回归必须回查对应修复",
+      "summary": "vLLM Ascend 快照记录 graph、RoPE、GDN、MTP、prefix cache、并行与量化的数值问题和修复，可按版本和实际算子继续读原 PR/issue。",
+      "tasks": [
+        "numerics",
+        "inference",
+        "performance"
+      ],
+      "stages": [
+        "troubleshooting",
+        "optimization"
+      ],
+      "keywords": [
+        "NaN",
+        "inf",
+        "精度",
+        "数值",
+        "accuracy",
+        "RoPE",
+        "GDN",
+        "MTP",
+        "W8A8",
+        "logprobs",
+        "reduce_sample",
+        "310P"
+      ],
+      "evidence": "documented",
+      "conditions": "例如 v0.23.0 记录 reduce_sample 的 logprobs 限制和 310P Qwen3.5-2B-W8A8 指标波动；具体数值保留原模型/设备上下文。",
+      "limitations": "这是官方/社区发布说明的声明，N2S未复现；不要把版本特定误差转换成通用容差或默认降低精度。",
+      "references": [
+        {
+          "path": "文档/vLLM Ascend发布说明_读取快照.txt"
+        },
+        {
+          "path": "昇腾卡使用优化与Debug参考手册.md"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://docs.vllm.ai/projects/vllm-ascend-cn/zh-cn/latest/user_guide/release_notes.html#v0-20-2rc1-2026-06-03",
+          "label": "精度修复和已知限制",
+          "authority": "community",
+          "content_status": "bundle_reports_read",
+          "revision": null
+        },
+        {
+          "url": "https://github.com/vllm-project/vllm-ascend/issues/14335",
+          "label": "310P W8A8 精度问题线索",
+          "authority": "community",
+          "content_status": "not_read",
+          "revision": null
+        },
+        {
+          "url": "https://github.com/vllm-project/vllm-ascend/issues/13469",
+          "label": "reduce_sample logprobs 限制线索",
+          "authority": "community",
+          "content_status": "not_read",
+          "revision": null
+        }
+      ],
+      "scopes": [
+        "general"
+      ]
+    }
+  ]
+}

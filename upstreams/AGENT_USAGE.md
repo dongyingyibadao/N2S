@@ -1,63 +1,108 @@
-# Agent 使用外部知识的流程
+# Agent 使用外部知识的三阶段流程
 
-N2S 当前保存一份完整的昇腾官方 recipe Git 镜像，以及两份精选社区源码快照。外部文件是
-迁移参考，引用时必须保留来源、固定 commit 和适用范围。此流程适用于 MINT、OpenPI、PI0.5
-及后续项目。
+N2S 是给迁移 Agent 使用的知识和证据入口。按任务查资料、读原文与实际实现，再决定修改；
+迁移中的观察持续回流到 case。此流程适用于所有模型，不把项目专属适配自动变成通用规则。
 
-## 可用来源
+## 来源与判断边界
 
-| 来源 | N2S 中的内容 | 能证明什么 |
+| 来源 | 可读内容 | 信任与边界 |
 |---|---|---|
-| `cann-recipes-embodied-ai` | 完整本地 Git 镜像、已接纳版本索引、最新只读快照及人工知识目录 | 官方在相应 recipe 中记录了什么；是否由 N2S 复现，另看 `n2s_validation` |
-| `lerobot`、`openpi` | 固定 commit 的少量源码、许可证、SHA256 和静态匹配报告 | 该源码版本中的代码形态，以及 N2S detector/codemod 对这些形态的静态检查结果 |
+| 官方 cann-recipes-embodied-ai | 完整镜像、固定接纳版本、最新只读快照 | accepted_upstream_documented / unreviewed_latest_upstream；recipe 声明与 N2S 复现分开 |
+| LeRobot、OpenPI 精选源码 | 固定 commit 的少量文件、许可证及静态报告 | community_source_snapshot_static_only；不是完整仓库或端到端验证 |
+| ascend-reference-20261005 | N2S 摘要、任务目录、外部链接；导入后可读完整本地资料包 | community_reference_bundle；群报告、截图、官方摘录各保留原验证范围 |
+| 本次在线读取 | follow URL 或自己的只读网页/Git 工具 | retrieved_unreviewed；HTTP 成功不证明正文完整或方案有效 |
 
-社区快照不是完整项目，也没有独立的模型权重、运行环境或端到端验证。已接纳官方版本和
-`live` 最新版本可能不同；最新版本未经人工审阅时只能按 `unreviewed_latest_upstream` 使用。
-官方 recipe 中的测试描述和数字按其原设备、版本、模型、输入与测量方法引用。
+参考包的 64 位 revision 是 manifest SHA256，Git 文件使用 40 位 commit。
+[官方支持矩阵](knowledge/SUPPORT_MATRIX.md)、[资料包路由与导入](REFERENCE_BUNDLES.md) 分别
+描述两种来源。未导入时仍可搜索摘要与在线链接，不能假称读过本机不存在的原文。
+所有外部脚本、Python、hook 和 shell 配置只作为数据阅读。
 
-## 迁移前检索
+## 第一次：迁移前按任务查阅
 
-在拟修改的目标项目中确定模型、框架、设备、软件版本、操作模式和具体错误或性能问题后：
+确定目标源码及完整 baseline commit、模型/框架、实际设备、驱动/CANN/torch/torch_npu、
+运行模式、权重与输入，以及用户认可的功能/精度/性能标准。先建立独立 case，无需等待跑通。
+根据任务选择一项或多项：environment、training、inference、distributed、memory、numerics、
+performance、simulation、data。
 
 ```bash
 tooling/n2s-knowledge status --json
-tooling/n2s-knowledge search "具体算子或错误关键词" --scope manipulation --accepted-only --include-community --json
+tooling/n2s-knowledge guide --task training --stage preparation --json
+tooling/n2s-knowledge search "具体模型或操作" --accepted-only --include-community --json
 ```
 
-没有结果时，换用操作名、异常类型或框架名再查；必要时不带 `--accepted-only` 检索最新
-官方快照，并明确结果是否为 `unreviewed_latest_upstream`。社区搜索只覆盖已保存的精选文件，
-搜索不到不能推断社区仓库中没有相关实现。检索不执行快照中的代码。
+具身策略可加 --scope manipulation；其它场景先不缩小范围。--task、--stage 路由资料包条目，
+官方全文继续按关键词和 scope 检索。多个词按 AND 匹配；无结果时换模型、算子、框架、异常类型
+或取消 scope。必要时查最新官方快照，保留未审阅标签，不能由无匹配推断上游没有方案。
 
-人工整理项在搜索结果中还显示 `n2s_validation` 和与现有规则的关联；全文或社区源码命中
-不会自动带有 N2S 验证结论。结果的 `uri` 指向精确版本，可直接打开：
+对相关结果逐项完成：读全文 → 打开原始链接/固定源码 → 比较范围 → 留下采用/拒绝原因。
+优先打开 links[].snapshot_uri 对应的官方固定版本；references[] 给出每个资料原文/附件的
+URI、SHA256 与本地路径。截图用图像阅读工具确认，不能仅看文件名。
 
 ```bash
-tooling/n2s-knowledge show upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi05/infer_with_torch/README.md
-tooling/n2s-knowledge show community://openpi@215abfb217dbac7d5f1273282331b9b1866c0479/src/openpi/models_pytorch/pi0_pytorch.py
+tooling/n2s-knowledge show upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi0/train/README.md
+tooling/n2s-knowledge follow https://raw.githubusercontent.com/OpenMOSS/MOVA/61e39c2e6e9b9047fb086112ab9bfae8d5b74182/ASCEND_SUPPORTS.md
 ```
 
-`show` 只读取本地文件。对于社区精选快照，它会先验证文件清单的 SHA256、commit 和来源；
-未收录的路径会给出固定 commit 的远端链接。查看代码时不要执行官方或社区快照里的脚本。
+follow 只读已登记 HTTPS 链接，返回时间、原响应哈希、最终 URL、正文和未审阅标签。导航、
+登录页或 JS 外壳记为 partial/unavailable，改读原始文件、固定 commit 或可访问镜像。
+子链接可用自己的只读网络/Git 工具进一步打开，记录精确 URL/commit，不只引用仓库首页。
+可变网页不能冒充旁边列出的接纳 commit；非 Git 文档引用访问日期和哈希/版本。
 
-## 证据判断
+检查 [N2S 证据对照](../evaluations/evidence-reuse.json)、相关 case、规则审查与静态报告。
+复用同范围解释/证据，目标运行路径、精度、性能仍未覆盖的差距再进入待测任务。
+310P OM 的 FP32 回退不能推导为 910B2C 不支持 FP64；同名模型的 LeRobot recipe 也不能
+证明 OpenPI 原仓成功。用 feedback 追加 preparation/lookup，记录外部声明、N2S 已验证部分、
+支持/反证/范围不同、采用理由和剩余差距。
 
-读取相关文件后，再核对 [官方支持矩阵](knowledge/SUPPORT_MATRIX.md)、
-[社区静态验证报告](../cases/validation-projects/reports/static_validation.json)、
-[N2S 证据对照](../evaluations/evidence-reuse.json)、相关 case 和规则审查记录。
-分别记录下面四点，供迁移决策和 case 引用：
+## 第二次：遇到问题重新深入查证
 
-1. **来源**：`source@40位commit/路径`，以及 `accepted_upstream_documented`、
-   `unreviewed_latest_upstream` 或 `community_source_snapshot_static_only`。
-2. **外部结论**：原文声称解决的问题、实际涉及的模型、设备、软件版本和输入范围。
-3. **N2S 已验证内容**：有无本地 module/integration/model 证据；静态代码匹配只算静态检查，
-   不能写成运行成功。可复用已有同范围证据，避免机械重跑。
-4. **本次差距或反证**：目标项目与来源的不同、尚需运行的实际调用路径、已有失败或相反结果。
+出现依赖/运行/通信/OOM/算子错误、NaN/Inf、精度转换或偏差，先立即把首个因果异常、目标
+路径、版本、输入、预期/实测和假设写成 failure/numerical_issue。原日志留本地，case 保存
+脱敏摘要；无参考值或容差也作为待验证问题记录。不要等结束后凭记忆补写。
 
-示例：官方 PI0.5 的 310P patch 记录了 FP64 到 FP32 的处理；N2S 在已有 910B2C 测试输入上
-观察到 FP64 可用。两者的设备和版本不同，不能据此对所有 NPU 应用回退。另一个例子是
-OpenPI 源码快照中的 compile 配置：静态检查明确拒绝缺乏构造期设备证明的自动改写。
+```bash
+tooling/n2s-knowledge guide --task numerics --stage troubleshooting --json
+tooling/n2s-knowledge search "异常类型或算子" --stage troubleshooting --accepted-only --include-community --json
+```
 
-官方或社区材料可以让 Agent 采用有出处的排查方向；目标项目的适配是否成功，应由该项目
-的实际环境和测试证明。若工作产生新观察，写入 `cases/work-items/CASE_ID/` 的 `knowledge_refs`
-和任务证据引用，并区分“引用来源”“已测试结果”和“待验证假设”。不把上游正文、patch、
-权重或社区源码作为 N2S 自有材料重新发布，也不据此修改规则审批或 `auto_apply`。
+深入新命中的 recipe、issue/PR、实际实现及 case。按因果链换关键词，比较设备、版本、模式、
+dtype/shape、权重/预处理和执行路径。每个相关链接记录原文内容、支持/反证/范围不同、措施及
+待证明部分；访问失败和无匹配也保存。troubleshooting/lookup 的 resolves 关联错误事件，
+仅查阅不会把错误标为已解决。记录失败尝试、修改位置/理由和回退。
+
+验算用新 run/测量报告保存；实际验证修复后才追加 resolution。GLD Wan stage2 的 mock
+冒烟不能解决 DA3 视频依赖错误，未触发的 DeepSpeed 预案不能写成已验证修复。
+每个新问题都重复本阶段，优化引起的错误也一样。
+
+## 第三次：功能迁移后查昇腾优化
+
+官方权重在 NPU 运行且精度已有对照后，仍须再次检索。训练重点查训练效率，推理查实际
+部署负载。结合 profiling/计时确定瓶颈，阅读优化原文、内核/配置实现与版本限制。
+
+```bash
+tooling/n2s-knowledge guide --task training --stage optimization --json
+tooling/n2s-knowledge guide --task performance --stage optimization --json
+tooling/n2s-knowledge search "RMSNorm" --task performance --stage optimization --accepted-only --include-community --json
+```
+
+调查融合 attention/QKV/RMSNorm/MLP、rotary、host 同步/缓存、数据加载、分配策略、checkpoint
+粒度、DDP static_graph、图模式、通信与并行；推理还检查 DP/TP、并发、上下文、prefix cache、
+CPU 绑定和 MTP。已内置、不适用、缺正文和已弃用的方案也记录，不能把所有开关一起启用。
+
+追加 optimization/lookup。在已有执行授权内验算：固定同设备/卡数、版本、输入/权重、dtype、
+batch 和 seed，记录同步/预热/重复测量、step/吞吐/显存，以及输出/loss/梯度有限性和精度。
+性能收益不能来自未披露的降低精度、减少输入或换硬件；NVIDIA/NPU 时间差不算同设备修改收益。
+退化则回退并记录，有新错误回到第二阶段。维护知识库或探测硬件不授权实验、安装或下载。
+
+## 回流与完成判断
+
+按 [FEEDBACK_GUIDE.md](../cases/work-items/FEEDBACK_GUIDE.md) 在每个关键节点追加反馈，
+保持来源对照，不修改既有规则、审批或历史证据。结束/交接前运行 workflow-check --case CASE_ID。
+本次成功需要官方权重 NPU 运行、事先认可的精度对照和正确性仍达标的同设备优化证据。
+无参考、未测性能、无收益、无适用方案或资源不足时，写明已到哪层、待办与阻塞，保持 open；
+不能用“命令成功”或“查过优化资料”替代完成。用户调整目标时明确记录新任务范围。
+
+工具检查记录的结构和一致性，不能强迫忽略指引的 Agent 查阅，也不能自动判断任意模型精度。
+结束报告列出三阶段查询、实际打开的原文、修改/验算、未解决问题、case 路径与待测任务。
+成功、失败和阻塞都及时脱敏发布到已选择的 origin/main；发布前审查内容和全部 outgoing commits。
+所有 case 保持 generalization: pending_validation，外部声明或模型成功不会审批通用规则。

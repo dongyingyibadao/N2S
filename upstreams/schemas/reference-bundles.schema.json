@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "bundles"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "bundles": {"type": "array", "items": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "revision", "captured_at", "origin_url", "catalog", "manifest_path", "extra_files", "coverage", "usage_restrictions", "missing_sources"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]+$"},
+        "revision": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "captured_at": {"type": "string", "minLength": 1},
+        "origin_url": {"type": "string", "pattern": "^https://"},
+        "catalog": {"type": "string", "pattern": "^upstreams/catalogs/[^/]+\\.json$"},
+        "manifest_path": {"type": "string", "minLength": 1},
+        "extra_files": {"type": "array", "items": {
+          "type": "object", "additionalProperties": false, "required": ["path", "sha256"],
+          "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+        }},
+        "coverage": {"type": "string", "minLength": 1},
+        "usage_restrictions": {"type": "string", "minLength": 1},
+        "missing_sources": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    }}
+  }
+}

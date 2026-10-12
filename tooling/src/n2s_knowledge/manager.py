@@ -14,6 +14,7 @@ from urllib.parse import quote
 import jsonschema
 
 from .indexer import IndexError, build_index, deterministic_json, list_tree, read_object
+from .references import ReferenceLibrary
 
 
 class KnowledgeError(RuntimeError):
@@ -328,7 +329,8 @@ class KnowledgeManager:
                     "usage_warning": source["usage_restrictions"],
                 }
             )
-        return {"schema_version": "1.0.0", "sources": results}
+        return {"schema_version": "1.0.0", "sources": results,
+                "reference_bundles": ReferenceLibrary(self.root).status()}
 
     def _resolve_alias(self, source, revision):
         if revision == "accepted":
@@ -427,7 +429,7 @@ class KnowledgeManager:
                 "local_path": str(local) if local else None, "remote_url": remote,
                 "revision": source["revision"]}
 
-    def search(self, query, scope=None, accepted_only=False, include_community=False):
+    def search(self, query, scope=None, accepted_only=False, include_community=False, task=None, stage=None):
         terms = [term.casefold() for term in query.split() if term]
         if not terms:
             raise KnowledgeError("search query cannot be empty")
@@ -500,8 +502,12 @@ class KnowledgeManager:
                         "uri": f"community://{source['id']}@{revision}/{path}",
                         "coverage": source["coverage"],
                     })
+        references = ReferenceLibrary(self.root)
+        results.extend(references.search(terms, task=task, stage=stage, scope=scope))
         results.sort(key=lambda item: (item["result_kind"], item["source"], item["path"], item["title"]))
-        return {"query": query, "results": results[:200], "scope": scope}
+        return {"query": query, "results": results[:200], "scope": scope, "task": task, "stage": stage,
+                "total_results": len(results), "truncated": len(results) > 200,
+                "reference_bundles": references.status()}
 
     def _excerpt(self, body, terms):
         lines = body.splitlines()

@@ -7,6 +7,7 @@
 CASE_ID/
   issue.json          来源、目标、观察、官方引用、待验证迁移假设
   tasks/TASK_ID.json  固定问题、硬件与版本、输入协议、命令和验收条件
+  events/EVENT_ID.json 追加的查询对照、错误、改动、解决与验算节点
   runs/RUN_ID/
     run.json          一次运行的源码/环境/任务指纹和结果
     evidence.txt      可选，经人工脱敏的日志摘录或测量报告
@@ -16,12 +17,15 @@ CASE_ID/
 已有 `mint-rule-followups` 是历史证据的剩余问题清单，不是假装已经开始了新 MINT 实验。
 每次新实验创建独立 ID，并用 `models` 标明模型，避免两台机器创建同名工单。
 所有模型统一使用 [迁移与复测指南](EXPERIMENT_GUIDE.md)，不需要各自的首次实验说明。
+迁移 Agent 在第一次修改前开工单，并按 [即时反馈指南](FEEDBACK_GUIDE.md) 连续追加，
+不要等整体成功才记录。三阶段原文阅读要求见 [AGENT_USAGE.md](../../upstreams/AGENT_USAGE.md)。
 
 ## 记录要求
 
 工单写清楚官方源码 URL 和完整 revision、用户认可的“跑通”标准、实际环境与资源、修改前后
 行为、完整错误类型和关键堆栈、迁移假设与排除项、回退方式、下一端应测什么。缺失内容明确
-写 `pending` 或 `not_available`。成功仅能把工单 `state` 改为 `resolved`，不能把通用性改成已验证。
+写 `pending` 或 `not_available`。新工单完成三阶段阅读及功能/精度/同设备优化验算后，经
+workflow-check 和审阅才能标为 `resolved`；未完成仍可发布 open 工单，通用性始终待验证。
 
 每项任务对应一个问题。baseline 与 modified 分成独立任务，共享输入和 `comparison_key`；不因
 baseline 失败就阻止修复任务运行，也不把跨端成功等同于同设备 A/B。任务内容变化后，旧结果仅
@@ -42,6 +46,7 @@ git status --short --branch
 git remote -v
 git switch main
 git pull --ff-only origin main
+tooling/n2s-experiments workflow-check --case CASE_ID
 tooling/n2s-experiments validate --case CASE_ID
 git add -- cases/work-items/CASE_ID/
 tooling/n2s-experiments publish-check --case CASE_ID
@@ -56,7 +61,8 @@ git push origin HEAD:main
 
 若 `publish-check` 因暂存区有无关文件而拒绝，不替用户撤销或清空暂存区；在独立干净工作树
 整理本次提交，或请用户处理。禁止 `git add .`、force push、覆盖已有运行记录和自动解决冲突。
-工具检查不是提交钩子；检查后修改了文件必须重新检查。日志脱敏、许可证和分支内容仍须人工确认。
+工具检查不是提交钩子；检查后修改了文件必须重新检查。事件和 run 已提交后不可覆盖。
+日志脱敏、许可证和分支内容仍须人工确认。
 
 其它配置上在干净 main 工作树执行 `git pull --ff-only origin main`，再按模型和硬件筛选任务。
 需要现场探测时才运行 `list --backend auto`，读取更新不会自动执行模型实验。

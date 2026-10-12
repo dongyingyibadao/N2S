@@ -6,6 +6,8 @@ evidence-reuse assessment live here; machine-local plans, locks and raw logs liv
 No command promotes a rule, edits the registry, commits or pushes.
 This is a model-independent workflow. The user runs experiments; maintaining N2S does not authorize
 model execution. See `cases/work-items/EXPERIMENT_GUIDE.md` for the shared intake and retest guide.
+Migration agents must also follow the three source-reading stages in `upstreams/AGENT_USAGE.md`, with
+continuous case feedback as described in `cases/work-items/FEEDBACK_GUIDE.md`.
 
 ## Evidence First
 
@@ -35,6 +37,7 @@ tooling/n2s-experiments list --backend npu
 tooling/n2s-experiments list --backend npu --model MODEL_NAME
 tooling/n2s-experiments list --backend auto --python /path/to/environment/bin/python
 tooling/n2s-experiments validate
+tooling/n2s-experiments workflow-check --case CASE_ID
 ```
 
 `probe` runs isolated imports of installed torch/torch_npu plus available device-management queries;
@@ -86,6 +89,21 @@ network/install flags describe the requested permission, not an enforced network
 
 ## Result Lifecycle
 
+Append an immediate `feedback --case CASE_ID --file SANITIZED.json --confirm-sanitized` for source
+lookups, failures, numerical problems, changes, verified resolutions and validation milestones. This
+command does not probe hardware or execute a model. Start from `templates/`, replace all placeholders
+and follow the feedback guide. Event IDs, UTC time, evidence hashes and pending generalization are
+generated; events are append-only under the case. A troubleshooting lookup links each error with
+`resolves`, while only a resolution event marks it addressed using measured evidence.
+
+Record functional/accuracy validation before the optimization lookup, then revalidate after optimization.
+`workflow-check` reports missing stages, unresolved errors and absent official-weight NPU, agreed accuracy
+or same-device improvement evidence. It checks the recorded claims and hash consistency; reviewers still
+judge source applicability and actual measurements. New cases use `maintenance_workflow: three_stage_v1`;
+`validate` refuses incomplete cases marked resolved. Open failure/blocked cases remain publishable.
+`workflow-check` exits 1 when incomplete and 0 when ready for review; an incomplete check is a handoff
+with gaps, not a prohibition on publishing an open case.
+
 Raw stdout/stderr stays in `_local/logs/` and may contain private paths or credentials. Inspect it locally,
 then create a small UTF-8 report with sanitized exception text or measured output checks. Include failure
 stage, command, actual device, input/seed, expected/observed values, modification description, rollback,
@@ -128,6 +146,7 @@ scoped numerical tolerances; never compare raw NVIDIA/Ascend speed as a migratio
 The experiment tests use temporary local Git repositories and CPU subprocess fixtures, not GitCode, model
 downloads or accelerator experiments. They cover failure/timeout records, approval replay and drift, locking,
 redaction checks, case-only publishing, immutable evidence and a second-host clone/run/local-push round trip.
+They also cover continuous feedback, source citation requirements and incomplete completion reports.
 
 ```bash
 PYTHONPATH=tooling/src python -m unittest discover -s tooling/tests -v
