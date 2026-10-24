@@ -1,6 +1,7 @@
 {
   "stage": "troubleshooting",
   "kind": "failure",
+  "issue_scope": "target",
   "summary": "REPLACE: 首个因果异常与当前阻塞",
   "environment": "REPLACE: 实际设备、卡数、Python、驱动、CANN、torch/torch_npu、框架版本",
   "error": {

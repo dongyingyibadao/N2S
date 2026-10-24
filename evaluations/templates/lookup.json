@@ -1,15 +1,18 @@
 {
   "stage": "preparation",
   "kind": "lookup",
+  "draft": true,
+  "issue_scope": "target",
   "summary": "REPLACE: 任务、采用或拒绝的依据及剩余差距",
   "queries": ["REPLACE: 实际执行的查询与范围"],
   "source_checks": [
     {
-      "uri": "reference://SOURCE@MANIFEST_SHA256/PATH",
+      "uri": null,
       "url": null,
-      "accessed_at": "REPLACE: 实际读取的 UTC 时间",
-      "status": "partial",
-      "trust": "community_reference_bundle",
+      "accessed_at": null,
+      "status": "not_read",
+      "read_depth": "catalog",
+      "trust": "unavailable",
       "claim": "REPLACE: 阅读的实际正文声明及验证范围",
       "applicability": "unknown",
       "comparison": "REPLACE: 模型、版本、设备、模式、输入与实际执行路径的差异"

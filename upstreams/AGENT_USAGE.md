@@ -17,6 +17,8 @@ N2S：/path/to/N2S
 
 请先读取并遵循 N2S/AGENTS.md，以及其中引用的知识使用和 case 反馈指南。
 首次访问时，在 N2S 根目录运行 tooling/n2s-knowledge refresh-if-due。
+若工具启动失败，先运行 tooling/n2s-knowledge doctor --json；
+通过 N2S_PYTHON 指定已有独立工具解释器，不自动改动模型环境。
 
 第一次修改前：
 记录项目 baseline revision，按任务检索 N2S 的官方和社区知识，
@@ -72,6 +74,35 @@ tooling/n2s-knowledge search "具体模型或操作" --accepted-only --include-c
 官方全文继续按关键词和 scope 检索。多个词按 AND 匹配；无结果时换模型、算子、框架、异常类型
 或取消 scope。必要时查最新官方快照，保留未审阅标签，不能由无匹配推断上游没有方案。
 
+搜索结果提供已登记的模型、模式、设备、软件版本、全部引用、性能测量条件及未覆盖范围。
+需要按当前任务排序时，准备一个本地 JSON 画像并传入 `--target-profile`：
+
+```json
+{
+  "task": "training",
+  "model": "MODEL_NAME",
+  "mode": "training",
+  "device": "ACTUAL_DEVICE",
+  "software_versions": {
+    "cann": "ACTUAL_VERSION",
+    "pytorch": "ACTUAL_VERSION",
+    "torch_npu": "ACTUAL_VERSION",
+    "framework": "ACTUAL_FRAMEWORK"
+  }
+}
+```
+
+替换占位值后放在 ignored 的 `evaluations/_local/target-profile.json`；所有字段均可省略，
+但至少提供一项。工具只读取该 JSON，不导入目标工程或探测设备。
+
+```bash
+tooling/n2s-knowledge search QUERY --accepted-only --include-community --target-profile evaluations/_local/target-profile.json --json
+```
+
+`context_comparison` 逐项列出 `matched`、`different`、`unknown` 和依据；排序只比较已登记文本。
+别名、版本范围和实际代码语义仍需核对，`compatibility` 保持 `not_determined`。
+不同版本不会被过滤；参考包只有自然语言条件时保留原文，结构化未知不会冒充通配兼容。
+
 对相关结果逐项完成：读全文 → 打开原始链接/固定源码 → 比较范围 → 留下采用/拒绝原因。
 优先打开 links[].snapshot_uri 对应的官方固定版本；references[] 给出每个资料原文/附件的
 URI、SHA256 与本地路径。截图用图像阅读工具确认，不能仅看文件名。
@@ -85,6 +116,12 @@ follow 只读已登记 HTTPS 链接，返回时间、原响应哈希、最终 UR
 登录页或 JS 外壳记为 partial/unavailable，改读原始文件、固定 commit 或可访问镜像。
 子链接可用自己的只读网络/Git 工具进一步打开，记录精确 URL/commit，不只引用仓库首页。
 可变网页不能冒充旁边列出的接纳 commit；非 Git 文档引用访问日期和哈希/版本。
+
+`follow` 输出 `discovered_links`，可用 `follow CHILD_URL --from-url REGISTERED_ROOT` 继续读取
+正文实际链接；多层时按顺序重复 `--from-url`，保留从登记入口到父页面的整条链。
+在 case 的 `source_checks` 中记录 `parent_url`/`parent_uri` 和 `read_depth`，将“看过目录”与
+“读到正文/实现”区分。完整的资料接入说明及 MOVA 固定版本实例见
+[链接深读示例](LINK_WALKTHROUGH.md)。工具不能代替 Agent 审代码和核对语义。
 
 检查 [N2S 证据对照](../evaluations/evidence-reuse.json)、相关 case、规则审查与静态报告。
 复用同范围解释/证据，目标运行路径、精度、性能仍未覆盖的差距再进入待测任务。
@@ -105,7 +142,7 @@ tooling/n2s-knowledge search "异常类型或算子" --stage troubleshooting --a
 
 深入新命中的 recipe、issue/PR、实际实现及 case。按因果链换关键词，比较设备、版本、模式、
 dtype/shape、权重/预处理和执行路径。每个相关链接记录原文内容、支持/反证/范围不同、措施及
-待证明部分；访问失败和无匹配也保存。troubleshooting/lookup 的 resolves 关联错误事件，
+待证明部分；访问失败和无匹配也保存。troubleshooting 或 optimization 的 lookup 用 resolves 关联错误事件，
 仅查阅不会把错误标为已解决。记录失败尝试、修改位置/理由和回退。
 
 验算用新 run/测量报告保存；实际验证修复后才追加 resolution。GLD Wan stage2 的 mock
@@ -136,9 +173,17 @@ batch 和 seed，记录同步/预热/重复测量、step/吞吐/显存，以及�
 
 按 [FEEDBACK_GUIDE.md](../cases/work-items/FEEDBACK_GUIDE.md) 在每个关键节点追加反馈，
 保持来源对照，不修改既有规则、审批或历史证据。结束/交接前运行 workflow-check --case CASE_ID。
-本次成功需要官方权重 NPU 运行、事先认可的精度对照和正确性仍达标的同设备优化证据。
-无参考、未测性能、无收益、无适用方案或资源不足时，写明已到哪层、待办与阻塞，保持 open；
+默认的完整模型迁移需要官方权重 NPU 运行、事先认可的精度对照和正确性仍达标的同设备优化证据。
+建立 case 时按用户约定选择任务类型、backend 和优化目标，不能为了通过检查而事后缩小范围。
+模块复测、工具修复和优化调查可声明较窄范围；无收益可以完成已约定的调查，仍不能称达到提速目标。
+旧 case 未配置完成范围时保持原来的完整标准。单项任务、模型迁移、优化目标和通用规则审批分别报告。
+缺参考、未测性能、未达约定收益、无适用方案或资源不足时，写明已到哪层、待办与阻塞，保持 open；
 不能用“命令成功”或“查过优化资料”替代完成。用户调整目标时明确记录新任务范围。
+
+`feedback-draft` 可从检索 JSON 生成带来源字段的未读草稿，`feedback-preflight` 提前检查格式。
+草稿不会计作已完成查询；必须真实读取原文、填写判断和验算后再提交正式反馈。
+`issue_scope` 区分目标项目、N2S 工具和记录问题；检查报告同时保留分类缺口，避免把工具接入
+失败当作目标模型修改或数值失败。
 
 工具检查记录的结构和一致性，不能强迫忽略指引的 Agent 查阅，也不能自动判断任意模型精度。
 结束报告列出三阶段查询、实际打开的原文、修改/验算、未解决问题、case 路径与待测任务。

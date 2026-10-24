@@ -10,6 +10,8 @@
     "generalization": {"const": "pending_validation"},
     "stage": {"enum": ["preparation", "troubleshooting", "optimization"]},
     "kind": {"enum": ["lookup", "failure", "numerical_issue", "change", "resolution", "validation"]},
+    "draft": {"type": "boolean"},
+    "issue_scope": {"enum": ["target", "tooling", "recordkeeping"]},
     "summary": {"type": "string", "minLength": 1},
     "environment": {"type": "string", "minLength": 1},
     "project_revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
@@ -33,15 +35,21 @@
       "properties": {
         "uri": {"type": ["string", "null"], "pattern": "^(upstream://[a-z0-9-]+@[0-9a-f]{40}/.+|community://[a-z0-9-]+@[0-9a-f]{40}/.+|reference://[a-z0-9-]+@[0-9a-f]{64}/.+|cases/[^\\s]+)$"},
         "url": {"type": ["string", "null"], "pattern": "^https://"},
-        "accessed_at": {"type": "string", "minLength": 1},
-        "status": {"enum": ["read", "partial", "unavailable", "no_match"]},
+        "accessed_at": {"type": ["string", "null"], "minLength": 1},
+        "status": {"enum": ["not_read", "read", "partial", "unavailable", "no_match"]},
+        "read_depth": {"enum": ["catalog", "body", "implementation", "issue", "version_matrix"]},
+        "parent_uri": {"type": ["string", "null"], "minLength": 1},
+        "parent_url": {"type": ["string", "null"], "pattern": "^https://"},
         "trust": {"enum": ["accepted_upstream_documented", "unreviewed_latest_upstream", "community_source_snapshot_static_only", "community_reference_bundle", "retrieved_unreviewed", "n2s_case_evidence", "unavailable"]},
         "claim": {"type": "string", "minLength": 1},
         "applicability": {"enum": ["applicable", "related", "different_scope", "contrary", "unknown", "no_match"]},
         "comparison": {"type": "string", "minLength": 1},
         "revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
         "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
-      }
+      },
+      "allOf": [{"if": {"properties": {"status": {"const": "not_read"}}},
+                  "then": {"properties": {"accessed_at": {"type": "null"}}},
+                  "else": {"properties": {"accessed_at": {"type": "string", "minLength": 1}}}}]
     }},
     "validation": {
       "type": "object", "additionalProperties": false,
@@ -51,7 +59,7 @@
         "official_weights": {"type": "boolean"},
         "actual_backend": {"enum": ["cpu", "cuda", "npu"]},
         "finite_outputs": {"type": "boolean"},
-        "accuracy": {"enum": ["passed", "failed", "pending"]},
+        "accuracy": {"enum": ["passed", "failed", "pending", "not_applicable"]},
         "accuracy_protocol": {"type": "string", "minLength": 1},
         "optimization": {"enum": ["measured_improvement", "no_gain", "regression", "blocked", "pending", "not_applicable"]},
         "performance": {

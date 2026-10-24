@@ -28,7 +28,9 @@ no runnable commands; an agent must define the missing test, not execute a place
 ## Interfaces
 
 Run from the N2S root. Use a provisioned, trusted Python environment; the tool needs `jsonschema` from
-`tooling/requirements.txt`. No tool command installs dependencies.
+`tooling/requirements.txt`. Run `tooling/n2s-experiments doctor --json` for a standard-library startup
+check and select an existing tool environment with `N2S_PYTHON`. `--python` selects the separate
+experiment interpreter, not the interpreter starting N2S. No tool command installs dependencies.
 
 ```bash
 tooling/n2s-experiments probe --python /path/to/environment/bin/python
@@ -52,6 +54,27 @@ checks actual devices and exact declared package versions. Dependency tasks requ
 they represent prerequisites only, not evidence that this host or model is correct. Specify separate
 tasks when prerequisites must be tied to a particular source/environment.
 
+## Completion Scope
+
+Choose scope from the user's agreed task before collecting results. `new` accepts `--task-type` and
+`--optimization-goal`; unspecified scope and existing cases retain full model-migration criteria.
+
+| Task type | Completion boundary | Default optimization goal |
+|---|---|---|
+| `model_migration` | Official-weight NPU execution, finite outputs and agreed accuracy | `required_gain` |
+| `module_validation` | Scoped module protocol on its declared CPU/CUDA/NPU backend | `not_applicable` |
+| `optimization_investigation` | Declared backend, correctness and documented optimization investigation | `investigate` |
+| `tooling` | Scoped tool behavior and its evidence; numerical accuracy may be `not_applicable` with a reason | `not_applicable` |
+
+`required_gain` still requires same-device measured improvement. `investigate` can document measured
+`no_gain`/`regression`, or explain why a proposal is not applicable; it never establishes a speedup.
+`not_applicable` is an explicit task boundary, not permission to skip an agreed optimization goal.
+Changing the user's goal must be recorded and agreed; never downgrade scope merely to pass a checker.
+
+The checker reports scope, component checks, grouped target/tooling/recordkeeping issues and gaps.
+Completing a module or investigation does not establish full-model migration or approve any rule.
+All cases remain `pending_validation`, and open or blocked records remain publishable.
+
 ## Planning And Execution
 
 Create a case using `new --model MODEL_NAME`; repeated `--model` arguments identify related models, without
@@ -60,6 +83,12 @@ until its concrete argv, fixed inputs, variant, acceptance criteria, costs and p
 Use `{python}` as an argv element to bind execution to the probed interpreter. There is no shell expansion.
 Arguments are an array, not a shell command string. Commands execute in a separate target Git checkout.
 Never point at an N2S case source snapshot, `upstreams/_cache`, or the N2S repository itself.
+
+Intake `new` collects Git identity, dirty state and submodule status without requiring the execution
+fingerprint. A project containing submodules can therefore open a case immediately. Its initial
+fingerprint is explicitly `not_collected`; `plan`/`run` continue to require a complete execution
+fingerprint and reject unsupported submodule checkouts. Do not skip child code or initialize modules
+automatically to work around that refusal.
 
 `protocol.assets` identifies input/checkpoint files by project-relative or absolute path in `name` and SHA256;
 their hashes are checked before planning and again before running. Prefer portable relative paths. All

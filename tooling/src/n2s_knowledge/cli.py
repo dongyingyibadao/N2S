@@ -2,6 +2,7 @@ import argparse
 import json
 import sys
 
+from .context import ContextError, load_target_profile
 from .manager import KnowledgeError, KnowledgeManager
 from .paths import default_n2s_root
 from .references import ReferenceError, ReferenceLibrary
@@ -36,11 +37,13 @@ def _parser():
     search.add_argument("--include-community", action="store_true", help="also search pinned, selected LeRobot/OpenPI source snapshots")
     search.add_argument("--task", choices=TASKS, help="route reference-bundle results by task; official text remains searchable")
     search.add_argument("--stage", choices=STAGES, help="route reference-bundle results by migration stage")
+    search.add_argument("--target-profile", help="read explicit target JSON for soft ordering and documented differences; no project/device probing")
     search.add_argument("--json", action="store_true")
 
     guide = subparsers.add_parser("guide", help="list relevant reference summaries, source links and limitations")
     guide.add_argument("--task", choices=TASKS, required=True)
     guide.add_argument("--stage", choices=STAGES)
+    guide.add_argument("--target-profile", help="read explicit target JSON for soft ordering; missing metadata remains unknown")
     guide.add_argument("--json", action="store_true")
 
     bundle = subparsers.add_parser("import-bundle", help="verify and cache a registered reference bundle as read-only data")
@@ -49,6 +52,8 @@ def _parser():
 
     follow = subparsers.add_parser("follow", help="read a cataloged HTTPS link without executing its content")
     follow.add_argument("url")
+    follow.add_argument("--from-url", action="append", default=[], metavar="PARENT",
+                        help="verify an actual child link; repeat in order from a catalog root through intermediate parents")
 
     show = subparsers.add_parser("show", help="display an exact official, community or reference-bundle snapshot file")
     show.add_argument("uri")
@@ -107,15 +112,33 @@ def _print_search(report):
         if item.get("n2s_validation"):
             validation = item["n2s_validation"]
             print(f"  N2S validation: {validation['status']} ({validation['level']})")
+        for key in ("tasks", "models", "modes", "devices", "software_versions", "performance_context"):
+            if item.get(key):
+                print(f"  {key}: {json.dumps(item[key], ensure_ascii=False, sort_keys=True)}")
+        if item.get("context_comparison"):
+            print(f"  target context score: {item['context_score']} (ordering only; compatibility not determined)")
+            for field in item["context_comparison"]["fields"]:
+                print(f"  {field['field']}: {field['status']}; target={field['target']}; documented={field['documented']}; {field['reason']}")
         for relation in item.get("rule_relations", []):
             print(f"  related rule: {relation['rule_id']} ({relation['relation']})")
         print(f"  local: {item['local_path'] or '-'}")
-        print(f"  remote: {item['remote_url']}")
+        if item.get("trust") == "community_reference_bundle":
+            print(f"  source entry (not an exact cached-file URL): {item.get('remote_url') or item.get('origin_url') or '-'}")
+        else:
+            print(f"  remote: {item.get('remote_url') or '-'}")
         if item["excerpt"]:
             print(f"  {item['excerpt']}")
         for key in ("evidence", "conditions", "limitations"):
             if item.get(key):
                 print(f"  {key}: {item[key]}")
+        for gap in item.get("uncovered_scope", []):
+            print(f"  uncovered: {gap}")
+        for reference in item.get("references", []):
+            print(f"  reference: {reference.get('uri') or reference.get('path', '-')} [{reference.get('trust', item['trust'])}]")
+            print(f"    remote: {reference.get('remote_url') or 'not provided for this exact file'}")
+            if reference.get("origin_url"):
+                print(f"    bundle origin (not an exact file URL): {reference['origin_url']}")
+            print(f"    local: {reference.get('local_path') or '-'}")
         for link in item.get("links", []):
             print(f"  source link: {link['url']} ({link['content_status']})")
             if link.get("snapshot_uri"):
@@ -145,14 +168,15 @@ def main(argv=None):
             return 0
         if args.command == "search":
             report = manager.search(args.query, scope=args.scope, accepted_only=args.accepted_only,
-                                    include_community=args.include_community, task=args.task, stage=args.stage)
+                                    include_community=args.include_community, task=args.task, stage=args.stage,
+                                    profile=load_target_profile(args.target_profile))
             if args.json:
                 print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))
             else:
                 _print_search(report)
             return 0
         if args.command == "guide":
-            report = ReferenceLibrary(args.root).guide(args.task, args.stage)
+            report = ReferenceLibrary(args.root).guide(args.task, args.stage, profile=load_target_profile(args.target_profile))
             if args.json:
                 print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))
             else:
@@ -163,7 +187,7 @@ def main(argv=None):
             print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))
             return 0
         if args.command == "follow":
-            report = ReferenceLibrary(args.root).follow(args.url)
+            report = ReferenceLibrary(args.root).follow(args.url, from_url=args.from_url)
             print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))
             return 0 if report["status"] == "retrieved" else 3
         if args.command == "show":
@@ -192,7 +216,7 @@ def main(argv=None):
         if args.command == "accept":
             print(json.dumps(manager.accept(args.source, args.revision, args.review), ensure_ascii=False, sort_keys=True))
             return 0
-    except (KnowledgeError, ReferenceError, OSError) as error:
+    except (KnowledgeError, ReferenceError, ContextError, OSError) as error:
         print(f"error: {error}", file=sys.stderr)
         return 2
     return 2

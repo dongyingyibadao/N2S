@@ -13,6 +13,7 @@ from urllib.parse import quote
 
 import jsonschema
 
+from .context import CONTEXT_POLICY, documented_tasks, empty_versions, rank_results, target_profile
 from .indexer import IndexError, build_index, deterministic_json, list_tree, read_object
 from .references import ReferenceLibrary
 
@@ -73,6 +74,7 @@ class KnowledgeManager:
         self.state_path = self.cache_root / "state.json"
         self.lock_path = self.cache_root / "sync.lock"
         self.now = now or _now
+        self._reference_indexes = {}
         self.registry = _read_json(self.sources_path)
         _validate(self.registry, self.schemas_root / "source.schema.json", "source registry")
         self.sources = {source["id"]: source for source in self.registry["sources"]}
@@ -429,7 +431,9 @@ class KnowledgeManager:
                 "local_path": str(local) if local else None, "remote_url": remote,
                 "revision": source["revision"]}
 
-    def search(self, query, scope=None, accepted_only=False, include_community=False, task=None, stage=None):
+    def search(self, query, scope=None, accepted_only=False, include_community=False, task=None, stage=None,
+               profile=None):
+        profile = target_profile(profile)
         terms = [term.casefold() for term in query.split() if term]
         if not terms:
             raise KnowledgeError("search query cannot be empty")
@@ -437,12 +441,14 @@ class KnowledgeManager:
         for item in self._knowledge():
             if scope and scope not in item["scope"]:
                 continue
-            reference = item["official_claim"]["references"][0]
-            source = self._source(reference["source"])
-            if accepted_only and reference["revision"] != source["accepted_revision"]:
+            references = [reference for reference in item["official_claim"]["references"]
+                          if not accepted_only or reference["revision"] == self._source(reference["source"])["accepted_revision"]]
+            if not references:
                 continue
             haystack = deterministic_json(item).casefold()
             if all(term in haystack for term in terms):
+                reference = references[0]
+                source = self._source(reference["source"])
                 revision = reference["revision"]
                 path = reference["path"]
                 snapshot_path = self._snapshot(source, revision) / path
@@ -452,6 +458,16 @@ class KnowledgeManager:
                 )
                 result["n2s_validation"] = item["n2s_validation"]
                 result["rule_relations"] = item["rule_relations"]
+                result.update({key: item[key] for key in ("models", "modes", "devices", "software_versions")})
+                result["tasks"] = documented_tasks(item["modes"], item["type"])
+                result["metadata_basis"] = "N2S-authored catalog of the cited fixed revisions"
+                result["references"] = [self._reference(value) for value in references]
+                result["official_claim"] = {**item["official_claim"], "references": result["references"]}
+                result["coverage"] = "Official documented claim; target-project runtime, accuracy and performance require separate evidence."
+                result["uncovered_scope"] = ["A documented recipe or implementation is not an N2S runtime reproduction.",
+                                             "Target code path, dtype/shape, weights, data and numerical/performance outcomes are not established by this result."]
+                if item.get("performance_context"):
+                    result["performance_context"] = item["performance_context"]
                 results.append(result)
 
         for source in self.sources.values():
@@ -460,7 +476,7 @@ class KnowledgeManager:
             index_path = self.upstreams_root / "indexes" / f"{source['id']}.json" if accepted_only else self._live_index_path(source)
             if not index_path.exists():
                 index_path = self.upstreams_root / "indexes" / f"{source['id']}.json"
-            index = _read_json(index_path)
+            index, _ = self._cached_index(index_path)
             revision = index["revision"]
             snapshot = self._snapshot(source, revision)
             for entry in index["files"]:
@@ -475,12 +491,18 @@ class KnowledgeManager:
                 combined = f"{candidate}\n{body}".casefold()
                 if all(term in combined for term in terms):
                     excerpt = self._excerpt(body or candidate, terms)
-                    results.append(
-                        self._search_result(
-                            source, revision, path, entry.get("title") or path, excerpt,
-                            "official_fulltext", local, entry["type"],
-                        )
-                    )
+                    result = self._search_result(source, revision, path, entry.get("title") or path, excerpt,
+                                                 "official_fulltext", local, entry["type"])
+                    result.update({key: entry[key] for key in ("modes", "devices", "software_versions")})
+                    result["models"] = [entry["model"]] if entry.get("model") else []
+                    result["tasks"] = documented_tasks(entry["modes"])
+                    result["metadata_basis"] = "Registered path-prefix metadata; verify against the cited file revision"
+                    result["references"] = [self._reference({"source": source["id"], "revision": revision, "path": path},
+                                                            blob_sha256=entry.get("blob_sha256"))]
+                    result["n2s_validation"] = {"status": "upstream_documented", "level": "not_verified"}
+                    result["coverage"] = "Official source text; prefix metadata describes the recipe, not individual exercised operations."
+                    result["uncovered_scope"] = ["Source text and registered recipe metadata do not prove target-project execution or numerical/performance results."]
+                    results.append(result)
         if include_community:
             for source in self._community_sources().values():
                 if scope and scope not in source["scopes"]:
@@ -492,22 +514,61 @@ class KnowledgeManager:
                     if not all(term in f"{path}\n{body}".casefold() for term in terms):
                         continue
                     revision = source["revision"]
+                    uri = f"community://{source['id']}@{revision}/{path}"
+                    remote = source["browse_url_template"].format(revision=revision, path=quote(path, safe="/"))
+                    trust = "community_source_snapshot_static_only"
                     results.append({
                         "entry_type": "selected_source_file", "excerpt": self._excerpt(body, terms),
                         "local_path": str(local), "path": path,
-                        "remote_url": source["browse_url_template"].format(revision=revision, path=quote(path, safe="/")),
+                        "remote_url": remote,
                         "result_kind": "community_source_snapshot", "revision": revision,
                         "source": source["id"], "title": path,
-                        "trust": "community_source_snapshot_static_only",
-                        "uri": f"community://{source['id']}@{revision}/{path}",
+                        "trust": trust, "uri": uri,
                         "coverage": source["coverage"],
+                        "models": [], "modes": [], "devices": [], "tasks": [],
+                        "software_versions": empty_versions(),
+                        "n2s_validation": {"status": "not_verified", "level": "not_verified"},
+                        "references": [{"source": source["id"], "revision": revision, "path": path,
+                                        "uri": uri, "remote_url": remote, "local_path": str(local), "trust": trust,
+                                        "blob_sha256": hashlib.sha256(local.read_bytes()).hexdigest()}],
+                        "uncovered_scope": ["Selected source files have static validation only; no runtime/model success is established.",
+                                             "Structured hardware/software applicability metadata is absent; read the code and provenance."],
                     })
         references = ReferenceLibrary(self.root)
         results.extend(references.search(terms, task=task, stage=stage, scope=scope))
-        results.sort(key=lambda item: (item["result_kind"], item["source"], item["path"], item["title"]))
+        rank_results(results, profile)
         return {"query": query, "results": results[:200], "scope": scope, "task": task, "stage": stage,
                 "total_results": len(results), "truncated": len(results) > 200,
+                "target_profile": profile, "context_policy": CONTEXT_POLICY,
                 "reference_bundles": references.status()}
+
+    def _reference(self, reference, blob_sha256=None):
+        source = self._source(reference["source"])
+        revision, path = reference["revision"], reference["path"]
+        local = self._snapshot(source, revision) / path
+        if blob_sha256 is None:
+            for index_path in (self.upstreams_root / "indexes" / f"{source['id']}.json", self._live_index_path(source)):
+                if not index_path.is_file():
+                    continue
+                index, by_path = self._cached_index(index_path)
+                if index["revision"] == revision and path in by_path:
+                    blob_sha256 = by_path[path].get("blob_sha256")
+                    break
+        return {**reference, "uri": f"upstream://{source['id']}@{revision}/{path}",
+                "remote_url": source["browse_url_template"].format(revision=revision, path=quote(path, safe="/")),
+                "local_path": str(local) if local.is_file() else None,
+                "trust": "accepted_upstream_documented" if revision == source["accepted_revision"] else "unreviewed_latest_upstream",
+                "blob_sha256": blob_sha256}
+
+    def _cached_index(self, path):
+        metadata = path.stat()
+        signature = (metadata.st_mtime_ns, metadata.st_size)
+        cached = self._reference_indexes.get(path)
+        if cached is None or cached[0] != signature:
+            index = _read_json(path)
+            cached = (signature, index, {entry["path"]: entry for entry in index["files"]})
+            self._reference_indexes[path] = cached
+        return cached[1], cached[2]
 
     def _excerpt(self, body, terms):
         lines = body.splitlines()

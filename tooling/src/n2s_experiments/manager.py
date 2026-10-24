@@ -45,6 +45,8 @@ def file_hash(path):
 
 
 def read_json(path):
+    if str(path) == "-":
+        return json.load(sys.stdin)
     return json.loads(Path(path).read_text(encoding="utf-8"))
 
 
@@ -157,12 +159,56 @@ class Experiments:
             raise ExperimentError("Task ID does not match path")
         return value
 
-    def source(self, project):
+    def project_root(self, project):
         project = Path(project).resolve()
         if project.is_relative_to(self.root) or self.root.is_relative_to(project):
             raise ExperimentError("Use a separate external Git checkout, never an N2S snapshot")
         if Path(git(project, "rev-parse", "--show-toplevel")).resolve() != project:
             raise ExperimentError("Project must be the external Git repository root")
+        return project
+
+    def gitlinks(self, project):
+        links = []
+        for record in git(project, "ls-files", "--stage", "-z").split("\0"):
+            if not record:
+                continue
+            metadata, name = record.split("\t", 1)
+            mode, revision, stage = metadata.split()
+            if mode == "160000":
+                links.append({"path": name, "index_revision": revision})
+        return links
+
+    def source_intake(self, project):
+        """Git identity for intake, never an executable-source fingerprint."""
+        project = self.project_root(project)
+        modules = []
+        gaps = ["execution_fingerprint_not_collected; plan must inspect the actual source"]
+        for link in self.gitlinks(project):
+            path = project / link["path"]
+            item = {**link, "checkout_revision": None, "status": "uninitialized", "dirty": None}
+            if path.is_symlink() or not path.resolve().is_relative_to(project):
+                item["status"] = "unavailable"
+            elif (path / ".git").exists():
+                try:
+                    if Path(git(path, "rev-parse", "--show-toplevel")).resolve() != path:
+                        raise ExperimentError("Submodule is not its own Git checkout")
+                    item["checkout_revision"] = git(path, "rev-parse", "HEAD")
+                    item["dirty"] = bool(git(path, "status", "--porcelain", "--ignore-submodules=none"))
+                    item["status"] = "initialized" if item["checkout_revision"] == link["index_revision"] else "revision_mismatch"
+                except (ExperimentError, OSError, subprocess.SubprocessError):
+                    item["status"] = "unavailable"
+            modules.append(item)
+            gaps.append("submodule_requires_separate_pinned_execution_scope:" + link["path"])
+        return {"revision": git(project, "rev-parse", "HEAD"),
+                "intake": {"dirty": bool(git(project, "status", "--porcelain", "--ignore-submodules=none")),
+                           "fingerprint_status": "not_collected", "fingerprint_gaps": gaps,
+                           "submodules": modules}}
+
+    def source(self, project):
+        project = self.project_root(project)
+        # Even absent/uninitialized gitlinks represent code outside this fingerprint.
+        if self.gitlinks(project):
+            raise ExperimentError("Submodule checkouts need a separate explicitly pinned task; execution fingerprint is incomplete")
         # Include nonignored untracked files so a new helper also invalidates an old plan.
         names = git(project, "ls-files", "-z", "--cached", "--others", "--exclude-standard").split("\0")
         files = {}
@@ -199,18 +245,32 @@ class Experiments:
         return digest(files)
 
     def workflow(self):
-        return self.fingerprint(("tooling/n2s-experiments", "tooling/src/n2s_experiments", "evaluations/schemas"))
+        return self.fingerprint(("tooling/n2s-experiments", "tooling/bootstrap.py", "tooling/src/n2s_experiments", "evaluations/schemas"))
 
-    def new_case(self, case_id, project, title, goal, source_url, backend="npu", models=None):
+    def new_case(self, case_id, project, title, goal, source_url, backend="npu", models=None,
+                 task_type=None, optimization_goal=None):
         identifier(case_id)
-        source = self.source(project)
+        source = self.source_intake(project)
+        completion = None
+        if task_type is not None or optimization_goal is not None:
+            task_type = task_type or "model_migration"
+            if task_type == "model_migration" and backend != "npu":
+                raise ExperimentError("A model_migration completes on npu; use module_validation for a cpu/cuda task")
+            default_goal = {"model_migration": "required_gain", "optimization_investigation": "investigate"}
+            completion = {"task_type": task_type, "backend": backend,
+                          "optimization_goal": optimization_goal or default_goal.get(task_type, "not_applicable")}
+            if task_type == "optimization_investigation" and completion["optimization_goal"] == "not_applicable":
+                raise ExperimentError("An optimization_investigation needs investigate or required_gain as its goal")
         issue = {"schema_version": "1.0.0", "id": case_id, "title": title, "created_at": now(),
                  "state": "open", "generalization": "pending_validation", "models": models or ["unspecified"],
                  "maintenance_workflow": "three_stage_v1",
-                 "source": {"url": source_url, "baseline_revision": source["revision"]},
+                 "source": {"url": source_url, "baseline_revision": source["revision"], "intake": source["intake"]},
                  "goal": goal,
-                 "observations": "Intake checkout is dirty; baseline_revision identifies HEAD, not the executed variant." if source["dirty"] else "",
+                 "observations": "Intake records Git identity only, not an executed variant or complete source fingerprint."
+                                 + (" Checkout is dirty; baseline_revision identifies HEAD." if source["intake"]["dirty"] else ""),
                  "knowledge_refs": [], "related_rules": []}
+        if completion is not None:
+            issue["completion"] = completion
         task = {"schema_version": "1.0.0", "id": "reproduce", "case_id": case_id,
                 "title": title, "state": "draft", "claim": goal, "level": "observation",
                 "requirements": {"backends": [backend], "device_name_contains": [], "versions": {}},
@@ -226,7 +286,9 @@ class Experiments:
             raise ExperimentError("Case already exists; use a new ID")
         self.write(f"cases/work-items/{case_id}/issue.json", issue)
         self.write(f"cases/work-items/{case_id}/tasks/reproduce.json", task)
-        return {"case": str(case_path), "task": f"{case_id}/reproduce", "state": "draft"}
+        return {"case": str(case_path), "task": f"{case_id}/reproduce", "state": "draft",
+                "source_intake": source["intake"], "execution_ready": False,
+                "note": "Intake does not authorize execution; plan/run require a complete source fingerprint and reviewed command"}
 
     def feedback_events(self, case_id):
         directory = self.path(f"cases/work-items/{identifier(case_id)}/events")
@@ -246,7 +308,7 @@ class Experiments:
                     raise ExperimentError("Feedback evidence checksum mismatch: " + relative)
                 check_text(evidence.read_text(encoding="utf-8"))
             for check in event["source_checks"]:
-                if check["status"] != "no_match" and not (check["uri"] or check["url"]):
+                if check["status"] not in {"no_match", "not_read"} and not (check["uri"] or check["url"]):
                     raise ExperimentError("Source inspection needs its actual URI or URL")
                 if check["status"] == "no_match" and check["applicability"] != "no_match":
                     raise ExperimentError("A no-match search cannot establish applicability")
@@ -257,16 +319,17 @@ class Experiments:
             events.append(event)
         return events
 
-    def feedback(self, case_id, report, confirmed):
-        if not confirmed:
-            raise ExperimentError("Review the feedback and pass --confirm-sanitized")
+    def prepare_feedback(self, case_id, report):
         issue = read_json(self.path(f"cases/work-items/{identifier(case_id)}/issue.json"))
         self.validate_data("issue", issue)
-        event = read_json(report)
+        event = dict(report) if isinstance(report, dict) else read_json(report)
+        if not isinstance(event, dict):
+            raise ExperimentError("Feedback input must be a JSON object")
         reserved = {"schema_version", "id", "case_id", "recorded_at", "generalization", "evidence_sha256"}
         if reserved.intersection(event):
             raise ExperimentError("Feedback IDs, timestamps, generalization and evidence hashes are generated by N2S")
         event = {"queries": [], "source_checks": [], "evidence_refs": [], "resolves": [], **event}
+        event.setdefault("issue_scope", "tooling" if issue.get("completion", {}).get("task_type") == "tooling" else "target")
         event.update(schema_version="1.0.0", case_id=case_id, recorded_at=now(),
                      id=dt.datetime.now(dt.timezone.utc).strftime("%Y%m%d-%H%M%S-%f-") + uuid.uuid4().hex[:8],
                      generalization="pending_validation", evidence_sha256={})
@@ -275,7 +338,7 @@ class Experiments:
         if any(key not in known or known[key]["kind"] not in {"failure", "numerical_issue"} for key in event["resolves"]):
             raise ExperimentError("Feedback must refer to an earlier failure/numerical issue")
         for check in event["source_checks"]:
-            if check["status"] != "no_match" and not (check["uri"] or check["url"]):
+            if check["status"] not in {"no_match", "not_read"} and not (check["uri"] or check["url"]):
                 raise ExperimentError("Source inspection needs its actual URI or URL")
             if check["status"] == "no_match" and check["applicability"] != "no_match":
                 raise ExperimentError("A no-match search cannot establish applicability")
@@ -286,6 +349,58 @@ class Experiments:
             check_text(evidence.read_text(encoding="utf-8"))
             event["evidence_sha256"][relative] = file_hash(evidence)
         self.validate_data("feedback", event)
+        return event
+
+    def feedback_preflight(self, case_id, report):
+        event = self.prepare_feedback(case_id, report)
+        warnings = []
+        if event.get("draft"):
+            warnings.append("Draft is recordable, but never counts as completed source reading or validation")
+        if any(check["status"] == "not_read" for check in event["source_checks"]):
+            warnings.append("Sources not read: inspect the actual body, then record real access time, claim and applicability")
+        return {"case_id": case_id, "valid": True, "draft": event.get("draft", False), "warnings": warnings,
+                "note": "No record written, hardware probed, model executed or source reading inferred"}
+
+    def feedback_draft(self, case_id, stage="preparation", search_results=None, queries=None, resolves=None,
+                       issue_scope=None, limit=8):
+        issue = read_json(self.path(f"cases/work-items/{identifier(case_id)}/issue.json"))
+        self.validate_data("issue", issue)
+        issue_scope = issue_scope or ("tooling" if issue.get("completion", {}).get("task_type") == "tooling" else "target")
+        payload = search_results or {}
+        if not isinstance(payload, dict) or not isinstance(payload.get("results", []), list):
+            raise ExperimentError("Search input must be a JSON object containing a results array")
+        queries = queries or ([payload["query"]] if payload.get("query") else ["pending: enter the actual query and scope"])
+        trust_states = read_json(self.path("evaluations/schemas/feedback.schema.json"))["properties"]["source_checks"]["items"]["properties"]["trust"]["enum"]
+        checks = []
+        for result in payload.get("results", [])[:limit]:
+            if not isinstance(result, dict):
+                raise ExperimentError("Each search result must be a JSON object")
+            check = {"uri": result.get("uri"), "url": result.get("remote_url"), "accessed_at": None,
+                     "status": "not_read", "read_depth": "catalog",
+                     "trust": result.get("trust") if result.get("trust") in trust_states else "unavailable",
+                     "claim": "Pending source inspection: " + str(result.get("title", result.get("path", "unknown source"))),
+                     "applicability": "unknown", "comparison": "Pending: compare the actual implementation, versions, device and exercised path"}
+            if check["url"] is not None and not str(check["url"]).startswith("https://"):
+                check["url"] = None
+            if re.fullmatch("[0-9a-f]{40}", str(result.get("revision", ""))):
+                check["revision"] = result["revision"]
+            if re.fullmatch("[0-9a-f]{64}", str(result.get("content_sha256", ""))):
+                check["content_sha256"] = result["content_sha256"]
+            checks.append(check)
+        if not checks:
+            checks = [{"uri": None, "url": None, "accessed_at": None, "status": "not_read",
+                       "read_depth": "catalog", "trust": "unavailable", "claim": "Pending: identify and read a source",
+                       "applicability": "unknown", "comparison": "Pending: no source inspection has been recorded"}]
+        draft = {"kind": "lookup", "stage": stage, "draft": True, "issue_scope": issue_scope,
+                 "summary": "Pending lookup: imported search metadata is not source reading or a verified claim",
+                 "queries": queries, "source_checks": checks, "resolves": resolves or []}
+        self.prepare_feedback(case_id, draft)
+        return draft
+
+    def feedback(self, case_id, report, confirmed):
+        if not confirmed:
+            raise ExperimentError("Review the feedback and pass --confirm-sanitized")
+        event = self.prepare_feedback(case_id, report)
         path = self.write(f"cases/work-items/{case_id}/events/{event['id']}.json", event)
         return {"event": str(path), "id": event["id"], "generalization": "pending_validation",
                 "note": "Observation recorded without hardware discovery, model execution or rule changes."}
@@ -293,65 +408,117 @@ class Experiments:
     def workflow_check(self, case_id):
         issue = read_json(self.path(f"cases/work-items/{identifier(case_id)}/issue.json"))
         self.validate_data("issue", issue)
-        events = self.feedback_events(case_id)
+        all_events = self.feedback_events(case_id)
+        events = [entry for entry in all_events if not entry.get("draft", False)]
+        scope = issue.get("completion", {"task_type": "model_migration", "backend": "npu", "optimization_goal": "required_gain"})
+        task_type, backend, optimization_goal = (scope[key] for key in ("task_type", "backend", "optimization_goal"))
+        if task_type == "model_migration" and backend != "npu":
+            raise ExperimentError("model_migration completion requires backend npu")
+        needs_optimization = optimization_goal != "not_applicable"
+        blocking_scope = "tooling" if task_type == "tooling" else "target"
         gaps = []
+        gap_details = []
+        def gap(code, category="recordkeeping", event_id=None):
+            gaps.append(code)
+            gap_details.append({"code": code, "category": category, "event_id": event_id})
+
+        def inspected(entry):
+            return entry["kind"] == "lookup" and any(check["status"] != "not_read" for check in entry["source_checks"])
+
+        def body_read(entry):
+            return any(check["status"] == "read" and check.get("read_depth") != "catalog" for check in entry["source_checks"])
+
         stages = {}
         for stage in ("preparation", "troubleshooting", "optimization"):
-            stages[stage] = [entry["id"] for entry in events if entry["stage"] == stage and entry["kind"] == "lookup"]
+            stages[stage] = [entry["id"] for entry in events if entry["stage"] == stage and inspected(entry)
+                             and entry.get("issue_scope", "target") == blocking_scope]
         if not stages["preparation"]:
-            gaps.append("preparation_lookup_missing")
-        if not stages["optimization"]:
-            gaps.append("optimization_lookup_missing")
+            gap("preparation_lookup_missing")
+        if needs_optimization and not stages["optimization"]:
+            gap("optimization_lookup_missing")
+        if task_type == "model_migration":
+            for stage in (["preparation", "optimization"] if needs_optimization else ["preparation"]):
+                if stages[stage] and not any(entry["id"] in stages[stage] and body_read(entry) for entry in events):
+                    gap(stage + "_source_body_not_verified")
         failures = [entry for entry in events if entry["kind"] in {"failure", "numerical_issue"}]
         resolved = {key for entry in events if entry["kind"] == "resolution" for key in entry["resolves"]}
         unresolved = [entry["id"] for entry in failures if entry["id"] not in resolved]
-        if unresolved:
-            gaps.append("unresolved_failures_or_numerical_issues")
+        blocking_failures = [entry for entry in failures if entry.get("issue_scope", "target") == blocking_scope]
+        blocking_unresolved = [entry["id"] for entry in blocking_failures if entry["id"] not in resolved]
+        if blocking_unresolved:
+            gap("unresolved_failures_or_numerical_issues", blocking_scope)
+        issue_groups = {name: [] for name in ("target", "tooling", "recordkeeping")}
         for failure in failures:
-            lookups = [entry for entry in events if entry["kind"] == "lookup"
-                       and entry["stage"] == "troubleshooting" and failure["id"] in entry["resolves"]]
-            if not lookups:
-                gaps.append("error_source_comparison_missing:" + failure["id"])
-        relevant = [entry for entry in events if entry["kind"] in {"change", "failure", "numerical_issue", "validation"}]
-        if relevant and stages["preparation"] and stages["preparation"][0] > relevant[0]["id"]:
-            gaps.append("preparation_recorded_after_work_started")
-        validations = [entry for entry in events if entry["kind"] == "validation"]
+            lookups = [entry for entry in events if inspected(entry)
+                       and entry["stage"] in {"troubleshooting", "optimization"} and failure["id"] in entry["resolves"]]
+            category = failure.get("issue_scope", "target")
+            issue_groups[category].append({"id": failure["id"], "resolved": failure["id"] in resolved,
+                                           "source_comparison_recorded": bool(lookups)})
+            if not lookups and failure in blocking_failures:
+                gap("error_source_comparison_missing:" + failure["id"], "recordkeeping", failure["id"])
+        relevant = [entry for entry in events if entry["kind"] in {"change", "failure", "numerical_issue", "validation"}
+                    and entry.get("issue_scope", "target") == blocking_scope]
+        changes = [entry for entry in relevant if entry["kind"] == "change"]
+        if changes and stages["preparation"] and stages["preparation"][0] > changes[0]["id"]:
+            gap("preparation_recorded_after_work_started")
+        validations = [entry for entry in relevant if entry["kind"] == "validation"]
         def functional_accuracy_passed(validation):
-            return (validation["functional"] == "passed" and validation["official_weights"]
-                    and validation["finite_outputs"] and validation["actual_backend"] == "npu"
+            return (validation["functional"] == "passed" and (task_type != "model_migration" or validation["official_weights"])
+                    and validation["finite_outputs"] and validation["actual_backend"] == backend
                     and validation["accuracy"] == "passed"
                     and "pending" not in validation["accuracy_protocol"].casefold())
 
         # The third-stage lookup must investigate the migrated, numerically checked target.
-        if stages["optimization"] and not any(
+        if task_type != "tooling" and needs_optimization and stages["optimization"] and not any(
                 entry["id"] < stages["optimization"][-1] and functional_accuracy_passed(entry["validation"])
                 for entry in validations):
-            gaps.append("functional_and_accuracy_check_must_precede_optimization_lookup")
+            gap("functional_and_accuracy_check_must_precede_optimization_lookup")
+        functional_ok = accuracy_ok = investigation_ok = gain_ok = False
         if not validations:
-            gaps.append("functional_accuracy_performance_report_missing")
+            gap("functional_accuracy_performance_report_missing")
         else:
             last = validations[-1]
             validation = last["validation"]
-            if (validation["functional"] != "passed" or not validation["official_weights"]
-                    or not validation["finite_outputs"] or validation["actual_backend"] != "npu"):
-                gaps.append("official_weight_npu_execution_not_verified")
-            if validation["accuracy"] != "passed" or "pending" in validation["accuracy_protocol"].casefold():
-                gaps.append("agreed_accuracy_comparison_not_verified")
+            functional_ok = (validation["functional"] == "passed" and validation["actual_backend"] == backend
+                             and (task_type == "tooling" or validation["finite_outputs"])
+                             and (task_type != "model_migration" or validation["official_weights"]))
+            if not functional_ok:
+                gap("official_weight_npu_execution_not_verified" if task_type == "model_migration" else "scoped_functional_execution_not_verified", blocking_scope)
+            accuracy_ok = ((validation["accuracy"] == "passed" or (task_type == "tooling" and validation["accuracy"] == "not_applicable"))
+                           and "pending" not in validation["accuracy_protocol"].casefold())
+            if not accuracy_ok:
+                gap("agreed_accuracy_comparison_not_verified", blocking_scope)
             performance = validation["performance"]
             baseline, modified = performance["baseline"], performance["modified"]
-            measurable = all(isinstance(value, (int, float)) and math.isfinite(value) for value in (baseline, modified))
+            measurable = all(isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value) for value in (baseline, modified))
             gain = measurable and (modified < baseline if performance["direction"] == "lower" else modified > baseline)
-            if (validation["optimization"] != "measured_improvement" or not performance["same_device"]
-                    or not gain or "pending" in performance["protocol"].casefold()):
-                gaps.append("same_device_optimization_gain_not_verified")
-            if (last["stage"] != "optimization" or not stages["optimization"]
+            protocol_ready = "pending" not in performance["protocol"].casefold()
+            gain_ok = (validation["optimization"] == "measured_improvement" and performance["same_device"] and gain and protocol_ready)
+            investigation_ok = (protocol_ready and ((validation["optimization"] in {"no_gain", "regression", "measured_improvement"}
+                                 and performance["same_device"] and measurable
+                                 and (validation["optimization"] != "measured_improvement" or gain_ok))
+                                 or validation["optimization"] == "not_applicable"))
+            if optimization_goal == "required_gain" and not gain_ok:
+                gap("same_device_optimization_gain_not_verified", blocking_scope)
+            if optimization_goal == "investigate" and not investigation_ok:
+                gap("optimization_investigation_not_verified", blocking_scope)
+            if needs_optimization and (last["stage"] != "optimization" or not stages["optimization"]
                     or stages["optimization"][-1] > last["id"]):
-                gaps.append("optimization_lookup_must_precede_final_validation")
+                gap("optimization_lookup_must_precede_final_validation")
             if any(entry["id"] > last["id"] for entry in relevant):
-                gaps.append("work_after_last_validation_needs_revalidation")
+                gap("work_after_last_validation_needs_revalidation")
+        accepted = functional_ok and accuracy_ok and not blocking_unresolved
         return {"case_id": case_id, "completion_ready": not gaps,
                 "status": "ready_for_review" if not gaps else "incomplete", "stages": stages,
-                "gaps": gaps, "unresolved_events": unresolved, "events": len(events),
+                "scope": scope, "gaps": gaps, "gap_details": gap_details, "issue_groups": issue_groups,
+                "unresolved_events": unresolved, "blocking_unresolved_events": blocking_unresolved,
+                "events": len(all_events), "draft_events": len(all_events) - len(events),
+                "measurements": {"same_device_gain_observed": gain_ok},
+                "checks": {"scoped_task_acceptance": "passed" if accepted else "pending",
+                           "model_migration": ("passed" if accepted else "pending") if task_type == "model_migration" else "not_applicable",
+                           "optimization_investigation": ("completed" if investigation_ok and accepted else "pending") if needs_optimization else "not_applicable",
+                           "optimization_goal": ("met" if gain_ok and accepted else "pending") if optimization_goal == "required_gain" else ("investigated" if investigation_ok and accepted else "pending") if needs_optimization else "not_applicable",
+                           "rule_approval": "not_evaluated"},
                 "generalization": "pending_validation",
                 "note": "Checks recorded evidence and workflow coverage, not model correctness or rule approval. Open/blocked cases remain publishable."}
 

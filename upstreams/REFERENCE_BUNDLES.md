@@ -5,6 +5,9 @@
 [catalogs/ascend-reference-20261005.json](catalogs/ascend-reference-20261005.json)。
 原来源为 [参考手册](https://sii-czxy.feishu.cn/docx/NwxrdHTD1ohfvSxm732cT2mUngb)，在线原文可能需要权限。
 
+资料登记、原文缓存、检索结果与外部实现的关系，以及可逐步执行的 MOVA 深读实例，见
+[从目录深入到实现](LINK_WALKTHROUGH.md)。资料包导入不会克隆其中链接的所有 Git 仓库。
+
 ## 按任务查阅
 
 ```bash
@@ -60,11 +63,13 @@ tooling/n2s-knowledge show 'reference://ascend-reference-20261005@b83a696461745e
 tooling/n2s-knowledge follow https://raw.githubusercontent.com/OpenMOSS/MOVA/61e39c2e6e9b9047fb086112ab9bfae8d5b74182/ASCEND_SUPPORTS.md
 ```
 
-`follow` 限制在目录中已登记的 HTTPS 文本链接，限制大小与超时，不启动网页脚本、安装程序或
+`follow` 从目录中已登记的 HTTPS 文本链接出发，限制大小与超时，不启动网页脚本、安装程序或
 远端代码。返回 `retrieved_unreviewed`、读取时间、原响应 SHA256、最终 URL 和正文；网络失败
 返回 `unavailable`。它不保存网页、不修改规则，也不扩大 Git 镜像注册表。branch/root 网页不因
-关联官方 snapshot 而得到该 commit 标签。需要子链接/动态页面时，Agent 使用自己的只读网络
-工具深入访问并记录；HTTP 200、导航和登录页均不能填成“已确认解法”。
+关联官方 snapshot 而得到该 commit 标签。返回的 `discovered_links` 列出正文实际出现的链接；
+用 `follow CHILD_URL --from-url PARENT_URL` 验证父正文后继续访问。
+需要多层链接或动态页面时，保留从已登记根链接出发的访问链，必要时使用自己的只读网络工具
+深入访问并记录；HTTP 200、导航和登录页均不能填成“已确认解法”。
 
 ## 已知缺口
 

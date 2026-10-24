@@ -4,10 +4,13 @@ import json
 import shutil
 import tempfile
 import unittest
+from contextlib import redirect_stdout
 from email.message import Message
 from pathlib import Path
 from unittest.mock import patch
+from urllib.error import URLError
 
+from n2s_knowledge.cli import _print_search
 from n2s_knowledge.references import ReferenceError, ReferenceLibrary
 
 
@@ -162,6 +165,105 @@ class ReferenceTests(unittest.TestCase):
         file = next(entry for entry in report if entry["result_kind"] == "reference_fulltext")
         self.assertEqual(["R01", "R02"], file["catalog_ids"])
         self.assertEqual({"https://example.invalid/docs", "https://example.invalid/compiler"}, {link["url"] for link in file["links"]})
+
+    def mocked_follow(self, url, pages, from_url=None):
+        requested = []
+
+        def open_page(request, timeout):
+            requested.append(request.full_url)
+            body, content_type, final_url = pages[request.full_url]
+            if isinstance(body, Exception):
+                raise body
+            response = io.BytesIO(body.encode())
+            response.headers = Message()
+            response.headers["Content-Type"] = content_type
+            response.geturl = lambda: final_url or request.full_url
+            return response
+
+        with patch("n2s_knowledge.references.build_opener") as opener:
+            opener.return_value.open.side_effect = open_page
+            result = self.library.follow(url, from_url=from_url)
+        return result, requested
+
+    def test_follow_relative_fixed_commit_links_and_multiple_parents_require_actual_provenance(self):
+        revision = "b" * 40
+        root = f"https://raw.githubusercontent.com/Fixture/Project/{revision}/ASCEND_SUPPORTS.md"
+        parent = f"https://raw.githubusercontent.com/Fixture/Project/{revision}/src/README.md"
+        child = f"https://raw.githubusercontent.com/Fixture/Project/{revision}/src/adapter.py"
+        root_body = "# Source guide\nRead [`src/README.md`](src/README.md) for implementation.\n"
+        parent_body = "# Adapter\nSee [actual adapter](adapter.py#L1).\n"
+        child_body = "# inert source fixture\nraise RuntimeError('must never execute')\n"
+        self.library.items[0]["links"].append({"url": root, "revision": revision})
+        pages = {root: (root_body, "text/plain; charset=utf-8", None),
+                 parent: (parent_body, "text/plain; charset=utf-8", None),
+                 child: (child_body, "text/plain; charset=utf-8", None)}
+        report, requested = self.mocked_follow(child, pages, from_url=[root, parent])
+        self.assertEqual([root, parent, child], requested)
+        self.assertEqual(revision, report["revision"])
+        self.assertEqual(child_body, report["text"])
+        self.assertEqual([parent, child], [entry["next_url"] for entry in report["lineage"]])
+        self.assertEqual(hashlib.sha256(root_body.encode()).hexdigest(), report["lineage"][0]["content_sha256"])
+        self.assertEqual("retrieved_unreviewed", report["trust"])
+        with self.assertRaisesRegex(ReferenceError, "freshly read parent"):
+            self.mocked_follow(child, pages, from_url=root)
+        with self.assertRaisesRegex(ReferenceError, "reviewed reference catalog"):
+            self.mocked_follow(child, pages, from_url=parent)
+
+    def test_partial_navigation_can_reveal_a_child_without_claiming_the_parent_solution_was_read(self):
+        root, child = "https://example.invalid/docs", "https://example.invalid/actual.py"
+        pages = {root: ('<nav><a href="actual.py">Source</a><a href="/help">Help</a><a href="/login">Login</a></nav>', "text/html", None),
+                 child: ("# actual implementation fixture", "text/plain", None)}
+        root_report, _ = self.mocked_follow(root, pages)
+        self.assertEqual("partial", root_report["status"])
+        self.assertEqual("navigation_only", root_report["body_status"])
+        self.assertIn(child, [link["url"] for link in root_report["discovered_links"]])
+        child_report, requested = self.mocked_follow(child, pages, from_url=root)
+        self.assertEqual([root, child], requested)
+        self.assertEqual("retrieved", child_report["status"])
+        self.assertEqual("navigation_only", child_report["lineage"][0]["body_status"])
+
+    def test_login_javascript_empty_and_parent_failure_are_explicit_not_successful_reads(self):
+        root = "https://example.invalid/docs"
+        for body, expected in (("<form><input type='password'>Sign in</form>", "login_required"),
+                               ("<main>Please enable JavaScript to read this repository</main>", "partial"),
+                               ("<script>renderRequestedSource()</script>", "empty")):
+            report, _ = self.mocked_follow(root, {root: (body, "text/html", None)})
+            self.assertEqual("partial", report["status"])
+            self.assertEqual(expected, report["body_status"])
+        report, requested = self.mocked_follow("https://example.invalid/child.py",
+                                              {root: (URLError("offline fixture"), "text/plain", None)}, from_url=root)
+        self.assertEqual([root], requested)
+        self.assertEqual("unavailable", report["status"])
+        self.assertIn("child was not requested", report["error"])
+        with self.assertRaisesRegex(ReferenceError, "HTTPS"):
+            self.library.follow("http://example.invalid/child.py", from_url=root)
+
+    def test_reference_context_preserves_textual_conditions_and_keeps_structured_unknowns(self):
+        profile = {"task": "training", "model": "AnyModel", "device": "Any NPU", "software_versions": {"cann": "9.0"}}
+        report = self.library.guide("training", "preparation", profile=profile)
+        result = report["results"][0]
+        fields = {field["field"]: field for field in result["context_comparison"]["fields"]}
+        self.assertEqual("matched", fields["task"]["status"])
+        self.assertEqual("unknown", fields["model"]["status"])
+        self.assertEqual("unknown", fields["software_versions.cann"]["status"])
+        self.assertEqual("Mock input only", result["conditions"])
+        self.assertEqual("No official-weight accuracy evidence", result["limitations"])
+        self.assertEqual(self.revision, result["references"][0]["revision"])
+        self.assertEqual("bundle_manifest_sha256", result["references"][0]["revision_kind"])
+
+    def test_text_renderer_accepts_legacy_reference_metadata_without_mislabeling_origin_as_exact_file(self):
+        report = self.library.guide("training")
+        reference = report["results"][0]["references"][0]
+        self.assertIsNone(reference["remote_url"])
+        reference.pop("trust")
+        reference.pop("remote_url")
+        output = io.StringIO()
+        with redirect_stdout(output):
+            _print_search(report)
+        text = output.getvalue()
+        self.assertIn(f"reference://fixture-reference@{self.revision}/报告.md [community_reference_bundle]", text)
+        self.assertIn("remote: not provided for this exact file", text)
+        self.assertIn("bundle origin (not an exact file URL): https://example.invalid/source", text)
 
 
 if __name__ == "__main__":

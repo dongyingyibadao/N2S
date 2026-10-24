@@ -28,6 +28,15 @@ tooling/n2s-experiments new --id model-migration-YYYYMMDD-01 \
 ID 使用小写字母、数字和连字符，替换示例日期后使用。一个工单可重复传入 `--model` 记录多个
 相关模型；但每个实际实验任务应固定一个明确的源码、输入和环境范围，不能混合推导通用结论。
 
+默认按完整 `model_migration` 验收。较窄任务可显式选择 `--task-type module_validation`、
+`optimization_investigation` 或 `tooling`，配合实际 `--backend` 和
+`--optimization-goal required_gain|investigate|not_applicable`；范围与用户目标一致，
+详见[完成范围](../../evaluations/README.md#completion-scope)。模块通过不会称为整模型迁移成功，
+无收益的优化调查也不会称为达到提速目标。
+
+带 Git 子模块的项目也可先建案：工具记录 Git 身份、dirty、子模块状态和尚未收集的执行指纹。
+执行 `plan`/`run` 时仍严格检查源码完整性，不会因为建案成功就跳过子模块代码或自动初始化。
+
 在 `issue.json` 记录错误阶段、修改位置和理由、作用、回退方法、官方引用和待验证假设。
 工单默认 `open`，通用性固定 `pending_validation`。初始任务是 `draft`，没有可执行命令。
 没有模块 A/B、模型尚未加载或环境依赖缺失，都可以先记录，不要求“成功后才允许提工单”。

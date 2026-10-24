@@ -5,6 +5,9 @@ N2S 用案例化证据记录模型从 NVIDIA/CUDA 软件栈迁移到昇腾/NPU �
 
 ## 新项目如何使用
 
+首次使用可运行 `tooling/n2s-knowledge doctor --json` 检查工具解释器、Git 和依赖。
+使用 `N2S_PYTHON=/path/to/tool-env/bin/python` 指定已配置环境；工具不会自动安装依赖。
+
 把目标项目路径、N2S 路径和迁移目标告诉 Agent，并明确要求读取、遵循 N2S 的 `AGENTS.md`。
 可直接复制 [新项目 Agent 指令示例](upstreams/AGENT_USAGE.md#新项目可直接交给-agent-的指令)，
 替换路径与任务后使用。Agent 按任务查资料、遇错即时回填 case、验算功能和精度，再查昇腾优化。
@@ -27,6 +30,8 @@ Agent 使用前应按 [外部知识流程](upstreams/AGENT_USAGE.md) 同时检�
 LeRobot/OpenPI 精选社区源码，以及 [昇腾参考资料任务目录](upstreams/REFERENCE_BUNDLES.md)，
 并核对各自的验证范围。资料包整理为 27 条来源/错误/优化入口，原文可校验导入只读本地缓存；
 另一台机器可直接使用摘要和链接，需要离线原文时单独导入授权资料包。
+资料的接入结构及“目录 → 原文 → 固定版本实现 → case 证据”的实际操作示例，见
+[链接深读示例](upstreams/LINK_WALKTHROUGH.md)。
 
 Agent 应在迁移前按任务阅读、遇到问题重新深入链接查证、功能和精度通过后再查昇腾算子与
 性能优化。每次错误、数值问题、来源对照和修改及时追加 [case 反馈](cases/work-items/FEEDBACK_GUIDE.md)，

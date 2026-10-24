@@ -3,7 +3,17 @@
 该工具把规则应用设计成 fail-closed 事务。依赖固定为 LibCST 1.9.0、PyYAML 6.0.3 和
 jsonschema 4.26.0；可以直接使用仓库入口，也可以安装 `N2S/tooling`。
 
+仓库的三个入口都支持仅用标准库的 `doctor [--json]`，检查 Python、Git 和各自所需包，
+不探测设备或导入目标项目。启动缺依赖时显示诊断，不自动安装。用 `N2S_PYTHON` 显式指定
+已有工具解释器；实验的 `--python` 另行选择目标项目解释器，两者用途不同。
+
 ```bash
+N2S/tooling/n2s-knowledge doctor --json
+N2S_PYTHON=/path/to/tool-env/bin/python N2S/tooling/n2s-experiments doctor --json
+```
+
+```bash
+# 仅在决定手动配置独立工具环境后运行安装命令。
 python -m pip install -r N2S/tooling/requirements.txt
 N2S/tooling/n2s-rules validate-registry
 ```
@@ -53,15 +63,23 @@ N2S/tooling/n2s-knowledge search "RMSNorm" --stage optimization --accepted-only 
 
 同步、审阅、许可限制和接纳流程见 [upstreams/README.md](../upstreams/README.md)。
 资料包任务目录默认参与搜索；`guide` 按任务/阶段给出原文入口和链接，`show` 读固定本地文件，
-`follow URL` 只读已登记 HTTPS 正文并返回时间与哈希。另一台机器用 `import-bundle --source ID
+`follow URL` 从已登记 HTTPS 正文出发并返回时间、哈希和 `discovered_links`。
+`follow CHILD --from-url ROOT --from-url PARENT` 逐层核对正文实际链接，不执行远端内容。
+`search` / `guide` 可用 `--target-profile PROFILE.json` 对提供的任务、模型、模式、设备和软件
+版本做可解释的软排序；差异和未知不会被标为兼容，也不会隐藏跨模型线索。
+另一台机器用 `import-bundle --source ID
 --path DIRECTORY` 导入同版本原资料；原文保持 ignored。详见
 [REFERENCE_BUNDLES.md](../upstreams/REFERENCE_BUNDLES.md)。
 
 ## Case 实验工具
 
 `tooling/n2s-experiments` 提供 `probe`、`new`、`list`、`plan`、`run`、`record`、`attach`、
-`review`、`feedback`、`workflow-check`、`validate` 和 `publish-check`，所有结果为 JSON。它不修改或晋级现有规则，
+`review`、`feedback-draft`、`feedback-preflight`、`feedback`、`workflow-check`、`validate`
+和 `publish-check`，所有结果为 JSON。它不修改或晋级现有规则，
 不执行 commit/push，不安装依赖，也不自动开始评测。详见
 [evaluations/README.md](../evaluations/README.md)。
 `feedback` 在迁移各节点追加脱敏事件，不探测硬件；`workflow-check` 列出三阶段查阅与功能、
 精度、优化证据的缺口。使用 [即时反馈指南](../cases/work-items/FEEDBACK_GUIDE.md)，不等成功再录入。
+`new` 的初始记录支持带子模块的工程；执行计划仍要求完整源码指纹。
+按用户实际目标选择 `--task-type` 和 `--optimization-goal`，完成检查的范围见
+[实验工作流](../evaluations/README.md#completion-scope)。

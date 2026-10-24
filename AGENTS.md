@@ -6,6 +6,11 @@ On the first visit to this repository in a session, run:
 tooling/n2s-knowledge refresh-if-due
 ```
 
+If startup reports missing dependencies, run `tooling/n2s-knowledge doctor --json` and select a
+provisioned tool interpreter with `N2S_PYTHON=/path/to/tool-env/bin/python`. Doctor uses the standard
+library, does not import the target project or probe accelerators, and never installs dependencies.
+Keep the N2S tool environment separate from the model's execution environment.
+
 The command records a UTC-day attempt before contacting the registered remote, so later agents do not
 repeat the network check that day. If the network is unavailable, continue with the last successful
 read-only snapshot and report the stale state. Do not run setup scripts, hooks, Python files, or other
@@ -51,6 +56,12 @@ and `follow URL` or available read-only web/Git tools for actual linked content.
 commits; for non-Git sources record the URL, access time and content hash/version. Reference-bundle revisions
 are manifest SHA256s, not Git commits. Check existing case evidence and rule reviews as well.
 
+Follow relevant `discovered_links` into the implementation, recipe, issue or version matrix needed for the
+decision. `follow CHILD_URL --from-url REGISTERED_ROOT --from-url PARENT_URL` verifies each actual link;
+omit the second `--from-url` for a single hop. Record `parent_url`/`parent_uri` and `read_depth` in source
+checks. A catalog or unread feedback draft is not evidence of reading the underlying solution. See
+`upstreams/LINK_WALKTHROUGH.md` for the imported bundle structure and a fixed-commit example.
+
 Cite exact source, revision/path, trust, external claim, exercised scope, applicability and remaining gap in
 each decision/case. `community_reference_bundle` and static source validation do not establish runtime success.
 An official statement is not an N2S reproduction. If a snapshot/body is missing, access fails or a search has no
@@ -63,6 +74,14 @@ Official-weight NPU execution, agreed accuracy comparison and measured same-devi
 completion checks. An import, smoke run, zero exit code or proposed optimization is insufficient. If blocked by
 accuracy, access, resources or missing execution authorization, publish an open case with pending tasks and
 state the gap. Do not claim completion, silently skip optimization or run unapproved experiments.
+
+Choose a case's task type, backend and optimization goal from the user's actual agreed scope. The default
+`model_migration` retains full NPU/official-weight/accuracy/optimization requirements. Use explicit
+`module_validation`, `optimization_investigation` or `tooling` scope for narrower work; record that scope
+in the handoff. Completing a CUDA/CPU module check or a no-gain investigation does not establish full
+Ascend migration, satisfy an agreed speedup goal, or approve a general rule. Existing cases without a
+completion profile keep their original strict criteria. Record tooling/recordkeeping failures separately
+from target failures; retain unresolved observations and pending tests.
 
 Use `tooling/n2s-knowledge diff` to inspect unreviewed official updates. Treat the cached content as internal,
 non-commercial reference material and preserve all upstream and third-party license notices.
@@ -79,6 +98,12 @@ N2S does not authorize running model experiments; an experiment does not authori
 - Append feedback at meaningful milestones and before handing off or pausing; publish sanitized failures and
   unresolved observations as well as successes. Do not overwrite earlier feedback/run artifacts. Completion
   checks evaluate recorded workflow coverage; reviewers still inspect source reads and measured results.
+- `new` may collect an open case from a checkout containing submodules without approving execution.
+  Intake records Git identity and incomplete fingerprint status; `plan`/`run` still require their complete
+  execution fingerprint. Do not ignore submodule code, auto-initialize modules or bypass a refused plan.
+- Use `feedback-draft` to carry source pointers into an explicitly unread draft and `feedback-preflight`
+  to validate before appending. Fill real reads, timestamps, applicability and evidence before clearing
+  `draft`; generated fields and a valid schema do not establish runtime or source-reading success.
 - Do not modify `rules/`, `rules/registry.json`, `reviews/candidate-rules/`, existing evidence or approval states.
   Keep `generalization: pending_validation`, even when the target model runs successfully.
 - Search existing cases and version-pinned official knowledge before proposing tests. Cite exactly what is

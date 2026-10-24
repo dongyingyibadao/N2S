@@ -7,6 +7,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from n2s_knowledge.context import ContextError, load_target_profile
 from n2s_knowledge.indexer import build_index, deterministic_json
 from n2s_knowledge.manager import KnowledgeManager
 
@@ -152,6 +153,76 @@ class KnowledgeSyncTests(unittest.TestCase):
     def tearDown(self):
         self.temporary.cleanup()
 
+    def test_search_preserves_applicability_all_references_and_performance_context(self):
+        manager = self.fixture.manager()
+        manager.refresh()
+        catalog_path = self.fixture.root / "upstreams/knowledge/fixture.json"
+        catalog = json.loads(catalog_path.read_text())
+        item = catalog["items"][0]
+        item["official_claim"]["references"].append({"path": "README.md", "source": "fixture-official", "revision": self.fixture.accepted})
+        item["performance_context"] = {"device": "Fixture NPU", "card_count": 2, "batch": "4 per card",
+                                       "model": "PI0", "dataset": "fixed fixture", "measurement": "10 synchronized steps",
+                                       "value": "8 samples/s"}
+        catalog_path.write_text(deterministic_json(catalog))
+        result = next(value for value in manager.search("fusion attention", accepted_only=True)["results"]
+                      if value["result_kind"] == "curated_knowledge")
+        for field in ("models", "modes", "devices", "software_versions", "performance_context"):
+            self.assertEqual(item[field], result[field])
+        self.assertEqual(2, len(result["references"]))
+        self.assertEqual({"manipulation/pi0/README.md", "README.md"}, {ref["path"] for ref in result["references"]})
+        for reference in result["references"]:
+            self.assertIn(self.fixture.accepted, reference["uri"])
+            self.assertIn(self.fixture.accepted, reference["remote_url"])
+            self.assertEqual("accepted_upstream_documented", reference["trust"])
+            self.assertTrue(Path(reference["local_path"]).is_file())
+            self.assertEqual(hashlib.sha256(Path(reference["local_path"]).read_bytes()).hexdigest(), reference["blob_sha256"])
+        self.assertTrue(result["uncovered_scope"])
+        fulltext = next(value for value in manager.search("needle", accepted_only=True)["results"]
+                        if value["result_kind"] == "official_fulltext")
+        self.assertEqual(["Fixture NPU"], fulltext["devices"])
+        self.assertEqual(hashlib.sha256((Path(fulltext["local_path"])).read_bytes()).hexdigest(),
+                         fulltext["references"][0]["blob_sha256"])
+        # A mutated local file must not acquire a new "Git blob" fingerprint.
+        pinned_sha = result["references"][0]["blob_sha256"]
+        local = Path(result["references"][0]["local_path"])
+        local.chmod(0o644)
+        local.write_text("unverified local modification")
+        reference = manager._reference(item["official_claim"]["references"][0])
+        self.assertEqual(pinned_sha, reference["blob_sha256"])
+        self.assertNotEqual(hashlib.sha256(local.read_bytes()).hexdigest(), reference["blob_sha256"])
+        unknown = manager._reference({"source": "fixture-official", "revision": "f" * 40, "path": "README.md"})
+        self.assertIsNone(unknown["blob_sha256"])
+
+    def test_target_context_soft_orders_without_filtering_different_versions_or_unknowns(self):
+        manager = self.fixture.manager()
+        manager.refresh()
+        catalog_path = self.fixture.root / "upstreams/knowledge/fixture.json"
+        catalog = json.loads(catalog_path.read_text())
+        other = json.loads(json.dumps(catalog["items"][0]))
+        other.update(id="fixture.other", models=["OtherModel"], devices=["Other NPU"], title="Other model knowledge")
+        other["software_versions"]["cann"] = ["different-version"]
+        catalog["items"].append(other)
+        catalog_path.write_text(deterministic_json(catalog))
+        before = manager.search("fusion attention", accepted_only=True)
+        profile = {"task": "inference", "model": "PI0", "device": "Fixture NPU", "software_versions": {"cann": "fixture"}}
+        after = manager.search("fusion attention", accepted_only=True, profile=profile)
+        self.assertEqual(before["total_results"], after["total_results"])
+        self.assertEqual("Fixture PI0 knowledge", after["results"][0]["title"])
+        by_title = {result["title"]: result for result in after["results"]}
+        comparison = by_title["Other model knowledge"]["context_comparison"]
+        self.assertEqual("different", next(field["status"] for field in comparison["fields"]
+                                           if field["field"] == "software_versions.cann"))
+        self.assertEqual("not_determined", comparison["compatibility"])
+        self.assertTrue(by_title["Other model knowledge"]["uncovered_scope"])
+        with self.assertRaises(ContextError):
+            manager.search("needle", profile={"project_path": "/must/not/be/probed"})
+        profile_path = self.fixture.base / "profile.json"
+        profile_path.write_text(json.dumps(profile))
+        self.assertEqual(profile, load_target_profile(profile_path))
+        profile_path.write_text('{"software_versions": {"cann": []}}')
+        with self.assertRaisesRegex(ContextError, "nonempty string"):
+            load_target_profile(profile_path)
+
     def make_community_snapshot(self):
         snapshot = self.fixture.root / "cases/validation-projects/community-fixture"
         snapshot.mkdir(parents=True)
@@ -240,6 +311,17 @@ class KnowledgeSyncTests(unittest.TestCase):
                 self.assertEqual(self.fixture.accepted, item["revision"])
         self.assertEqual("not_imported", report["reference_bundles"][0]["status"])
         self.assertFalse(report["truncated"])
+        # Exercise the real non-JSON CLI path for official, selected-source and bundle results.
+        search_text = run(str(CLI), "--root", str(self.fixture.root), "search", "needle", "--include-community",
+                          "--accepted-only", cwd=self.fixture.base)
+        guide_text = run(str(CLI), "--root", str(self.fixture.root), "guide", "--task", "training", cwd=self.fixture.base)
+        for output in (search_text, guide_text):
+            self.assertIn("reference://fixture-reference@", output)
+            self.assertIn("[community_reference_bundle]", output)
+            self.assertIn("remote: not provided for this exact file", output)
+            self.assertIn("bundle origin (not an exact file URL): https://example.invalid/docs", output)
+        self.assertIn("community://community-fixture@", search_text)
+        self.assertIn("remote: https://example.invalid/community/blob/", search_text)
 
     def test_initial_clone_snapshot_hash_index_and_search_contract(self):
         manager = self.fixture.manager()

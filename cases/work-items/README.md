@@ -24,8 +24,10 @@ CASE_ID/
 
 工单写清楚官方源码 URL 和完整 revision、用户认可的“跑通”标准、实际环境与资源、修改前后
 行为、完整错误类型和关键堆栈、迁移假设与排除项、回退方式、下一端应测什么。缺失内容明确
-写 `pending` 或 `not_available`。新工单完成三阶段阅读及功能/精度/同设备优化验算后，经
-workflow-check 和审阅才能标为 `resolved`；未完成仍可发布 open 工单，通用性始终待验证。
+写 `pending` 或 `not_available`。新工单完成约定范围的阅读与验算后，经 workflow-check 和审阅
+才能标为 `resolved`；完整模型迁移默认仍要求三阶段阅读及功能/精度/同设备优化验算。
+模块复测、优化调查和工具修复需显式声明较窄的[完成范围](../../evaluations/README.md#completion-scope)，
+不得用缩小范围代替原定目标。未完成仍可发布 open 工单，通用性始终待验证。
 
 每项任务对应一个问题。baseline 与 modified 分成独立任务，共享输入和 `comparison_key`；不因
 baseline 失败就阻止修复任务运行，也不把跨端成功等同于同设备 A/B。任务内容变化后，旧结果仅

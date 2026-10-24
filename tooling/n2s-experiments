@@ -2,5 +2,9 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-export PYTHONPATH="${SCRIPT_DIR}/src${PYTHONPATH:+:${PYTHONPATH}}"
-exec python -m n2s_experiments.cli "$@"
+TOOL_PYTHON="${N2S_PYTHON:-python}"
+if ! command -v -- "$TOOL_PYTHON" >/dev/null 2>&1; then
+  printf 'error: N2S tool interpreter not found: %s\nSet N2S_PYTHON to a trusted Python 3.10+ executable.\n' "$TOOL_PYTHON" >&2
+  exit 2
+fi
+exec "$TOOL_PYTHON" -I "$SCRIPT_DIR/bootstrap.py" experiments "$@"

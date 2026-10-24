@@ -11,12 +11,47 @@
     "state": {"enum": ["open", "resolved", "withdrawn"]},
     "generalization": {"const": "pending_validation"},
     "maintenance_workflow": {"const": "three_stage_v1"},
+    "completion": {
+      "type": "object", "additionalProperties": false,
+      "required": ["task_type", "backend", "optimization_goal"],
+      "properties": {
+        "task_type": {"enum": ["model_migration", "module_validation", "optimization_investigation", "tooling"]},
+        "backend": {"enum": ["cpu", "cuda", "npu"]},
+        "optimization_goal": {"enum": ["required_gain", "investigate", "not_applicable"]}
+      },
+      "allOf": [
+        {"if": {"properties": {"task_type": {"const": "model_migration"}}},
+         "then": {"properties": {"backend": {"const": "npu"}}}},
+        {"if": {"properties": {"task_type": {"const": "optimization_investigation"}}},
+         "then": {"properties": {"optimization_goal": {"enum": ["required_gain", "investigate"]}}}}
+      ]
+    },
     "source": {
       "type": "object", "additionalProperties": false,
       "required": ["url", "baseline_revision"],
       "properties": {
         "url": {"type": "string", "minLength": 1},
-        "baseline_revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"}
+        "baseline_revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "intake": {
+          "type": "object", "additionalProperties": false,
+          "required": ["dirty", "fingerprint_status", "fingerprint_gaps", "submodules"],
+          "properties": {
+            "dirty": {"type": "boolean"},
+            "fingerprint_status": {"const": "not_collected"},
+            "fingerprint_gaps": {"type": "array", "items": {"type": "string", "minLength": 1}},
+            "submodules": {"type": "array", "items": {
+              "type": "object", "additionalProperties": false,
+              "required": ["path", "index_revision", "checkout_revision", "status", "dirty"],
+              "properties": {
+                "path": {"type": "string", "minLength": 1},
+                "index_revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+                "checkout_revision": {"type": ["string", "null"], "pattern": "^[0-9a-f]{40}$"},
+                "status": {"enum": ["initialized", "uninitialized", "revision_mismatch", "unavailable"]},
+                "dirty": {"type": ["boolean", "null"]}
+              }
+            }}
+          }
+        }
       }
     },
     "goal": {"type": "string", "minLength": 1},
