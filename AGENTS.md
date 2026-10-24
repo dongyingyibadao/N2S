@@ -62,6 +62,18 @@ omit the second `--from-url` for a single hop. Record `parent_url`/`parent_uri` 
 checks. A catalog or unread feedback draft is not evidence of reading the underlying solution. See
 `upstreams/LINK_WALKTHROUGH.md` for the imported bundle structure and a fixed-commit example.
 
+When subagents are available and relevant sources or optimization topics can be read independently,
+use parallel read-only subagents to deepen source review across all three stages, especially optimization.
+The main Agent owns a deduplicated coverage list, assigns bounded source groups with the same target
+context, and follows newly discovered relevant links into actual implementations and limits. Each subagent
+returns exact URLs/URIs, revision/hash, access time, trust, reading depth, located claims, applicability,
+contrary evidence and access gaps. Respect available concurrency limits. Subagents must not spawn further
+agents, execute experiments or edit target code, cases or rules. The main Agent reconciles reports,
+reopens decision-critical and conflicting sources, and appends consolidated case evidence. Account for every selected relevant
+source as read, blocked, pending or excluded with a reason; pending/blocked sources remain visible gaps.
+If subagents are unavailable or sources are sequential, perform the same review serially. Parallel reports
+do not establish correctness or runtime success. See `upstreams/AGENT_USAGE.md` for the coverage workflow.
+
 Cite exact source, revision/path, trust, external claim, exercised scope, applicability and remaining gap in
 each decision/case. `community_reference_bundle` and static source validation do not establish runtime success.
 An official statement is not an N2S reproduction. If a snapshot/body is missing, access fails or a search has no
