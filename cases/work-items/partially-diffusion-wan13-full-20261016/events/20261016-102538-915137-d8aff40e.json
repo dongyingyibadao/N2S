@@ -1,0 +1,86 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/ddp-16rank-numerical-observation-20261016.json",
+    "cases/work-items/partially-diffusion-wan13-full-20261016/ddp-16rank-source-investigation-20261016.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/ddp-16rank-numerical-observation-20261016.json": "7f77057fe5b6d71e9ef1f63373c5a2980b174d7db5fda6fda6a49bf37236a2b9",
+    "cases/work-items/partially-diffusion-wan13-full-20261016/ddp-16rank-source-investigation-20261016.json": "88d124a66b2312173c3d5d0b8bb14a84f1f8705b29201afb359807df41fcc8bd"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-102538-915137-d8aff40e",
+  "kind": "lookup",
+  "queries": [
+    "n2s-knowledge search all_reduce --accepted-only --include-community --json",
+    "n2s-knowledge search DDP precision --accepted-only --include-community --json",
+    "n2s-knowledge search floating point reduction --accepted-only --include-community --json",
+    "Read installed torch/version.py and default_hooks.py; follow matchingfullcommit numerical_accuracy.rst/default_comm_hooks.cpp and actualreducerfunctions"
+  ],
+  "recorded_at": "2026-10-16T10:25:38.915126+00:00",
+  "resolves": [
+    "20261016-102139-846881-eaadb7ec"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-10-16T10:25:38.818785+00:00",
+      "applicability": "related",
+      "claim": "Floating-point order may change mathematically equivalent results.",
+      "comparison": "Pinned to installed torch git commit. Source mechanics motivate tests but do not isolate HCCL/Wan drift; maintain exact16rank validation and bounded fallback.",
+      "content_sha256": "383c98439629eb6b38b9a09099d9803f5e1f74e93caa45707c3cef90d41a8feb",
+      "revision": "0fabc3ba44823f257e70ce397d989c8de5e362c1",
+      "status": "read",
+      "trust": "retrieved_unreviewed",
+      "uri": null,
+      "url": "https://raw.githubusercontent.com/pytorch/pytorch/0fabc3ba44823f257e70ce397d989c8de5e362c1/docs/source/notes/numerical_accuracy.rst"
+    },
+    {
+      "accessed_at": "2026-10-16T10:25:38.818785+00:00",
+      "applicability": "related",
+      "claim": "DDP scaling/collective paths differ from project bounded implementation.",
+      "comparison": "Pinned to installed torch git commit. Source mechanics motivate tests but do not isolate HCCL/Wan drift; maintain exact16rank validation and bounded fallback.",
+      "content_sha256": "672c76d6da61ce05d581bd457591b7de9a1b8087980af4627a4726e6c8a7d54a",
+      "revision": "0fabc3ba44823f257e70ce397d989c8de5e362c1",
+      "status": "read",
+      "trust": "retrieved_unreviewed",
+      "uri": null,
+      "url": "https://raw.githubusercontent.com/pytorch/pytorch/0fabc3ba44823f257e70ce397d989c8de5e362c1/torch/csrc/distributed/c10d/default_comm_hooks.cpp"
+    },
+    {
+      "accessed_at": "2026-10-16T10:25:38.818785+00:00",
+      "applicability": "related",
+      "claim": "DDP scaling/collective paths differ from project bounded implementation.",
+      "comparison": "Pinned to installed torch git commit. Source mechanics motivate tests but do not isolate HCCL/Wan drift; maintain exact16rank validation and bounded fallback.",
+      "content_sha256": "3eb0a1d23ea6fa8f700b5d5a6a01465fbb193cb559a9e146d14bd1d64d96ea63",
+      "revision": "0fabc3ba44823f257e70ce397d989c8de5e362c1",
+      "status": "partial",
+      "trust": "retrieved_unreviewed",
+      "uri": null,
+      "url": "https://raw.githubusercontent.com/pytorch/pytorch/0fabc3ba44823f257e70ce397d989c8de5e362c1/torch/csrc/distributed/c10d/reducer.cpp"
+    },
+    {
+      "accessed_at": "2026-10-16T10:25:38.818785+00:00",
+      "applicability": "different_scope",
+      "claim": "SmoothedValue synchronizes FP32 metric count/total by all_reduce.",
+      "comparison": "Metric logging, not 1.419B model gradient reduction or16rank update equivalence; no repair can be inferred.",
+      "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/3d_vision/SLARM/src/utils/logging.py",
+      "url": null
+    },
+    {
+      "accessed_at": "2026-10-16T10:25:38.818785+00:00",
+      "applicability": "no_match",
+      "claim": "Accepted/community exact floating point reduction query returned0results; DDP precision results point PI05 settings rather than Wan/HCCL rootcause.",
+      "comparison": "Try matching installed PyTorch source and quantitative scoped replay; no claim that community lacks solutions.",
+      "status": "no_match",
+      "trust": "unavailable",
+      "uri": null,
+      "url": null
+    }
+  ],
+  "stage": "troubleshooting",
+  "summary": "Investigate new16rank DDP drift using error-specific N2S queries and pinned installed PyTorch2.9 docs/default hooks/reducer functions. Confirm pre-SUM scaling and bucket paths differ from bounded post-SUM division; rootcause remains unlocalized, so no equivalence waiver."
+}

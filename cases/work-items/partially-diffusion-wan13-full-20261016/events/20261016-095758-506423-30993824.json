@@ -1,0 +1,20 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/execution-harness-initialization-failure.md"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/execution-harness-initialization-failure.md": "bbbfbca1da45becc608abe5ba8416965e58489b4f94465d76b2e25ec38557184"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-095758-506423-30993824",
+  "kind": "change",
+  "queries": [],
+  "recorded_at": "2026-10-16T09:57:58.506413+00:00",
+  "resolves": [],
+  "rollback": "Remove diagnostic wrapper or revert only its task-owned path-order change; do not weaken trainer output collision checks or overwrite failed artifacts.",
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Main moved diagnostic evidence mkdir to install_capture after trainer output creation. Corrected script SHA256 e7fd7fc7a36f55514c62ff4df6e5cb1c700f45cfe587c16c3f5b348cb83c4e89. New v2 output paths for paired3step rerun; result pending."
+}

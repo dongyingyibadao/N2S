@@ -1,0 +1,154 @@
+{
+  "format": "wan13-full-baseline-capacity-v1",
+  "date_utc": "2026-10-16",
+  "scope": "Single-device local microbatch boundary; not a16-rank HCCL capacity guarantee",
+  "status": "complete",
+  "tested_maximum_passing_batch": 41,
+  "adjacent_failing_batch": 42,
+  "recommended_production_batch_pending_distributed_verification": 32,
+  "cpu_quota": "12800000 100000",
+  "physical_card": "910B2C nominal64GiB",
+  "torch_api_total_capacity_gib": 60.95703125,
+  "precision": "BF16 autocast;FP32 full model gradients and AdamW moments",
+  "gradient_checkpointing": true,
+  "actual_parameters_trainable": 1418996800,
+  "parameter_tensor_count": 825,
+  "batched_patch": false,
+  "batched_rope": true,
+  "optimizer": "AdamW foreach=false,fused=false",
+  "memory_notes": "Physical samples include runtime and untouched keepalive. Sparse physical samples are not continuous peak. Near-boundary batches have<0.5GiBfree and allocator/layout-sensitive behavior. HCCL is absent,32MiB reduction buffer only exists for world_size>1.",
+  "checkpoint_note": "All real training computations and final finite audits retained. Final checkpoint serialization replaced with a small capacity audit only; no long-run/resume or checkpoint-save memory guarantee from this harness.",
+  "timing_note": "Local single-device timings are not16-card distributed throughput and have only2 post-initialization updates.",
+  "rows": [
+    {
+      "batch_per_card": 36,
+      "physical_device": 1,
+      "status": "pass",
+      "completed_optimizer_updates": 3,
+      "memory": {
+        "completed_step": 3,
+        "peak_memory_allocated_gib": 53.87052345275879,
+        "peak_memory_reserved_gib": 56.974609375,
+        "memory_allocated_gib": 21.222046375274658,
+        "memory_reserved_gib": 56.974609375,
+        "current_free_gib": 3.1958999633789062,
+        "total_gib": 60.95703125
+      },
+      "last_peak_memory_allocated_gib": 53.87052345275879,
+      "physical_hbm_sample_max_mib": 62263,
+      "step_seconds": [
+        19.224254914559424,
+        14.183404278941453,
+        14.050750981085002
+      ],
+      "steady_updates_2_3_mean_seconds": 14.117077630013227,
+      "error": null,
+      "audit": {
+        "gradients_nonzero": 825,
+        "gradient_tensor_count": 825,
+        "all_gradients_finite_fp32": true,
+        "optimizer": {
+          "parameter_states": 825,
+          "moment_elements": 2837993600,
+          "moment_dtype": "float32",
+          "all_finite": true,
+          "step_min": 3.0,
+          "step_max": 3.0
+        },
+        "frozen_student_unchanged": true
+      }
+    },
+    {
+      "batch_per_card": 40,
+      "physical_device": 0,
+      "status": "pass",
+      "completed_optimizer_updates": 3,
+      "memory": {
+        "completed_step": 3,
+        "peak_memory_allocated_gib": 58.05996608734131,
+        "peak_memory_reserved_gib": 59.716796875,
+        "memory_allocated_gib": 21.222046375274658,
+        "memory_reserved_gib": 59.716796875,
+        "current_free_gib": 0.4474220275878906,
+        "total_gib": 60.95703125
+      },
+      "last_peak_memory_allocated_gib": 58.05996608734131,
+      "physical_hbm_sample_max_mib": 65077,
+      "step_seconds": [
+        20.781727590598166,
+        16.01835453696549,
+        15.552210606634617
+      ],
+      "steady_updates_2_3_mean_seconds": 15.785282571800053,
+      "error": null,
+      "audit": {
+        "gradients_nonzero": 825,
+        "gradient_tensor_count": 825,
+        "all_gradients_finite_fp32": true,
+        "optimizer": {
+          "parameter_states": 825,
+          "moment_elements": 2837993600,
+          "moment_dtype": "float32",
+          "all_finite": true,
+          "step_min": 3.0,
+          "step_max": 3.0
+        },
+        "frozen_student_unchanged": true
+      }
+    },
+    {
+      "batch_per_card": 41,
+      "physical_device": 0,
+      "status": "pass",
+      "completed_optimizer_updates": 3,
+      "memory": {
+        "completed_step": 3,
+        "peak_memory_allocated_gib": 59.10732460021973,
+        "peak_memory_reserved_gib": 59.9921875,
+        "memory_allocated_gib": 21.222046375274658,
+        "memory_reserved_gib": 59.830078125,
+        "current_free_gib": 0.333648681640625,
+        "total_gib": 60.95703125
+      },
+      "last_peak_memory_allocated_gib": 59.10732460021973,
+      "physical_hbm_sample_max_mib": 65194,
+      "step_seconds": [
+        20.835017261095345,
+        16.925042337737978,
+        16.415974974632263
+      ],
+      "steady_updates_2_3_mean_seconds": 16.67050865618512,
+      "error": null,
+      "audit": {
+        "gradients_nonzero": 825,
+        "gradient_tensor_count": 825,
+        "all_gradients_finite_fp32": true,
+        "optimizer": {
+          "parameter_states": 825,
+          "moment_elements": 2837993600,
+          "moment_dtype": "float32",
+          "all_finite": true,
+          "step_min": 3.0,
+          "step_max": 3.0
+        },
+        "frozen_student_unchanged": true
+      }
+    },
+    {
+      "batch_per_card": 42,
+      "physical_device": 1,
+      "status": "oom",
+      "completed_optimizer_updates": 1,
+      "memory": null,
+      "last_peak_memory_allocated_gib": 59.370914936065674,
+      "physical_hbm_sample_max_mib": 56009,
+      "step_seconds": [
+        20.774346159771085
+      ],
+      "steady_updates_2_3_mean_seconds": null,
+      "error": "NPU out of memory. Tried to allocate 2.19 GiB (NPU 0; 60.96 GiB total capacity; 57.87 GiB already allocated; 57.87 GiB current active; 1.93 GiB free; 58.24 GiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation."
+    }
+  ],
+  "keepalive_untouched": true,
+  "source_report_sha256": "7db4236b0d46a846a9873bfc96c91ac2f5a57b1be473f6bb193acf02a6e6df85"
+}

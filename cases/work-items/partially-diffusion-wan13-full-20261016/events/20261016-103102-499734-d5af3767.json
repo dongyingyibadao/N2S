@@ -1,0 +1,20 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/checkpoint-retention-change-20261016.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/checkpoint-retention-change-20261016.json": "05a1873d1127d4cf2186177a06be9259125636664d559c19972d272a15b0396b"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-103102-499734-d5af3767",
+  "kind": "change",
+  "queries": [],
+  "recorded_at": "2026-10-16T10:31:02.499724+00:00",
+  "resolves": [],
+  "rollback": "Select --checkpoint-retention all for future saves. Already discarded checkpoints cannot be recreated by changing the policy; user explicitly authorized their removal within this new run.",
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "Implement user-requested storage policy for this new full-training run: latest two checkpoints plus fixed2000 anchor, final2000/2800/3000. Trainer/launcher default remains all; formal command selects policy explicitly. Add retention helper to source identity; fresh full825-gradient RoPE proof and51CPUtests/8subtests pass. Actual NPU pruning/resume test pending."
+}

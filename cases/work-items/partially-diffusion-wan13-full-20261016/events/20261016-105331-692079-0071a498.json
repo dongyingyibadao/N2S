@@ -1,0 +1,37 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "environment": "Formal16Ascend910B2C; mb32/global512/accum1; boundedFP32/serialAdamW/exactmaskcache/batchedRoPE/BF16autocast; warmup500,total3000,gradclip1,retentionrecent2-anchor3.",
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/formal-step5-checkpoint-acceptance-20261016.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/formal-step5-checkpoint-acceptance-20261016.json": "e024d4bb03a2eab1e305601fed19845a5db7a6ef100115963f7c4d0a0fa97069"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-105331-692079-0071a498",
+  "kind": "validation",
+  "queries": [],
+  "recorded_at": "2026-10-16T10:53:31.692069+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Actual formal3000target/horizon3000/save400 Student16rankmb32 stopsafelyat5, publishes fullcheckpoint, returns0, all16workers exit. Independent CPUreader hashes53files, comparesall16model/AdamW digests and pinnedidentity/anchor2000, verifies checksum-bound finite825gradient/825AdamWstate-step5audit. Onlythen taskcontrolremoved and sameidentityresume launched; resumedupdates pending.",
+  "validation": {
+    "accuracy": "pending",
+    "accuracy_protocol": "Checkpoint readiness/identity/crossrank equality and complete saved-state audit. Independentreader uses no torch/NPU and no model-state deserialization; finitechecks rely onchecksumverifiedaudit. Does not yet verifyresumeload/update and doesnot prove uninterrupted-reference equality.",
+    "actual_backend": "npu",
+    "finite_outputs": true,
+    "functional": "passed",
+    "official_weights": true,
+    "optimization": "pending",
+    "performance": {
+      "baseline": null,
+      "direction": "lower",
+      "metric": "step_seconds",
+      "modified": null,
+      "protocol": "Formalcheckpoint/controlvalidation only; do not use loading/hash/saving times as trainingoptimization speed.",
+      "same_device": false
+    }
+  }
+}

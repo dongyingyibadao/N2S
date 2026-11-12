@@ -1,0 +1,22 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/mask-cache-full-update-validation-20261016.json",
+    "cases/work-items/partially-diffusion-wan13-full-20261016/mask-cache-native-option-diagnosis-20261016.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/mask-cache-full-update-validation-20261016.json": "34cd96b8b148928533175547319f8bc55e5a534f83b6373bca324ba9494625a5",
+    "cases/work-items/partially-diffusion-wan13-full-20261016/mask-cache-native-option-diagnosis-20261016.json": "c3adc74106c23aa4d520f23e4a22dae7a7f5483facce029662bc9009a79e8cb5"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-101227-629431-64e5f36e",
+  "kind": "change",
+  "queries": [],
+  "recorded_at": "2026-10-16T10:12:27.629421+00:00",
+  "resolves": [],
+  "rollback": "Omit --student-mask-cache to use original frozen online Student and history reads. Keep DDP/bounded and serial optimizer independently selectable; do not change scientific source definitions or mask threshold.",
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "Add optional verified frozen Student mask cache to full trainer and shared batch reader. Cache path skips live Student/history reads, reconstructs exact FP32 masks/area, preserves original sampler/sigma/epsilon draws and reseeding, copies frozen Student weights into every full checkpoint. Candidate source identity is pinned in imported capture."
+}

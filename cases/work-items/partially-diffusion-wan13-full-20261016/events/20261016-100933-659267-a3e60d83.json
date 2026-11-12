@@ -1,0 +1,20 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/launcher-determinism-diagnosis-20261016.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/launcher-determinism-diagnosis-20261016.json": "b33219e8a82dd64a7b5e5f0f454ac936bd92a8b426de4889718293cbc8341f14"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-100933-659267-a3e60d83",
+  "kind": "change",
+  "queries": [],
+  "recorded_at": "2026-10-16T10:09:33.659258+00:00",
+  "resolves": [],
+  "rollback": "Revertlauncheronlydefault/preflight whilepassing explicitmatching --deterministic; keep trainerstrictcontractand cacheunaltered. Existinglogs/checkpointspreserved.",
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Launcherdefaults deterministictrue forcurrentcache andpreflight rejectscontrarymetadata before torchrun. Originalstrictcache validationretained."
+}

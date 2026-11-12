@@ -1,0 +1,21 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/mask-cache-native-option-diagnosis-20261016.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/mask-cache-native-option-diagnosis-20261016.json": "c3adc74106c23aa4d520f23e4a22dae7a7f5483facce029662bc9009a79e8cb5"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-100933-395024-807f9a42",
+  "kind": "resolution",
+  "queries": [],
+  "recorded_at": "2026-10-16T10:09:33.395015+00:00",
+  "resolves": [
+    "20261016-100755-282945-5dd5583c"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Fresh8rank retry completed64000 originalbatch1Student outputs in92.735sec, full independentreader verifiedall64000 mask/area bytes and contract, RNG unchangedallranks,torchrun0. Metadata AttributeError resolved. This alone is not fulltrainerupdate/performance equivalence."
+}

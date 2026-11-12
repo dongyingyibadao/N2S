@@ -1,0 +1,84 @@
+{
+  "format": "wan13-full-launcher-integration-v1",
+  "status": "pass",
+  "real_assets": true,
+  "no_lora": true,
+  "two_logical_nodes_on_one_physical_host": true,
+  "true_multihost_network_test": false,
+  "physical_devices": [
+    6,
+    7
+  ],
+  "checkpoint_storage": "LOCAL_PATH_0007",
+  "evidence_storage": "TARGET_PROJECT/artifacts/ascend/full-launcher-validation-20261016",
+  "initial_failure": {
+    "status": "expected_failure_retained",
+    "reason": "Launcher default deterministic=false differed from deterministic=true immutable latent cache",
+    "fixed": "Default deterministic=true and preflight metadata contract rejection"
+  },
+  "history_static": {
+    "steps": [
+      1,
+      2,
+      3
+    ],
+    "resume_from": 2,
+    "resume_to": 3,
+    "nnodes": 2,
+    "nproc_per_node": 1,
+    "global_batch": 2,
+    "microbatch": 1,
+    "accumulation": 1,
+    "gradient_sync": "ddp_fp32_overlap",
+    "operator": "unbatched_rope",
+    "success": true,
+    "checkpoint_2": {
+      "path": "LOCAL_PATH_0008",
+      "manifest_sha256": "b47406b647eadabf07d9f3b0dbad7ad1379653d3d5e70ded12f0c526089239fc",
+      "all_rank_model_optimizer_bitwise_equal": true,
+      "identity_sha256": "cb46b5ceea028eb3949b3727b69977ca6ecc6442a95211dfdfc99c7761420219",
+      "parameter_tensors": 825
+    },
+    "checkpoint_3": {
+      "path": "LOCAL_PATH_0009",
+      "manifest_sha256": "ffb6d441a586bf127a55054682853776d6c426a05916d6218cbe7ac2f324384a",
+      "all_rank_model_optimizer_bitwise_equal": true,
+      "identity_sha256": "cb46b5ceea028eb3949b3727b69977ca6ecc6442a95211dfdfc99c7761420219",
+      "parameter_tensors": 825
+    },
+    "identity_unchanged_across_resume": true
+  },
+  "gaussian": {
+    "success": true,
+    "steps": 2,
+    "nnodes": 1,
+    "nproc_per_node": 2,
+    "global_batch": 4,
+    "microbatch": 1,
+    "accumulation": 2,
+    "gradient_sync": "ddp_fp32_overlap",
+    "operator": "unbatched_rope",
+    "checkpoint": "LOCAL_PATH_0010",
+    "manifest_sha256": "8577acbd818e87cd2b70295fa2796b48fcf907654c49feb784c5f037e7bb3da2",
+    "all_rank_model_optimizer_bitwise_equal": true,
+    "parameter_tensors": 825,
+    "all_gradients_finite": true,
+    "optimizer_all_finite": true,
+    "torchrun_exit_code": 0,
+    "workers_all_exited": true
+  },
+  "launcher_unit_tests": {
+    "count": 13,
+    "status": "pass",
+    "command": "python -m unittest discover -s tests -p 'test_wan13_full_launcher.py' -q"
+  },
+  "limitations": [
+    "Two logical torchrun nodes share one host; inter-host HCCL/network was not tested.",
+    "Capacity of production microbatch was tested separately; these launcher smoke tests use microbatch1.",
+    "Strict resume is demonstrated from 2 to 3 under unchanged source and configuration; no uninterrupted 3 step bitwisecomparison was executed here.",
+    "Complete checkpoints are stored in/tmp; sharedreport preserves metadata/hash/audit and logs.",
+    "Initial determinism configuration failure retained; no cache contract overrides or bypasses."
+  ],
+  "original_report_sha256": "e629b73a6194594301e9fc9288f332f1065ece57b30a0db0a138cdb0edbe1510",
+  "imported_at": "2026-10-16T10:07:46.419487+00:00"
+}

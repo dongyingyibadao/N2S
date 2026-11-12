@@ -1,0 +1,20 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/mask-cache-native-option-diagnosis-20261016.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/mask-cache-native-option-diagnosis-20261016.json": "c3adc74106c23aa4d520f23e4a22dae7a7f5483facce029662bc9009a79e8cb5"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-100933-262554-6b14b98c",
+  "kind": "change",
+  "queries": [],
+  "recorded_at": "2026-10-16T10:09:33.262545+00:00",
+  "resolves": [],
+  "rollback": "Remove optional frozenmaskcache and use originalonlineStudent path; reverting only getter requires preventingbuilderlaunch on incompatible API. Existingcache/weights/data preserved.",
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Replace unsupported Python option getter in newlycreated maskcache metadata with existing native _npu_getOption; record exact unsetstring, no runtime precision option is changed."
+}

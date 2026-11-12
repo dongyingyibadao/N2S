@@ -1,0 +1,260 @@
+{
+  "format": "wan13-full-execution-comparison-v1",
+  "status": "pass",
+  "all_tensor_bytes_equal": true,
+  "relative_tolerance": 1e-05,
+  "max_relative_l2": 0,
+  "max_absolute_error": 0,
+  "input_trace_bitwise_equal": {
+    "trace-rank-0.json": true,
+    "trace-rank-1.json": true
+  },
+  "rng_sampler_bitwise_equal": {
+    "rng-rank-0.pt": true,
+    "rng-rank-1.pt": true
+  },
+  "checkpoint_step": 3,
+  "forward_output_checks": {
+    "outputs-rank-0.pt": [
+      {
+        "same_shape_dtype": true,
+        "finite": true,
+        "bitwise_equal": true,
+        "relative_l2": 0.0,
+        "max_absolute_error": 0.0
+      }
+    ],
+    "outputs-rank-1.pt": [
+      {
+        "same_shape_dtype": true,
+        "finite": true,
+        "bitwise_equal": true,
+        "relative_l2": 0.0,
+        "max_absolute_error": 0.0
+      }
+    ]
+  },
+  "scope": "Fixed same-NPU inputs, actual full-model gradients/updates/FP32 AdamW/RNG. No CUDA equivalence or model-quality claim.",
+  "imported_at": "2026-10-16T10:07:46.419487+00:00",
+  "original_report": "TARGET_PROJECT/artifacts/ascend/full-training-iteration-20261016/ddp-numeric-comparison.json",
+  "original_report_sha256": "7ac7e552a87d672b3fee44a0d88b214fe8821062c4b6a2c9343eccb075ed7d58",
+  "reference": "LOCAL_PATH_0005",
+  "candidate": "LOCAL_PATH_0006",
+  "world_size": 2,
+  "microbatch_per_rank": 2,
+  "global_batch": 4,
+  "gradient_accumulation": 1,
+  "actual_updates": 3,
+  "gradient_capture": "All825 rank0 averaged FP32 gradients before clipping, first update only; clipped gradient tensors not separately captured.",
+  "per_tensor_groups": {
+    "gradients-step-000001.safetensors": {
+      "tensor_count": 825,
+      "all_bitwise_equal": true,
+      "all_finite": true,
+      "max_relative_l2": 0.0,
+      "max_absolute_error": 0.0
+    },
+    "model": {
+      "tensor_count": 825,
+      "all_bitwise_equal": true,
+      "all_finite": true,
+      "max_relative_l2": 0.0,
+      "max_absolute_error": 0.0
+    },
+    "optimizer": {
+      "tensor_count": 2475,
+      "all_bitwise_equal": true,
+      "all_finite": true,
+      "max_relative_l2": 0.0,
+      "max_absolute_error": 0.0
+    }
+  },
+  "capture": {
+    "bounded-v2": {
+      "status": "complete",
+      "rank": 0,
+      "actual_updates": 3,
+      "gradient_files": [
+        "gradients-step-000001.safetensors"
+      ],
+      "captured_forwards": 1,
+      "source_sha256": {
+        "scripts/train_wan13_libero_full.py": "0cbbc20f5596ad2520813010650a3d90d71c0ec0096797cf707cca285a710f10",
+        "scripts/train_wan13_libero_lora.py": "8ba91167ce5faa3fa0bb3cd9816cf184ecd2ea393ae26227484b767c732de0f9",
+        "src/partially_diffusion/wan13_full_training.py": "8d399d9b4a4a0fb8e9d2d82935c936888edb2a4c48edb405f8f7e31b7f570a66",
+        "src/partially_diffusion/wan13_execution.py": "504b3729fff4319375e125ce142a478f974697b14f24c1d01ad989d9036d0f6d",
+        "src/partially_diffusion/wan_latent_cache.py": "87d13eb50334fa093050305b879eebfb9acaa868d0e6af0f4c8c3e1d62f5b0e1",
+        "src/partially_diffusion/context.py": "cdce789ff13c8f24fefdffea9fbc9c7f917462df54cb9aef50689f80643306e2",
+        "src/partially_diffusion/mask_student.py": "4db8e686d662b339417eeb319b91ecd8f25bd9b88e18c9b3afd9d8a9aa057014",
+        "src/partially_diffusion/device.py": "3af2c0d488554d5fa474720487218fed39917bdbb934e7cb92c2cad3642631c7",
+        "src/partially_diffusion/lr_schedule.py": "84c9bd6652f2d12bd835b198f2a0cf6ba0285044464d4253e7ea260632040489",
+        "third_party/causal_forcing/utils/wan_wrapper.py": "e2ef591fa98abfe335015606fffbc11596222e0c08d5a3eee207b75f00c3cabb",
+        "third_party/causal_forcing/wan/modules/causal_model.py": "81691a1f39d44349eb08c571e8dc97c178babf6e3725aa9c47d2286b1afd8352",
+        "third_party/causal_forcing/wan/modules/model.py": "83708a78f58f448e3fa8e6a9a5166ef44651507d4a3d4cff70c8f2d33f932ac8",
+        "third_party/causal_forcing/wan/modules/npu_ops.py": "06fb43406f0cff4bc1ab450956acf4083253b470aaab46e15e923f20f2e0a5eb"
+      }
+    },
+    "ddp-v2": {
+      "status": "complete",
+      "rank": 0,
+      "actual_updates": 3,
+      "gradient_files": [
+        "gradients-step-000001.safetensors"
+      ],
+      "captured_forwards": 1,
+      "source_sha256": {
+        "scripts/train_wan13_libero_full.py": "0cbbc20f5596ad2520813010650a3d90d71c0ec0096797cf707cca285a710f10",
+        "scripts/train_wan13_libero_lora.py": "8ba91167ce5faa3fa0bb3cd9816cf184ecd2ea393ae26227484b767c732de0f9",
+        "src/partially_diffusion/wan13_full_training.py": "8d399d9b4a4a0fb8e9d2d82935c936888edb2a4c48edb405f8f7e31b7f570a66",
+        "src/partially_diffusion/wan13_execution.py": "504b3729fff4319375e125ce142a478f974697b14f24c1d01ad989d9036d0f6d",
+        "src/partially_diffusion/wan_latent_cache.py": "87d13eb50334fa093050305b879eebfb9acaa868d0e6af0f4c8c3e1d62f5b0e1",
+        "src/partially_diffusion/context.py": "cdce789ff13c8f24fefdffea9fbc9c7f917462df54cb9aef50689f80643306e2",
+        "src/partially_diffusion/mask_student.py": "4db8e686d662b339417eeb319b91ecd8f25bd9b88e18c9b3afd9d8a9aa057014",
+        "src/partially_diffusion/device.py": "3af2c0d488554d5fa474720487218fed39917bdbb934e7cb92c2cad3642631c7",
+        "src/partially_diffusion/lr_schedule.py": "84c9bd6652f2d12bd835b198f2a0cf6ba0285044464d4253e7ea260632040489",
+        "third_party/causal_forcing/utils/wan_wrapper.py": "e2ef591fa98abfe335015606fffbc11596222e0c08d5a3eee207b75f00c3cabb",
+        "third_party/causal_forcing/wan/modules/causal_model.py": "81691a1f39d44349eb08c571e8dc97c178babf6e3725aa9c47d2286b1afd8352",
+        "third_party/causal_forcing/wan/modules/model.py": "83708a78f58f448e3fa8e6a9a5166ef44651507d4a3d4cff70c8f2d33f932ac8",
+        "third_party/causal_forcing/wan/modules/npu_ops.py": "06fb43406f0cff4bc1ab450956acf4083253b470aaab46e15e923f20f2e0a5eb"
+      }
+    }
+  },
+  "checkpoints": {
+    "bounded-v2": {
+      "step": 3,
+      "configuration": {
+        "training_kind": "full_dit_no_lora",
+        "mode": "student_partial",
+        "flow_protocol": "full-range",
+        "sigma_distribution": "uniform (0,1]",
+        "x_sigma": "(1-sigma)*future+sigma*source",
+        "velocity_target": "source-future",
+        "source_partial": "static*(1-mask)+epsilon*mask",
+        "clean_prefix": true,
+        "freeze_student": true,
+        "precision": "bf16_autocast_fp32_master_grad_adamw",
+        "world_size": 2,
+        "global_batch": 4,
+        "microbatch_size": 2,
+        "gradient_accumulation": 1,
+        "gradient_checkpointing": true,
+        "gradient_sync": "bounded_fp32_sum_div_world",
+        "bucket_mib": 32,
+        "ddp": null,
+        "optimizer": {
+          "name": "AdamW",
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.01,
+          "foreach": false,
+          "fused": false
+        },
+        "grad_clip": 1.0,
+        "peak_lr": 1e-05,
+        "lr_schedule": "constant",
+        "warmup_steps": 500,
+        "warmup_start_lr": 1e-07,
+        "min_lr": 1e-07,
+        "schedule_total_steps": 15000,
+        "seed": 42,
+        "deterministic": true,
+        "trial": false,
+        "operators": {
+          "WAN_NPU_ATTENTION": "fusion",
+          "WAN_NPU_PHASE_CACHE": "1",
+          "WAN_NPU_FUSED_RMS": "1",
+          "WAN_NPU_FUSED_ROPE": "1",
+          "WAN_NPU_FP32_ATTENTION": "0",
+          "WAN_NPU_BATCHED_ROPE": "0",
+          "WAN_NPU_BATCHED_PATCH": "0"
+        },
+        "operator_validation_sha256": null,
+        "cached_input": "lean",
+        "prefetch_inputs": true,
+        "cache_sha256": "a9828145a32bb2b58e3076f650213e438082b9399fd3483c35db379589f064e7",
+        "latent_cache_sha256": "76ea58d85c70024631f34f47043780255b5dbf74fe32b2d80f5491dd8bead7d9",
+        "vae_policy": "reuse_prefix",
+        "text_length": 128
+      },
+      "all_rank_model_optimizer_bitwise_equal": true,
+      "model_sha256": "370cc73e58eca04d6742ad5245c99ddcfb4cae126f2461a0d67382cde9e636bc",
+      "optimizer_sha256": "0d04000a93b1c6dea85947cf0018197bec584a160cfb5a742b89b8dd18b02642",
+      "identity_sha256": "24fafa9883d89d6572ab7ee21b9ffd3644bca3387dbe08b3fcad6d731c7926ad"
+    },
+    "ddp-v2": {
+      "step": 3,
+      "configuration": {
+        "training_kind": "full_dit_no_lora",
+        "mode": "student_partial",
+        "flow_protocol": "full-range",
+        "sigma_distribution": "uniform (0,1]",
+        "x_sigma": "(1-sigma)*future+sigma*source",
+        "velocity_target": "source-future",
+        "source_partial": "static*(1-mask)+epsilon*mask",
+        "clean_prefix": true,
+        "freeze_student": true,
+        "precision": "bf16_autocast_fp32_master_grad_adamw",
+        "world_size": 2,
+        "global_batch": 4,
+        "microbatch_size": 2,
+        "gradient_accumulation": 1,
+        "gradient_checkpointing": true,
+        "gradient_sync": "ddp_fp32_overlap",
+        "bucket_mib": 32,
+        "ddp": {
+          "bucket_mib": 32,
+          "static_graph": true,
+          "gradient_as_bucket_view": true,
+          "find_unused_parameters": false,
+          "broadcast_buffers": false
+        },
+        "optimizer": {
+          "name": "AdamW",
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.01,
+          "foreach": false,
+          "fused": false
+        },
+        "grad_clip": 1.0,
+        "peak_lr": 1e-05,
+        "lr_schedule": "constant",
+        "warmup_steps": 500,
+        "warmup_start_lr": 1e-07,
+        "min_lr": 1e-07,
+        "schedule_total_steps": 15000,
+        "seed": 42,
+        "deterministic": true,
+        "trial": false,
+        "operators": {
+          "WAN_NPU_ATTENTION": "fusion",
+          "WAN_NPU_PHASE_CACHE": "1",
+          "WAN_NPU_FUSED_RMS": "1",
+          "WAN_NPU_FUSED_ROPE": "1",
+          "WAN_NPU_FP32_ATTENTION": "0",
+          "WAN_NPU_BATCHED_ROPE": "0",
+          "WAN_NPU_BATCHED_PATCH": "0"
+        },
+        "operator_validation_sha256": null,
+        "cached_input": "lean",
+        "prefetch_inputs": true,
+        "cache_sha256": "a9828145a32bb2b58e3076f650213e438082b9399fd3483c35db379589f064e7",
+        "latent_cache_sha256": "76ea58d85c70024631f34f47043780255b5dbf74fe32b2d80f5491dd8bead7d9",
+        "vae_policy": "reuse_prefix",
+        "text_length": 128
+      },
+      "all_rank_model_optimizer_bitwise_equal": true,
+      "model_sha256": "370cc73e58eca04d6742ad5245c99ddcfb4cae126f2461a0d67382cde9e636bc",
+      "optimizer_sha256": "0d04000a93b1c6dea85947cf0018197bec584a160cfb5a742b89b8dd18b02642",
+      "identity_sha256": "dbc031d1dfd5900c56d05a909fe60afff45943617cc1607ea00c6ebee0697c76"
+    }
+  },
+  "correction_to_prior_change": "The earlier DDP change event stated no_sync was used. Current tested path actually synchronizes every microbatch, retains init_sync=True. Accumulation=1 here, no delayed-sync optimization is claimed.",
+  "performance_conclusion": "None: capture is intentionally expensive, physical devices differ between arms; this is numerical validation, not same-device performance measurement."
+}

@@ -1,0 +1,56 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "environment": "Known16x910B2C64GiB/CPUquota128/torch2.9.0+cpu torch_npu2.9.0, full1,418,996,800parameters in825FP32tensors; BF16autocast, FP32grad/AdamW. New actualenvironment captured by main runs.",
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/prior-full-training-evidence.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/prior-full-training-evidence.json": "f5134ca768d078de1b4c8b135751822b991f3c7ab45c2531cf65c74195e40394"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-094737-845191-d7269c50",
+  "kind": "lookup",
+  "queries": [
+    "n2s-knowledge guide --task training --stage optimization --json (repeated after baseline validation event)",
+    "n2s-knowledge search static_graph --accepted-only --include-community --json",
+    "n2s-knowledge search cache --task performance --stage optimization --accepted-only --include-community --json",
+    "Full actual PI05 trainer and docs read; current Wan full trainer/utilities, student_mask and MaskStudent forward, FrozenBatchReader read. Cache search results mostly inference/RoPE/host cache, no direct Student-mask training cache recipe found."
+  ],
+  "recorded_at": "2026-10-16T09:47:37.845181+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-10-16T09:47:37.748190+00:00",
+      "applicability": "related",
+      "claim": "DDP static graph, no unused detection and gradient bucket views reduce extra graph and communication overhead in PI05.",
+      "comparison": "Current Wan full trainer reduces every FP32 gradient after complete backward using serial reusable32MiB buckets; DDP can overlap backward/allreduce and eliminate pack/unpack copies. Must compare fixed inputs, all825 gradients, FP32 master updates and AdamW states; FP32 collective arithmetic order can differ.",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi05/train/doc/README.md",
+      "url": "https://gitcode.com/cann/cann-recipes-embodied-ai/blob/45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi05/train/doc/README.md"
+    },
+    {
+      "accessed_at": "2026-10-16T09:47:37.748190+00:00",
+      "applicability": "related",
+      "claim": "Recipe implements three DDP flags at actual wrapping boundary rather than changing model mathematics.",
+      "comparison": "Preserve raw Wan model for serialization/audits, register only trainable DiT with DDP, use no_sync on every accumulation microbatch except last. init_sync=False needs independent proof all ranks loaded identical parameters/buffers; this setting is project extension, not recipe guarantee.",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi05/train/src/lerobot_train.py",
+      "url": "https://gitcode.com/cann/cann-recipes-embodied-ai/blob/45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi05/train/src/lerobot_train.py"
+    },
+    {
+      "accessed_at": "2026-10-16T09:47:37.748190+00:00",
+      "applicability": "related",
+      "claim": "O01 routes profiling-driven host synchronization, caching, communication and recomputation investigation; R16 distinguishes sampled HBM from framework peaks; available memory depends on optimizer states and activations.",
+      "comparison": "Exact frozen Student cache is our project extension, not an approved N2S rule or literal recipe. Student.dropout is forced0 and frozen eval; masks depend only immutable history/text/threshold. Build original batch1 NPU function and verify exact mask/area roundtrip, pinned source/input/weight/context/config/dtype/operator identity. Retain main sample/sigma/epsilon RNG order. No cache for jointly trained Student.",
+      "status": "read",
+      "trust": "community_reference_bundle",
+      "uri": "reference://ascend-reference-20261005@b83a696461745e01f8e44e8a2e672db9fdadca7d66b6e19d7eaaaac53b5081a8/\u6607\u817e\u5361\u4f7f\u7528\u4f18\u5316\u4e0eDebug\u53c2\u8003\u624b\u518c.md",
+      "url": null
+    }
+  ],
+  "stage": "optimization",
+  "summary": "After importing prior functional and same-NPU numeric evidence, re-query optimization guidance and actual implementations. Candidate1 DDP communication overlap/bucket views. Candidate2 exact frozen Student mask cache removing sequential repeated forwards and scalar host synchronizations. Both execution only, not altered flow objective, noise distribution, precision or model. Rejected blind transplantation: PI05 grouped gated MLP, PI0 outer suffix removal (no corresponding Wan outer layer), vLLM inference/FP8 and unconditional torch.compile."
+}

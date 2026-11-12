@@ -1,0 +1,74 @@
+{
+  "baseline": {
+    "metrics_sha256": "8ba42f27b8154b1dc61c078c035814577e98cf3af4f284eab6543f73ac281692",
+    "measured_steps": [
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "measured_seconds": [
+      12.888534726575017,
+      12.879240750335157,
+      12.828744415193796,
+      12.757489997893572,
+      12.680576307699084
+    ],
+    "mean_seconds_per_update": 12.806917239539326,
+    "sample_std_seconds": 0.08771204774128143,
+    "global_batch": 512,
+    "world_size": 16,
+    "microbatch_size": 32,
+    "gradient_accumulation": 1,
+    "learning_rate": 1e-05,
+    "max_peak_memory_allocated_gib": 49.71233606338501
+  },
+  "selected": {
+    "metrics_sha256": "a7554352181d2cba8706c7373416f8a384f1675b28bc22069aea8fa3b0d1a8fa",
+    "measured_steps": [
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "measured_seconds": [
+      12.778426695615053,
+      12.738087953999639,
+      12.691223280504346,
+      12.624660258181393,
+      12.587261244654655
+    ],
+    "mean_seconds_per_update": 12.683931886591017,
+    "sample_std_seconds": 0.07869824003999758,
+    "global_batch": 512,
+    "world_size": 16,
+    "microbatch_size": 32,
+    "gradient_accumulation": 1,
+    "learning_rate": 1e-05,
+    "max_peak_memory_allocated_gib": 49.690117835998535
+  },
+  "format": "wan13-bounded-frozen-mask-performance-v1",
+  "imported_at": "2026-10-16T10:44:39.882589+00:00",
+  "status": "measured_modest_improvement_short_single_run",
+  "evidence_origin": "Imported manual project execution; not an N2S runner run.",
+  "same_physical_cards_sequential": true,
+  "same_initial_generator_ema_seed42_fresh_adamw": true,
+  "capture_hooks_removed_after_first_update": true,
+  "audit_in_timing": false,
+  "latency_reduction_percent": 0.9603041125979243,
+  "throughput_ratio": 1.0096961536886149,
+  "baseline_samples_per_second": 39.97839530182027,
+  "selected_samples_per_second": 40.366031966890915,
+  "original_performance_report_sha256": {
+    "baseline": "ad42975b30c2f6b49097d6be0a7c2a05fdbb2c94481d52f243d33d9d8f094adf",
+    "selected": "3f5ee7c7ee3ab3143fd2e3a8039fc1cf89ec25d039fbf2bd9dc0deda05febeda"
+  },
+  "limits": [
+    "One run per variant and5stabletimings; no repeatedABBA or longrun guarantee.",
+    "Both timing sequences drift downward;0.96percent is a short-run observed difference rather than a robust hardware speedup estimate.",
+    "Exclude loading/captureinitialization/checkpointserialization; include normalupdate data/read/forward/backward/optimizer/synchronization.",
+    "ConstantLR1e-5 protocol; formal warmup500/cosine3000 is a separate trajectory setting."
+  ]
+}

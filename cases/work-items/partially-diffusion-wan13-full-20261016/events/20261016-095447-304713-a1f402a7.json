@@ -1,0 +1,26 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "environment": "Single910B2C64GiB nominal, torchAPI60.957GiB; BF16autocast/825FP32fulltensors/AdamWserial/blockcheckpointing; physicalcard1; noHCCL.",
+  "error": {
+    "expected": "Complete3realAdamWupdates and finalfiniteaudit atbatch42.",
+    "message": "NPU out of memory. Tried to allocate2.19GiB; total60.96GiB;57.87GiBalreadyallocated;1.93GiBfree;58.24GiBreserved.",
+    "observed": "Oneupdatecompleted; secondforwardOOM. Adjacentbatch41completed3updates but has0.33365GiBfree, noHCCL and checkpointserializationexcluded.",
+    "type": "NPUOutOfMemory"
+  },
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/baseline-capacity-20261016.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/baseline-capacity-20261016.json": "dbb19cb6460f74aee0dd61248ac95993658adb76b8796a3a6c4395ebc5e2f2ea"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-095447-304713-a1f402a7",
+  "kind": "failure",
+  "queries": [],
+  "recorded_at": "2026-10-16T09:54:47.304704+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "Imported capacity worker first causal OOM at batch42, second forward after one complete AdamW update. Singlecard local scope; preserved user keepalive."
+}

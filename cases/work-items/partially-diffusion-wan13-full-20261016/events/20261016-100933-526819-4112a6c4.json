@@ -1,0 +1,45 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/launcher-determinism-diagnosis-20261016.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/launcher-determinism-diagnosis-20261016.json": "b33219e8a82dd64a7b5e5f0f454ac936bd92a8b426de4889718293cbc8341f14"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-100933-526819-4112a6c4",
+  "kind": "lookup",
+  "queries": [
+    "n2s-knowledge search latent cache deterministic contract --accepted-only --include-community --json",
+    "Readfullwan_latent_cache.py andlaunch_wan13_full.py default/preflight sections"
+  ],
+  "recorded_at": "2026-10-16T10:09:33.526810+00:00",
+  "resolves": [
+    "20261016-100755-413172-1538722d"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-10-16T10:09:19.729000+00:00",
+      "applicability": "no_match",
+      "claim": "Acceptedofficial/community exactquery returned0matches.",
+      "comparison": "Doesnot imply no upstreamsolution; use actualprojectstrictcacheimplementation forprojectspecific metadatafailure.",
+      "status": "no_match",
+      "trust": "unavailable",
+      "uri": null,
+      "url": null
+    },
+    {
+      "accessed_at": "2026-10-16T10:09:19.729000+00:00",
+      "applicability": "applicable",
+      "claim": "Actualcontractencodesdeterministicflag; initialfalse differscachetrue.",
+      "comparison": "Fixmatchingdefault andpreflight; do notbypassstricttrainer contract.",
+      "status": "read",
+      "trust": "n2s_case_evidence",
+      "uri": "cases/work-items/partially-diffusion-wan13-full-20261016/launcher-determinism-diagnosis-20261016.json",
+      "url": null
+    }
+  ],
+  "stage": "troubleshooting",
+  "summary": "No accepted/community knowledge result for projectspecific latentcache determinism contract. Read actualcache contractconstructor/rejection and launcher default/preflight; default mismatch is exact firstcause."
+}

@@ -1,0 +1,26 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "environment": "Preparation tools only; shell default Python lacks jsonschema; provisioned Python3.12.14 has dependency. Target has incomplete Git metadata. No accelerator execution.",
+  "error": {
+    "expected": "Traceable baseline without inventing an upstream commit",
+    "message": "Target .git has no refs/objects; new case CLI rejected source",
+    "observed": "Created separate source-only Git archive; target revision remains unavailable",
+    "type": "TargetSourceIdentityUnavailable"
+  },
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/tooling-preparation-resolution.md"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/tooling-preparation-resolution.md": "46ddb781cf55e14d5f4053cce32446713aec2a467fd29f1e2e9e75d0c9f9ab3c"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-094606-540929-0c01ccd3",
+  "kind": "failure",
+  "queries": [],
+  "recorded_at": "2026-10-16T09:46:06.540920+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Preparation failure 2; recorded after case creation, before target migration changes."
+}

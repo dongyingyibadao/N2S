@@ -1,0 +1,45 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/mask-cache-full-update-validation-20261016.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/mask-cache-full-update-validation-20261016.json": "34cd96b8b148928533175547319f8bc55e5a534f83b6373bca324ba9494625a5"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-101227-916644-4df53eb3",
+  "kind": "lookup",
+  "queries": [
+    "n2s-knowledge guide --task performance --stage optimization --json",
+    "n2s-knowledge search gradient_as_bucket_view --accepted-only --include-community --json",
+    "Reconcile previously read full accepted PI05 README and actual lerobot_train.py with current Wan source and measured correctness"
+  ],
+  "recorded_at": "2026-10-16T10:12:27.916635+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-10-16T10:12:27.526063+00:00",
+      "applicability": "applicable",
+      "claim": "Actual PI05 DDP defaults select static_graph and gradient_as_bucket_view with unused detection disabled.",
+      "comparison": "Wan equivalent flags now pass real full-gradient/update A/B; PI05 does not establish Wan speed. Keep init_sync true, sync every microbatch, serialAdamW. Same-device full16rank speed and capacity still to measure.",
+      "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi05/train/src/lerobot_train.py",
+      "url": "https://gitcode.com/cann/cann-recipes-embodied-ai/blob/45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi05/train/src/lerobot_train.py"
+    },
+    {
+      "accessed_at": "2026-10-16T10:12:27.526063+00:00",
+      "applicability": "applicable",
+      "claim": "Frozen-mask replacement and current-source RoPE pass scoped same-NPU numerics.",
+      "comparison": "Mask reuse is a project extension; cached KV and inference-only recipes have different scope. Current finite/bitwise results do not establish throughput gain; use sequential same-device timing.",
+      "status": "read",
+      "trust": "n2s_case_evidence",
+      "uri": "cases/work-items/partially-diffusion-wan13-full-20261016/mask-cache-full-update-validation-20261016.json",
+      "url": null
+    }
+  ],
+  "stage": "optimization",
+  "summary": "After full-update numerical acceptance, query performance guidance again. Retain PI05-supported static graph/bucket views; project-specific exact frozen mask cache targets repeated host/Student work. Measure three sequential variants on identical16NPU/global512/mb32, constantLR, updates4to8 with capture hooks removed after firstupdate; test full checkpoint and all states separately."
+}

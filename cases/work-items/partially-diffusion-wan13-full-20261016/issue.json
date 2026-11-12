@@ -1,0 +1,30 @@
+{
+  "created_at": "2026-10-16T09:41:50.034913+00:00",
+  "generalization": "pending_validation",
+  "goal": "Bounded full-training batch search, fixed-input same-NPU numerical validation and measured runtime optimization; one-command distributed launchers for all three sources",
+  "id": "partially-diffusion-wan13-full-20261016",
+  "knowledge_refs": [
+    "upstreams/AGENT_USAGE.md",
+    "upstreams/REFERENCE_BUNDLES.md",
+    "evaluations/evidence-reuse.json",
+    "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi05/train/doc/README.md",
+    "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi05/train/src/lerobot_train.py"
+  ],
+  "maintenance_workflow": "three_stage_v1",
+  "models": [
+    "Causal-Forcing-Wan2.1-T2V-1.3B"
+  ],
+  "observations": "Target revision unavailable: incomplete .git has HEAD/config without refs/objects. source.baseline_revision=949abb74b523268f528beda228592a0e6fb793f8 is a NEW isolated local source-only archival commit, not upstream or target history. Snapshot198sourcefiles excludes artifacts/symlinks/pycache; treeSHA256 ae7a64c582b64b14742032c9a4a8c4bcc863c468b751541eb64d99449aaa3e05. Real execution remains separate Partially_diffusion checkout; N2S runner will not execute archive. User authorizes bounded NPU capacity/optimization/launcher tests on16cards. Three iterations: largest batch surviving forward/backward/AdamW/checkpoint; N2S-informed execution optimization; verified distributed launch commands for other2sources. Preserve flow objective/initialEMA/frozenStudent/all825FP32trainables/BF16autocast/FP32gradients/AdamWstates. Old cross-CUDA BF16 discrepancy independently open. Main measured storage about95GiB; use task-owned temporarycapacityoutputs, never delete userassets. User subsequently fixes the formal Student full-training target to3000optimizer updates with checkpoint every400updates; final3000checkpoint also required. Iteration tests precede actual formallaunch. Subsequentuserconfirmation: formalwarmup500(1e-7to1e-5)/cosinehorizon3000/min1e-7, notold15000trajectory. Userauthorizes thisnewrun retentionrecent2-anchor3; finalkeep2000/2800/3000 aftercompleteatomic saves only; neverpriorassets. Final16rank bounded/serial/exactmaskcache passes8update bitwise A/B, selectedshorttiming12.806917to12.683932s (0.9603percent), DDP rejected because16rank state drift;causeunlocalized. Finalactual16rankcapacity40 passes3updates/fullverifiedcheckpoint,41 OOMthirdbackward. Choosepercard32/global512 with7.524GiBmargin. FormalnewStudentrun launched; step5safe-save/exit/strictresume acceptance currentlypending. Storageestimates supersede earlierapprox95GiB planningstatement; retentionkeeps3complete+temporarysave. Latest2026-10-16T10:57Z: finalformalc p5 fullsaveindependent53fileacceptance/rc0/allworkersgone passed; strictsameidentityresume actuallycompletedfiniteupdates6to22 and16workerslive. No uninterruptedreferencecomparison;3000runcontinues. FinalN2Svalidateexit0,workflow-checkexit0 ready_for_review/events44/gaps0/unresolved0; caseopen/pending_validation, no genericruleapproval or runnerexecution.",
+  "related_rules": [
+    "pytorch.attention.cache-dtype-alignment",
+    "pytorch.npu.compile-capability-fallback",
+    "pytorch.npu.sinusoidal-fp64-fallback"
+  ],
+  "schema_version": "1.0.0",
+  "source": {
+    "baseline_revision": "949abb74b523268f528beda228592a0e6fb793f8",
+    "url": "file://LOCAL_PATH_0001"
+  },
+  "state": "open",
+  "title": "Wan1.3B Student-mask full training capacity and NPU execution optimization"
+}

@@ -1,0 +1,46 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/mask-cache-native-option-diagnosis-20261016.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/mask-cache-native-option-diagnosis-20261016.json": "c3adc74106c23aa4d520f23e4a22dae7a7f5483facce029662bc9009a79e8cb5"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-100933-132798-77b9d2b5",
+  "kind": "lookup",
+  "queries": [
+    "n2s-knowledge search ALLOW_INTERNAL_FORMAT --accepted-only --include-community --json",
+    "Read full pinned3d_vision/Hunyuan3D/minimal_demo_npu.py and installedtorch_npu2.9 npu_config.py _npuConfig"
+  ],
+  "recorded_at": "2026-10-16T10:09:33.132788+00:00",
+  "resolves": [
+    "20261016-100755-282945-5dd5583c"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-10-16T10:09:19.729000+00:00",
+      "applicability": "different_scope",
+      "claim": "Recipe sets allow_internal_format=False; it does not read this property.",
+      "comparison": "Actual full file is Hunyuan3D inference, so its assignment is not a getter contract for torch_npu2.9 fulltraining metadata. Installed _npuConfig implementation and successfulnativequery determine local repair.",
+      "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/3d_vision/Hunyuan3D/minimal_demo_npu.py",
+      "url": "https://gitcode.com/cann/cann-recipes-embodied-ai/blob/45d167135c81d97573bfbe0e564bb4a1d9642514/3d_vision/Hunyuan3D/minimal_demo_npu.py"
+    },
+    {
+      "accessed_at": "2026-10-16T10:09:19.729000+00:00",
+      "applicability": "applicable",
+      "claim": "Installed _npuConfig exposes setter only; nativegetter returns existing empty/unset string.",
+      "comparison": "Directly matches AttributeError, preserves runtime option,8rank retry succeeds throughall64000 originalbatch1outputs.",
+      "status": "read",
+      "trust": "n2s_case_evidence",
+      "uri": "cases/work-items/partially-diffusion-wan13-full-20261016/mask-cache-native-option-diagnosis-20261016.json",
+      "url": null
+    }
+  ],
+  "stage": "troubleshooting",
+  "summary": "Search specific ALLOW_INTERNAL_FORMAT failure, read official full inference file and installed npu_config implementation. Official assignment is different scope; installed setter-only class plus actualnativequery explains local repair."
+}

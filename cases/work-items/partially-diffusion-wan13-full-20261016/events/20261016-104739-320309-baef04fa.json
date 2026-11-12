@@ -1,0 +1,27 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "environment": "Same16physicalAscend910B2C64GiB; boundedFP32HCCL/serialAdamW/exactmaskcache/batchedRoPE/blockrecompute/BF16autocast; mb41/global656/accum1.",
+  "error": {
+    "expected": "Complete3realupdates and publishfullcheckpoint atpercard41.",
+    "message": "Third-update backward rank0/1 fails74MiBallocation; active59.05GiB,reserved59.59GiB,total60.96GiB,free186.21/191.40MiB.",
+    "observed": "2updates completed; rank0/1 loss.backward/autograd engineOOM. No finalcheckpoint; torchrunrc1,all16workers exited.",
+    "stack_excerpt": "loss.backward -> engine_run_backward; exact kernel/allocator fragmentation rootcause unlocalized.",
+    "type": "NPUOutOfMemory"
+  },
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/final-16rank-capacity-20261016.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/final-16rank-capacity-20261016.json": "39b06c6b198a8841e10875c8b1c0e8e7187051027284bb575e90f04a66530a0d"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-104739-320309-baef04fa",
+  "kind": "failure",
+  "queries": [],
+  "recorded_at": "2026-10-16T10:47:39.320298+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Final actual16rank bounded/serial/cache profile: percard40 completes3updates and full verifiedcheckpoint; adjacent41 OOM inthird-update backward after2completeupdates. Allworkers exit.40 is empirical short-test edge only; formal32 keeps margin."
+}

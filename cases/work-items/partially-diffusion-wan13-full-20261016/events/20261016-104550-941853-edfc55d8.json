@@ -1,0 +1,23 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/bounded-mask-cache-16rank-validation-20261016.json",
+    "cases/work-items/partially-diffusion-wan13-full-20261016/ddp-16rank-quantitative-validation-20261016.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/bounded-mask-cache-16rank-validation-20261016.json": "ca9f6391927a383281ebff294bd6d62e0028fab5615679e4a3dcf70aeaab3221",
+    "cases/work-items/partially-diffusion-wan13-full-20261016/ddp-16rank-quantitative-validation-20261016.json": "827c77895110c177510684c2ad16191fa1caf730b1832c2829213d549bb5aa61"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-104550-941853-edfc55d8",
+  "kind": "resolution",
+  "queries": [],
+  "recorded_at": "2026-10-16T10:45:50.941841+00:00",
+  "resolves": [
+    "20261016-102139-846881-eaadb7ec"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Resolve formal-training adoption blocker by rejecting DDP and selecting original bounded SUM-then-divide plus exact frozen-mask cache, proven bitwise equal in actual16rank full-update A/B. DDP numerical rootcause remains unlocalized; this resolution does not repair or accept DDP."
+}

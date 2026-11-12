@@ -1,0 +1,49 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/tooling-preparation-resolution.md"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/tooling-preparation-resolution.md": "46ddb781cf55e14d5f4053cce32446713aec2a467fd29f1e2e9e75d0c9f9ab3c"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-095447-192821-0c20e813",
+  "kind": "lookup",
+  "queries": [
+    "n2s-knowledge search jsonschema --accepted-only --include-community --json:0results",
+    "Read tooling/README.md and tooling/n2s-knowledge interpreter entrypoint",
+    "Read tooling/src/n2s_experiments/manager.py source and new_case implementation",
+    "Inspect capacity baseline source_snapshot artifacts symlink; enumerate source-only files without following symlinks"
+  ],
+  "recorded_at": "2026-10-16T09:54:47.192812+00:00",
+  "resolves": [
+    "20261016-094606-438744-bd951c07",
+    "20261016-094606-540929-0c01ccd3",
+    "20261016-094606-644408-7f016118"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-10-16T09:54:47.106737+00:00",
+      "applicability": "no_match",
+      "claim": "Accepted/community knowledge search for jsonschema returned no matching recipes.",
+      "comparison": "Read local tooling/README.md and n2s-knowledge launcher: tools require provisioned jsonschema dependency; remedy was selecting existing interpreter, not installation.",
+      "status": "no_match",
+      "trust": "unavailable",
+      "uri": null,
+      "url": null
+    },
+    {
+      "accessed_at": "2026-10-16T09:54:47.106737+00:00",
+      "applicability": "no_match",
+      "claim": "Target Git identity/copy failures were local workflow issues; no upstream model-runtime solution claimed.",
+      "comparison": "Read local tooling/src/n2s_experiments/manager.py source()/new_case(): exact Git root and baseline revision required. Preserved target metadata, used own source-only archival Git; enumerated files skipping symlinks/artifacts.",
+      "status": "no_match",
+      "trust": "unavailable",
+      "uri": null,
+      "url": null
+    }
+  ],
+  "stage": "troubleshooting",
+  "summary": "Error-specific lookup for preparation tooling: local dependency/exactGitroot requirements explain failures; no network or model runtime fix inferred. Actual resolutions previously recorded with evidence."
+}

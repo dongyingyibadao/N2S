@@ -1,0 +1,21 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/ddp-numerical-validation-20261016.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/ddp-numerical-validation-20261016.json": "5474bb8f8fe647b6c746307f1f0d6d1a9d69719627fcc194238c9fc591cbc64a"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-100755-025778-6dd94028",
+  "kind": "resolution",
+  "queries": [],
+  "recorded_at": "2026-10-16T10:07:55.025768+00:00",
+  "resolves": [
+    "20261016-095758-248927-7b8338a5"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "The corrected diagnostic mkdir ordering completed both real2rank3update v2 runs and complete checkpoints. The harness output-initialization failure is resolved; collision checks remain intact."
+}

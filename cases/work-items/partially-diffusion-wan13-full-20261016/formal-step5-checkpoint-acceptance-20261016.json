@@ -1,0 +1,298 @@
+{
+  "file_sha256": {
+    "count": 53,
+    "report": "file-checksums.json",
+    "status": "pass"
+  },
+  "finished_utc": "2026-10-16T10:48:20.722222+00:00",
+  "format": "wan13-production-checkpoint-acceptance-v1",
+  "global_batch": 512,
+  "helper_sha256": "edce0b17212639e11549ec97b450d19ec4c40397adabc85f7221b6dfdcb1caec",
+  "identity": {
+    "configuration": {
+      "bucket_mib": 32,
+      "cache_sha256": "a9828145a32bb2b58e3076f650213e438082b9399fd3483c35db379589f064e7",
+      "cached_input": "lean",
+      "checkpoint_retention": {
+        "anchor_gap": 3,
+        "anchor_step": 2000,
+        "keep_recent": 2,
+        "policy": "recent2-anchor3",
+        "save_every": 400,
+        "target_steps": 3000
+      },
+      "clean_prefix": true,
+      "ddp": null,
+      "deterministic": true,
+      "flow_protocol": "full-range",
+      "freeze_student": true,
+      "global_batch": 512,
+      "grad_clip": 1.0,
+      "gradient_accumulation": 1,
+      "gradient_checkpointing": true,
+      "gradient_sync": "bounded_fp32_sum_div_world",
+      "latent_cache_sha256": "76ea58d85c70024631f34f47043780255b5dbf74fe32b2d80f5491dd8bead7d9",
+      "lr_schedule": "warmup-cosine",
+      "microbatch_size": 32,
+      "min_lr": 1e-07,
+      "mode": "student_partial",
+      "operator_validation_sha256": "a00025d5b989487b995b831d2d6846c5d64db53703faba686788dab04d2fa1a1",
+      "operators": {
+        "WAN_NPU_ATTENTION": "fusion",
+        "WAN_NPU_BATCHED_PATCH": "0",
+        "WAN_NPU_BATCHED_ROPE": "1",
+        "WAN_NPU_FP32_ATTENTION": "0",
+        "WAN_NPU_FUSED_RMS": "1",
+        "WAN_NPU_FUSED_ROPE": "1",
+        "WAN_NPU_PHASE_CACHE": "1"
+      },
+      "optimizer": {
+        "betas": [
+          0.9,
+          0.999
+        ],
+        "eps": 1e-08,
+        "foreach": false,
+        "fused": false,
+        "name": "AdamW",
+        "weight_decay": 0.01
+      },
+      "peak_lr": 1e-05,
+      "precision": "bf16_autocast_fp32_master_grad_adamw",
+      "prefetch_inputs": true,
+      "schedule_total_steps": 3000,
+      "seed": 42,
+      "sigma_distribution": "uniform (0,1]",
+      "source_partial": "static*(1-mask)+epsilon*mask",
+      "student_mask_cache": {
+        "data_sha256": "c4bb6cc9b1d00a6e3bf406ca94394069b7c8a524d3af0c9347c0040f5e681de0",
+        "manifest_sha256": "599c324ac338ffa11337541561fa05561fa01be82c984dc112c3dfb6be5e001d",
+        "sample_count": 64000
+      },
+      "text_length": 128,
+      "training_kind": "full_dit_no_lora",
+      "trial": false,
+      "vae_policy": "reuse_prefix",
+      "velocity_target": "source-future",
+      "warmup_start_lr": 1e-07,
+      "warmup_steps": 500,
+      "world_size": 16,
+      "x_sigma": "(1-sigma)*future+sigma*source"
+    },
+    "run_identity_bytes_equal": true,
+    "sha256": "8c792fbbd8c74b03f9a13957292cba96ae9a646e1e0058f872f8ff26b8cd4789",
+    "source_sha256": {
+      "scripts/train_wan13_libero_full.py": "6df43c5d7346c09cbdbcbeb49d649de81816cdc6e56e1821bbb768d06a1628d8",
+      "scripts/train_wan13_libero_lora.py": "cf1c441f4673becd833dae70bdfe138291847ea629e0b6bf88d67a4eb7183a8f",
+      "src/partially_diffusion/context.py": "cdce789ff13c8f24fefdffea9fbc9c7f917462df54cb9aef50689f80643306e2",
+      "src/partially_diffusion/device.py": "3af2c0d488554d5fa474720487218fed39917bdbb934e7cb92c2cad3642631c7",
+      "src/partially_diffusion/frozen_student_mask_cache.py": "49dc73c1f7ce3e0de240693de406bb50d5ccfdcf5dba54d2ea15fbb693807028",
+      "src/partially_diffusion/full_checkpoint_retention.py": "ffbfb3f8381f75ab31a6fdcc7862cf489bc2fda39d0e8ce753934798219c1a00",
+      "src/partially_diffusion/lr_schedule.py": "84c9bd6652f2d12bd835b198f2a0cf6ba0285044464d4253e7ea260632040489",
+      "src/partially_diffusion/mask_student.py": "4db8e686d662b339417eeb319b91ecd8f25bd9b88e18c9b3afd9d8a9aa057014",
+      "src/partially_diffusion/wan13_execution.py": "eb3b324abf3c82d5f5c575e8dc61b498166cacdb9084f7f99605ee8647f14b16",
+      "src/partially_diffusion/wan13_full_training.py": "8d399d9b4a4a0fb8e9d2d82935c936888edb2a4c48edb405f8f7e31b7f570a66",
+      "src/partially_diffusion/wan_latent_cache.py": "87d13eb50334fa093050305b879eebfb9acaa868d0e6af0f4c8c3e1d62f5b0e1",
+      "third_party/causal_forcing/utils/wan_wrapper.py": "e2ef591fa98abfe335015606fffbc11596222e0c08d5a3eee207b75f00c3cabb",
+      "third_party/causal_forcing/wan/modules/causal_model.py": "81691a1f39d44349eb08c571e8dc97c178babf6e3725aa9c47d2286b1afd8352",
+      "third_party/causal_forcing/wan/modules/model.py": "83708a78f58f448e3fa8e6a9a5166ef44651507d4a3d4cff70c8f2d33f932ac8",
+      "third_party/causal_forcing/wan/modules/npu_ops.py": "06fb43406f0cff4bc1ab450956acf4083253b470aaab46e15e923f20f2e0a5eb"
+    }
+  },
+  "manifest_sha256": "96420e4ac84fdc8cdd8610df060c250af53229b045108e1fdde5964b2260dc7a",
+  "microbatch_size": 32,
+  "rank_equality": {
+    "all_rank_model_and_adamw_digests_equal": true,
+    "rank_count": 16,
+    "ranks": [
+      {
+        "all_model_and_adamw_digests_equal": true,
+        "rank": 0,
+        "sha256": "358a57e897c99579fa59ffcf1d2f8ca250b1032b653a2ee4f99363313a308cc8"
+      },
+      {
+        "all_model_and_adamw_digests_equal": true,
+        "rank": 1,
+        "sha256": "358a57e897c99579fa59ffcf1d2f8ca250b1032b653a2ee4f99363313a308cc8"
+      },
+      {
+        "all_model_and_adamw_digests_equal": true,
+        "rank": 2,
+        "sha256": "358a57e897c99579fa59ffcf1d2f8ca250b1032b653a2ee4f99363313a308cc8"
+      },
+      {
+        "all_model_and_adamw_digests_equal": true,
+        "rank": 3,
+        "sha256": "358a57e897c99579fa59ffcf1d2f8ca250b1032b653a2ee4f99363313a308cc8"
+      },
+      {
+        "all_model_and_adamw_digests_equal": true,
+        "rank": 4,
+        "sha256": "358a57e897c99579fa59ffcf1d2f8ca250b1032b653a2ee4f99363313a308cc8"
+      },
+      {
+        "all_model_and_adamw_digests_equal": true,
+        "rank": 5,
+        "sha256": "358a57e897c99579fa59ffcf1d2f8ca250b1032b653a2ee4f99363313a308cc8"
+      },
+      {
+        "all_model_and_adamw_digests_equal": true,
+        "rank": 6,
+        "sha256": "358a57e897c99579fa59ffcf1d2f8ca250b1032b653a2ee4f99363313a308cc8"
+      },
+      {
+        "all_model_and_adamw_digests_equal": true,
+        "rank": 7,
+        "sha256": "358a57e897c99579fa59ffcf1d2f8ca250b1032b653a2ee4f99363313a308cc8"
+      },
+      {
+        "all_model_and_adamw_digests_equal": true,
+        "rank": 8,
+        "sha256": "358a57e897c99579fa59ffcf1d2f8ca250b1032b653a2ee4f99363313a308cc8"
+      },
+      {
+        "all_model_and_adamw_digests_equal": true,
+        "rank": 9,
+        "sha256": "358a57e897c99579fa59ffcf1d2f8ca250b1032b653a2ee4f99363313a308cc8"
+      },
+      {
+        "all_model_and_adamw_digests_equal": true,
+        "rank": 10,
+        "sha256": "358a57e897c99579fa59ffcf1d2f8ca250b1032b653a2ee4f99363313a308cc8"
+      },
+      {
+        "all_model_and_adamw_digests_equal": true,
+        "rank": 11,
+        "sha256": "358a57e897c99579fa59ffcf1d2f8ca250b1032b653a2ee4f99363313a308cc8"
+      },
+      {
+        "all_model_and_adamw_digests_equal": true,
+        "rank": 12,
+        "sha256": "358a57e897c99579fa59ffcf1d2f8ca250b1032b653a2ee4f99363313a308cc8"
+      },
+      {
+        "all_model_and_adamw_digests_equal": true,
+        "rank": 13,
+        "sha256": "358a57e897c99579fa59ffcf1d2f8ca250b1032b653a2ee4f99363313a308cc8"
+      },
+      {
+        "all_model_and_adamw_digests_equal": true,
+        "rank": 14,
+        "sha256": "358a57e897c99579fa59ffcf1d2f8ca250b1032b653a2ee4f99363313a308cc8"
+      },
+      {
+        "all_model_and_adamw_digests_equal": true,
+        "rank": 15,
+        "sha256": "358a57e897c99579fa59ffcf1d2f8ca250b1032b653a2ee4f99363313a308cc8"
+      }
+    ],
+    "status": "pass"
+  },
+  "retention": {
+    "all_deleted_steps": [],
+    "configuration": {
+      "anchor_gap": 3,
+      "anchor_step": 2000,
+      "keep_recent": 2,
+      "policy": "recent2-anchor3",
+      "save_every": 400,
+      "target_steps": 3000
+    },
+    "latest": {
+      "deleted_checkpoints": [],
+      "deleted_steps": [],
+      "finished_utc": "2026-10-16T10:47:39.424400+00:00",
+      "kept_checkpoints": [
+        "checkpoint-000005"
+      ],
+      "kept_steps": [
+        5
+      ],
+      "planned_delete_checkpoints": [],
+      "planned_delete_steps": [],
+      "seen_steps": [
+        5
+      ],
+      "started_utc": "2026-10-16T10:47:39.422107+00:00",
+      "status": "complete"
+    },
+    "status": "pass"
+  },
+  "scope": [
+    "CPU-only, no torch import or accelerator calls; all training/checkpoint/control files are read-only.",
+    "Independently hashes every manifest-listed checkpoint file, including weights, AdamW and each rank RNG.",
+    "Independently compares all per-rank recorded model/AdamW tensor digests and recorded FP32 step digests.",
+    "Checks every parameter gradient finite audit and AdamW finite/state/step audit produced during the stopped update.",
+    "Does not rerun gradients or deserialize optimizer/model tensor payloads; finite checks rely on the checksum-verified training audit.",
+    "Preserves small metadata and all rank JSON evidence; copies no weights, AdamW or RNG tensors.",
+    "Covers one-node exact-topology checkpoint readiness; does not prove resumed updates equal an uninterrupted run."
+  ],
+  "seconds": 14.111304595135152,
+  "started_utc": "2026-10-16T10:48:06.610937+00:00",
+  "status": "pass",
+  "step": 5,
+  "training_audit": {
+    "adamw_step_sha256": "fca31f1667a6aa1bba12fca4e4ea1becd503379d80da3213af07f6cc5702828d",
+    "gradients_all_present_finite_fp32": true,
+    "optimizer": {
+      "all_finite": true,
+      "moment_dtype": "float32",
+      "moment_elements": 2837993600,
+      "parameter_states": 825,
+      "step_max": 5.0,
+      "step_min": 5.0
+    },
+    "parameter_tensors": 825,
+    "status": "pass",
+    "trainable_parameters": 1418996800
+  },
+  "training_output_modified": false,
+  "world_size": 16,
+  "evidence_origin": "Imported CPU-only independent acceptance of actual16NPU formal step5 stopped checkpoint. No N2S runner execution.",
+  "original_report_sha256": "c8302a7fd68323f0e82c008e4211df1d7954cf591e447953d02afde460998e52",
+  "imported_at": "2026-10-16T10:53:31.368889+00:00",
+  "runtime": {
+    "all_workers_exited": true,
+    "finished_utc": "2026-10-16T10:47:55.365150+00:00",
+    "latest_metrics": {
+      "allocated_device_gib": 21.231078624725342,
+      "audit_in_timing": false,
+      "dit_grad_norm": 3.71112060546875,
+      "flow_loss": 0.4219602644443512,
+      "global_batch": 512,
+      "gradient_accumulation": 1,
+      "lr": 1.7935871743486972e-07,
+      "mask_area": 0.3492406904697418,
+      "microbatch_size": 32,
+      "mode": "student_partial",
+      "peak_device_gib": 49.690117835998535,
+      "reserved_device_gib": 52.234375,
+      "step": 5,
+      "step_seconds": 12.712012643925846,
+      "training_kind": "full_dit_no_lora",
+      "trial": false,
+      "world_size": 16
+    },
+    "phase": "stopped",
+    "started_utc": "2026-10-16T10:44:57.084261+00:00",
+    "torchrun_return_code": 0,
+    "recorded_worker_count": 16,
+    "all_recorded_workers_inactive": true
+  },
+  "preserved_metadata_file_count": 44,
+  "resume_acceptance": "pending actual resumedupdates6and7",
+  "control_removal": {
+    "removed_utc": "2026-10-16T10:48:46.142051+00:00",
+    "sha256": "c654ae03144cdc6eec2d455b205ef4202710d553d2775df8ef1d4cf6bdc60f76",
+    "after_independent_acceptance": "pass",
+    "stopped_supervisor_returncode": 0
+  },
+  "resume_launch": {
+    "source_sha256": "ba9dc97284a835165912b3e16085160f58435575bc0e45027a00add181163f49",
+    "world_size": 16,
+    "global_batch": 512,
+    "checkpoint_step": 5,
+    "run_id": "resume-5-verified",
+    "status": "launched_wait_actual_loadedstate_and_updates"
+  }
+}

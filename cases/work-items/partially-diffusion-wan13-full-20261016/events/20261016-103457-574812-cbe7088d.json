@@ -1,0 +1,39 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "environment": "Ascend910B2C64GiB physical0/1 static and2/3 Gaussian, percardmb2,global4, boundedFP32/serialAdamW, unbatchedRoPE forscoped launchtest, final trainer source6df43c5d...; no crosshost test.",
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/final-launcher-retention-validation-20261016.json",
+    "cases/work-items/partially-diffusion-wan13-full-20261016/checkpoint-retention-change-20261016.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/checkpoint-retention-change-20261016.json": "05a1873d1127d4cf2186177a06be9259125636664d559c19972d272a15b0396b",
+    "cases/work-items/partially-diffusion-wan13-full-20261016/final-launcher-retention-validation-20261016.json": "a662d93462c5be46c97030fb3dc475bbcc1646c06d3eece25dfb0e98489523dc"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-103457-574812-cbe7088d",
+  "kind": "validation",
+  "queries": [],
+  "recorded_at": "2026-10-16T10:34:57.574799+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Final trainer/launcher source: real bounded two-card static3updates/save1 publishes full checkpoints, actually deletescp1 and retainscp2/3; Gaussian2updates/save99 writes finalcp2. All825gradients and AdamW finite, crossrank states equal, independent30file hashes pass, allworkers exit. Three formal3000horizon commands pass asset/proof dry-run,15launcherCPUtests pass.",
+  "validation": {
+    "accuracy": "pending",
+    "accuracy_protocol": "These final launcher trials check finite full gradients, crossrank byte equality, complete/checksummed checkpoint and actual authorized retention. They are not baseline-vs-modified full-update reference comparisons. That separate16rank cache/bounded comparison is pending.",
+    "actual_backend": "npu",
+    "finite_outputs": true,
+    "functional": "passed",
+    "official_weights": true,
+    "optimization": "pending",
+    "performance": {
+      "baseline": null,
+      "direction": "lower",
+      "metric": "step_seconds",
+      "modified": null,
+      "protocol": "Launcher/save/prune validation only; no speed inference from shortmicrobatch2 tests or docsdry-runs.",
+      "same_device": false
+    }
+  }
+}

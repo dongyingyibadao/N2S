@@ -1,0 +1,108 @@
+{
+  "read_at": "2026-10-16T10:09:19.729000+00:00",
+  "diagnosis": "Installed torch_npu2.9 _npuConfig implements only __setattr__ for allow_internal_format; assigning the option is not evidence a Python getter exists. Official Hunyuan3D recipe only assigns False and concerns inference.",
+  "installed_file": "ENV/site-packages/torch_npu/npu/npu_config.py",
+  "installed_file_sha256": "d8d59e50dacc81b1b1e9c9717f24fefc077ec35d0e3f80c4df6283e47c0270c3",
+  "repair": "Query existing native _C._npu_getOption(ALLOW_INTERNAL_FORMAT), decode only bytes, preserve empty/unset string exactly. Do not assign or change internal format.",
+  "current_module_sha256": "49dc73c1f7ce3e0de240693de406bb50d5ccfdcf5dba54d2ea15fbb693807028",
+  "native_contract_query": {
+    "format": "wan13-frozen-student-masks-v1",
+    "sample_count": 64000,
+    "input_cache_sha256": "a9828145a32bb2b58e3076f650213e438082b9399fd3483c35db379589f064e7",
+    "student_sha256": "b64dcaf65d7b6cd63cf111eb7129de63c584b609e4ec64cb07bb054c62bb0ecc",
+    "student_manifest_sha256": "763355e5c9c70f6964860f52f25cd9be0b67e4070da954382261d58c31e0d10f",
+    "student_architecture": {
+      "dropout": 0.0,
+      "ffn_dim": 1024,
+      "hidden_dim": 256,
+      "latent_channels": 48,
+      "latent_size": [
+        14,
+        14
+      ],
+      "name": "tiny_s",
+      "num_heads": 8,
+      "num_layers": 4,
+      "text_dim": 4096
+    },
+    "threshold": 0.067,
+    "contexts_sha256": "7143e03659e157d8f65f78668c6d163f5470988e20c6628b6cf1bbfa8944e6ea",
+    "tasks_sha256": "66bf9295252c110a23a9acb7b8c4f4ac691866a0b87353737a438a724b53cff2",
+    "context_manifest_sha256": "ae1a51322a44b8840818f5e6d294af3cb503c7a77119a319f232dcc93d47b7f4",
+    "source_functions_sha256": {
+      "student_mask": "4f564e415fdfa7e9bdf2aa98bfa9cc34db8f99c57a75be96a77e376532d9ae87",
+      "source_latent": "f8440dfef459dde01a7f5fe1161b31648d8fe1a6a5d68be040248f4eb78c37ee",
+      "cache_lean_item": "aa9ee036d53df0d67c212820b13c1929af1267c6a62a8a6af05b999b843abeb0"
+    },
+    "dependency_sha256": {
+      "src/partially_diffusion/mask_student.py": "4db8e686d662b339417eeb319b91ecd8f25bd9b88e18c9b3afd9d8a9aa057014",
+      "src/partially_diffusion/context.py": "cdce789ff13c8f24fefdffea9fbc9c7f917462df54cb9aef50689f80643306e2"
+    },
+    "device_type": "npu",
+    "torch_version": "2.9.0+cpu",
+    "deterministic": true,
+    "deterministic_warn_only": false,
+    "mha_fastpath_enabled": false,
+    "float32_matmul_precision": "highest",
+    "student_mode": "eval requires_grad_false; original batch-one student_mask joint=False",
+    "student_parameter_dtype": "float32",
+    "autocast_dtype": "bfloat16",
+    "context_dtype": "bfloat16",
+    "history_dtype": "bfloat16",
+    "batch_size": 1,
+    "mask_shape": [
+      1,
+      1,
+      1,
+      60,
+      104
+    ],
+    "mask_dtype": "float32",
+    "area_dtype": "float32",
+    "packing": "numpy.packbits bitorder=little; C-order",
+    "mask_mapping": "threshold>=; nearest14to52; pad4vertical; wristallones",
+    "output_digest": "SHA256(mask contiguous FP32 bytes + original area little-endian FP32 bytes)",
+    "torch_npu_version": "2.9.0",
+    "allow_internal_format": "",
+    "allow_internal_format_query": "torch_npu._C._npu_getOption('ALLOW_INTERNAL_FORMAT')"
+  },
+  "retry_result": {
+    "status": "pass",
+    "torchrun_returncode": 0,
+    "sample_count": 64000,
+    "independent_full_reader_verified_rows": 64000,
+    "independent_full_reader_seconds": 3.3555805031210184,
+    "contract_exact_match": true,
+    "all_rows_original_bitwise_equal": true,
+    "all_build_ranks_rng_unchanged": true,
+    "shards": 8,
+    "build_seconds": 92.73512471746653,
+    "data_bytes": 52800424,
+    "data_mib": 50.354408264160156,
+    "data_sha256": "c4bb6cc9b1d00a6e3bf406ca94394069b7c8a524d3af0c9347c0040f5e681de0",
+    "manifest_sha256": "599c324ac338ffa11337541561fa05561fa01be82c984dc112c3dfb6be5e001d",
+    "all_decoded_mask_bytes_sha256": "8dee6a9b9dc998f246fd6024a24cb462de9dadf4edb12622a560705a9c69129b",
+    "min_area": 0.18877552449703217,
+    "max_area": 0.6326531171798706,
+    "source_unchanged": {
+      "scripts/build_wan13_student_mask_cache.py": true,
+      "src/partially_diffusion/frozen_student_mask_cache.py": true
+    },
+    "allow_internal_format": "",
+    "allow_internal_format_query": "torch_npu._C._npu_getOption('ALLOW_INTERNAL_FORMAT')",
+    "physical_devices_used": [
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "keepalive_untouched": true,
+    "output": "TARGET_PROJECT/artifacts/wan13_frozen_student_masks_npu_v1",
+    "log": "TARGET_PROJECT/artifacts/ascend/full-training-iteration-20261016/mask-cache-build.log"
+  },
+  "runtime_scope": "The private native getter is verified on installed2.9 only; future torch_npu versions must recheck compatibility. Full-training cached-vs-online A/B still pending."
+}

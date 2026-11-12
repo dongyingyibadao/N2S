@@ -1,0 +1,39 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "environment": "Same16Ascend910B2C64GiB,percardmb32,global512,8updates,constant1e-5,deterministictrue,BF16compute/FP32alltrainables/serialAdamW;firststepgradientcaptureonly.",
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/ddp-16rank-quantitative-validation-20261016.json",
+    "cases/work-items/partially-diffusion-wan13-full-20261016/ddp-16rank-source-investigation-20261016.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/ddp-16rank-quantitative-validation-20261016.json": "827c77895110c177510684c2ad16191fa1caf730b1832c2829213d549bb5aa61",
+    "cases/work-items/partially-diffusion-wan13-full-20261016/ddp-16rank-source-investigation-20261016.json": "88d124a66b2312173c3d5d0b8bb14a84f1f8705b29201afb359807df41fcc8bd"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-102854-882418-0b391a3c",
+  "kind": "validation",
+  "queries": [],
+  "recorded_at": "2026-10-16T10:28:54.882408+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Quantitative16rankDDP comparison fails1e-5 gate despitefiniteoutputs. Firstgradient differences tiny, but eight-update states diverge; cachewithinDDP itself passesexact. RejectDDP forformal16cardtraining; rootcause notclaimedfixed.",
+  "validation": {
+    "accuracy": "failed",
+    "accuracy_protocol": "Bounded-vs-DDP exact/1e-5 gate:520of825firstgradients differbytes (maxperTensorrel1.24545e-7);8update825weights(maxrel.001463625) and1650AdamWmomenttensors differ(maxrel.709266 foroneexpavg). Inputs/RNG16ranks andfirstforwardexact. Theseareper-tensornumericerrors,notmodel/taskaccuracy.",
+    "actual_backend": "npu",
+    "finite_outputs": true,
+    "functional": "passed",
+    "official_weights": true,
+    "optimization": "pending",
+    "performance": {
+      "baseline": null,
+      "direction": "lower",
+      "metric": "step_seconds",
+      "modified": null,
+      "protocol": "Rawtimingsretained,butfinalfullsame-device4variantreportpending. DDP candidateexcludedforfailednumericalgate,notacceptedforspeed.",
+      "same_device": true
+    }
+  }
+}

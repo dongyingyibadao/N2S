@@ -1,0 +1,145 @@
+{
+  "recorded_at": "2026-10-16T10:21:39.754447+00:00",
+  "observation": "16-rank DDP online loss differs from bounded online beginning update3; no training exception or task-quality deterioration established. Two-rank exact validation cannot be generalized to16ranks.",
+  "world_size": 16,
+  "microbatch": 32,
+  "global_batch": 512,
+  "updates": 8,
+  "learning_rate": "constant1e-5 for all timing variants",
+  "same_physical_cards": true,
+  "variants": {
+    "bounded-online": {
+      "metrics": [
+        {
+          "step": 1,
+          "flow_loss": 0.4528138041496277,
+          "dit_grad_norm": 3.7627618312835693,
+          "step_seconds": 28.39591628871858,
+          "peak_device_gib": 39.139198303222656
+        },
+        {
+          "step": 2,
+          "flow_loss": 0.237040176987648,
+          "dit_grad_norm": 1.4493550062179565,
+          "step_seconds": 13.071158217266202,
+          "peak_device_gib": 49.71233606338501
+        },
+        {
+          "step": 3,
+          "flow_loss": 0.23439562320709229,
+          "dit_grad_norm": 6.041529655456543,
+          "step_seconds": 13.087822660803795,
+          "peak_device_gib": 49.71233606338501
+        },
+        {
+          "step": 4,
+          "flow_loss": 0.2160544991493225,
+          "dit_grad_norm": 3.7920613288879395,
+          "step_seconds": 12.888534726575017,
+          "peak_device_gib": 49.71233606338501
+        },
+        {
+          "step": 5,
+          "flow_loss": 0.17649032175540924,
+          "dit_grad_norm": 1.3708899021148682,
+          "step_seconds": 12.879240750335157,
+          "peak_device_gib": 49.71233606338501
+        },
+        {
+          "step": 6,
+          "flow_loss": 0.1700722873210907,
+          "dit_grad_norm": 0.41453516483306885,
+          "step_seconds": 12.828744415193796,
+          "peak_device_gib": 49.71233606338501
+        },
+        {
+          "step": 7,
+          "flow_loss": 0.15672093629837036,
+          "dit_grad_norm": 0.4362136125564575,
+          "step_seconds": 12.757489997893572,
+          "peak_device_gib": 49.71233606338501
+        },
+        {
+          "step": 8,
+          "flow_loss": 0.15198737382888794,
+          "dit_grad_norm": 0.4479222297668457,
+          "step_seconds": 12.680576307699084,
+          "peak_device_gib": 49.71233606338501
+        }
+      ],
+      "metrics_sha256": "8ba42f27b8154b1dc61c078c035814577e98cf3af4f284eab6543f73ac281692"
+    },
+    "ddp-online": {
+      "metrics": [
+        {
+          "step": 1,
+          "flow_loss": 0.4528138041496277,
+          "dit_grad_norm": 3.7627618312835693,
+          "step_seconds": 30.313605352304876,
+          "peak_device_gib": 44.394126415252686
+        },
+        {
+          "step": 2,
+          "flow_loss": 0.2370402216911316,
+          "dit_grad_norm": 1.449866771697998,
+          "step_seconds": 13.096089551225305,
+          "peak_device_gib": 54.96688508987427
+        },
+        {
+          "step": 3,
+          "flow_loss": 0.23440013825893402,
+          "dit_grad_norm": 6.060483455657959,
+          "step_seconds": 12.807253066450357,
+          "peak_device_gib": 54.96694326400757
+        },
+        {
+          "step": 4,
+          "flow_loss": 0.21623191237449646,
+          "dit_grad_norm": 3.7950973510742188,
+          "step_seconds": 12.726800199598074,
+          "peak_device_gib": 54.96694326400757
+        },
+        {
+          "step": 5,
+          "flow_loss": 0.17658767104148865,
+          "dit_grad_norm": 1.378892183303833,
+          "step_seconds": 12.686030217446387,
+          "peak_device_gib": 54.96694326400757
+        },
+        {
+          "step": 6,
+          "flow_loss": 0.17012333869934082,
+          "dit_grad_norm": 0.41480961441993713,
+          "step_seconds": 12.581805370748043,
+          "peak_device_gib": 54.96694326400757
+        },
+        {
+          "step": 7,
+          "flow_loss": 0.15674012899398804,
+          "dit_grad_norm": 0.43448886275291443,
+          "step_seconds": 12.520943555049598,
+          "peak_device_gib": 54.96694326400757
+        },
+        {
+          "step": 8,
+          "flow_loss": 0.15204989910125732,
+          "dit_grad_norm": 0.449614018201828,
+          "step_seconds": 12.510294158011675,
+          "peak_device_gib": 54.96694326400757
+        }
+      ],
+      "metrics_sha256": "6311d84e3c51b118942a29dd9d750aa7f72ffb3c87d41e5ee4f0591562395f90"
+    }
+  },
+  "reported_by_main": {
+    "step3_bounded_loss": 0.234396,
+    "step3_ddp_loss": 0.2344,
+    "step8_bounded_loss": 0.151987,
+    "step8_ddp_loss": 0.15205,
+    "bounded_peak_gib": 49.712,
+    "ddp_peak_gib": 54.967,
+    "ddp_extra_peak_gib": 5.255
+  },
+  "root_cause": "Not localized. Collective layout or reduction order is a hypothesis only. First-step all825gradient/finalstates comparison pending.",
+  "next_test": "Complete DDPmask timing as planned, quantify raw825gradients/finalmodel/AdamW/RNG. Add bounded+maskcache on identical16cards to isolate cache without DDP. Default must not claim exact16rank DDP if it fails."
+}

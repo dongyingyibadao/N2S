@@ -1,0 +1,37 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "environment": "2rank Ascend910B2C64GiB, perrankmicrobatch2, global4,3updates, officialgeneratorEMA, BF16autocast/FP32fullparameters/serialAdamW, deterministictrue; gradient capture first update only.",
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/ddp-numerical-validation-20261016.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/ddp-numerical-validation-20261016.json": "5474bb8f8fe647b6c746307f1f0d6d1a9d69719627fcc194238c9fc591cbc64a"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-100755-155864-30a8a88a",
+  "kind": "validation",
+  "queries": [],
+  "recorded_at": "2026-10-16T10:07:55.155850+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Bounded reducer versus DDP on actual NPU full training: first-step825 averaged preclip gradients, final825 weights/2475 AdamW tensors after3updates, input traces, forward outputs and RNG/sampler are finite and bitwise equal. This corrects earlier no_sync wording; every microbatch was synchronized.",
+  "validation": {
+    "accuracy": "passed",
+    "accuracy_protocol": "Same-NPU execution change only: all saved tensor bytes exactly equal; maxrelativeL2/maxabs0, sampler/RNG/input exact. First-step preclip gradients825; final model825 and AdamWtensor2475 after3updates. Not cross-CUDA or task-quality equivalence.",
+    "actual_backend": "npu",
+    "finite_outputs": true,
+    "functional": "passed",
+    "official_weights": true,
+    "optimization": "pending",
+    "performance": {
+      "baseline": null,
+      "direction": "lower",
+      "metric": "step_seconds",
+      "modified": null,
+      "protocol": "Diagnostic capture overhead and differing physical devices invalidate performance inference. Separate stable same-device paired timing pending.",
+      "same_device": false
+    }
+  }
+}

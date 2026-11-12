@@ -1,0 +1,26 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "environment": "Real target full trainer, bounded/DDP A/B harness, authorized2rank trial; same provisioned Ascend environment.",
+  "error": {
+    "expected": "Trainer initializes new output before diagnostic capture creates nested evidence directory.",
+    "message": "Shared output initialization failed: FileExistsError",
+    "observed": "Worker precreated evidence directory under output, violating existing no-overwrite contract.",
+    "type": "FileExistsError"
+  },
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/execution-harness-initialization-failure.md"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/execution-harness-initialization-failure.md": "bbbfbca1da45becc608abe5ba8416965e58489b4f94465d76b2e25ec38557184"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-095758-248927-7b8338a5",
+  "kind": "failure",
+  "queries": [],
+  "recorded_at": "2026-10-16T09:57:58.248915+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "First paired execution A/B harness failed during output initialization; no model had executed and no numerical conclusion is available."
+}

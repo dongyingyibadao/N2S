@@ -1,0 +1,19 @@
+{
+  "format": "wan13-capacity-stage-prose-correction-v1",
+  "imported_at": "2026-10-16T10:44:39.882589+00:00",
+  "supersedes_only_prose_in_event": "20261016-095447-304713-a1f402a7",
+  "original_log_sha256": "6d3e03b4b027bb02a54951b6a6f926fe44e2d357a8ac4580ffad1fa106ebc900",
+  "original_result_sha256": "56a72d1acc29b08661d0968623e538cb46902a8cbbfa88fc544d644d2592a495",
+  "batch_per_card": 42,
+  "completed_optimizer_updates": 1,
+  "correct_stage": "Second optimizer update backward/autograd engine.",
+  "stack_excerpt": [
+    "full_range_update: (loss * (args.microbatch_size / local_batch)).backward()",
+    "torch.autograd.backward",
+    "_engine_run_backward",
+    "Variable._execution_engine.run_backward",
+    "RuntimeError: NPU out of memory. Tried to allocate2.19GiB;57.87GiBallocated;1.93GiBfree."
+  ],
+  "correction": "Earlier event/review text said second forward; original causal stack shows backward. With activation checkpointing enabled the stack alone cannot identify whether a recomputation-forward or gradient kernel allocation triggered the failure.",
+  "unchanged_conclusion": "Batch42 failed; localbatch41passed3updates but omittedHCCL and fullcheckpointserialization. No new capacity or resolution is claimed."
+}

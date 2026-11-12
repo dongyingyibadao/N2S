@@ -1,0 +1,26 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "environment": "torch2.9.0+cpu torch_npu2.9.0 Python3.12,8rank authorized frozenStudent maskbuilder, no training yet.",
+  "error": {
+    "expected": "Read and pin existing internal-format option without changing it.",
+    "message": "AttributeError: '_npuConfig' object has no attribute 'allow_internal_format'",
+    "observed": "Metadata property getter does not exist; all builder workers aborted before samples.",
+    "type": "AttributeError"
+  },
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/mask-cache-native-option-failure-20261016.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/mask-cache-native-option-failure-20261016.json": "ae2500108d35cecace4f648071de1a34135302f57a0d90445ad9a9694a646c89"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-100755-282945-5dd5583c",
+  "kind": "failure",
+  "queries": [],
+  "recorded_at": "2026-10-16T10:07:55.282935+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "First frozen-mask builder failed before producing any sample because torch_npu2.9 _npuConfig has a setter-only allow_internal_format API; reading it as a property raised AttributeError."
+}

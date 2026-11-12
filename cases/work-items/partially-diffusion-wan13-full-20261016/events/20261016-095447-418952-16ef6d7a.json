@@ -1,0 +1,20 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/baseline-source-manifest.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/baseline-source-manifest.json": "7f9c3d6ce32082c185b0f03de02ad265d6a2a8fbea8045b51e6b7b0b674aab43"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-095447-418952-16ef6d7a",
+  "kind": "change",
+  "queries": [],
+  "recorded_at": "2026-10-16T09:54:47.418942+00:00",
+  "resolves": [],
+  "rollback": "Select --gradient-sync bounded --optimizer-impl serial and no Studentmaskcache; original pre-edit sourcearchive commit949abb74b523268f528beda228592a0e6fb793f8 and baseline-source-manifest preserve fallback. No source rollback overwrites userwork.",
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "Main implemented optional DDP static graph bucketviews for fullDiT, preserving bounded reference default and serialAdamW selection pendingnumeric/perf. no_sync used for accumulation; raw model retained for checkpoint. Current livefileSHA256 {\"scripts/train_wan13_libero_full.py\": \"0cbbc20f5596ad2520813010650a3d90d71c0ec0096797cf707cca285a710f10\", \"scripts/train_wan13_libero_lora.py\": \"8ba91167ce5faa3fa0bb3cd9816cf184ecd2ea393ae26227484b767c732de0f9\"}"
+}

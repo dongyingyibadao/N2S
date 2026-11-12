@@ -1,0 +1,48 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/final-16rank-capacity-20261016.json",
+    "cases/work-items/partially-diffusion-wan13-full-20261016/bounded-mask-cache-same-device-performance-20261016.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/bounded-mask-cache-same-device-performance-20261016.json": "446d46ef86d15d3cb89556924182a70d61c1bf1c0c3ab8e575b3e6cf4ffabacb",
+    "cases/work-items/partially-diffusion-wan13-full-20261016/final-16rank-capacity-20261016.json": "39b06c6b198a8841e10875c8b1c0e8e7187051027284bb575e90f04a66530a0d"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-105711-676249-57938edb",
+  "kind": "lookup",
+  "queries": [
+    "n2s-knowledge search out of memory --accepted-only --include-community --json",
+    "Inspect finalbounded-serial-mb41 train.log firstcausalOOM and finalcapacity memory evidence",
+    "Reconcile O01 profiling/memory investigation with alreadyvalidatedbatch32; avoid blind allocator/operator/numerics changes"
+  ],
+  "recorded_at": "2026-10-16T10:57:11.676239+00:00",
+  "resolves": [
+    "20261016-104739-320309-baef04fa"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-10-16",
+      "applicability": "applicable",
+      "claim": "41OOMthirdbackward74MiBalloc after2updates;40passes3updates/fullcheckpoint butonly0.251GiBfree.",
+      "comparison": "Actual HCCL capacity boundary differs from oldsinglecard41pass; no isolatedcause for exactkernel/fragmentation.32separate8updatecacheproof has7.524GiBminimumfree.",
+      "status": "read",
+      "trust": "n2s_case_evidence",
+      "uri": "cases/work-items/partially-diffusion-wan13-full-20261016/final-16rank-capacity-20261016.json",
+      "url": null
+    },
+    {
+      "accessed_at": "2026-10-16",
+      "applicability": "related",
+      "claim": "O01 requires target-path memory/numerics/throughput evidence and separate scope for optimizations.",
+      "comparison": "Use measuredcapacitymargin to select32; reference/search are investigationinputs, not recipeproof thatbatch41canrun. Broad searchhits were screened bymetadata, not all sourcebodies reread.",
+      "status": "read",
+      "trust": "community_reference_bundle",
+      "uri": "reference://ascend-reference-20261005@b83a696461745e01f8e44e8a2e672db9fdadca7d66b6e19d7eaaaac53b5081a8/\u6607\u817e\u5361\u4f7f\u7528\u4f18\u5316\u4e0eDebug\u53c2\u8003\u624b\u518c.md",
+      "url": "https://gitcode.com/cann/cann-recipes-embodied-ai"
+    }
+  ],
+  "stage": "troubleshooting",
+  "summary": "Explicitfailure-link for alreadyperformed finalbatch41 sourcecomparison: After finaldistributedbatch41OOM, inspect originalfirstcause rank0/1 loss.backward stacks and finalrankmemory. Search accepted/community N2S outofmemory (54 broadhits, no target-kernel fix identified); retain existing allocator config and recompute. Safe path selects independentlyverifiedmb32 with7.524GiBfree; no claim that41isfixed or40longrunstable."
+}

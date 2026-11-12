@@ -1,0 +1,94 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "environment": "16xAscend910B2C64GiB CPUquota128; known20261013 Python3.12.14 torch2.9.0+cpu torch_npu2.9.0. Parent to capture currentdriver/CANNtuple. No installs.",
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/baseline-source-manifest.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/baseline-source-manifest.json": "7f9c3d6ce32082c185b0f03de02ad265d6a2a8fbea8045b51e6b7b0b674aab43"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-094311-945261-2176a6f7",
+  "kind": "lookup",
+  "project_tree_sha256": "ae7a64c582b64b14742032c9a4a8c4bcc863c468b751541eb64d99449aaa3e05",
+  "queries": [
+    "n2s-knowledge refresh-if-due (defaultPython jsonschemamissing, provisionedenvretry succeeded)",
+    "n2s-knowledge guide --task training --stage preparation --json",
+    "n2s-knowledge guide --task performance --stage optimization --json",
+    "n2s-knowledge search AdamW --accepted-only --include-community --json",
+    "n2s-knowledge search fusion --accepted-only --include-community --json",
+    "Read fullaccepted PI0/PI05docs and actualPI05trainer; registry/evidence-reuse; currentWanfulltrainer/utilities/npuops"
+  ],
+  "recorded_at": "2026-10-16T09:43:11.945252+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-10-16T09:43:11.851737+00:00",
+      "applicability": "related",
+      "claim": "Recipe reports DDP find_unused=False/static_graph=True/gradient_as_bucket_view=True reducing graph/bucket overhead; fusion/projection changes model local.",
+      "comparison": "Wan has825alltrainable tensors, fixedgeometry, nonreentrant blockcheckpointing and serial post-backward FP32 gradientreduction. DDP requires fullgradient/update A/B. Gemma gatedMLP differs from Wan GELUFFN.",
+      "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi05/train/doc/README.md",
+      "url": "https://gitcode.com/cann/cann-recipes-embodied-ai/blob/45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi05/train/doc/README.md"
+    },
+    {
+      "accessed_at": "2026-10-16T09:43:11.851737+00:00",
+      "applicability": "related",
+      "claim": "Actual recipe resolves three DDPflags and passes into DistributedDataParallelKwargs.",
+      "comparison": "Wrap only trainableWanDiT; keep rawmodel checkpoint identity. Retain serialreducerrollback. No TF32/cuDNN settings transplanted.",
+      "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi05/train/src/lerobot_train.py",
+      "url": "https://gitcode.com/cann/cann-recipes-embodied-ai/blob/45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi05/train/src/lerobot_train.py"
+    },
+    {
+      "accessed_at": "2026-10-16T09:43:11.851737+00:00",
+      "applicability": "related",
+      "claim": "AtlasA2 LIBERO recipe reports fusionattention and avoiding redundant outercheckpoint speedups.",
+      "comparison": "Wan alreadyhas localfusionattention/blockcheckpoint and no PI0outersuffixcheckpoint; reportedgains do nottransfer.",
+      "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi0/train/README.md",
+      "url": "https://gitcode.com/cann/cann-recipes-embodied-ai/blob/45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi0/train/README.md"
+    },
+    {
+      "accessed_at": "2026-10-16T09:43:11.851737+00:00",
+      "applicability": "related",
+      "claim": "PI0 reportedperformance uses8cards/batch24percard.",
+      "comparison": "Must benchmark identical16cardWan batch/dtype/inputs; upstreamspeed is notprojectresult.",
+      "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi0/train/doc/README.md",
+      "url": "https://gitcode.com/cann/cann-recipes-embodied-ai/blob/45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi0/train/doc/README.md"
+    },
+    {
+      "accessed_at": "2026-10-16T09:43:11.851737+00:00",
+      "applicability": "related",
+      "claim": "Official worldmodel recipe trainsWan1.3B using own49frameprotocol.",
+      "comparison": "Familyrelated but causalstructure/input/training/data differ; preserve currentresearchprotocol.",
+      "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/world_model/agibot-arm-world-model/doc/train.md",
+      "url": "https://gitcode.com/cann/cann-recipes-embodied-ai/blob/45d167135c81d97573bfbe0e564bb4a1d9642514/world_model/agibot-arm-world-model/doc/train.md"
+    },
+    {
+      "accessed_at": "2026-10-16T09:43:11.851737+00:00",
+      "applicability": "related",
+      "claim": "R05/R09/R11/R12/R16/O01 route fusion/DDP/hostsync/cache/checkpoint/memory/communication; not runtimeevidence.",
+      "comparison": "Project alreadyuses fusionattention/RMS/RoPE, immutable latent/textcache and CPUinputprefetch. Measure newchanges independently. Maximumcapacity differs from bestthroughput.",
+      "status": "read",
+      "trust": "community_reference_bundle",
+      "uri": "reference://ascend-reference-20261005@b83a696461745e01f8e44e8a2e672db9fdadca7d66b6e19d7eaaaac53b5081a8/\u6607\u817e\u5361\u4f7f\u7528\u4f18\u5316\u4e0eDebug\u53c2\u8003\u624b\u518c.md",
+      "url": null
+    }
+  ],
+  "stage": "preparation",
+  "summary": "Before targetmigrationedits: honest archivalbaseline and authorized3iterations; read acceptedofficialfullrecipefiles and existing N2Sevidence. Refreshsucceeded inprovisionedenvironment; db9b2453ad70ac919f8c42e02a61d16db63f4e66 remains unreviewed. Zeroapproved reusable rules. Conservative same-NPUbitwise tests do notresolve old cross-CUDA BF16issue."
+}

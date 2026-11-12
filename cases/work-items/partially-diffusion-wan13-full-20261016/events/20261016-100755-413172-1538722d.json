@@ -1,0 +1,27 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "environment": "2logical torchrun nodes on1physicalhost,1NPU perlogicalnode,history_static global2; immutableNPUVAEcache,torch2.9/torch_npu2.9.",
+  "error": {
+    "expected": "Launcher and cached preprocessing deterministic settings agree before torchrun.",
+    "message": "latent cache model/data/preprocessing/backend/determinism contract differs",
+    "observed": "Defaultfalse differed from existingtrue; both logicalnodes failed without checkpoint.",
+    "stack_excerpt": "WanLatentCache.__init__,wan_latent_cache.py:29; ERR99999 was wrapper only.",
+    "type": "ValueError"
+  },
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/distributed-launcher-validation-20261016.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/distributed-launcher-validation-20261016.json": "53a6905a43de406a8dd74fec74c1f831643001af95e8c561d47409b10685e1a4"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-100755-413172-1538722d",
+  "kind": "failure",
+  "queries": [],
+  "recorded_at": "2026-10-16T10:07:55.413162+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "First real two-logical-node launcher trial aborted before training because launcher deterministic=false conflicted with immutable latent cache deterministic=true. Retained original failure; no contract bypass."
+}

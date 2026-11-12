@@ -1,0 +1,184 @@
+{
+  "imported_at": "2026-10-16T10:28:54.778994+00:00",
+  "world_size": 16,
+  "microbatch": 32,
+  "global_batch": 512,
+  "updates": 8,
+  "first_step_gradient_capture_only": true,
+  "ddp_vs_bounded": {
+    "format": "wan13-full-execution-comparison-v1",
+    "status": "fail",
+    "all_tensor_bytes_equal": false,
+    "relative_tolerance": 1e-05,
+    "max_relative_l2": 0.7092661330200484,
+    "max_absolute_error": 0.0003620716743171215,
+    "input_trace_bitwise_equal": {
+      "trace-rank-0.json": true,
+      "trace-rank-1.json": true,
+      "trace-rank-10.json": true,
+      "trace-rank-11.json": true,
+      "trace-rank-12.json": true,
+      "trace-rank-13.json": true,
+      "trace-rank-14.json": true,
+      "trace-rank-15.json": true,
+      "trace-rank-2.json": true,
+      "trace-rank-3.json": true,
+      "trace-rank-4.json": true,
+      "trace-rank-5.json": true,
+      "trace-rank-6.json": true,
+      "trace-rank-7.json": true,
+      "trace-rank-8.json": true,
+      "trace-rank-9.json": true
+    },
+    "rng_sampler_bitwise_equal": {
+      "rng-rank-0.pt": true,
+      "rng-rank-11.pt": true,
+      "rng-rank-5.pt": true,
+      "rng-rank-6.pt": true,
+      "rng-rank-4.pt": true,
+      "rng-rank-2.pt": true,
+      "rng-rank-3.pt": true,
+      "rng-rank-15.pt": true,
+      "rng-rank-1.pt": true,
+      "rng-rank-14.pt": true,
+      "rng-rank-13.pt": true,
+      "rng-rank-10.pt": true,
+      "rng-rank-7.pt": true,
+      "rng-rank-9.pt": true,
+      "rng-rank-12.pt": true,
+      "rng-rank-8.pt": true
+    },
+    "reference": "LOCAL_PATH_0002",
+    "candidate": "LOCAL_PATH_0003",
+    "checkpoint_step": 8,
+    "scope": "Fixed same-NPU inputs, actual full-model gradients/updates/FP32 AdamW/RNG. No CUDA equivalence or model-quality claim.",
+    "original_report_sha256": "b9936b5466493b4d93a0582fb5a5f0ed8e582f97a474fd65399068534f9e5f26",
+    "forward_outputs": {
+      "rank_count": 16,
+      "captured_per_rank": 1,
+      "all_bitwise_equal": true,
+      "all_finite": true
+    },
+    "tensor_groups": {
+      "gradients-step-000001.safetensors": {
+        "tensor_count": 825,
+        "non_bitwise_count": 520,
+        "all_finite": true,
+        "max_per_tensor_relative_l2": 1.2454507145401265e-07,
+        "max_absolute_error": 1.4901161193847656e-08,
+        "worst_relative_l2_tensor": "blocks.24.norm3.weight",
+        "worst_relative_l2_tensor_maxabs": 9.313225746154785e-10
+      },
+      "model": {
+        "tensor_count": 825,
+        "non_bitwise_count": 825,
+        "all_finite": true,
+        "max_per_tensor_relative_l2": 0.0014636253153602096,
+        "max_absolute_error": 9.626150131225586e-05,
+        "worst_relative_l2_tensor": "text_embedding.2.bias",
+        "worst_relative_l2_tensor_maxabs": 4.875604645349085e-06
+      },
+      "optimizer": {
+        "tensor_count": 2475,
+        "non_bitwise_count": 1650,
+        "all_finite": true,
+        "max_per_tensor_relative_l2": 0.7092661330200484,
+        "max_absolute_error": 0.0003620716743171215,
+        "worst_relative_l2_tensor": "104.exp_avg",
+        "worst_relative_l2_tensor_maxabs": 4.998523763788398e-06
+      }
+    }
+  },
+  "cache_within_ddp": {
+    "format": "wan13-full-execution-comparison-v1",
+    "status": "pass",
+    "all_tensor_bytes_equal": true,
+    "relative_tolerance": 1e-05,
+    "max_relative_l2": 0,
+    "max_absolute_error": 0,
+    "input_trace_bitwise_equal": {
+      "trace-rank-0.json": true,
+      "trace-rank-1.json": true,
+      "trace-rank-10.json": true,
+      "trace-rank-11.json": true,
+      "trace-rank-12.json": true,
+      "trace-rank-13.json": true,
+      "trace-rank-14.json": true,
+      "trace-rank-15.json": true,
+      "trace-rank-2.json": true,
+      "trace-rank-3.json": true,
+      "trace-rank-4.json": true,
+      "trace-rank-5.json": true,
+      "trace-rank-6.json": true,
+      "trace-rank-7.json": true,
+      "trace-rank-8.json": true,
+      "trace-rank-9.json": true
+    },
+    "rng_sampler_bitwise_equal": {
+      "rng-rank-0.pt": true,
+      "rng-rank-5.pt": true,
+      "rng-rank-12.pt": true,
+      "rng-rank-10.pt": true,
+      "rng-rank-13.pt": true,
+      "rng-rank-7.pt": true,
+      "rng-rank-4.pt": true,
+      "rng-rank-1.pt": true,
+      "rng-rank-11.pt": true,
+      "rng-rank-9.pt": true,
+      "rng-rank-14.pt": true,
+      "rng-rank-15.pt": true,
+      "rng-rank-6.pt": true,
+      "rng-rank-2.pt": true,
+      "rng-rank-3.pt": true,
+      "rng-rank-8.pt": true
+    },
+    "reference": "LOCAL_PATH_0003",
+    "candidate": "LOCAL_PATH_0004",
+    "checkpoint_step": 8,
+    "scope": "Fixed same-NPU inputs, actual full-model gradients/updates/FP32 AdamW/RNG. No CUDA equivalence or model-quality claim.",
+    "original_report_sha256": "2195237d8671eb827851a11754795deb36d285d23b81cf3f62ada4bc407d67fe",
+    "forward_outputs": {
+      "rank_count": 16,
+      "captured_per_rank": 1,
+      "all_bitwise_equal": true,
+      "all_finite": true
+    },
+    "tensor_groups": {
+      "gradients-step-000001.safetensors": {
+        "tensor_count": 825,
+        "non_bitwise_count": 0,
+        "all_finite": true,
+        "max_per_tensor_relative_l2": 0.0,
+        "max_absolute_error": 0.0,
+        "worst_relative_l2_tensor": "blocks.0.cross_attn.k.bias",
+        "worst_relative_l2_tensor_maxabs": 0.0
+      },
+      "model": {
+        "tensor_count": 825,
+        "non_bitwise_count": 0,
+        "all_finite": true,
+        "max_per_tensor_relative_l2": 0.0,
+        "max_absolute_error": 0.0,
+        "worst_relative_l2_tensor": "blocks.0.cross_attn.k.bias",
+        "worst_relative_l2_tensor_maxabs": 0.0
+      },
+      "optimizer": {
+        "tensor_count": 2475,
+        "non_bitwise_count": 0,
+        "all_finite": true,
+        "max_per_tensor_relative_l2": 0.0,
+        "max_absolute_error": 0.0,
+        "worst_relative_l2_tensor": "0.step",
+        "worst_relative_l2_tensor_maxabs": 0.0
+      }
+    }
+  },
+  "interpretation": [
+    "First forward and16rank input/RNG traces exact; first825gradient discrepancies atmost1.24545e-7 relativeL2 and1.490116e-8 absolute.",
+    "After8updates all825weights differ inbytes; maxper-tensor weightrelativeL2 about0.14636percent, not a whole-model accuracy measure.",
+    "AdamW maximum per-tensor relativeL2 about70.9266percent belongs to104.exp_avg withmaxabs4.9985e-6; it is not wholeoptimizer norm or70.9percent task/model precision loss.",
+    "Within the sameDDP path, online-vs-cache gradients/weights/AdamW/RNG remain exact at16rank. This isolates cache correctness for the exercised run but does not restore bounded-vs-DDP equivalence."
+  ],
+  "decision": "Main rejectsDDP forformal16cardtraining. Use originalbounded gradient averaging; bounded+maskcache8update same-device numerical/performance validation next.",
+  "root_cause": "Notlocalized; differing collective arithmetic/layout is supported hypothesis only."
+}

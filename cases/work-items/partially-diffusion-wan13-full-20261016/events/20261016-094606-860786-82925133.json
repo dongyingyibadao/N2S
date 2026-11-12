@@ -1,0 +1,37 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "environment": "16x910B2C64GiB CPUquota128 Python3.12.14 torch2.9.0+cpu torch_npu2.9.0 OMP4; historical20261013 execution.",
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/prior-full-training-evidence.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/prior-full-training-evidence.json": "f5134ca768d078de1b4c8b135751822b991f3c7ab45c2531cf65c74195e40394"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-094606-860786-82925133",
+  "kind": "validation",
+  "queries": [],
+  "recorded_at": "2026-10-16T09:46:06.860777+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Import prior20261013 official-EMA NPU full-training functionality and same-NPU all-parameter operator evidence. This is scoped prior evidence, not a new run or proof of cross-CUDA equivalence. Batched patch remains disabled due measured gradient drift.",
+  "validation": {
+    "accuracy": "passed",
+    "accuracy_protocol": "Same-NPU execution-only gate: original versus batched RoPE real-microbatch2 output and all825FP32 parameter gradients bitwise equal; exactresume step3to4 model/AdamW/RNG/loss equal. Different scope from CUDA/NPU fullpipeline equivalence, which remains open.",
+    "actual_backend": "npu",
+    "finite_outputs": true,
+    "functional": "passed",
+    "official_weights": true,
+    "optimization": "pending",
+    "performance": {
+      "baseline": 12.878483,
+      "direction": "lower",
+      "metric": "step_seconds",
+      "modified": null,
+      "protocol": "Imported16card/microbatch32/global512 priorupdates4to8 baseline; newexecutionconfiguration/currentenvironment need same-device repeatedA/B.",
+      "same_device": false
+    }
+  }
+}

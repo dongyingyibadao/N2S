@@ -1,0 +1,18 @@
+{
+  "read_at": "2026-10-16T10:09:19.729000+00:00",
+  "error": "Latent cache strictcontract mismatch",
+  "first_failure": "immutablecache deterministictrue vslauncher defaultfalse",
+  "knowledge_search": "latent cache deterministic contract",
+  "knowledge_search_results": 0,
+  "source_reads": {
+    "src/partially_diffusion/wan_latent_cache.py": "87d13eb50334fa093050305b879eebfb9acaa868d0e6af0f4c8c3e1d62f5b0e1",
+    "scripts/launch_wan13_full.py": "5d7adc855aea7f0996d7ba1b1b0ee9ef82f147fffbc7e386d6af4c0fc6171a84"
+  },
+  "mechanism": "latent_contract includes torch.are_deterministic_algorithms_enabled(); WanLatentCache rejects any contractdifference. Launcher now defaultstrue and validates manifestdeterminism before processlaunch. Trainer remains strict.",
+  "validation_ref": "cases/work-items/partially-diffusion-wan13-full-20261016/distributed-launcher-validation-20261016.json",
+  "limitations": [
+    "Launcher newoptionalStudentcacheargument addedafter scoped tests; finalsourceidentity recheckownedbymain.",
+    "Twologicalnodes shareonephysicalhost; truecrosshostnetwork nottested.",
+    "Resume2to3 strictidentity/hash andrankconsistency tested; no uninterrupted3step newrunto compare."
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "validate": {
+    "command": [
+      "tooling/n2s-experiments",
+      "validate",
+      "--case",
+      "partially-diffusion-wan13-full-20261016"
+    ],
+    "recorded_at": "2026-10-16T10:57:11.985920+00:00",
+    "exit_code": 0,
+    "stdout": "{\n  \"runs\": 0,\n  \"status\": \"valid\",\n  \"tasks\": 1\n}\n",
+    "stderr": ""
+  },
+  "workflow-check": {
+    "command": [
+      "tooling/n2s-experiments",
+      "workflow-check",
+      "--case",
+      "partially-diffusion-wan13-full-20261016"
+    ],
+    "recorded_at": "2026-10-16T10:57:12.159676+00:00",
+    "exit_code": 0,
+    "stdout": "{\n  \"case_id\": \"partially-diffusion-wan13-full-20261016\",\n  \"completion_ready\": true,\n  \"events\": 44,\n  \"gaps\": [],\n  \"generalization\": \"pending_validation\",\n  \"note\": \"Checks recorded evidence and workflow coverage, not model correctness or rule approval. Open/blocked cases remain publishable.\",\n  \"stages\": {\n    \"optimization\": [\n      \"20261016-094737-845191-d7269c50\",\n      \"20261016-101227-916644-4df53eb3\",\n      \"20261016-104707-446469-15ff77f0\",\n      \"20261016-105625-546201-f6bc574f\"\n    ],\n    \"preparation\": [\n      \"20261016-094311-945261-2176a6f7\"\n    ],\n    \"troubleshooting\": [\n      \"20261016-095447-192821-0c20e813\",\n      \"20261016-095647-689703-43ef7017\",\n      \"20261016-095758-377971-5495d2c4\",\n      \"20261016-100933-132798-77b9d2b5\",\n      \"20261016-100933-526819-4112a6c4\",\n      \"20261016-102538-915137-d8aff40e\",\n      \"20261016-104550-591008-5b927e17\",\n      \"20261016-104820-780908-306bfea3\",\n      \"20261016-105711-676249-57938edb\"\n    ]\n  },\n  \"status\": \"ready_for_review\",\n  \"unresolved_events\": []\n}\n",
+    "stderr": ""
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "claim": "Bounded full-training batch search, fixed-input same-NPU numerical validation and measured runtime optimization; one-command distributed launchers for all three sources",
+  "depends_on": [],
+  "evidence_refs": [],
+  "execution": null,
+  "id": "reproduce",
+  "level": "observation",
+  "protocol": {
+    "acceptance": "pending: user must define what counts as running successfully",
+    "assets": [],
+    "comparison_key": "partially-diffusion-wan13-full-20261016",
+    "input_description": "pending: fixed input and observed failure stage",
+    "seed": null,
+    "variant": "baseline"
+  },
+  "requirements": {
+    "backends": [
+      "npu"
+    ],
+    "device_name_contains": [],
+    "versions": {}
+  },
+  "schema_version": "1.0.0",
+  "state": "draft",
+  "title": "Wan1.3B Student-mask full training capacity and NPU execution optimization"
+}

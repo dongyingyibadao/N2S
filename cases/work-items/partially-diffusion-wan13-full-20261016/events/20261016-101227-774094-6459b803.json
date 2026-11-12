@@ -1,0 +1,39 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "environment": "Ascend 910B2C64GiB, torch2.9/torch_npu2.9; world2, microbatch2, global4, accumulation1,3updates, official generator EMA, BF16 autocast/FP32 full params/grad/serial AdamW, deterministictrue.",
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/mask-cache-full-update-validation-20261016.json",
+    "cases/work-items/partially-diffusion-wan13-full-20261016/mask-cache-native-option-diagnosis-20261016.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/mask-cache-full-update-validation-20261016.json": "34cd96b8b148928533175547319f8bc55e5a534f83b6373bca324ba9494625a5",
+    "cases/work-items/partially-diffusion-wan13-full-20261016/mask-cache-native-option-diagnosis-20261016.json": "c3adc74106c23aa4d520f23e4a22dae7a7f5483facce029662bc9009a79e8cb5"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-101227-774094-6459b803",
+  "kind": "validation",
+  "queries": [],
+  "recorded_at": "2026-10-16T10:12:27.774082+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Actual two-rank full-training DDP online Student versus cached masks passes: first-step 825 preclip gradients, three-update final 825 weights and 2475 AdamW tensors, captured inputs/outputs and all rank RNG/sampler are bitwise equal and finite. Fresh batched RoPE proof on current source also passes all 825 full gradients.",
+  "validation": {
+    "accuracy": "passed",
+    "accuracy_protocol": "Execution-only same-NPU gate: 64,000 original masks/areas lossless and RNG unchanged during cache build; full-update A/B saved tensors bitwise equal, max relativeL2/maxabs0, source/input/RNG identities pinned. Fresh full-parameter RoPE forward/backward exact; no cross-CUDA or model-quality claim.",
+    "actual_backend": "npu",
+    "finite_outputs": true,
+    "functional": "passed",
+    "official_weights": true,
+    "optimization": "pending",
+    "performance": {
+      "baseline": null,
+      "direction": "lower",
+      "metric": "step_seconds",
+      "modified": null,
+      "protocol": "Correctness capture only, not a timing experiment. Sequential same16card mb32/global512 eight-update steady timing is pending.",
+      "same_device": false
+    }
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "recorded_at": "2026-10-16T10:31:02.408722+00:00",
+  "authorization": "Main relayed the user explicitly requested retaining the latest two full checkpoints plus one older checkpoint three save events before final. Main concretized final3000/save400 as2000/2800/3000. Applies only to this new run; never prior user output.",
+  "origin": "Project-specific storage policy, not a claimed N2S recipe or generic rule.",
+  "policy": "recent2-anchor3",
+  "formal_updates": 3000,
+  "save_every": 400,
+  "final_save": 3000,
+  "planned_saves": [
+    400,
+    800,
+    1200,
+    1600,
+    2000,
+    2400,
+    2800,
+    3000
+  ],
+  "final_retained": [
+    2000,
+    2800,
+    3000
+  ],
+  "mechanism": [
+    "New complete checkpoint is atomically published and checked before pruning.",
+    "Rank0 validates candidate complete markers, step, training-identity hash and non-symlink metadata before deleting. Foreign/incomplete/symlink entries fail closed.",
+    "Only checkpoint directories in this new matching training output are eligible. Every event is journaled atomically.",
+    "A final barrier completes pruning before ranks continue.",
+    "Default all retains compatibility for bounded tests/resume to later total updates."
+  ],
+  "unit_validation": {
+    "command_output": "51 passed,1 warning,8subtests passed in9.91s",
+    "log_sha256": "0a49f58d097941b428dbec2d304ec1003a1f157487949df6c394733cd234d025",
+    "scope": "CPU unit tests covering mask cache, full training and retention; not actual NPU deletion proof."
+  },
+  "actual_NPU_save_prune_resume": "pending independent final launcher test",
+  "final_operator_proof": {
+    "status": "pass",
+    "all_parameter_gradients_bitwise_equal": true,
+    "input_trace_bitwise_equal": true,
+    "output": {
+      "bitwise_equal": true,
+      "finite": true,
+      "relative_l2": 0.0,
+      "max_absolute_error": 0.0
+    },
+    "parameter_tensors": 825,
+    "microbatch_size": 2,
+    "source_sha256": {
+      "scripts/train_wan13_libero_full.py": "6df43c5d7346c09cbdbcbeb49d649de81816cdc6e56e1821bbb768d06a1628d8",
+      "scripts/train_wan13_libero_lora.py": "cf1c441f4673becd833dae70bdfe138291847ea629e0b6bf88d67a4eb7183a8f",
+      "src/partially_diffusion/wan13_full_training.py": "8d399d9b4a4a0fb8e9d2d82935c936888edb2a4c48edb405f8f7e31b7f570a66",
+      "src/partially_diffusion/wan13_execution.py": "eb3b324abf3c82d5f5c575e8dc61b498166cacdb9084f7f99605ee8647f14b16",
+      "src/partially_diffusion/wan_latent_cache.py": "87d13eb50334fa093050305b879eebfb9acaa868d0e6af0f4c8c3e1d62f5b0e1",
+      "src/partially_diffusion/context.py": "cdce789ff13c8f24fefdffea9fbc9c7f917462df54cb9aef50689f80643306e2",
+      "src/partially_diffusion/mask_student.py": "4db8e686d662b339417eeb319b91ecd8f25bd9b88e18c9b3afd9d8a9aa057014",
+      "src/partially_diffusion/device.py": "3af2c0d488554d5fa474720487218fed39917bdbb934e7cb92c2cad3642631c7",
+      "src/partially_diffusion/lr_schedule.py": "84c9bd6652f2d12bd835b198f2a0cf6ba0285044464d4253e7ea260632040489",
+      "third_party/causal_forcing/utils/wan_wrapper.py": "e2ef591fa98abfe335015606fffbc11596222e0c08d5a3eee207b75f00c3cabb",
+      "src/partially_diffusion/frozen_student_mask_cache.py": "49dc73c1f7ce3e0de240693de406bb50d5ccfdcf5dba54d2ea15fbb693807028",
+      "src/partially_diffusion/full_checkpoint_retention.py": "ffbfb3f8381f75ab31a6fdcc7862cf489bc2fda39d0e8ce753934798219c1a00",
+      "third_party/causal_forcing/wan/modules/causal_model.py": "81691a1f39d44349eb08c571e8dc97c178babf6e3725aa9c47d2286b1afd8352",
+      "third_party/causal_forcing/wan/modules/model.py": "83708a78f58f448e3fa8e6a9a5166ef44651507d4a3d4cff70c8f2d33f932ac8",
+      "third_party/causal_forcing/wan/modules/npu_ops.py": "06fb43406f0cff4bc1ab450956acf4083253b470aaab46e15e923f20f2e0a5eb"
+    }
+  },
+  "final_operator_proof_sha256": "a00025d5b989487b995b831d2d6846c5d64db53703faba686788dab04d2fa1a1",
+  "current_source_matches_proof": {
+    "scripts/train_wan13_libero_full.py": true,
+    "scripts/train_wan13_libero_lora.py": true,
+    "src/partially_diffusion/wan13_full_training.py": true,
+    "src/partially_diffusion/wan13_execution.py": true,
+    "src/partially_diffusion/wan_latent_cache.py": true,
+    "src/partially_diffusion/context.py": true,
+    "src/partially_diffusion/mask_student.py": true,
+    "src/partially_diffusion/device.py": true,
+    "src/partially_diffusion/lr_schedule.py": true,
+    "third_party/causal_forcing/utils/wan_wrapper.py": true,
+    "src/partially_diffusion/frozen_student_mask_cache.py": true,
+    "src/partially_diffusion/full_checkpoint_retention.py": true,
+    "third_party/causal_forcing/wan/modules/causal_model.py": true,
+    "third_party/causal_forcing/wan/modules/model.py": true,
+    "third_party/causal_forcing/wan/modules/npu_ops.py": true
+  },
+  "learning_rate_plan": "Formal new training uses warmup500 from1e-7 to1e-5, cosine total3000 to1e-7. This intentionally changes optimization trajectory from total15000 and is not a same-numerics execution optimization. All speed A/B arms retain constant1e-5.",
+  "rollback": "Select --checkpoint-retention all for future saves. Already discarded checkpoints cannot be recreated by changing the policy; user explicitly authorized their removal within this new run."
+}

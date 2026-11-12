@@ -1,0 +1,39 @@
+{
+  "recorded_at": "2026-10-16T10:07:46.419487+00:00",
+  "actual_observation": "2026-10-16T10:00:33Z",
+  "causal_exception": "AttributeError: '_npuConfig' object has no attribute 'allow_internal_format'",
+  "stack_excerpt": [
+    "scripts/build_wan13_student_mask_cache.py:149 -> build_contract",
+    "frozen_student_mask_cache.py:107 -> bool(torch.npu.config.allow_internal_format)"
+  ],
+  "scope": "Cache metadata construction before any Student sample or training update. No model precision failure.",
+  "original_log_sha256": "ed6ad500baaae7329733090f00e24f0d69c1744ee039271b2f7bb644c8b78d8b",
+  "failed_plan": {
+    "purpose": "Full64000 original batch-one frozen Student exact mask cache",
+    "environment": {
+      "ASCEND_RT_VISIBLE_DEVICES": "8,9,10,11,12,13,14,15",
+      "OMP_NUM_THREADS": "4",
+      "HCCL_IF_BASE_PORT": "57000",
+      "HCCL_HOST_SOCKET_PORT_RANGE": "58000-58499",
+      "HCCL_NPU_SOCKET_PORT_RANGE": "59000-59499"
+    },
+    "command": [
+      "LOCAL_PATH_0013",
+      "-m",
+      "torch.distributed.run",
+      "--nproc_per_node=8",
+      "--master_addr=127.0.0.1",
+      "--master_port=29916",
+      "TARGET_PROJECT/scripts/build_wan13_student_mask_cache.py",
+      "--output",
+      "TARGET_PROJECT/artifacts/wan13_frozen_student_masks_npu_v1",
+      "--log-every",
+      "256"
+    ],
+    "source_sha256": {
+      "scripts/build_wan13_student_mask_cache.py": "fe96b44f0fece4ae8d8adea0a5362f1bb27dd1d15755021bc9dffcd614799665",
+      "src/partially_diffusion/frozen_student_mask_cache.py": "33684844c8eb30ec01d58c39fa6ea99a5faa52c8b929b001cf2b3ba3e0de29d9"
+    },
+    "plan_time_unix": 1792144819.3803928
+  }
+}

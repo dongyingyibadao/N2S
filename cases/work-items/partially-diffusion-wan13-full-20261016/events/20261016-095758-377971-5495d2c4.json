@@ -1,0 +1,35 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/execution-harness-initialization-failure.md"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/execution-harness-initialization-failure.md": "bbbfbca1da45becc608abe5ba8416965e58489b4f94465d76b2e25ec38557184"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-095758-377971-5495d2c4",
+  "kind": "lookup",
+  "queries": [
+    "Read scripts/train_wan13_libero_full.py shared output initialization",
+    "Read scripts/validate_wan13_full_execution.py worker install_capture path creation"
+  ],
+  "recorded_at": "2026-10-16T09:57:58.377960+00:00",
+  "resolves": [
+    "20261016-095758-248927-7b8338a5"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-10-16T09:57:58.155147+00:00",
+      "applicability": "no_match",
+      "claim": "No external kernel or model recipe is needed to explain this deterministic directory-order failure.",
+      "comparison": "Local trainer deliberately raises on existing output; directory creation must move after initialization. No precision or performance inference.",
+      "status": "no_match",
+      "trust": "unavailable",
+      "uri": null,
+      "url": null
+    }
+  ],
+  "stage": "troubleshooting",
+  "summary": "Read exact target output initialization and capture lifecycle. Failure is a local ownership/order bug in diagnostic harness; preserve trainer no-overwrite safety contract."
+}

@@ -1,0 +1,27 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "environment": "Same16physicalAscend910B2C64GiB, percardmicrobatch32,global512,accumulation1,8updates,constantLR1e-5,BF16compute/FP32fullparams/serialAdamW,originalonlinefrozenStudent.",
+  "error": {
+    "expected": "Target exactsame-NPU fullupdate comparison must independently pass at16rank.",
+    "message": "16rank loss differs beginningupdate3; no causalexception raised.",
+    "observed": "Step3 approximately0.234396 bounded versus0.234400 DDP; step8 approximately0.151987 versus0.152050. Firstgradient/finalstate quantitativecomparison stillpending.",
+    "stack_excerpt": "Noexception; this is measured numericaldifference, rootcause unlocalized.",
+    "type": "SameDeviceDistributedNumericalDrift"
+  },
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/ddp-16rank-numerical-observation-20261016.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/ddp-16rank-numerical-observation-20261016.json": "7f77057fe5b6d71e9ef1f63373c5a2980b174d7db5fda6fda6a49bf37236a2b9"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-102139-846881-eaadb7ec",
+  "kind": "numerical_issue",
+  "queries": [],
+  "recorded_at": "2026-10-16T10:21:39.846872+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "New16rank actual fulltraining shows small bounded-vs-DDP loss drift fromupdate3; prior2rank bitwise pass is scope-limited. DDP also addsabout5.255GiB peak foronlyabout1.6percent speed, pending exact final quantification. Do not claim no16rank numerical impact."
+}

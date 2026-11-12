@@ -1,0 +1,27 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/tooling-preparation-resolution.md",
+    "cases/work-items/partially-diffusion-wan13-full-20261016/baseline-provenance.md",
+    "cases/work-items/partially-diffusion-wan13-full-20261016/baseline-source-manifest.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/baseline-provenance.md": "41ca9f1bdf8f6578ecc0273d7843a6cb11b103222928cc8a42e22c79b8d08942",
+    "cases/work-items/partially-diffusion-wan13-full-20261016/baseline-source-manifest.json": "7f9c3d6ce32082c185b0f03de02ad265d6a2a8fbea8045b51e6b7b0b674aab43",
+    "cases/work-items/partially-diffusion-wan13-full-20261016/tooling-preparation-resolution.md": "46ddb781cf55e14d5f4053cce32446713aec2a467fd29f1e2e9e75d0c9f9ab3c"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-094606-750534-b5f5e76b",
+  "kind": "resolution",
+  "queries": [],
+  "recorded_at": "2026-10-16T09:46:06.750525+00:00",
+  "resolves": [
+    "20261016-094606-438744-bd951c07",
+    "20261016-094606-540929-0c01ccd3",
+    "20261016-094606-644408-7f016118"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Resolved preparation tooling failures without installs or target Git mutations: use provisioned Python; honest separate source-only Git archive; source-file-only copy excludes artifacts and symlinks. No user assets modified."
+}

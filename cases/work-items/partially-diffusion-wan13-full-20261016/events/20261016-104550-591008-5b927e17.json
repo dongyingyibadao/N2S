@@ -1,0 +1,33 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/capacity-baseline-stage-correction-20261016.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/capacity-baseline-stage-correction-20261016.json": "2c0f10f3ce99884ac2f5b82e511e98304b70ffddfb2183ef3d8608caf113afd2"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-104550-591008-5b927e17",
+  "kind": "lookup",
+  "queries": [
+    "Inspect original capacity-baseline mb42-steps3.log and mb42-steps3-result.json causal traceback",
+    "Check completed optimizer updates before failure and activation-checkpoint scope"
+  ],
+  "recorded_at": "2026-10-16T10:45:50.590996+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-10-16",
+      "applicability": "applicable",
+      "claim": "Original stack is inside loss.backward/autograd after one complete update.",
+      "comparison": "Supersedes stage wording only in20261016-095447-304713-a1f402a7; batch42 remains failed and distributed capacity unresolved.",
+      "status": "read",
+      "trust": "n2s_case_evidence",
+      "uri": "cases/work-items/partially-diffusion-wan13-full-20261016/capacity-baseline-stage-correction-20261016.json",
+      "url": null
+    }
+  ],
+  "stage": "troubleshooting",
+  "summary": "Re-read original batch42 causal log/stack. Correct earlier immutable event prose secondforward to second-update backward/autograd stage; preserve original failure and all measurements. Recompute-forward versus gradient kernel cannot be isolated from stack alone."
+}

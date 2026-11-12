@@ -1,0 +1,40 @@
+{
+  "read_at": "2026-10-16T10:25:38.818785+00:00",
+  "installed_torch_version": "2.9.0+cpu",
+  "installed_torch_git_version": "0fabc3ba44823f257e70ce397d989c8de5e362c1",
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/pytorch/pytorch/0fabc3ba44823f257e70ce397d989c8de5e362c1/docs/source/notes/numerical_accuracy.rst",
+      "revision": "0fabc3ba44823f257e70ce397d989c8de5e362c1",
+      "content_sha256": "383c98439629eb6b38b9a09099d9803f5e1f74e93caa45707c3cef90d41a8feb",
+      "read_scope": "full_file"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/pytorch/pytorch/0fabc3ba44823f257e70ce397d989c8de5e362c1/torch/csrc/distributed/c10d/default_comm_hooks.cpp",
+      "revision": "0fabc3ba44823f257e70ce397d989c8de5e362c1",
+      "content_sha256": "672c76d6da61ce05d581bd457591b7de9a1b8087980af4627a4726e6c8a7d54a",
+      "read_scope": "full_file"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/pytorch/pytorch/0fabc3ba44823f257e70ce397d989c8de5e362c1/torch/csrc/distributed/c10d/reducer.cpp",
+      "revision": "0fabc3ba44823f257e70ce397d989c8de5e362c1",
+      "content_sha256": "3eb0a1d23ea6fa8f700b5d5a6a01465fbb193cb559a9e146d14bd1d64d96ea63",
+      "read_scope": "complete_functions_mark_variable_ready_dense_run_allreduce_hook_all_reduce_bucket"
+    }
+  ],
+  "observed_source_mechanisms": [
+    "DDP default Reducer.mark_variable_ready_dense scales each local dense gradient by1/div_factor while copying or divides its bucket view before collective.",
+    "Reducer.run_allreduce_hook invokes _AllReduceBySumCommHook, which performs SUM without post-division.",
+    "Project bounded gradient averager packs then SUMs and divides byworld_size after the collective.",
+    "DDP also changes bucket membership and communication ordering relative to bounded reducer."
+  ],
+  "supporting_scope": "PyTorch numerical accuracy documentation explicitly says floating-point addition/multiplication are not associative and mathematically identical computations need not be bitwise identical. This supports investigating arithmetic and collective path differences.",
+  "contrary_or_limitations": [
+    "World16 is a power of two: pre-vs-post scaling alone is not sufficient evidence for observed drift; normal FP32 scaling may be exact.",
+    "No HCCL collective trace or controlled bucket/order/scaling A/B has isolated a root cause.",
+    "Accepted PI05 static graph recipe documents settings, not exact Wan fulltraining equivalence at16ranks.",
+    "N2S all_reduce matches in SLARM engine/logging aggregate scalar metrics; relevant functions read, but they are a different scope from fullgradient equivalence.",
+    "No exact N2S search match for floating point reduction; this is not evidence no upstream solution exists."
+  ],
+  "recommendation": "Quantify first-step raw825 gradients and eight-update weights/AdamW/RNG. Preserve bounded as default if16rank exact gate fails; test bounded+same exactmaskcache without altered reduction. Do not use two-rank pass or general floating-point documentation to waive the agreed numerical gate."
+}

@@ -1,0 +1,45 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/bounded-mask-cache-16rank-validation-20261016.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/bounded-mask-cache-16rank-validation-20261016.json": "ca9f6391927a383281ebff294bd6d62e0028fab5615679e4a3dcf70aeaab3221"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-104707-446469-15ff77f0",
+  "kind": "lookup",
+  "queries": [
+    "n2s-knowledge guide --task performance --stage optimization --json",
+    "n2s-knowledge search frozen student mask cache --accepted-only --include-community --json",
+    "Reconcile N2S O01 and previously fully-read accepted PI05 DDP source with failed16rankDDP and passing16rankboundedcache evidence"
+  ],
+  "recorded_at": "2026-10-16T10:47:07.446454+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-10-16",
+      "applicability": "related",
+      "claim": "O01 directs profiling hostsync/cache/operator/communication after functional and accuracy gates.",
+      "comparison": "Originalreference fullmanual alreadyread; query now returns O01 but zero direct exactfrozenStudentcache matches. Cache is local derived optimization, no generic rule or PI05 runtime equivalence inherited.",
+      "content_sha256": "e09eb014accc05c0761e31423d681371cd26dd74e7dfb3255efe63594194dbd2",
+      "status": "read",
+      "trust": "community_reference_bundle",
+      "uri": "reference://ascend-reference-20261005@b83a696461745e01f8e44e8a2e672db9fdadca7d66b6e19d7eaaaac53b5081a8/\u6607\u817e\u5361\u4f7f\u7528\u4f18\u5316\u4e0eDebug\u53c2\u8003\u624b\u518c.md",
+      "url": "https://gitcode.com/cann/cann-recipes-embodied-ai"
+    },
+    {
+      "accessed_at": "2026-10-16",
+      "applicability": "applicable",
+      "claim": "Selected16rank full-update tensors/inputs/RNG are exact and finite.",
+      "comparison": "Separate samephysicalcard mb32/global512 constantLR stableupdates4to8 timing is retained for finaloptimizationvalidation; shortsinglerun cannot establish broadhardware speedup.",
+      "status": "read",
+      "trust": "n2s_case_evidence",
+      "uri": "cases/work-items/partially-diffusion-wan13-full-20261016/bounded-mask-cache-16rank-validation-20261016.json",
+      "url": null
+    }
+  ],
+  "stage": "optimization",
+  "summary": "After latest16rank bounded+cache functional/numerical acceptance and DDP rejection, query N2S performance guidance again. O01 gives host/cache and fixed-device timing investigation; exact frozen Student cache has no direct accepted match and stays a project-specific extension. Keep previously fused operators/recompute/latent-text caches unchanged, serialAdamW, boundedFP32reducer; defer unproven new candidates."
+}

@@ -1,0 +1,37 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "environment": "Same16physicalAscend910B2C64GiB; originalgeneratorEMA; mb32/global512/accum1;8updates constantLR1e-5; BF16autocast/FP32fullparams/serialAdamW/deterministictrue.",
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/bounded-mask-cache-16rank-validation-20261016.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/bounded-mask-cache-16rank-validation-20261016.json": "ca9f6391927a383281ebff294bd6d62e0028fab5615679e4a3dcf70aeaab3221"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-104550-768063-bc553a6c",
+  "kind": "validation",
+  "queries": [],
+  "recorded_at": "2026-10-16T10:45:50.768050+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Final-source bounded FP32 gradient averaging plus exact frozen Student cache passes actual16rank mb32/global512 eight-update A/B against original bounded online Student. All16 input traces and RNG/sampler exact,825 first-step preclip gradients,825 final model tensors and2475 AdamW tensors bitwise equal;0relativeL2/0maxabs. Fullcp8 complete/crossrank states equal.",
+  "validation": {
+    "accuracy": "passed",
+    "accuracy_protocol": "Same-NPU execution replacement only. All64k masks/areas exact;16rank first-step825preclipgradients and final825weights/2475AdamW tensors plus input/RNG/sampler bytes exact at0tolerance. No independently captured postclip/allsteps gradients, CUDA equivalence, or taskquality claim.",
+    "actual_backend": "npu",
+    "finite_outputs": true,
+    "functional": "passed",
+    "official_weights": true,
+    "optimization": "pending",
+    "performance": {
+      "baseline": null,
+      "direction": "lower",
+      "metric": "step_seconds",
+      "modified": null,
+      "protocol": "This event records numerical acceptance. Same-device throughput is retained separately and final optimization validation follows renewed lookup.",
+      "same_device": false
+    }
+  }
+}

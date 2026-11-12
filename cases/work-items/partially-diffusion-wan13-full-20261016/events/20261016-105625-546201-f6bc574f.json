@@ -1,0 +1,45 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/bounded-mask-cache-16rank-validation-20261016.json",
+    "cases/work-items/partially-diffusion-wan13-full-20261016/formal-resume-verification-20261016.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/bounded-mask-cache-16rank-validation-20261016.json": "ca9f6391927a383281ebff294bd6d62e0028fab5615679e4a3dcf70aeaab3221",
+    "cases/work-items/partially-diffusion-wan13-full-20261016/formal-resume-verification-20261016.json": "92393eb4cd7f82881d422d2e7b2f6f7cffb4722bee31ae7edc673af1e30aa8ed"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-105625-546201-f6bc574f",
+  "kind": "lookup",
+  "queries": [
+    "n2s-knowledge guide --task performance --stage optimization --json",
+    "Reconcile final16rank numericalpass/capacity40edge/32safeformalresume withpreviouslyreadN2SO01 and actualsame-device shorttimings"
+  ],
+  "recorded_at": "2026-10-16T10:56:25.546190+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-10-16",
+      "applicability": "related",
+      "claim": "O01 requires fixeddevice/backend/batch/numerics and warmedtiming before declaringoptimization.",
+      "comparison": "ExactStudentcache remains projectderived,not anacceptedgenericrule. Short0.96percentlatencydifference reportedwithsinglerun/downwarddriftlimitations; noDDP orLRtrajectory speedcredit.",
+      "status": "read",
+      "trust": "community_reference_bundle",
+      "uri": "reference://ascend-reference-20261005@b83a696461745e01f8e44e8a2e672db9fdadca7d66b6e19d7eaaaac53b5081a8/\u6607\u817e\u5361\u4f7f\u7528\u4f18\u5316\u4e0eDebug\u53c2\u8003\u624b\u518c.md",
+      "url": "https://gitcode.com/cann/cann-recipes-embodied-ai"
+    },
+    {
+      "accessed_at": "2026-10-16",
+      "applicability": "applicable",
+      "claim": "16rankfixedinputfull-update replacement passesbitwise; actualformalresume works.",
+      "comparison": "Finaloptimizationscopeis bounded+exactcache; finalformalwarmup3000horizon isseparateexperimentsetting.",
+      "status": "read",
+      "trust": "n2s_case_evidence",
+      "uri": "cases/work-items/partially-diffusion-wan13-full-20261016/bounded-mask-cache-16rank-validation-20261016.json",
+      "url": null
+    }
+  ],
+  "stage": "optimization",
+  "summary": "Finalafteractualresume performanceguidance lookup confirms sameO01investigation scope. Stopaddingcandidates: select provenbounded+exactcache only; DDP rejected and existingfusions/cache/recompute not countedasanewgain. Finalspeedmeasurement remains fixedsame16cards/global512/constantLR stableupdates4to8, separately fromformalwarmup/resume."
+}

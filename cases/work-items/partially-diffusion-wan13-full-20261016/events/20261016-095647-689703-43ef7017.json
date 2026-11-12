@@ -1,0 +1,66 @@
+{
+  "case_id": "partially-diffusion-wan13-full-20261016",
+  "evidence_refs": [
+    "cases/work-items/partially-diffusion-wan13-full-20261016/baseline-capacity-20261016.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/partially-diffusion-wan13-full-20261016/baseline-capacity-20261016.json": "dbb19cb6460f74aee0dd61248ac95993658adb76b8796a3a6c4395ebc5e2f2ea"
+  },
+  "generalization": "pending_validation",
+  "id": "20261016-095647-689703-43ef7017",
+  "kind": "lookup",
+  "queries": [
+    "n2s-knowledge guide --task memory --stage troubleshooting --json",
+    "n2s-knowledge search OOM --accepted-only --include-community --json",
+    "ReadfullGLDresults and acceptedWan1.3Btrainer/run_train.sh; referencedzero2configmissing"
+  ],
+  "recorded_at": "2026-10-16T09:56:47.689693+00:00",
+  "resolves": [
+    "20261016-095447-304713-a1f402a7"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-10-16T09:56:47.597992+00:00",
+      "applicability": "related",
+      "claim": "Related Wan1.3B trainer forces gradient checkpointing to prevent OOM.",
+      "comparison": "Wan project already uses blockcheckpointing; cannot remove it to chase runtime at capacityboundary. Direct evidence is localfirstOOM afterAdamWstateallocation. Lower percardbatch and verifyHCCL/checkpoint beforelongrun.",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/world_model/agibot-arm-world-model/train/train_fun_control_1_3b_text_49frames.py",
+      "url": "https://gitcode.com/cann/cann-recipes-embodied-ai/blob/45d167135c81d97573bfbe0e564bb4a1d9642514/world_model/agibot-arm-world-model/train/train_fun_control_1_3b_text_49frames.py"
+    },
+    {
+      "accessed_at": "2026-10-16T09:56:47.597992+00:00",
+      "applicability": "different_scope",
+      "claim": "GLD2card13BZeRO3OOM alleviated in8/16card mock shorttest; realweights/data/accuracy werepending.",
+      "comparison": "Current1.3BDDP fullyreplicated optimizerstates do notshrink byaddingcards. Thatreport doesnot prove currentbatchlimitnorauthorizechangingtoZeRO. Preservecurrentprotocol andcapacitymargin.",
+      "status": "read",
+      "trust": "community_reference_bundle",
+      "uri": "reference://ascend-reference-20261005@b83a696461745e01f8e44e8a2e672db9fdadca7d66b6e19d7eaaaac53b5081a8/\u9644\u4ef6/GLD Wan2.2\u8bad\u7ec3\u7ba1\u7ebf\u6607\u817e\u9002\u914d\u7ed3\u679c-v1.md",
+      "url": null
+    },
+    {
+      "accessed_at": "2026-10-16T09:56:47.597992+00:00",
+      "applicability": "related",
+      "claim": "R16distinguishes frameworkallocator peaksfromperiodicnpu-smiHBMsamples; batchraisesactivationoverfixedweights/grad/optimizer.",
+      "comparison": "Batch42had oneupdatefinite thensecondforwardOOM despite lowerphysicalsamplepeak; samplingmissedspike. FrameworkOOM message causal, unchangedkeepaliveincludedphysicalusage; distinguishlocal41computeboundary from16cardproductionbatch.",
+      "status": "read",
+      "trust": "community_reference_bundle",
+      "uri": "reference://ascend-reference-20261005@b83a696461745e01f8e44e8a2e672db9fdadca7d66b6e19d7eaaaac53b5081a8/\u6607\u817e\u5361\u4f7f\u7528\u4f18\u5316\u4e0eDebug\u53c2\u8003\u624b\u518c.md",
+      "url": null
+    },
+    {
+      "accessed_at": "2026-10-16T09:56:47.597992+00:00",
+      "applicability": "unknown",
+      "claim": "Officialrun_train.sh references thisconfig but acceptedlocal snapshot has nofile.",
+      "comparison": "Cannot claim readorvalidated exactZeRO2configuration; dedicatedfuture shardingreviewrequires retrievingactualversionedconfig.",
+      "status": "unavailable",
+      "trust": "unavailable",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/world_model/agibot-arm-world-model/train/configs/accelerate_config_zero2.yaml",
+      "url": "https://gitcode.com/cann/cann-recipes-embodied-ai/blob/45d167135c81d97573bfbe0e564bb4a1d9642514/world_model/agibot-arm-world-model/train/configs/accelerate_config_zero2.yaml"
+    }
+  ],
+  "stage": "troubleshooting",
+  "summary": "Batch42OOM causal followup: readrelatedWantrainercheckpointpath andfullGLDreport, repeatmemoryguide/OOMsearch. Keepgradientcheckpoint, lowercapacitybelownearOOMedge; distributed/checkpointverificationpending. MoreDDPcardscannotshrinkfullyreplicatedfixedstates."
+}

@@ -1,0 +1,119 @@
+{
+  "format": "wan13-prior-full-training-evidence-v1",
+  "actual_run_date": "2026-10-13",
+  "imported_on": "2026-10-16",
+  "source_report": "Partially_diffusion/artifacts/ascend/full-finetune-student-partial-trial-20261013/summary.json",
+  "source_report_sha256": "ffa134eae485056adfcef775ced3d993aefeab367e77185c12f9e3de98557bc0",
+  "scope": "Prior trial evidence, not a new experiment; no full long training.",
+  "configuration": {
+    "training_kind": "full_dit_no_lora",
+    "mode": "student_partial",
+    "flow_protocol": "full-range",
+    "sigma_distribution": "uniform (0,1]",
+    "x_sigma": "(1-sigma)*future+sigma*source",
+    "velocity_target": "source-future",
+    "source_partial": "static*(1-mask)+epsilon*mask",
+    "clean_prefix": true,
+    "freeze_student": true,
+    "precision": "bf16_autocast_fp32_master_grad_adamw",
+    "world_size": 16,
+    "global_batch": 512,
+    "microbatch_size": 32,
+    "gradient_accumulation": 1,
+    "gradient_checkpointing": true,
+    "gradient_sync": "bounded_fp32_sum_div_world",
+    "bucket_mib": 32,
+    "optimizer": {
+      "name": "AdamW",
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "eps": 1e-08,
+      "weight_decay": 0.01,
+      "foreach": false,
+      "fused": false
+    },
+    "grad_clip": 1.0,
+    "peak_lr": 1e-05,
+    "lr_schedule": "warmup-cosine",
+    "warmup_steps": 500,
+    "warmup_start_lr": 1e-07,
+    "min_lr": 1e-07,
+    "schedule_total_steps": 15000,
+    "seed": 42,
+    "deterministic": true,
+    "trial": true,
+    "operators": {
+      "WAN_NPU_ATTENTION": "fusion",
+      "WAN_NPU_PHASE_CACHE": "1",
+      "WAN_NPU_FUSED_RMS": "1",
+      "WAN_NPU_FUSED_ROPE": "1",
+      "WAN_NPU_FP32_ATTENTION": "0",
+      "WAN_NPU_BATCHED_ROPE": "1",
+      "WAN_NPU_BATCHED_PATCH": "0"
+    },
+    "operator_validation_sha256": "605bf3608f64b1c5b98cd0fa9760bb05da4ed20f7a45b7c82dd31f2a2e4f3e1b",
+    "cached_input": "lean",
+    "prefetch_inputs": true,
+    "cache_sha256": "a9828145a32bb2b58e3076f650213e438082b9399fd3483c35db379589f064e7",
+    "latent_cache_sha256": "76ea58d85c70024631f34f47043780255b5dbf74fe32b2d80f5491dd8bead7d9",
+    "vae_policy": "reuse_prefix",
+    "text_length": 128
+  },
+  "trainable_parameters": 1418996800,
+  "all_rank_model_optimizer_tensor_bytes_equal": true,
+  "all_model_gradients_present_nonzero_finite_fp32": true,
+  "optimizer": {
+    "parameter_states": 825,
+    "moment_elements": 2837993600,
+    "moment_dtype": "float32",
+    "all_finite": true,
+    "step_min": 8.0,
+    "step_max": 8.0
+  },
+  "performance": {
+    "measurement_updates": [
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "step_seconds": [
+      13.008601767010987,
+      12.89794724714011,
+      12.905304859392345,
+      12.79903191421181,
+      12.781527047045529
+    ],
+    "mean_step_seconds": 12.878482566960155,
+    "global_samples_per_second": 39.75623660147197,
+    "min_step_seconds": 12.781527047045529,
+    "max_step_seconds": 13.008601767010987,
+    "all_eight_updates_finite": true,
+    "final_loss": 0.406196653842926,
+    "includes": "cached input reading, frozen Student masks, full forward/backward, 32MiB HCCL sum/div, gradient clip, FP32 AdamW and update synchronize; excludes model loading/checkpoint save/final audit",
+    "comparison_limit": "This full trial uses global512; prior LoRA uses global256 and three concurrently sharing NPUs. These timings do not establish a same-batch speed comparison."
+  },
+  "old_source_sha256": {
+    "scripts/train_wan13_libero_full.py": "e0975cb45ec0d128c8d02c8e168ebd477a8f22044c8c09fbb13f87e67c7612db",
+    "scripts/train_wan13_libero_lora.py": "8ba91167ce5faa3fa0bb3cd9816cf184ecd2ea393ae26227484b767c732de0f9",
+    "src/partially_diffusion/wan13_full_training.py": "8d399d9b4a4a0fb8e9d2d82935c936888edb2a4c48edb405f8f7e31b7f570a66",
+    "src/partially_diffusion/wan13_execution.py": "504b3729fff4319375e125ce142a478f974697b14f24c1d01ad989d9036d0f6d",
+    "src/partially_diffusion/wan_latent_cache.py": "87d13eb50334fa093050305b879eebfb9acaa868d0e6af0f4c8c3e1d62f5b0e1",
+    "src/partially_diffusion/context.py": "cdce789ff13c8f24fefdffea9fbc9c7f917462df54cb9aef50689f80643306e2",
+    "src/partially_diffusion/mask_student.py": "4db8e686d662b339417eeb319b91ecd8f25bd9b88e18c9b3afd9d8a9aa057014",
+    "src/partially_diffusion/device.py": "3af2c0d488554d5fa474720487218fed39917bdbb934e7cb92c2cad3642631c7",
+    "src/partially_diffusion/lr_schedule.py": "84c9bd6652f2d12bd835b198f2a0cf6ba0285044464d4253e7ea260632040489",
+    "third_party/causal_forcing/utils/wan_wrapper.py": "e2ef591fa98abfe335015606fffbc11596222e0c08d5a3eee207b75f00c3cabb",
+    "third_party/causal_forcing/wan/modules/causal_model.py": "81691a1f39d44349eb08c571e8dc97c178babf6e3725aa9c47d2286b1afd8352",
+    "third_party/causal_forcing/wan/modules/model.py": "83708a78f58f448e3fa8e6a9a5166ef44651507d4a3d4cff70c8f2d33f932ac8",
+    "third_party/causal_forcing/wan/modules/npu_ops.py": "06fb43406f0cff4bc1ab450956acf4083253b470aaab46e15e923f20f2e0a5eb"
+  },
+  "same_npu_operator_validation": {
+    "rope": "All825 parameter gradients and outputs bitwise equal at real microbatch2 BF16 autocast",
+    "patch": "Disabled: Conv3d weight/bias gradients relativeL2 0.265000%/0.263647%, despite bitwise equal forward"
+  },
+  "precision_limit": "No CUDA/NPU equivalence claim; shared-input single-sample x0 difference1.5017%, full12item pipeline and independent33.1%CPU/NPU gradient case remain open."
+}
