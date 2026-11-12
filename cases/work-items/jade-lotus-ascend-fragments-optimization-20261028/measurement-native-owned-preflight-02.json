@@ -1,0 +1,110 @@
+{
+  "scope": "Component and short preflight evidence only. 500-update acceptance remains incomplete.",
+  "parameter_loading_v2": {
+    "status": "passed",
+    "protocol": "parameter-blob-loading-matched-read-workers-v2",
+    "read_workers": 4,
+    "summary_by_mode": {
+      "mmap_v1": {
+        "median_combined_phase_wall_seconds": 10.924611076712608,
+        "phases": {
+          "load": {
+            "max_rss_bytes": 1131884544,
+            "median_calling_thread_cpu_seconds": 0.019756708499999998,
+            "median_major_page_faults": 0.0,
+            "median_minor_page_faults": 23772.0,
+            "median_process_cpu_seconds": 15.034410865000002,
+            "median_wall_seconds": 4.934431627392769
+          },
+          "second_finite_scan": {
+            "max_rss_bytes": 13052923904,
+            "median_calling_thread_cpu_seconds": 5.989191172,
+            "median_major_page_faults": 0.0,
+            "median_minor_page_faults": 3172940.0,
+            "median_process_cpu_seconds": 5.989195766,
+            "median_wall_seconds": 5.9901794493198395
+          }
+        },
+        "trials": 2
+      },
+      "owned_buffer_v1": {
+        "median_combined_phase_wall_seconds": 7.479579832404852,
+        "phases": {
+          "load": {
+            "max_rss_bytes": 13316075520,
+            "median_calling_thread_cpu_seconds": 4.420855706,
+            "median_major_page_faults": 0.0,
+            "median_minor_page_faults": 24684.0,
+            "median_process_cpu_seconds": 19.4460911305,
+            "median_wall_seconds": 5.520206922665238
+          },
+          "second_finite_scan": {
+            "max_rss_bytes": 13316075520,
+            "median_calling_thread_cpu_seconds": 1.9590533909999994,
+            "median_major_page_faults": 0.0,
+            "median_minor_page_faults": 4360.5,
+            "median_process_cpu_seconds": 1.9590580834999987,
+            "median_wall_seconds": 1.9593729097396135
+          }
+        },
+        "trials": 2
+      }
+    },
+    "all_leaf_digests_equal_to_legacy": true,
+    "full_payload_bytes_sha256_equal_to_legacy": true,
+    "source_unchanged": true
+  },
+  "parameter_loading_source": {
+    "leaves": 805,
+    "logical_bytes": 12994288704,
+    "hash_mode": "sha256_chunk_tree_v1",
+    "trials_per_mode": 2,
+    "effective_workers_every_trial": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "component": "CPU/shared filesystem inside one allocated LOW NPU job; no NPU/H2D measured",
+    "order": [
+      "mmap_v1",
+      "owned_buffer_v1",
+      "owned_buffer_v1",
+      "mmap_v1"
+    ],
+    "caveat": "Fresh child processes, no cache eviction. Both modes request four readers. Includes load+engine finite rescan, excludes digest comparisons and process startup. Old v1 legacy was serial and its combined multiplier is invalid."
+  },
+  "native_wire": {
+    "status": "passed",
+    "all_full_gradient_bits_equal": true,
+    "compared_logical_bytes": 12994288704,
+    "parameter_count": 3248572176,
+    "parameter_leaves": 805,
+    "policy_sha256": "65443f826212c807c4308301591fc2265719872896df250b5003a647102ab6b1",
+    "wire_reduction_fraction": 0.4815739799650368,
+    "source_unchanged": true,
+    "caveat": "One CPU/full-gradient write-and-roundtrip, one trial/mode and no cache eviction; timings are not a controlled NPU performance comparison or32-card training speedup. Native policy comes from actual NPU dtype calibration. FP32 low bits checked by the exact codec; FP32 leaves retained."
+  },
+  "native_wire_bytes": {
+    "float32": 12994288704,
+    "native_mixed_exact": 6736577376
+  },
+  "preflight_32_cards": {
+    "steps": 4,
+    "samples_consumed": 1024,
+    "admitted_devices": 32,
+    "owned_jobs": 32,
+    "all_owned_jobs_official_terminal": true,
+    "terminal_status_counts": {
+      "job_stopped": 4,
+      "job_succeeded": 28
+    },
+    "accepted_task_count": 128,
+    "all_tasks_finite": true,
+    "all_tasks_checkpoint_calls_zero": true,
+    "interpretation": "Fixed chunk parallel-read component gain did not establish a large end-to-end gain. Warm updates still spend tens of seconds in parameter_validation_seconds before about2.5s H2D. Shared-FS mmap second access/page-fault overhead is a testable hypothesis; no fault counters captured in this run. Owned verified RAM path and gradient async transfer are next experiments."
+  },
+  "preflight_warm_mean_seconds": 113.32990022997062,
+  "acceptance_steps": 500,
+  "completed_acceptance": false
+}

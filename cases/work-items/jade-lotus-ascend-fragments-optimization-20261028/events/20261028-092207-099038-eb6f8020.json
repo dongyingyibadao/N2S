@@ -1,0 +1,39 @@
+{
+  "case_id": "jade-lotus-ascend-fragments-optimization-20261028",
+  "draft": false,
+  "environment": "One LOW/1 qz job,10 allocated CPUs/100GiB host RAM; operations are CPU/shared-filesystem only. No cache eviction; fresh process per trial.",
+  "evidence_refs": [
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/measurement-native-owned-preflight-02.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/measurement-native-owned-preflight-02.json": "bf136430e1aacdd21dd7ae36cefe448a2eb0b3aa0a9f03a94fd398838c092b2c"
+  },
+  "generalization": "pending_validation",
+  "id": "20261028-092207-099038-eb6f8020",
+  "issue_scope": "target",
+  "kind": "validation",
+  "queries": [],
+  "recorded_at": "2026-10-28T09:22:07.099027+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "Matched-reader owned loading passed full805-leaf/payload equality. Component median combined10.92461s to7.47958s; old serial-legacy-v1 combined comparison is invalid.",
+  "validation": {
+    "accuracy": "passed",
+    "accuracy_protocol": "Full805 leaf SHA and complete actual payload SHA agree across four fresh process trials. Both chunk-tree modes use four readers.",
+    "actual_backend": "cpu",
+    "finite_outputs": true,
+    "functional": "passed",
+    "official_weights": false,
+    "optimization": "measured_improvement",
+    "performance": {
+      "baseline": 10.924611076712608,
+      "direction": "lower",
+      "metric": "parameter_load_plus_finite_rescan_wall_seconds",
+      "modified": 7.479579832404852,
+      "protocol": "CPU/shared-filesystem component only on one qz job;2 trials/mode in ABBA order, same13GB source,4 readers both modes. Includes hash/finite/assembly plus finite rescan; excludes startup/digest comparison. No NPU,H2D,32-card or optimizer speed claim.",
+      "same_device": true
+    }
+  }
+}

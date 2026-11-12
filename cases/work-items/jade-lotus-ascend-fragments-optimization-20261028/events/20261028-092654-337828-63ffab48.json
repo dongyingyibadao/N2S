@@ -1,0 +1,23 @@
+{
+  "case_id": "jade-lotus-ascend-fragments-optimization-20261028",
+  "draft": false,
+  "evidence_refs": [
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/measurement-native-owned-preflight-02.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/measurement-native-owned-preflight-02.json": "bf136430e1aacdd21dd7ae36cefe448a2eb0b3aa0a9f03a94fd398838c092b2c"
+  },
+  "generalization": "pending_validation",
+  "id": "20261028-092654-337828-63ffab48",
+  "issue_scope": "recordkeeping",
+  "kind": "resolution",
+  "queries": [],
+  "recorded_at": "2026-10-28T09:26:54.337817+00:00",
+  "resolves": [
+    "20261028-092206-486320-4f05cbe4"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "The new immutable v2 harness reports requested/effective4 readers for both chunk-tree modes, full805-leaf/payload equality and new measurements. The older v1 comparison remains invalid; no NPU/end-to-end claim made."
+}

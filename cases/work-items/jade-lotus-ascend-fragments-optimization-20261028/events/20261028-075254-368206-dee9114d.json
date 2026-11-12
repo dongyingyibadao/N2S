@@ -1,0 +1,33 @@
+{
+  "case_id": "jade-lotus-ascend-fragments-optimization-20261028",
+  "draft": false,
+  "evidence_refs": [],
+  "evidence_sha256": {},
+  "generalization": "pending_validation",
+  "id": "20261028-075254-368206-dee9114d",
+  "issue_scope": "target",
+  "kind": "lookup",
+  "queries": [
+    "guide --task training --stage preparation --json",
+    "guide --task performance --stage optimization --json",
+    "search OpenPI --accepted-only --include-community --json"
+  ],
+  "recorded_at": "2026-10-28T07:52:54.368192+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-10-28T07:50:00Z",
+      "applicability": "different_scope",
+      "claim": "Profiling-first recipe documents fused QKV/attention, grouped MLP and DDP static buckets; its recommended checkpoint setting disables only the outer suffix while internal checkpointing remains enabled.",
+      "comparison": "Recipe uses LeRobot and retains internal recomputation. The target is existing OpenPI, disables all recomputation, and NPU compute is already about 1.46 seconds. Prioritize host transfer/reduction profiling; do not copy recomputation assumptions or recipe timing as target evidence.",
+      "read_depth": "body",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi05/train/doc/README.md",
+      "url": null
+    }
+  ],
+  "stage": "preparation",
+  "summary": "Start a scoped optimization case after existing functional migration. The bottleneck is CPU/native-dtype parameter staging and shared-file gradient reduction rather than the measured 1.46-second NPU backward. Preserve CPU FP32 authority and independent worker semantics. Source intake covers OpenPI HEAD only; the non-Git fragment implementation is identified by frozen source manifest digest."
+}

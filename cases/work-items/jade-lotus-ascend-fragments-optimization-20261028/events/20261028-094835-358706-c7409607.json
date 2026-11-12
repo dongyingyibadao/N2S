@@ -1,0 +1,23 @@
+{
+  "case_id": "jade-lotus-ascend-fragments-optimization-20261028",
+  "draft": false,
+  "evidence_refs": [
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/independent-training-decision-and-new-run-03.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/independent-training-decision-and-new-run-03.json": "d27d3e89059181bf16e43807a12fc46001747e9677b9365d35055d206a4062e9"
+  },
+  "generalization": "pending_validation",
+  "id": "20261028-094835-358706-c7409607",
+  "issue_scope": "target",
+  "kind": "change",
+  "project_tree_sha256": "96a6d693de21a4cd1634ef3f2655230b2c273e4724ef4e148ce54d69a48310af",
+  "queries": [],
+  "recorded_at": "2026-10-28T09:48:35.358693+00:00",
+  "resolves": [],
+  "rollback": "Freeze a separate future run with legacy transfer/wire/loading flags if validation fails. Never edit this immutable active run. Keep healthy accepted tasks when any single worker is lost; no fixed group restarts. Automatic final audit reports failure rather than fabricating completion.",
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "Honor clarified preemption constraint: reject32-rank whole-group restart. Keep independent1-NPU workers/CPU FP32 Adam. Launch a fresh immutable500-update run from0 with validated opt-in native wire/owned params/pinned D2H; strengthen native policy/source audit,retain strict32LOW/global256/500/no-recompute gate and configure automatic final byte audit. Direct native export/streaming remain unimplemented proposals."
+}

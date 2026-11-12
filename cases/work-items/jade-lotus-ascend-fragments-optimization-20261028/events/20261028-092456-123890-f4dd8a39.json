@@ -1,0 +1,38 @@
+{
+  "case_id": "jade-lotus-ascend-fragments-optimization-20261028",
+  "draft": false,
+  "evidence_refs": [
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/measurement-native-owned-preflight-02.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/measurement-native-owned-preflight-02.json": "bf136430e1aacdd21dd7ae36cefe448a2eb0b3aa0a9f03a94fd398838c092b2c"
+  },
+  "generalization": "pending_validation",
+  "id": "20261028-092456-123890-f4dd8a39",
+  "issue_scope": "recordkeeping",
+  "kind": "lookup",
+  "queries": [
+    "Read verify_all_chunks(workers=read_workers), load_blob_owned(read_workers=read_workers), effective_read_workers and real v2 trial identities"
+  ],
+  "recorded_at": "2026-10-28T09:24:56.123881+00:00",
+  "resolves": [
+    "20261028-092206-486320-4f05cbe4"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-10-28T09:23:05.358137+00:00",
+      "applicability": "applicable",
+      "claim": "Actual matched-reader v2 report shows effective4 readers for every trial on the retained chunk-tree source, full leaf/payload equality and separately recorded v2 timing.",
+      "comparison": "Direct code review and corrected v2 real output; old v1 multiplier remains invalid and unchanged.",
+      "content_sha256": "bf136430e1aacdd21dd7ae36cefe448a2eb0b3aa0a9f03a94fd398838c092b2c",
+      "read_depth": "body",
+      "status": "read",
+      "trust": "n2s_case_evidence",
+      "uri": "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/measurement-native-owned-preflight-02.json",
+      "url": null
+    }
+  ],
+  "stage": "optimization",
+  "summary": "Review worker-count forwarding against production ArrayBlob verification and corrected matched-reader v2 output."
+}

@@ -1,0 +1,73 @@
+{
+  "scope": "Exact installed-version layout diagnosis and benchmark protocol review",
+  "source_checks": [
+    {
+      "url": "https://raw.githubusercontent.com/Ascend/pytorch/12d689a08941d4a6e45eab16e3ad6fef96a9affd/torch_npu/csrc/aten/common/TensorProperties.cpp",
+      "revision": "12d689a08941d4a6e45eab16e3ad6fef96a9affd",
+      "content_sha256": "a73783dbbb465a3aa66ff673a06aefcaed5fc1eb7d1a14bb5a9f0e8df30a6500",
+      "accessed_at": "2026-10-28T09:17:01.752843+00:00",
+      "read_depth": "implementation",
+      "lines": 39,
+      "uri": null,
+      "status": "read",
+      "trust": "retrieved_unreviewed",
+      "claim": "NPU contiguous returns immediately for an already matching format, otherwise rejects any requested non-Contiguous format.",
+      "applicability": "applicable",
+      "comparison": "Matches actual NPU traceback. Does not prove the underlying backward is deterministic or validate batching."
+    },
+    {
+      "uri": null,
+      "url": "https://raw.githubusercontent.com/pytorch/pytorch/0fabc3ba44823f257e70ce397d989c8de5e362c1/torch/nn/functional.py",
+      "revision": "0fabc3ba44823f257e70ce397d989c8de5e362c1",
+      "content_sha256": "5e96bb0880a4c6f4c0ae34c00a894e152412e68f6ffd073d2b442907eedeb5fa",
+      "accessed_at": "2026-10-28T09:21:14.343550+00:00",
+      "status": "read",
+      "trust": "retrieved_unreviewed",
+      "read_depth": "implementation",
+      "claim": "Strict non-CPU bilinear interpolation selects the Python upsample decomposition.",
+      "applicability": "applicable",
+      "comparison": "Installed source read at the causal lines; hash agrees with the previously checked version. Current whole-input contiguous wrapper is insufficient. No default training change adopted."
+    },
+    {
+      "uri": null,
+      "url": "https://raw.githubusercontent.com/pytorch/pytorch/0fabc3ba44823f257e70ce397d989c8de5e362c1/torch/_decomp/decompositions.py",
+      "revision": "0fabc3ba44823f257e70ce397d989c8de5e362c1",
+      "content_sha256": "4061f0dd317b66822c2a324824110063cc262635e44ae7996f84538ce4f4d463",
+      "accessed_at": "2026-10-28T09:21:14.343550+00:00",
+      "status": "read",
+      "trust": "retrieved_unreviewed",
+      "read_depth": "implementation",
+      "claim": "The decomposition suggests output memory format from the actual interpolation input and calls result.contiguous(memory_format=memory_format).",
+      "applicability": "applicable",
+      "comparison": "Installed source read at the causal lines; hash agrees with the previously checked version. Current whole-input contiguous wrapper is insufficient. No default training change adopted."
+    },
+    {
+      "uri": null,
+      "url": null,
+      "accessed_at": "2026-10-28T09:21:14.343550+00:00",
+      "status": "no_match",
+      "trust": "retrieved_unreviewed",
+      "read_depth": "catalog",
+      "claim": "No literal result in accepted snapshot plus selected community catalog for this combined query.",
+      "applicability": "no_match",
+      "comparison": "Does not imply no upstream solution; followed exact installed-version implementation and actual traceback instead. Query: NPU contiguous deterministic ChannelsLast"
+    },
+    {
+      "uri": null,
+      "url": null,
+      "accessed_at": "2026-10-28T09:21:14.343550+00:00",
+      "status": "no_match",
+      "trust": "retrieved_unreviewed",
+      "read_depth": "catalog",
+      "claim": "No literal result in accepted snapshot plus selected community catalog for this combined query.",
+      "applicability": "no_match",
+      "comparison": "Does not imply no upstream solution; followed exact installed-version implementation and actual traceback instead. Query: pin_memory non_blocking"
+    }
+  ],
+  "remaining_gaps": [
+    "Native parameter batching same-path and A/B gradient equality",
+    "Pinned D2H actual NPU report still in progress",
+    "32-card optimized complete-step throughput",
+    "500-update completion"
+  ]
+}

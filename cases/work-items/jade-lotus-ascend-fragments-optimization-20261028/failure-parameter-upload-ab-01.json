@@ -1,0 +1,374 @@
+{
+  "scope": "Single LOW/1 NPU upload component A/B, not full training",
+  "failure": {
+    "caveat": "Component-only, one-NPU parameter-upload A/B, not global-batch-256 training throughput, a 32-card/preemption test, or 500 optimizer updates. No optimizer is run. Pack timing includes CPU dtype conversion; the engine does not separately time cast. Blocking legacy copy timing includes its implicit synchronization and conversion. First-use allocation/binding is reported separately from warmed alternating trials. Both warmed paths retain the batched buffers and use the same packed parameter storage. Readback, hashing, real forward/backward validation and input loading are outside upload timings. Host load, page caches, accelerator clocks and order can still affect measurements.",
+    "component_only": true,
+    "error": "Real gradients exceed the declared tolerance: paligemma_with_expert.paligemma.model.vision_tower.vision_model.embeddings.patch_embedding.weight",
+    "error_type": "ValueError",
+    "status": "failed"
+  },
+  "upload_trials": [
+    {
+      "memory_after": {
+        "max_memory_allocated_bytes": 7473154560,
+        "max_memory_reserved_bytes": 14642315264,
+        "memory_allocated_bytes": 7473154560,
+        "memory_reserved_bytes": 14642315264
+      },
+      "memory_before": {
+        "max_memory_allocated_bytes": 7473154560,
+        "max_memory_reserved_bytes": 14642315264,
+        "memory_allocated_bytes": 7473154560,
+        "memory_reserved_bytes": 14642315264
+      },
+      "metrics": {
+        "parameter_h2d_copy_seconds": 1.2374793142080307,
+        "parameter_h2d_sync_seconds": 9.535998106002808e-05,
+        "parameter_pack_seconds": 0.0,
+        "parameter_storage_bind_seconds": 0.0,
+        "parameter_transfer_batched": 0,
+        "parameter_transfer_pinned": 0,
+        "parameter_upload_allocation_seconds": 0.0,
+        "parameter_upload_cache_hit": 0,
+        "parameter_upload_copy_calls": 805,
+        "parameter_upload_dtype_groups": 2,
+        "parameter_upload_native_bytes": 6736577376,
+        "parameter_upload_packed_bytes": 6736577376,
+        "parameter_upload_source_bytes": 12994288704,
+        "parameter_upload_total_seconds": 2.613015439361334,
+        "parameter_validation_seconds": 1.3749564364552498
+      },
+      "mode": "leaf_copy_v1",
+      "process_cpu_seconds": 3.7988426340000103,
+      "repetition": 0,
+      "sequence": 0,
+      "wall_seconds": 2.613048478960991
+    },
+    {
+      "memory_after": {
+        "max_memory_allocated_bytes": 7473154560,
+        "max_memory_reserved_bytes": 14642315264,
+        "memory_allocated_bytes": 7473154560,
+        "memory_reserved_bytes": 14642315264
+      },
+      "memory_before": {
+        "max_memory_allocated_bytes": 7473154560,
+        "max_memory_reserved_bytes": 14642315264,
+        "memory_allocated_bytes": 7473154560,
+        "memory_reserved_bytes": 14642315264
+      },
+      "metrics": {
+        "parameter_h2d_copy_seconds": 9.739771485328674e-05,
+        "parameter_h2d_sync_seconds": 0.23303110152482986,
+        "parameter_pack_seconds": 0.7868404388427734,
+        "parameter_storage_bind_seconds": 1.12876296043396e-06,
+        "parameter_transfer_batched": 1,
+        "parameter_transfer_pinned": 1,
+        "parameter_upload_allocation_seconds": 7.227063179016113e-07,
+        "parameter_upload_cache_hit": 0,
+        "parameter_upload_copy_calls": 2,
+        "parameter_upload_dtype_groups": 2,
+        "parameter_upload_native_bytes": 6736577376,
+        "parameter_upload_packed_bytes": 6736642816,
+        "parameter_upload_source_bytes": 12994288704,
+        "parameter_upload_total_seconds": 2.4180027954280376,
+        "parameter_validation_seconds": 1.3975630290806293
+      },
+      "mode": "batched_pinned_v1",
+      "process_cpu_seconds": 3.157463332000006,
+      "repetition": 0,
+      "sequence": 1,
+      "wall_seconds": 2.4180800430476665
+    },
+    {
+      "memory_after": {
+        "max_memory_allocated_bytes": 7473154560,
+        "max_memory_reserved_bytes": 14642315264,
+        "memory_allocated_bytes": 7473154560,
+        "memory_reserved_bytes": 14642315264
+      },
+      "memory_before": {
+        "max_memory_allocated_bytes": 7473154560,
+        "max_memory_reserved_bytes": 14642315264,
+        "memory_allocated_bytes": 7473154560,
+        "memory_reserved_bytes": 14642315264
+      },
+      "metrics": {
+        "parameter_h2d_copy_seconds": 0.00011763349175453186,
+        "parameter_h2d_sync_seconds": 0.23302611336112022,
+        "parameter_pack_seconds": 0.7877211757004261,
+        "parameter_storage_bind_seconds": 1.087784767150879e-06,
+        "parameter_transfer_batched": 1,
+        "parameter_transfer_pinned": 1,
+        "parameter_upload_allocation_seconds": 4.4330954551696777e-07,
+        "parameter_upload_cache_hit": 0,
+        "parameter_upload_copy_calls": 2,
+        "parameter_upload_dtype_groups": 2,
+        "parameter_upload_native_bytes": 6736577376,
+        "parameter_upload_packed_bytes": 6736642816,
+        "parameter_upload_source_bytes": 12994288704,
+        "parameter_upload_total_seconds": 2.397979248315096,
+        "parameter_validation_seconds": 1.3766315765678883
+      },
+      "mode": "batched_pinned_v1",
+      "process_cpu_seconds": 3.134573520999993,
+      "repetition": 1,
+      "sequence": 2,
+      "wall_seconds": 2.398061528801918
+    },
+    {
+      "memory_after": {
+        "max_memory_allocated_bytes": 7473154560,
+        "max_memory_reserved_bytes": 14642315264,
+        "memory_allocated_bytes": 7473154560,
+        "memory_reserved_bytes": 14642315264
+      },
+      "memory_before": {
+        "max_memory_allocated_bytes": 7473154560,
+        "max_memory_reserved_bytes": 14642315264,
+        "memory_allocated_bytes": 7473154560,
+        "memory_reserved_bytes": 14642315264
+      },
+      "metrics": {
+        "parameter_h2d_copy_seconds": 1.2955912090837955,
+        "parameter_h2d_sync_seconds": 9.381771087646484e-05,
+        "parameter_pack_seconds": 0.0,
+        "parameter_storage_bind_seconds": 0.0,
+        "parameter_transfer_batched": 0,
+        "parameter_transfer_pinned": 0,
+        "parameter_upload_allocation_seconds": 0.0,
+        "parameter_upload_cache_hit": 0,
+        "parameter_upload_copy_calls": 805,
+        "parameter_upload_dtype_groups": 2,
+        "parameter_upload_native_bytes": 6736577376,
+        "parameter_upload_packed_bytes": 6736577376,
+        "parameter_upload_source_bytes": 12994288704,
+        "parameter_upload_total_seconds": 2.689875915646553,
+        "parameter_validation_seconds": 1.3936971798539162
+      },
+      "mode": "leaf_copy_v1",
+      "process_cpu_seconds": 3.9272576689999994,
+      "repetition": 1,
+      "sequence": 3,
+      "wall_seconds": 2.689920898526907
+    },
+    {
+      "memory_after": {
+        "max_memory_allocated_bytes": 7473154560,
+        "max_memory_reserved_bytes": 14642315264,
+        "memory_allocated_bytes": 7473154560,
+        "memory_reserved_bytes": 14642315264
+      },
+      "memory_before": {
+        "max_memory_allocated_bytes": 7473154560,
+        "max_memory_reserved_bytes": 14642315264,
+        "memory_allocated_bytes": 7473154560,
+        "memory_reserved_bytes": 14642315264
+      },
+      "metrics": {
+        "parameter_h2d_copy_seconds": 1.2276910915970802,
+        "parameter_h2d_sync_seconds": 9.28342342376709e-05,
+        "parameter_pack_seconds": 0.0,
+        "parameter_storage_bind_seconds": 0.0,
+        "parameter_transfer_batched": 0,
+        "parameter_transfer_pinned": 0,
+        "parameter_upload_allocation_seconds": 0.0,
+        "parameter_upload_cache_hit": 0,
+        "parameter_upload_copy_calls": 805,
+        "parameter_upload_dtype_groups": 2,
+        "parameter_upload_native_bytes": 6736577376,
+        "parameter_upload_packed_bytes": 6736577376,
+        "parameter_upload_source_bytes": 12994288704,
+        "parameter_upload_total_seconds": 2.6340478621423244,
+        "parameter_validation_seconds": 1.405524205416441
+      },
+      "mode": "leaf_copy_v1",
+      "process_cpu_seconds": 3.8040796020000016,
+      "repetition": 2,
+      "sequence": 4,
+      "wall_seconds": 2.6340824104845524
+    },
+    {
+      "memory_after": {
+        "max_memory_allocated_bytes": 7473154560,
+        "max_memory_reserved_bytes": 14642315264,
+        "memory_allocated_bytes": 7473154560,
+        "memory_reserved_bytes": 14642315264
+      },
+      "memory_before": {
+        "max_memory_allocated_bytes": 7473154560,
+        "max_memory_reserved_bytes": 14642315264,
+        "memory_allocated_bytes": 7473154560,
+        "memory_reserved_bytes": 14642315264
+      },
+      "metrics": {
+        "parameter_h2d_copy_seconds": 0.00010118260979652405,
+        "parameter_h2d_sync_seconds": 0.23303668200969696,
+        "parameter_pack_seconds": 0.7726437672972679,
+        "parameter_storage_bind_seconds": 1.4193356037139893e-06,
+        "parameter_transfer_batched": 1,
+        "parameter_transfer_pinned": 1,
+        "parameter_upload_allocation_seconds": 6.407499313354492e-07,
+        "parameter_upload_cache_hit": 0,
+        "parameter_upload_copy_calls": 2,
+        "parameter_upload_dtype_groups": 2,
+        "parameter_upload_native_bytes": 6736577376,
+        "parameter_upload_packed_bytes": 6736642816,
+        "parameter_upload_source_bytes": 12994288704,
+        "parameter_upload_total_seconds": 2.406520575284958,
+        "parameter_validation_seconds": 1.4002638198435307
+      },
+      "mode": "batched_pinned_v1",
+      "process_cpu_seconds": 3.1315196749999927,
+      "repetition": 2,
+      "sequence": 5,
+      "wall_seconds": 2.406605936586857
+    },
+    {
+      "memory_after": {
+        "max_memory_allocated_bytes": 7473154560,
+        "max_memory_reserved_bytes": 14642315264,
+        "memory_allocated_bytes": 7473154560,
+        "memory_reserved_bytes": 14642315264
+      },
+      "memory_before": {
+        "max_memory_allocated_bytes": 7473154560,
+        "max_memory_reserved_bytes": 14642315264,
+        "memory_allocated_bytes": 7473154560,
+        "memory_reserved_bytes": 14642315264
+      },
+      "metrics": {
+        "parameter_h2d_copy_seconds": 0.00010170787572860718,
+        "parameter_h2d_sync_seconds": 0.23302944004535675,
+        "parameter_pack_seconds": 0.7771940678358078,
+        "parameter_storage_bind_seconds": 1.2032687664031982e-06,
+        "parameter_transfer_batched": 1,
+        "parameter_transfer_pinned": 1,
+        "parameter_upload_allocation_seconds": 4.470348358154297e-07,
+        "parameter_upload_cache_hit": 0,
+        "parameter_upload_copy_calls": 2,
+        "parameter_upload_dtype_groups": 2,
+        "parameter_upload_native_bytes": 6736577376,
+        "parameter_upload_packed_bytes": 6736642816,
+        "parameter_upload_source_bytes": 12994288704,
+        "parameter_upload_total_seconds": 2.385670654475689,
+        "parameter_validation_seconds": 1.3747343495488167
+      },
+      "mode": "batched_pinned_v1",
+      "process_cpu_seconds": 3.1128800549999767,
+      "repetition": 3,
+      "sequence": 6,
+      "wall_seconds": 2.385748915374279
+    },
+    {
+      "memory_after": {
+        "max_memory_allocated_bytes": 7473154560,
+        "max_memory_reserved_bytes": 14642315264,
+        "memory_allocated_bytes": 7473154560,
+        "memory_reserved_bytes": 14642315264
+      },
+      "memory_before": {
+        "max_memory_allocated_bytes": 7473154560,
+        "max_memory_reserved_bytes": 14642315264,
+        "memory_allocated_bytes": 7473154560,
+        "memory_reserved_bytes": 14642315264
+      },
+      "metrics": {
+        "parameter_h2d_copy_seconds": 1.2349410504102707,
+        "parameter_h2d_sync_seconds": 7.15106725692749e-05,
+        "parameter_pack_seconds": 0.0,
+        "parameter_storage_bind_seconds": 0.0,
+        "parameter_transfer_batched": 0,
+        "parameter_transfer_pinned": 0,
+        "parameter_upload_allocation_seconds": 0.0,
+        "parameter_upload_cache_hit": 0,
+        "parameter_upload_copy_calls": 805,
+        "parameter_upload_dtype_groups": 2,
+        "parameter_upload_native_bytes": 6736577376,
+        "parameter_upload_packed_bytes": 6736577376,
+        "parameter_upload_source_bytes": 12994288704,
+        "parameter_upload_total_seconds": 2.6134600937366486,
+        "parameter_validation_seconds": 1.377956498414278
+      },
+      "mode": "leaf_copy_v1",
+      "process_cpu_seconds": 3.788573871000011,
+      "repetition": 3,
+      "sequence": 7,
+      "wall_seconds": 2.6135023534297943
+    }
+  ],
+  "cold_first_use": [
+    {
+      "memory_after": {
+        "max_memory_allocated_bytes": 7508038656,
+        "max_memory_reserved_bytes": 7904165888,
+        "memory_allocated_bytes": 7508038656,
+        "memory_reserved_bytes": 7904165888
+      },
+      "memory_before": {
+        "max_memory_allocated_bytes": 7508038656,
+        "max_memory_reserved_bytes": 7904165888,
+        "memory_allocated_bytes": 7508038656,
+        "memory_reserved_bytes": 7904165888
+      },
+      "metrics": {
+        "parameter_h2d_copy_seconds": 1.2234952934086323,
+        "parameter_h2d_sync_seconds": 7.964298129081726e-05,
+        "parameter_pack_seconds": 0.0,
+        "parameter_storage_bind_seconds": 0.0,
+        "parameter_transfer_batched": 0,
+        "parameter_transfer_pinned": 0,
+        "parameter_upload_allocation_seconds": 0.0,
+        "parameter_upload_cache_hit": 0,
+        "parameter_upload_copy_calls": 805,
+        "parameter_upload_dtype_groups": 2,
+        "parameter_upload_native_bytes": 6736577376,
+        "parameter_upload_packed_bytes": 6736577376,
+        "parameter_upload_source_bytes": 12994288704,
+        "parameter_upload_total_seconds": 2.871416114270687,
+        "parameter_validation_seconds": 1.6473482735455036
+      },
+      "mode": "leaf_copy_v1",
+      "process_cpu_seconds": 4.048084645000003,
+      "wall_seconds": 2.871456179767847
+    },
+    {
+      "memory_after": {
+        "max_memory_allocated_bytes": 14244807168,
+        "max_memory_reserved_bytes": 14642315264,
+        "memory_allocated_bytes": 7473154560,
+        "memory_reserved_bytes": 14642315264
+      },
+      "memory_before": {
+        "max_memory_allocated_bytes": 7508038656,
+        "max_memory_reserved_bytes": 7904165888,
+        "memory_allocated_bytes": 7508038656,
+        "memory_reserved_bytes": 7904165888
+      },
+      "metrics": {
+        "parameter_h2d_copy_seconds": 0.0005146116018295288,
+        "parameter_h2d_sync_seconds": 0.2327057532966137,
+        "parameter_pack_seconds": 0.7715361081063747,
+        "parameter_storage_bind_seconds": 0.0022005178034305573,
+        "parameter_transfer_batched": 1,
+        "parameter_transfer_pinned": 1,
+        "parameter_upload_allocation_seconds": 3.848061479628086,
+        "parameter_upload_cache_hit": 0,
+        "parameter_upload_copy_calls": 2,
+        "parameter_upload_dtype_groups": 2,
+        "parameter_upload_native_bytes": 6736577376,
+        "parameter_upload_packed_bytes": 6736642816,
+        "parameter_upload_source_bytes": 12994288704,
+        "parameter_upload_total_seconds": 6.243786960840225,
+        "parameter_validation_seconds": 1.388423714786768
+      },
+      "mode": "batched_pinned_v1",
+      "process_cpu_seconds": 8.004726739999995,
+      "wall_seconds": 6.243877250701189
+    }
+  ],
+  "native_parameter_checks": "Both paths reached and passed complete native parameter readback before the first gradient comparison failure. The final equality summary was not produced.",
+  "interpretation": "NPU gradient non-determinism is a hypothesis. No tolerance relaxed or correctness claim accepted. Need same-path repeat first.",
+  "frozen_source_digest": "18d22e193eb542bcd3aa8aca9a8ba68bd25330a61ccc42c4d06bd77436d503bf",
+  "optimizer_updates": 0
+}

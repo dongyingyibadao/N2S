@@ -1,0 +1,57 @@
+{
+  "format": "native-export-probe-cpu-preparation-v1",
+  "recorded_at_utc": "2026-10-28T10:45:41.989975+00:00",
+  "scope": "Source-frozen probe readiness and prior CPU benchmark-harness checks; actual NPU pending",
+  "benchmark_harness_cpu_tests": {
+    "passed": 56,
+    "status": "Passed in preceding same-session agent tools as recorded in handoff; no redundant rerun here",
+    "source_sha256": "9626450e2e3d8d20e0f850625c0390b744ea808c133e53a7599712b040b3ac0f",
+    "tests_sha256": "b5e5013636d6ea693348863dc4e3c2985260bb12366e073277d283ebf03d6451"
+  },
+  "independent_review_summary": "No blocking correctness/resource/verification bug found within reviewed source scope. True-NPU correctness and gain remain pending.",
+  "remaining_limits": [
+    "Readonly ownership is cooperative; deliberate NumPy/Tensor base/storage mutation is outside contract.",
+    "Caller must order backward/copy streams and avoid concurrent gradient mutation; device semantics still require actual NPU execution.",
+    "save_native_blob defaults durable=False; protocol integration and planned probe explicitly pass durable=True.",
+    "Benchmark uses legacy parameter upload equally for both exports, isolates export component only, and cannot establish end-to-end 32-card speed or fault recovery.",
+    "No environment archive or dataset payload freeze is included. Weight payload is rehashed by actual benchmark, not by this capsule preparation."
+  ],
+  "capsule": {
+    "manifest_sha256": "7d48399c68cd8b577515bf7bed2e959e7b4c0ef7a70cc57fc3d8cafb2c464e48",
+    "python_local_import_closure_files": 14,
+    "source_manifest_files": 19,
+    "closure_missing_local_imports": [],
+    "external_openpi_source_files_verified": 106,
+    "files_mode": "0444",
+    "directories_mode": "0555",
+    "replay_command_file": "native-export-probe-source-v1/REPLAY_COMMAND.txt",
+    "copied_tensors_or_env": false
+  },
+  "verification": [
+    {
+      "check": "SHA-pinned capsule and106 OpenPI external source hashes",
+      "status": "passed",
+      "device_calls": false
+    },
+    {
+      "check": "Syntax compile of15 capsule Python files (14source + verifier)",
+      "status": "passed",
+      "device_calls": false
+    },
+    {
+      "check": "Capsule benchmark --help via provisioned interpreter, autoload disabled",
+      "status": "passed",
+      "device_calls": false
+    }
+  ],
+  "root_capsule_verification": {
+    "status": "passed",
+    "source_files": 19,
+    "external_openpi_sources": 106,
+    "weights_payload_rehashed": false,
+    "npu_executed": false
+  },
+  "resource_status": "All32 task-owned LOW NPUs are allocated to formal500; no extra job submitted and no adjacent workload device used",
+  "npu_component_speedup": null,
+  "formal500_acceptance_complete": false
+}

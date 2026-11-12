@@ -1,0 +1,39 @@
+{
+  "case_id": "jade-lotus-ascend-fragments-optimization-20261028",
+  "draft": false,
+  "environment": "Same CPU host and shared filesystem, actual retained FP32 OpenPI gradients; fresh subprocess per trial, no cache eviction; no NPU execution in this measurement.",
+  "evidence_refs": [
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/measurement-reducer-prefetch-01.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/measurement-reducer-prefetch-01.json": "05c9c8f1751ce07c02ebde25b31e96993680e85c48a3cb221920989e683e7efa"
+  },
+  "generalization": "pending_validation",
+  "id": "20261028-082346-620692-08a2c75d",
+  "issue_scope": "target",
+  "kind": "validation",
+  "queries": [],
+  "recorded_at": "2026-10-28T08:23:46.620680+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "Fixed real version61 gradient chunk CPU A/B passed:32 sources,256MiB output, alternating1/2/4 then4/2/1, exact manifest and payload equality. Serial median13.879973s,4readers4.944757s. This is component-only shared-filesystem/CPU evidence; whole32-card throughput, NPU upload correctness and500 updates remain pending.",
+  "validation": {
+    "accuracy": "passed",
+    "accuracy_protocol": "Exact manifest and payload bytes against the ordered serial baseline for all3,248,572,176-model parameter positions intersecting selected256MiB chunk. Unselected chunks are not audited. No task accuracy claim.",
+    "actual_backend": "cpu",
+    "finite_outputs": true,
+    "functional": "passed",
+    "official_weights": false,
+    "optimization": "measured_improvement",
+    "performance": {
+      "baseline": 13.879973195493221,
+      "direction": "lower",
+      "metric": "selected_chunk_reduce_wall_seconds",
+      "modified": 4.944756742566824,
+      "protocol": "Same fixed32 input commits, ordered FP32 multiply/add and hash/finite checks, durable output/fsync. Two repeats per mode, fresh process, alternating order. Includes read/hash/math/write; excludes launch and external byte compare. No physical I/O traffic or whole training gain inferred.",
+      "same_device": true
+    }
+  }
+}

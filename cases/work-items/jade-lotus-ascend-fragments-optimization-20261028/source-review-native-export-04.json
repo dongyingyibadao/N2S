@@ -1,0 +1,828 @@
+{
+  "format": "sanitized-native-export-source-review-v1",
+  "recorded_at_utc": "2026-10-28T10:36:42.435454+00:00",
+  "scope": "Source-level review only; no NPU model execution/performance claim",
+  "reviewer_scope": "Read-only subagent reviewed22 selected sources; root reopened15 decision-critical representation, ownership, finite-check and D2H fence implementation sections and verified19 cached primary source full-file hashes. Exact matched source metadata is retained without upstream bodies.",
+  "versions": {
+    "torch": {
+      "version": "2.9.0+cpu",
+      "revision": "0fabc3ba44823f257e70ce397d989c8de5e362c1",
+      "version_file_sha256": "ff8ea659d7cbeaf99c9a3fb1307fcc6ec324ce9b9f752464dd7934f32a1e73c8"
+    },
+    "torch_npu": {
+      "version": "2.9.0",
+      "revision": "12d689a08941d4a6e45eab16e3ad6fef96a9affd",
+      "version_file_sha256": "a3c2905cc26d6a68631fec723b3eac1e0a02cb9ff9bba3eca6d06b0d23734937"
+    },
+    "numpy": {
+      "version": "1.26.4",
+      "revision": "9815c16f449e12915ef35a8255329ba26dacd5c0",
+      "version_file_sha256": "3932e74a1d0d19f5b22fc56b9c88f435db7f29939397567e903f427fe8d13266"
+    }
+  },
+  "n2s_accepted_official_revision": "45d167135c81d97573bfbe0e564bb4a1d9642514",
+  "n2s_reference_bundle_manifest_sha256": "b83a696461745e01f8e44e8a2e672db9fdadca7d66b6e19d7eaaaac53b5081a8",
+  "refresh_state": "blocked_license_changed; retained accepted cache used; no retry, acceptance, rule modification or publication",
+  "target_files_sha256": {
+    "jade_lotus/native_snapshot.py": "89ab88e24f702829fc92fcf62e5bf75c165db3f528bb925ded2f150416003e6e",
+    "jade_lotus/npu_gradient_transfer.py": "5411c2e45621aefeba30f9fb0c974cc9b2d988f23be5c92ea38165c39f64a36e",
+    "jade_lotus/array_blob.py": "a9458c6afb4d7d0dd93daec5ab3a6dc5bea722a773dbe176d1492ad648ef9c10"
+  },
+  "queries": [
+    {
+      "query": "uint16",
+      "total_results": 10,
+      "server_truncated": false,
+      "status": "discovery_only",
+      "bounds": "Only selected sources O01-O03 and actual-version underlying primary sources were read. Other search hits are not claimed reviewed."
+    },
+    {
+      "query": "pin_memory",
+      "total_results": 5,
+      "server_truncated": false,
+      "status": "discovery_only",
+      "bounds": "Only selected sources O01-O03 and actual-version underlying primary sources were read. Other search hits are not claimed reviewed."
+    },
+    {
+      "query": "non_blocking",
+      "total_results": 5,
+      "server_truncated": false,
+      "status": "discovery_only",
+      "bounds": "Only selected sources O01-O03 and actual-version underlying primary sources were read. Other search hits are not claimed reviewed."
+    },
+    {
+      "query": "numpy",
+      "total_results": 174,
+      "server_truncated": false,
+      "status": "discovery_only",
+      "bounds": "Only selected sources O01-O03 and actual-version underlying primary sources were read. Other search hits are not claimed reviewed."
+    },
+    {
+      "query": "clone",
+      "total_results": 88,
+      "server_truncated": false,
+      "status": "discovery_only",
+      "bounds": "Only selected sources O01-O03 and actual-version underlying primary sources were read. Other search hits are not claimed reviewed."
+    },
+    {
+      "query": "synchronize",
+      "total_results": 23,
+      "server_truncated": false,
+      "status": "discovery_only",
+      "bounds": "Only selected sources O01-O03 and actual-version underlying primary sources were read. Other search hits are not claimed reviewed."
+    },
+    {
+      "query": "bfloat16 uint16",
+      "total_results": 3,
+      "server_truncated": false,
+      "status": "discovery_only",
+      "bounds": "Only selected sources O01-O03 and actual-version underlying primary sources were read. Other search hits are not claimed reviewed."
+    },
+    {
+      "query": "numpy lifetime",
+      "total_results": 0,
+      "server_truncated": false,
+      "status": "discovery_only",
+      "bounds": "Only selected sources O01-O03 and actual-version underlying primary sources were read. Other search hits are not claimed reviewed."
+    },
+    {
+      "query": "non_blocking synchronize",
+      "total_results": 0,
+      "server_truncated": false,
+      "status": "discovery_only",
+      "bounds": "Only selected sources O01-O03 and actual-version underlying primary sources were read. Other search hits are not claimed reviewed."
+    },
+    {
+      "query": "clone numpy",
+      "total_results": 31,
+      "server_truncated": false,
+      "status": "discovery_only",
+      "bounds": "Only selected sources O01-O03 and actual-version underlying primary sources were read. Other search hits are not claimed reviewed."
+    }
+  ],
+  "coverage": [
+    {
+      "id": "P01",
+      "url": "https://raw.githubusercontent.com/pytorch/pytorch/0fabc3ba44823f257e70ce397d989c8de5e362c1/torch/_tensor_docs.py",
+      "revision": "0fabc3ba44823f257e70ce397d989c8de5e362c1",
+      "sha256": "a06db021c657b303c73ec30b4899eaff4b6be50dffedb94193bd1ab90538e6c6",
+      "bytes": 144493,
+      "accessed_at_utc": "2026-10-28T10:20:11.689242+00:00",
+      "reviewed_at_utc": "2026-10-28T10:29:18.792363+00:00",
+      "trust": "retrieved_unreviewed",
+      "coverage_status": "read",
+      "reading_scope": "Complete decision-specific functions or documentation sections; unrelated portions of this file were not reviewed.",
+      "read_depth": 2,
+      "locators": [
+        "copy_ lines 1205-1222",
+        "numpy lines 3708-3733",
+        "view(dtype) lines 6162-6264"
+      ],
+      "located_claims": [
+        "view(dtype) interprets the same underlying data using another dtype.",
+        "Default numpy() on a supported CPU strided tensor shares storage.",
+        "copy_ non_blocking documentation describes CPU/GPU asynchrony."
+      ],
+      "applicability": "CPU clone reinterpretation and NumPy conversion in download_native(); installed file SHA256 matches this pinned source.",
+      "contrary_or_different_scope": "The copy_ documentation is worded for CPU/GPU, so it cannot establish Ascend copy semantics. Dtype-view TorchScript support is explicitly excluded.",
+      "remaining_gap": "No runtime execution. Ascend semantics require N01-N08 rather than this generic GPU wording.",
+      "edge_kind": "manual actual-version symbol/include resolution; not an asserted verified hyperlink",
+      "parent_resolution": "Manual actual-version symbol or target-code resolution; not a verified hyperlink",
+      "root_reopened_decision_specific_sections": false
+    },
+    {
+      "id": "P02",
+      "url": "https://raw.githubusercontent.com/pytorch/pytorch/0fabc3ba44823f257e70ce397d989c8de5e362c1/torch/headeronly/util/BFloat16.h",
+      "revision": "0fabc3ba44823f257e70ce397d989c8de5e362c1",
+      "sha256": "9d79a08f05af8eb8d48d077317d6ace1fb83dacdc445ffae147c8d1a367422a2",
+      "bytes": 14996,
+      "accessed_at_utc": "2026-10-28T10:20:55.085967+00:00",
+      "reviewed_at_utc": "2026-10-28T10:29:18.792363+00:00",
+      "trust": "retrieved_unreviewed",
+      "coverage_status": "read",
+      "reading_scope": "Complete decision-specific functions or documentation sections; unrelated portions of this file were not reviewed.",
+      "read_depth": 3,
+      "locators": [
+        "struct BFloat16 lines 3-4,27-43",
+        "detail::f32_from_bits lines 64-80",
+        "operator float lines 139-147",
+        "numeric_limits lines 421-475"
+      ],
+      "located_claims": [
+        "BFloat16 contains a uint16_t word and uses one sign bit, eight exponent bits and seven fraction bits.",
+        "CPU BF16-to-FP32 conversion shifts that uint16 word left by 16 before a memcpy into float.",
+        "The source supplies infinity bits 0x7F80, quiet NaN bits 0x7FC0, finite max 0x7F7F and denorm minimum 0x0001."
+      ],
+      "applicability": "Exact installed header SHA256 matches this fixed commit. Together with NP03, supports the native exponent-mask check without widening.",
+      "contrary_or_different_scope": "numeric_limits reports is_iec559=false; this report does not claim full IEEE-754 conformance. CPU raw storage evidence is distinct from NPU arithmetic behavior.",
+      "remaining_gap": "Source-derived bit and finite classification only; no on-device representation experiment.",
+      "edge_kind": "manual actual-version symbol/include resolution; not an asserted verified hyperlink",
+      "parent": "https://raw.githubusercontent.com/pytorch/pytorch/0fabc3ba44823f257e70ce397d989c8de5e362c1/c10/util/BFloat16.h",
+      "root_reopened_decision_specific_sections": true
+    },
+    {
+      "id": "P03",
+      "url": "https://raw.githubusercontent.com/pytorch/pytorch/0fabc3ba44823f257e70ce397d989c8de5e362c1/aten/src/ATen/native/TensorConversions.cpp",
+      "revision": "0fabc3ba44823f257e70ce397d989c8de5e362c1",
+      "sha256": "0633c6235f356aee14d74fa2367f8a8b509e4a15023df957c71fd7352d0cf1ea",
+      "bytes": 87888,
+      "accessed_at_utc": "2026-10-28T10:20:13.616041+00:00",
+      "reviewed_at_utc": "2026-10-28T10:29:18.792363+00:00",
+      "trust": "retrieved_unreviewed",
+      "coverage_status": "read",
+      "reading_scope": "Complete decision-specific functions or documentation sections; unrelated portions of this file were not reviewed.",
+      "read_depth": 2,
+      "locators": [
+        "view_dtype lines 872-892"
+      ],
+      "located_claims": [
+        "view_dtype copies the Storage handle into a new TensorImpl using the requested type metadata.",
+        "For equal item sizes, shape, strides and storage offset are retained; this branch does not numerically convert elements."
+      ],
+      "applicability": "BF16 and uint16 both have two-byte elements, and the reviewed downloader clones a contiguous CPU flat before calling view(torch.uint16).",
+      "contrary_or_different_scope": "Unequal item sizes, conjugate/negative view bits and arbitrary layouts have separate restrictions. This is a storage alias of the clone, not a second owned copy.",
+      "remaining_gap": "Compiled binary-to-source correspondence is inferred from installed version metadata; headers/docs were hash-matched, but no binary reproducibility audit was performed.",
+      "edge_kind": "manual actual-version symbol/include resolution; not an asserted verified hyperlink",
+      "parent": "https://raw.githubusercontent.com/pytorch/pytorch/0fabc3ba44823f257e70ce397d989c8de5e362c1/torch/_tensor_docs.py",
+      "root_reopened_decision_specific_sections": true
+    },
+    {
+      "id": "P04",
+      "url": "https://raw.githubusercontent.com/pytorch/pytorch/0fabc3ba44823f257e70ce397d989c8de5e362c1/aten/src/ATen/native/TensorFactories.cpp",
+      "revision": "0fabc3ba44823f257e70ce397d989c8de5e362c1",
+      "sha256": "d4c3fa37c4819005571d377d13b1746de65ace3589ae293ba5d07783fe04135d",
+      "bytes": 73234,
+      "accessed_at_utc": "2026-10-28T10:20:13.096711+00:00",
+      "reviewed_at_utc": "2026-10-28T10:29:18.792363+00:00",
+      "trust": "retrieved_unreviewed",
+      "coverage_status": "read",
+      "reading_scope": "Complete decision-specific functions or documentation sections; unrelated portions of this file were not reviewed.",
+      "read_depth": 2,
+      "locators": [
+        "clone lines 2158-2180"
+      ],
+      "located_claims": [
+        "clone allocates empty_strided or empty_like with src.options() and then copies src into the newly allocated tensor."
+      ],
+      "applicability": "group.host.clone() creates storage distinct from reusable staging for both BF16 and FP32 in the reviewed native export.",
+      "contrary_or_different_scope": "A view or FP32 .float() conversion can alias existing storage; the conclusion is specific to clone(). This source does not establish peak memory or time cost.",
+      "remaining_gap": "No CPU or NPU tests in this source-review assignment.",
+      "edge_kind": "manual actual-version symbol/include resolution; not an asserted verified hyperlink",
+      "parent_resolution": "Manual actual-version symbol or target-code resolution; not a verified hyperlink",
+      "root_reopened_decision_specific_sections": true
+    },
+    {
+      "id": "P05",
+      "url": "https://raw.githubusercontent.com/pytorch/pytorch/0fabc3ba44823f257e70ce397d989c8de5e362c1/torch/csrc/utils/tensor_numpy.cpp",
+      "revision": "0fabc3ba44823f257e70ce397d989c8de5e362c1",
+      "sha256": "d2346fcd587daa629c2e1607d35127c0fc88d2303e55efd5e2c3f77a161b2c36",
+      "bytes": 19119,
+      "accessed_at_utc": "2026-10-28T10:20:14.104232+00:00",
+      "reviewed_at_utc": "2026-10-28T10:29:18.792363+00:00",
+      "trust": "retrieved_unreviewed",
+      "coverage_status": "read",
+      "reading_scope": "Complete decision-specific functions or documentation sections; unrelated portions of this file were not reviewed.",
+      "read_depth": 3,
+      "locators": [
+        "tensor_to_numpy lines 126-202",
+        "aten_to_numpy_dtype lines 278-311"
+      ],
+      "located_claims": [
+        "Conversion checks CPU strided and supported dtype conditions, prepares a detached tensor and builds the ndarray over prepared_tensor.data_ptr().",
+        "The dtype mapping includes kUInt16 -> NPY_UINT16 and kFloat -> NPY_FLOAT; BF16 has no direct mapping and reaches unsupported ScalarType.",
+        "The ndarray base holds a wrapped prepared Tensor and its storage is marked non-resizable."
+      ],
+      "applicability": "The uint16 view avoids unsupported direct BF16 numpy() while keeping the independent clone Storage alive even after a local Tensor variable is dropped.",
+      "contrary_or_different_scope": "The source explicitly warns at lines 189-192 that Tensor.set_ may change storage and defeat this lifetime protection. NumPy writable flags do not prohibit deliberate mutation through a reachable torch base or other aliases.",
+      "remaining_gap": "Ownership is valid under the private clone/no-explicit-storage-mutation contract, not a hostile-mutation guarantee.",
+      "edge_kind": "manual actual-version symbol/include resolution; not an asserted verified hyperlink",
+      "parent": "https://raw.githubusercontent.com/pytorch/pytorch/0fabc3ba44823f257e70ce397d989c8de5e362c1/torch/_tensor_docs.py",
+      "root_reopened_decision_specific_sections": true
+    },
+    {
+      "id": "N01",
+      "url": "https://raw.githubusercontent.com/Ascend/pytorch/12d689a08941d4a6e45eab16e3ad6fef96a9affd/torch_npu/npu/utils.py",
+      "revision": "12d689a08941d4a6e45eab16e3ad6fef96a9affd",
+      "sha256": "39bdf11ec1d84bf3b3801df6ed7eb1b5fe051a5416bb25a7615267e7307ee959",
+      "bytes": 18530,
+      "accessed_at_utc": "2026-10-28T10:20:55.087392+00:00",
+      "reviewed_at_utc": "2026-10-28T10:29:18.792363+00:00",
+      "trust": "retrieved_unreviewed",
+      "coverage_status": "read",
+      "reading_scope": "Complete decision-specific functions or documentation sections; unrelated portions of this file were not reviewed.",
+      "read_depth": 2,
+      "locators": [
+        "synchronize lines 62-72"
+      ],
+      "located_claims": [
+        "synchronize documents waiting for all kernels in all streams on the selected NPU device, enters that device context, then calls _C._npu_synchronize()."
+      ],
+      "applicability": "The target passes its validated NPU device; installed utils.py SHA256 exactly matches this fixed commit.",
+      "contrary_or_different_scope": "This is device synchronization, not distributed cross-worker synchronization. It does not by itself order an earlier copy after an untracked producer on another stream.",
+      "remaining_gap": "No device call was made; implementation continuation is N02-N04.",
+      "edge_kind": "manual actual-version symbol/include resolution; not an asserted verified hyperlink",
+      "parent": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi05/infer_with_torch/infer_utils.py",
+      "root_reopened_decision_specific_sections": true
+    },
+    {
+      "id": "N02",
+      "url": "https://raw.githubusercontent.com/Ascend/pytorch/12d689a08941d4a6e45eab16e3ad6fef96a9affd/torch_npu/csrc/npu/Module.cpp",
+      "revision": "12d689a08941d4a6e45eab16e3ad6fef96a9affd",
+      "sha256": "71a8d9c366f200200b577d40c21afe3d1e683332c1ee93f8351e67e74ad4384d",
+      "bytes": 89218,
+      "accessed_at_utc": "2026-10-28T10:20:55.088909+00:00",
+      "reviewed_at_utc": "2026-10-28T10:29:18.792363+00:00",
+      "trust": "retrieved_unreviewed",
+      "coverage_status": "read",
+      "reading_scope": "Complete decision-specific functions or documentation sections; unrelated portions of this file were not reviewed.",
+      "read_depth": 3,
+      "locators": [
+        "THNPModule_npuSynchronize lines 697-704",
+        "Python method registration line 2130"
+      ],
+      "located_claims": [
+        "The Python binding releases the GIL and calls c10_npu::npuSynchronizeDevice()."
+      ],
+      "applicability": "Resolves the exact Python synchronization binding used by the target.",
+      "contrary_or_different_scope": "A wrapper call alone does not prove ACL implementation behavior.",
+      "remaining_gap": "Underlying device synchronization is delegated to N03-N04.",
+      "edge_kind": "manual actual-version symbol/include resolution; not an asserted verified hyperlink",
+      "parent": "https://raw.githubusercontent.com/Ascend/pytorch/12d689a08941d4a6e45eab16e3ad6fef96a9affd/torch_npu/npu/utils.py",
+      "root_reopened_decision_specific_sections": true
+    },
+    {
+      "id": "N03",
+      "url": "https://raw.githubusercontent.com/Ascend/pytorch/12d689a08941d4a6e45eab16e3ad6fef96a9affd/torch_npu/csrc/core/npu/NPUStream.cpp",
+      "revision": "12d689a08941d4a6e45eab16e3ad6fef96a9affd",
+      "sha256": "7696a82e95879613a24a8aa8b30ea62a88d1a0958a5d173757a776f38d9f4e18",
+      "bytes": 27486,
+      "accessed_at_utc": "2026-10-28T10:20:55.554034+00:00",
+      "reviewed_at_utc": "2026-10-28T10:29:18.792363+00:00",
+      "trust": "retrieved_unreviewed",
+      "coverage_status": "read",
+      "reading_scope": "Complete decision-specific functions or documentation sections; unrelated portions of this file were not reviewed.",
+      "read_depth": 4,
+      "locators": [
+        "emptyAllNPUStream lines 461-512",
+        "npuSynchronizeDevice lines 554-579"
+      ],
+      "located_claims": [
+        "When task queues are enabled, npuSynchronizeDevice calls emptyAllNPUStream before the ACL synchronization call.",
+        "emptyAllNPUStream invokes MakeSureQueueEmpty on initialized default queues and, when per-stream queues are enabled, secondary and pooled queues.",
+        "The function then calls AclrtSynchronizeDeviceWithTimeout and checks its return code."
+      ],
+      "applicability": "Supports an explicit fence after asynchronous copy submission, including queued submission, before clone, NumPy access or finite scanning.",
+      "contrary_or_different_scope": "The selected-device ACL fence is not proof of safe concurrent gradient mutation or correct dependencies across arbitrary producer streams.",
+      "remaining_gap": "ACL is a vendor runtime dependency; its internal implementation was not available or exercised.",
+      "edge_kind": "manual actual-version symbol/include resolution; not an asserted verified hyperlink",
+      "parent": "https://github.com/Ascend/pytorch/blob/12d689a08941d4a6e45eab16e3ad6fef96a9affd/torch_npu/csrc/npu/Module.cpp",
+      "root_reopened_decision_specific_sections": true
+    },
+    {
+      "id": "N04",
+      "url": "https://github.com/Ascend/pytorch/blob/12d689a08941d4a6e45eab16e3ad6fef96a9affd/torch_npu/csrc/core/npu/interface/AclInterface.cpp",
+      "revision": "12d689a08941d4a6e45eab16e3ad6fef96a9affd",
+      "sha256": "f0a76860faec610c475b5c92b4bf477b92d1753239c45698e9fa8b35f88641eb",
+      "bytes": 58636,
+      "accessed_at_utc": "2026-10-28T10:22:47.179715+00:00",
+      "reviewed_at_utc": "2026-10-28T10:29:18.792363+00:00",
+      "trust": "retrieved_unreviewed",
+      "coverage_status": "read",
+      "reading_scope": "Complete decision-specific functions or documentation sections; unrelated portions of this file were not reviewed.",
+      "read_depth": 5,
+      "locators": [
+        "AclrtSynchronizeDeviceWithTimeout lines 821-839"
+      ],
+      "located_claims": [
+        "The wrapper dynamically calls aclrtSynchronizeDeviceWithTimeout when present, using the configured timeout.",
+        "Otherwise it requires aclrtSynchronizeDevice and calls that fallback."
+      ],
+      "applicability": "Completes the source chain from target torch.npu.synchronize() to the concrete ACL synchronization API.",
+      "contrary_or_different_scope": "If the timeout API is absent, a positive configured timeout is warned to have no effect; source-level fallback existence does not confirm the installed CANN path.",
+      "remaining_gap": "Installed CANN binary, selected dynamic branch and actual device completion were not probed.",
+      "edge_kind": "manual actual-version symbol/include resolution; not an asserted verified hyperlink",
+      "parent": "https://raw.githubusercontent.com/Ascend/pytorch/12d689a08941d4a6e45eab16e3ad6fef96a9affd/torch_npu/csrc/core/npu/NPUStream.cpp",
+      "root_reopened_decision_specific_sections": true
+    },
+    {
+      "id": "N05",
+      "url": "https://github.com/Ascend/pytorch/blob/12d689a08941d4a6e45eab16e3ad6fef96a9affd/torch_npu/csrc/aten/common/CopyKernel.cpp",
+      "revision": "12d689a08941d4a6e45eab16e3ad6fef96a9affd",
+      "sha256": "26f670bb9c7df135d4088b101f303998095c4d71d2199dd6de398bef89eebc36",
+      "bytes": 15562,
+      "accessed_at_utc": "2026-10-28T10:22:47.176236+00:00",
+      "reviewed_at_utc": "2026-10-28T10:29:18.792363+00:00",
+      "trust": "retrieved_unreviewed",
+      "coverage_status": "read",
+      "reading_scope": "Full 408-line source file read, including routing and fallback context.",
+      "read_depth": 2,
+      "locators": [
+        "copy_between_host_and_device lines 86-125",
+        "D2H same-dtype contiguous path lines 141-153,188-210",
+        "NPUNativeFunctions::copy_ lines 382-404"
+      ],
+      "located_claims": [
+        "For same-dtype, same-shape contiguous tensors the D2H route copies numel * element_size bytes.",
+        "The non_blocking route launches an asynchronous copy and processes host-memory location without an unconditional stream fence.",
+        "The CPU destination/NPU source case routes to D2H."
+      ],
+      "applicability": "Matches the validated native BF16/FP32 contiguous source gradients and contiguous CPU leaf views in the target. It supports retaining native payload size before the explicit fence.",
+      "contrary_or_different_scope": "Noncontiguous, differing-dtype and non-base-format cases may allocate temporary buffers or require format conversion. Target validation avoids the first two; no blanket performance claim is made.",
+      "remaining_gap": "Source review cannot prove which compiled dispatch route was exercised; both common and OpApi paths were reviewed.",
+      "edge_kind": "manual actual-version symbol/include resolution; not an asserted verified hyperlink",
+      "parent_resolution": "Manual actual-version symbol or target-code resolution; not a verified hyperlink",
+      "root_reopened_decision_specific_sections": true
+    },
+    {
+      "id": "N06",
+      "url": "https://github.com/Ascend/pytorch/blob/12d689a08941d4a6e45eab16e3ad6fef96a9affd/torch_npu/csrc/aten/ops/op_api/CopyKernelOpApi.cpp",
+      "revision": "12d689a08941d4a6e45eab16e3ad6fef96a9affd",
+      "sha256": "238b3504bb9c8f1be1c7d6af8b8f6773bb8790ac88843cdd23ddacf1755822cf",
+      "bytes": 8907,
+      "accessed_at_utc": "2026-10-28T10:22:47.177143+00:00",
+      "reviewed_at_utc": "2026-10-28T10:29:18.792363+00:00",
+      "trust": "retrieved_unreviewed",
+      "coverage_status": "read",
+      "reading_scope": "Full 206-line source file read.",
+      "read_depth": 2,
+      "locators": [
+        "copy_between_host_and_device_opapi lines 35-76",
+        "D2H path lines 104-113,146-168",
+        "NPUNativeOpApiFunctions::copy_ lines 170-203"
+      ],
+      "located_claims": [
+        "The OpApi route uses the same asynchronous launcher and host-memory processing for non_blocking host/device copies.",
+        "The CPU destination/NPU source route selects D2H; compatibility can fall back to common NPUNativeFunctions::copy_."
+      ],
+      "applicability": "Covers the alternate copy dispatch in this exact torch_npu commit. Same-dtype contiguous BF16/FP32 avoids CPU widening in the D2H fast path.",
+      "contrary_or_different_scope": "The presence of source does not establish the selected dispatch or runtime gain. D2D aclnnInplaceCopy behavior is outside this review.",
+      "remaining_gap": "No on-device trace or dispatch experiment.",
+      "edge_kind": "manual actual-version symbol/include resolution; not an asserted verified hyperlink",
+      "parent_resolution": "Manual actual-version symbol or target-code resolution; not a verified hyperlink",
+      "root_reopened_decision_specific_sections": true
+    },
+    {
+      "id": "N07",
+      "url": "https://github.com/Ascend/pytorch/blob/12d689a08941d4a6e45eab16e3ad6fef96a9affd/torch_npu/csrc/framework/utils/CalcuOpUtil.cpp",
+      "revision": "12d689a08941d4a6e45eab16e3ad6fef96a9affd",
+      "sha256": "c2d9734e8e70fc692c4c6e4bdf8b7d5d9bb6ad6d198bb5485b390ccf7f6115b3",
+      "bytes": 19589,
+      "accessed_at_utc": "2026-10-28T10:23:48.344005+00:00",
+      "reviewed_at_utc": "2026-10-28T10:29:18.792363+00:00",
+      "trust": "retrieved_unreviewed",
+      "coverage_status": "read",
+      "reading_scope": "Complete decision-specific functions or documentation sections; unrelated portions of this file were not reviewed.",
+      "read_depth": 3,
+      "locators": [
+        "LaunchAsyncCopyTaskWithModeSwitch lines 243-248"
+      ],
+      "located_claims": [
+        "The Tensor overload forwards destination/source pointers, sizes and memcpy kind to queue::LaunchAsyncCopyTask."
+      ],
+      "applicability": "Connects N05/N06 to the actual asynchronous queue code.",
+      "contrary_or_different_scope": "This wrapper stores raw pointer arguments and performs no ownership clone itself. Target keeps gradient/staging references while waiting for its fence.",
+      "remaining_gap": "Caller and allocator ownership must remain valid until copy completion.",
+      "edge_kind": "manual actual-version symbol/include resolution; not an asserted verified hyperlink",
+      "parent": "https://github.com/Ascend/pytorch/blob/12d689a08941d4a6e45eab16e3ad6fef96a9affd/torch_npu/csrc/aten/common/CopyKernel.cpp",
+      "root_reopened_decision_specific_sections": true
+    },
+    {
+      "id": "N08",
+      "url": "https://github.com/Ascend/pytorch/blob/12d689a08941d4a6e45eab16e3ad6fef96a9affd/torch_npu/csrc/core/npu/interface/AsyncTaskQueueInterface.cpp",
+      "revision": "12d689a08941d4a6e45eab16e3ad6fef96a9affd",
+      "sha256": "91f5e3191a5a7ec5c858478cfc950872851801dfdfc25b4b08d1bf6d650d1a73",
+      "bytes": 12951,
+      "accessed_at_utc": "2026-10-28T10:23:48.406008+00:00",
+      "reviewed_at_utc": "2026-10-28T10:29:18.792363+00:00",
+      "trust": "retrieved_unreviewed",
+      "coverage_status": "read",
+      "reading_scope": "Complete decision-specific functions or documentation sections; unrelated portions of this file were not reviewed.",
+      "read_depth": 4,
+      "locators": [
+        "AsyncCopyTask constructor and LaunchCopyTask lines 74-107",
+        "LaunchAsyncCopyTask lines 167-172"
+      ],
+      "located_claims": [
+        "The task stores copy pointer/size/kind parameters.",
+        "With task queues enabled it queues ASYNC_MEMCPY; otherwise it calls the current stream ACL asynchronous memcpy API, including a conditional D2H variant when present."
+      ],
+      "applicability": "Establishes why completion of Python copy_ submission is insufficient for a CPU read and why queue drain plus device fence must precede clone/view/finite checks.",
+      "contrary_or_different_scope": "This file does not independently prove vendor ACL or queue worker correctness.",
+      "remaining_gap": "No asynchronous timing, data-content or lifetime experiment.",
+      "edge_kind": "manual actual-version symbol/include resolution; not an asserted verified hyperlink",
+      "parent": "https://github.com/Ascend/pytorch/blob/12d689a08941d4a6e45eab16e3ad6fef96a9affd/torch_npu/csrc/framework/utils/CalcuOpUtil.cpp",
+      "root_reopened_decision_specific_sections": true
+    },
+    {
+      "id": "N09",
+      "url": "https://raw.githubusercontent.com/Ascend/pytorch/12d689a08941d4a6e45eab16e3ad6fef96a9affd/torch_npu/csrc/core/npu/CachingHostAllocator.cpp",
+      "revision": "12d689a08941d4a6e45eab16e3ad6fef96a9affd",
+      "sha256": "ba660d619a96b0aa8d241f2a60b80e76a01628e121c2ad57b76f4f181263ba64",
+      "bytes": 9360,
+      "accessed_at_utc": "2026-10-28T10:20:55.573478+00:00",
+      "reviewed_at_utc": "2026-10-28T10:29:18.792363+00:00",
+      "trust": "retrieved_unreviewed",
+      "coverage_status": "read",
+      "reading_scope": "Full 272-line source file read.",
+      "read_depth": 3,
+      "locators": [
+        "allocate_host_memory lines 109-124",
+        "record_stream lines 154-166",
+        "process_non_blocking_copy lines 215-264",
+        "getPinnedMemoryAllocator lines 266-270"
+      ],
+      "located_claims": [
+        "Native host allocation uses aclrtMallocHost.",
+        "Registered host memory records stream events when managed by the native host allocator.",
+        "Unregistered host memory forces stream synchronization; registered host memory can retain asynchronous behavior."
+      ],
+      "applicability": "Supports the target requirement that real NPU staging be pinned and checked with is_pinned(), and reinforces the need for its explicit completion fence before CPU reads.",
+      "contrary_or_different_scope": "Event tracking protects allocator reuse; it is not permission for CPU inspection before completion. Unregistered-memory synchronous fallback cannot be assumed for pinned staging.",
+      "remaining_gap": "No allocator call, pin check or hardware experiment was made.",
+      "edge_kind": "manual actual-version symbol/include resolution; not an asserted verified hyperlink",
+      "parent": "https://github.com/Ascend/pytorch/blob/12d689a08941d4a6e45eab16e3ad6fef96a9affd/torch_npu/csrc/aten/common/CopyKernel.cpp",
+      "root_reopened_decision_specific_sections": true
+    },
+    {
+      "id": "N10",
+      "url": "https://github.com/Ascend/pytorch/blob/12d689a08941d4a6e45eab16e3ad6fef96a9affd/torch_npu/csrc/aten/PinMemory.cpp",
+      "revision": "12d689a08941d4a6e45eab16e3ad6fef96a9affd",
+      "sha256": "eec4d2f09c630ff99cf1ccdaf0f282123cb9df715a8c6aeafce88f7e56db7263",
+      "bytes": 1717,
+      "accessed_at_utc": "2026-10-28T10:23:48.335759+00:00",
+      "reviewed_at_utc": "2026-10-28T10:29:18.792363+00:00",
+      "trust": "retrieved_unreviewed",
+      "coverage_status": "read",
+      "reading_scope": "Full 50-line source file read.",
+      "read_depth": 3,
+      "locators": [
+        "is_pinned lines 26-34",
+        "_pin_memory lines 36-40",
+        "backend registrations lines 43-46"
+      ],
+      "located_claims": [
+        "Pinning requires CPU tensors and redispatches the pin/is_pinned operations for the selected backend."
+      ],
+      "applicability": "Additional context for the target CPU pinned host staging and explicit is_pinned() verification.",
+      "contrary_or_different_scope": "This source does not prove torch.empty(pin_memory=True) succeeds in the actual environment.",
+      "remaining_gap": "No allocation or hardware probe.",
+      "edge_kind": "manual actual-version symbol/include resolution; not an asserted verified hyperlink",
+      "parent": "https://github.com/Ascend/pytorch/blob/12d689a08941d4a6e45eab16e3ad6fef96a9affd/torch_npu/csrc/core/npu/CachingHostAllocator.cpp",
+      "root_reopened_decision_specific_sections": false
+    },
+    {
+      "id": "NP01",
+      "url": "https://raw.githubusercontent.com/numpy/numpy/9815c16f449e12915ef35a8255329ba26dacd5c0/numpy/core/src/multiarray/arrayobject.c",
+      "revision": "9815c16f449e12915ef35a8255329ba26dacd5c0",
+      "sha256": "975d1f18121dccbc9c808eda8cec85b1189d30ae741a8cead9403359b703cd0a",
+      "bytes": 42865,
+      "accessed_at_utc": "2026-10-28T10:23:17.129184+00:00",
+      "reviewed_at_utc": "2026-10-28T10:29:18.792363+00:00",
+      "trust": "retrieved_unreviewed",
+      "coverage_status": "read",
+      "reading_scope": "Complete decision-specific functions or documentation sections; unrelated portions of this file were not reviewed.",
+      "read_depth": 4,
+      "locators": [
+        "PyArray_SetBaseObject lines 148-225",
+        "array_dealloc lines 420-455"
+      ],
+      "located_claims": [
+        "Setting base transfers a strong reference to the owner; ndarray base chains collapse toward an owner when applicable.",
+        "array_dealloc decrements the base reference when the array is destroyed."
+      ],
+      "applicability": "At installed NumPy 1.26.4 revision, retained ndarray leaves keep clone tensor storage alive across local variable release and NativeSnapshot.close(), under the ordinary base reference contract.",
+      "contrary_or_different_scope": "Reference ownership does not freeze buffer contents or protect against explicit mutation/rebinding of the underlying owner.",
+      "remaining_gap": "The binary build was identified by installed numpy/version.py; no binary rebuild or lifetime test.",
+      "edge_kind": "manual actual-version symbol/include resolution; not an asserted verified hyperlink",
+      "parent": "https://raw.githubusercontent.com/pytorch/pytorch/0fabc3ba44823f257e70ce397d989c8de5e362c1/torch/csrc/utils/tensor_numpy.cpp",
+      "root_reopened_decision_specific_sections": true
+    },
+    {
+      "id": "NP02",
+      "url": "https://raw.githubusercontent.com/numpy/numpy/9815c16f449e12915ef35a8255329ba26dacd5c0/doc/source/reference/c-api/array.rst",
+      "revision": "9815c16f449e12915ef35a8255329ba26dacd5c0",
+      "sha256": "0f88651e7edbf3536d8eb7e73e8b3939206990820a29f6028445627040e365bf",
+      "bytes": 152544,
+      "accessed_at_utc": "2026-10-28T10:23:17.632902+00:00",
+      "reviewed_at_utc": "2026-10-28T10:29:18.792363+00:00",
+      "trust": "retrieved_unreviewed",
+      "coverage_status": "read",
+      "reading_scope": "Complete decision-specific functions or documentation sections; unrelated portions of this file were not reviewed.",
+      "read_depth": 4,
+      "locators": [
+        "PyArray_BASE lines 121-128",
+        "PyArray_SetBaseObject lines 388-404"
+      ],
+      "located_claims": [
+        "The base should be an object that owns externally supplied memory.",
+        "PyArray_SetBaseObject steals an owner reference to preserve the memory buffer lifetime; the base cannot subsequently be changed through that setter."
+      ],
+      "applicability": "Documents the reference ownership mechanism implemented by P05 and NP01.",
+      "contrary_or_different_scope": "This documents lifetime rather than immutability or application locking.",
+      "remaining_gap": "No runtime validation.",
+      "edge_kind": "manual actual-version symbol/include resolution; not an asserted verified hyperlink",
+      "parent": "https://raw.githubusercontent.com/pytorch/pytorch/0fabc3ba44823f257e70ce397d989c8de5e362c1/torch/csrc/utils/tensor_numpy.cpp",
+      "root_reopened_decision_specific_sections": false
+    },
+    {
+      "id": "NP03",
+      "url": "https://raw.githubusercontent.com/numpy/numpy/9815c16f449e12915ef35a8255329ba26dacd5c0/numpy/core/src/umath/loops_unary_fp_le.dispatch.c.src",
+      "revision": "9815c16f449e12915ef35a8255329ba26dacd5c0",
+      "sha256": "e27fd93e922037e9881f484df7f657a5c7798c28be0a598d38d388d697cdc1bf",
+      "bytes": 20811,
+      "accessed_at_utc": "2026-10-28T10:24:38.289976+00:00",
+      "reviewed_at_utc": "2026-10-28T10:29:18.792363+00:00",
+      "trust": "retrieved_unreviewed",
+      "coverage_status": "read",
+      "reading_scope": "Complete decision-specific functions or documentation sections; unrelated portions of this file were not reviewed.",
+      "read_depth": 3,
+      "locators": [
+        "npyv_notfinite_f32 and npyv_isfinite_f32 lines 197-213",
+        "isfinite dispatch template lines 513-563"
+      ],
+      "located_claims": [
+        "The FP32 SIMD not-finite check masks exponent bits with 0x7f800000 and compares the full mask, regardless of mantissa.",
+        "The isfinite template returns boolean values; scalar fallback invokes npy_isfinite."
+      ],
+      "applicability": "Combining this FP32 exponent mask with P02 BF16 -> FP32 shift yields the native BF16 condition (word & 0x7f80) == 0x7f80. It supports target native finite checks without full FP32 conversion.",
+      "contrary_or_different_scope": "Exact SIMD/scalar dispatch is host/build dependent. No training accuracy, gradient numerical error or NPU arithmetic claim follows.",
+      "remaining_gap": "The BF16 mask conclusion is a source-derived equivalence, not a new execution result.",
+      "edge_kind": "manual actual-version symbol/include resolution; not an asserted verified hyperlink",
+      "parent_resolution": "Manual actual-version symbol or target-code resolution; not a verified hyperlink",
+      "root_reopened_decision_specific_sections": true
+    },
+    {
+      "id": "NP04",
+      "url": "https://raw.githubusercontent.com/numpy/numpy/9815c16f449e12915ef35a8255329ba26dacd5c0/numpy/core/include/numpy/npy_math.h",
+      "revision": "9815c16f449e12915ef35a8255329ba26dacd5c0",
+      "sha256": "49b291a1cecede056e0e5ec73998e4e36e0ed38f48d339feee2f46c01c0d9a69",
+      "bytes": 18945,
+      "accessed_at_utc": "2026-10-28T10:24:38.746703+00:00",
+      "reviewed_at_utc": "2026-10-28T10:29:18.792363+00:00",
+      "trust": "retrieved_unreviewed",
+      "coverage_status": "read",
+      "reading_scope": "Complete decision-specific functions or documentation sections; unrelated portions of this file were not reviewed.",
+      "read_depth": 4,
+      "locators": [
+        "npy_isfinite lines 218-223"
+      ],
+      "located_claims": [
+        "The scalar npy_isfinite uses compiler builtin isfinite when configured and otherwise the platform isfinite."
+      ],
+      "applicability": "Completes the scalar finite-check fallback in NP03 for FP32 native blocks.",
+      "contrary_or_different_scope": "The particular compiled host branch was not probed.",
+      "remaining_gap": "No finite-check experiment.",
+      "edge_kind": "manual actual-version symbol/include resolution; not an asserted verified hyperlink",
+      "parent": "https://raw.githubusercontent.com/numpy/numpy/9815c16f449e12915ef35a8255329ba26dacd5c0/numpy/core/src/umath/loops_unary_fp_le.dispatch.c.src",
+      "root_reopened_decision_specific_sections": false
+    },
+    {
+      "id": "O01",
+      "url": "https://gitcode.com/cann/cann-recipes-embodied-ai/blob/45d167135c81d97573bfbe0e564bb4a1d9642514/3d_vision/Hunyuan3D/minimal_demo_npu.py",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/3d_vision/Hunyuan3D/minimal_demo_npu.py",
+      "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514",
+      "sha256": "90dbde144d22279514d2c5336fd21feccaf6a8ec7212775ed38532b9c5ffc59b",
+      "accessed_at_utc": "2026-10-28T10:22:46.993207+00:00",
+      "reviewed_at_utc": "2026-10-28T10:29:18.792363+00:00",
+      "trust": "accepted_upstream_documented",
+      "coverage_status": "read_different_scope",
+      "reading_scope": "full 213-line file",
+      "read_depth": 1,
+      "locators": [
+        "lines 195,200,205"
+      ],
+      "located_claims": [
+        "The inference recipe uses torch.npu.synchronize() around a timed texture-generation path."
+      ],
+      "applicability": "Illustrative accepted use of the synchronization API only; distinct model, inference workload, precision and runtime scope.",
+      "contrary_or_different_scope": "This accepted recipe text is not proof of actual-version native export correctness or runtime success.",
+      "remaining_gap": "No direct native gradient snapshot/export solution was found in these selected recipe files.",
+      "parent_resolution": "Manual actual-version symbol or target-code resolution; not a verified hyperlink",
+      "root_reopened_decision_specific_sections": false
+    },
+    {
+      "id": "O02",
+      "url": "https://gitcode.com/cann/cann-recipes-embodied-ai/blob/45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi05/infer_with_torch/infer_utils.py",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi05/infer_with_torch/infer_utils.py",
+      "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514",
+      "sha256": "f6fde0b881cea5bb992d313f171a1035d440cfbd8591bbbd9ed23ac92ec068cc",
+      "accessed_at_utc": "2026-10-28T10:22:46.993402+00:00",
+      "reviewed_at_utc": "2026-10-28T10:29:18.792363+00:00",
+      "trust": "accepted_upstream_documented",
+      "coverage_status": "read_different_scope",
+      "reading_scope": "full 115-line file",
+      "read_depth": 1,
+      "locators": [
+        "synchronize lines 101-115"
+      ],
+      "located_claims": [
+        "The pi05 inference helper routes NPU timing synchronization to torch.npu.synchronize()."
+      ],
+      "applicability": "Relevant API name in a pi05 recipe, but not native gradient export, pinned D2H semantics or target training verification.",
+      "contrary_or_different_scope": "This accepted recipe text is not proof of actual-version native export correctness or runtime success.",
+      "remaining_gap": "No direct native gradient snapshot/export solution was found in these selected recipe files.",
+      "parent_resolution": "Manual actual-version symbol or target-code resolution; not a verified hyperlink",
+      "root_reopened_decision_specific_sections": false
+    },
+    {
+      "id": "O03",
+      "url": "https://gitcode.com/cann/cann-recipes-embodied-ai/blob/45d167135c81d97573bfbe0e564bb4a1d9642514/ops/ascendc/meta_gauss_render/csrc/OpApiCommon.h",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/ops/ascendc/meta_gauss_render/csrc/OpApiCommon.h",
+      "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514",
+      "sha256": "1619854f00076bccc918a23cc857ac65389e47398d4a581b6121a8ab0725e618",
+      "accessed_at_utc": "2026-10-28T10:22:46.993630+00:00",
+      "reviewed_at_utc": "2026-10-28T10:29:18.792363+00:00",
+      "trust": "accepted_upstream_documented",
+      "coverage_status": "excluded_different_direction_after_function_read",
+      "reading_scope": "relevant function inspected; full output was truncated",
+      "read_depth": 1,
+      "locators": [
+        "CopyTensorHostToDevice lines 178-183"
+      ],
+      "located_claims": [
+        "The helper pins CPU memory and performs a nonblocking host-to-device transfer."
+      ],
+      "applicability": "Excluded as D2H-fence evidence because this is H2D custom-operator setup, not CPU consumption after a native gradient download.",
+      "contrary_or_different_scope": "This accepted recipe text is not proof of actual-version native export correctness or runtime success.",
+      "remaining_gap": "No direct native gradient snapshot/export solution was found in these selected recipe files.",
+      "parent_resolution": "Manual actual-version symbol or target-code resolution; not a verified hyperlink",
+      "root_reopened_decision_specific_sections": false
+    }
+  ],
+  "source_archive": {
+    "url": "https://codeload.github.com/Ascend/pytorch/tar.gz/12d689a08941d4a6e45eab16e3ad6fef96a9affd",
+    "revision": "12d689a08941d4a6e45eab16e3ad6fef96a9affd",
+    "read_at": "2026-10-28T10:21:45.048744+00:00",
+    "status": 200,
+    "sha256": "58d297c7ae3b6da4c4cb12e44459c0c5dc849262b55c2ea38147ee01c965655e",
+    "size": 4209288
+  },
+  "retrieval_and_exclusion_log": [
+    {
+      "url": "https://raw.githubusercontent.com/pytorch/pytorch/0fabc3ba44823f257e70ce397d989c8de5e362c1/c10/util/BFloat16.h",
+      "revision": "0fabc3ba44823f257e70ce397d989c8de5e362c1",
+      "sha256": "9550345b6b81b0d68d91ec9aa28225edece81d1a5843cc500366407cc9d9bdcd",
+      "accessed_at_utc": "2026-10-28T10:20:12.287876+00:00",
+      "status": "retrieved_excluded",
+      "reason": "Not used for this decision: forwarding include, D2D/other operators, or generic finite documentation. Retrieval is not reported as full review."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/pytorch/pytorch/0fabc3ba44823f257e70ce397d989c8de5e362c1/c10/util/BFloat16-inl.h",
+      "revision": "0fabc3ba44823f257e70ce397d989c8de5e362c1",
+      "sha256": "9550345b6b81b0d68d91ec9aa28225edece81d1a5843cc500366407cc9d9bdcd",
+      "accessed_at_utc": "2026-10-28T10:20:12.697963+00:00",
+      "status": "retrieved_excluded",
+      "reason": "Not used for this decision: forwarding include, D2D/other operators, or generic finite documentation. Retrieval is not reported as full review."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/pytorch/pytorch/0fabc3ba44823f257e70ce397d989c8de5e362c1/torch/_torch_docs.py",
+      "revision": "0fabc3ba44823f257e70ce397d989c8de5e362c1",
+      "sha256": "d7e78bf42ec9b005c7e1bc7b752244e94442c9ccc8a2abed546234723a0533dd",
+      "accessed_at_utc": "2026-10-28T10:20:14.541352+00:00",
+      "status": "retrieved_excluded",
+      "reason": "Not used for this decision: forwarding include, D2D/other operators, or generic finite documentation. Retrieval is not reported as full review."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/pytorch/pytorch/0fabc3ba44823f257e70ce397d989c8de5e362c1/aten/src/ATen/native/UnaryOps.cpp",
+      "revision": "0fabc3ba44823f257e70ce397d989c8de5e362c1",
+      "sha256": "1ab275bdcdce107f107576406fbbb7f19e9338916077083efda96d54c415eba9",
+      "accessed_at_utc": "2026-10-28T10:20:15.136753+00:00",
+      "status": "retrieved_excluded",
+      "reason": "Not used for this decision: forwarding include, D2D/other operators, or generic finite documentation. Retrieval is not reported as full review."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/pytorch/pytorch/0fabc3ba44823f257e70ce397d989c8de5e362c1/torch/headeronly/util/BFloat16-inl.h",
+      "revision": "0fabc3ba44823f257e70ce397d989c8de5e362c1",
+      "accessed_at_utc": "2026-10-28T10:20:55.577893+00:00",
+      "status": "navigation_failed_resolved",
+      "error": "HTTP Error 404: Not Found",
+      "resolution": "Correct source paths were located through the fixed-commit source archive or forwarding header; see reviewed sources."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/pytorch/pytorch/0fabc3ba44823f257e70ce397d989c8de5e362c1/aten/src/ATen/native/TensorShape.cpp",
+      "revision": "0fabc3ba44823f257e70ce397d989c8de5e362c1",
+      "sha256": "6891b1bf07b806dd176eaba637be5d0fbe7b855609ef8594bcace906821e78b8",
+      "accessed_at_utc": "2026-10-28T10:20:56.014837+00:00",
+      "status": "retrieved_excluded",
+      "reason": "Not used for this decision: forwarding include, D2D/other operators, or generic finite documentation. Retrieval is not reported as full review."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Ascend/pytorch/12d689a08941d4a6e45eab16e3ad6fef96a9affd/torch_npu/csrc/aten/ops/CopyKernel.cpp",
+      "revision": "12d689a08941d4a6e45eab16e3ad6fef96a9affd",
+      "accessed_at_utc": "2026-10-28T10:20:55.087888+00:00",
+      "status": "navigation_failed_resolved",
+      "error": "HTTP Error 404: Not Found",
+      "resolution": "Correct source paths were located through the fixed-commit source archive or forwarding header; see reviewed sources."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Ascend/pytorch/12d689a08941d4a6e45eab16e3ad6fef96a9affd/torch_npu/csrc/aten/ops/op_api/CopyKernel.cpp",
+      "revision": "12d689a08941d4a6e45eab16e3ad6fef96a9affd",
+      "accessed_at_utc": "2026-10-28T10:20:55.088471+00:00",
+      "status": "navigation_failed_resolved",
+      "error": "HTTP Error 404: Not Found",
+      "resolution": "Correct source paths were located through the fixed-commit source archive or forwarding header; see reviewed sources."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Ascend/pytorch/12d689a08941d4a6e45eab16e3ad6fef96a9affd/torch_npu/csrc/core/npu/NPUFunctions.cpp",
+      "revision": "12d689a08941d4a6e45eab16e3ad6fef96a9affd",
+      "sha256": "d6844e972fd53f0e22edd1ddeea5c9f3c90838d8422e9519f6ba251b17d6e766",
+      "accessed_at_utc": "2026-10-28T10:20:55.533825+00:00",
+      "status": "retrieved_excluded",
+      "reason": "Not used for this decision: forwarding include, D2D/other operators, or generic finite documentation. Retrieval is not reported as full review."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Ascend/pytorch/12d689a08941d4a6e45eab16e3ad6fef96a9affd/torch_npu/csrc/core/npu/NPUCachingAllocator.cpp",
+      "revision": "12d689a08941d4a6e45eab16e3ad6fef96a9affd",
+      "sha256": "9f73cc79755851b68b683a255337edd3620dbd7acb2a1a6efd04e2070d371534",
+      "accessed_at_utc": "2026-10-28T10:20:55.691887+00:00",
+      "status": "retrieved_excluded",
+      "reason": "Not used for this decision: forwarding include, D2D/other operators, or generic finite documentation. Retrieval is not reported as full review."
+    },
+    {
+      "url": "https://github.com/Ascend/pytorch/blob/12d689a08941d4a6e45eab16e3ad6fef96a9affd/torch_npu/csrc/aten/common/CopyKernelNpu.cpp",
+      "revision": "12d689a08941d4a6e45eab16e3ad6fef96a9affd",
+      "sha256": "9f77e0e4c561bcdbad3b680fcd9314237db276ceeb0238c33faf70d3df52ca8a",
+      "accessed_at_utc": "2026-10-28T10:22:47.176379+00:00",
+      "status": "retrieved_excluded",
+      "reason": "Not used for this decision: forwarding include, D2D/other operators, or generic finite documentation. Retrieval is not reported as full review."
+    },
+    {
+      "url": "https://github.com/Ascend/pytorch/blob/12d689a08941d4a6e45eab16e3ad6fef96a9affd/torch_npu/csrc/core/npu/interface/AclInterface.h",
+      "revision": "12d689a08941d4a6e45eab16e3ad6fef96a9affd",
+      "sha256": "c6a8a38efda66ac0ba5d78417214c8f9dc862df07701f6366137edca0252c5c4",
+      "accessed_at_utc": "2026-10-28T10:22:47.179835+00:00",
+      "status": "retrieved_excluded",
+      "reason": "Not used for this decision: forwarding include, D2D/other operators, or generic finite documentation. Retrieval is not reported as full review."
+    },
+    {
+      "url": "https://github.com/Ascend/pytorch/blob/12d689a08941d4a6e45eab16e3ad6fef96a9affd/.gitmodules",
+      "revision": "12d689a08941d4a6e45eab16e3ad6fef96a9affd",
+      "sha256": "a9c344f73c78186b4bfca0445e811a9278a1a2b7bc52789dcb9be282ce9383c1",
+      "accessed_at_utc": "2026-10-28T10:22:47.180180+00:00",
+      "status": "retrieved_excluded",
+      "reason": "Not used for this decision: forwarding include, D2D/other operators, or generic finite documentation. Retrieval is not reported as full review."
+    },
+    {
+      "url": "https://api.github.com/repos/Ascend/pytorch/git/trees/12d689a08941d4a6e45eab16e3ad6fef96a9affd?recursive=1",
+      "revision": "12d689a08941d4a6e45eab16e3ad6fef96a9affd",
+      "accessed_at_utc": "2026-10-28T10:20:11.689230+00:00",
+      "status": "navigation_failed_resolved",
+      "error": "HTTP Error 403: rate limit exceeded",
+      "resolution": "Exact-commit codeload archive succeeded; no moving branch or version substitution was used."
+    }
+  ],
+  "remaining_gaps": [
+    "No NPU execution, D2H payload comparison, memory measurement, native-mode training run or 32-low-priority-card/500-update evidence is created by this review.",
+    "Vendor ACL internals and exact installed binary dispatch were not independently validated; source correspondence uses installed revision metadata and matching accessible headers/Python sources.",
+    "Caller ordering of backward, copy submission and any non-default producer streams is outside this bounded source review.",
+    "Ownership is cooperative: explicit mutation via .base/torch aliases or use of reusable staging with the private factory violates the contract.",
+    "Large upstream files were reviewed at their complete relevant functions/sections, not every unrelated function. Official recipe O03 was excluded after its relevant H2D function; full output had been truncated.",
+    "Generalization remains pending validation; retrieved_unreviewed primary source is not accepted N2S evidence, an approved migration rule, or runtime success."
+  ],
+  "validation": {
+    "npu_execution": false,
+    "measured_speedup": false,
+    "target500_complete": false,
+    "generalization": "pending_validation"
+  }
+}

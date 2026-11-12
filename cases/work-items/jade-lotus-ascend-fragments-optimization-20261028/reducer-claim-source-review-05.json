@@ -1,0 +1,63 @@
+{
+  "format": "reducer-idle-publication-review-v1",
+  "read_at": "2026-10-28T10:40:26.705397+00:00",
+  "scope": "Target source-level protocol analysis before opt-in cache refinement; no runtime or accelerator change",
+  "target_sources_sha256": {
+    "jade_lotus/sharded_transport.py": "69971a27f0572feafb9af63fc106f760d44fb310699fda39863b70365c6e6224",
+    "jade_lotus/sharded_coordinator.py": "91a74db0968140d8f6fd4677f1a405f3547f9d8ffcf5b6a97da794515918c9e8",
+    "jade_lotus/runtime.py": "abf5c516211a715f212984e534a21ed6f29704fe40b3cebdc1543d7029d1a4ab",
+    "tests/test_sharded_transport.py": "ada29e9aa40d27e621cc3b8e4733f5a6b7ceadbb475027fe8ebde400b8f143e1"
+  },
+  "claims": [
+    {
+      "locator": "jade_lotus/sharded_transport.py:394-431",
+      "finding": "With reducer_plan_cache enabled, every idle claim poll rescans per-attempt result/claim paths even after a previous full scan found all jobs claimed/completed. Plan validation/JSON decoding are cached, job scans are not."
+    },
+    {
+      "locator": "jade_lotus/sharded_coordinator.py:238-285",
+      "finding": "Expired shard claims are replaced by new attempt_id followed by atomic publication of plan.json and reduction_active.json; old claims are not reopened."
+    },
+    {
+      "locator": "jade_lotus/sharded_transport.py:339-365",
+      "finding": "_PublishedJsonCache reuses object identity only if dev/inode/mtime_ns/ctime_ns/size signature is unchanged. Atomic same-size/same-mtime replacement still changes inode or ctime and invalidates cache."
+    },
+    {
+      "locator": "jade_lotus/runtime.py:21-34",
+      "finding": "atomic_json fsyncs temporary file, uses os.replace, then fsyncs directory."
+    },
+    {
+      "locator": "jade_lotus/sharded_transport.py:256-270,435-454",
+      "finding": "Actual claimed work and output commits recheck current_plan with fresh authoritative active and published plan; cached polling never replaces these fences."
+    }
+  ],
+  "negative_key_warning": "identity_sha256 and reduction_id remain the same across shard retry; they are insufficient exhaustion cache keys. Memoize only exact cached publication object identity.",
+  "proposal": "With existing reducer_plan_cache true, remember a plan only after one complete scan finds no work. Skip per-attempt scans while that exact cached publication object is current; always retain active publication checks. New publication invalidates; exceptions and partial scans do not mark exhaustion. Legacy cache-disabled behavior unchanged.",
+  "searches": [
+    {
+      "query": "metadata",
+      "total_results": 28,
+      "finding": "Broad metadata hits, mostly datasets or model metadata; no selected target reducer cache recipe claimed read."
+    },
+    {
+      "query": "reducer_plan_cache",
+      "total_results": 0,
+      "finding": "No matching accepted/community text in this exact local search; not a global absence claim."
+    },
+    {
+      "query": "directory.mkdir",
+      "total_results": 1,
+      "finding": "pi05 OM conversion setup result is a different task; not used as fault-isolated reducer evidence."
+    }
+  ],
+  "validation_pending": [
+    "unchanged idle polls avoid result/claim syscalls",
+    "expiration republishing wakes an exhausted idle service and preserves healthy shard result",
+    "same-size and restored-mtime atomic replacement invalidates",
+    "incomplete claim failures never poison polling",
+    "fresh authority mismatch still prevents a claim",
+    "existing sharded/native/maintenance regression suites"
+  ],
+  "performance_claim": null,
+  "actual_npu_validation": false,
+  "active_formal_runtime_changed": false
+}

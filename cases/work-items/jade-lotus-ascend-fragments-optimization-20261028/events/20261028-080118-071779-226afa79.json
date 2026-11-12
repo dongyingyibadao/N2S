@@ -1,0 +1,24 @@
+{
+  "case_id": "jade-lotus-ascend-fragments-optimization-20261028",
+  "environment": "Ascend 910B2C, 32 LOW/1 single-card NPU jobs; OpenPI torch_npu engine with CPU FP32 authority and global batch 256; original v3 config and runtime frozen.",
+  "error": {
+    "expected": "SHA256 3bfa22d563c46b988b2983a85e13abd1a92cf8b2a4bcef20e7f1307545ca109e unchanged during execution",
+    "message": "Frozen source changed: upstream/src/openpi/training/config.py",
+    "observed": "At 2026-10-28T07:57:54Z active version61, checkpoint58, observed SHA256 39b8b3a3bfe2ce9e0dd0803452a835d395bfa322d170d3c9c0dee7de7325cc16; file modified at07:52:33Z",
+    "stack_excerpt": "Frozen audit source-manifest check rejected the shared OpenPI config source; old run has not completed 500 updates.",
+    "type": "FrozenSourceDrift"
+  },
+  "evidence_refs": [],
+  "evidence_sha256": {},
+  "generalization": "pending_validation",
+  "id": "20261028-080118-071779-226afa79",
+  "issue_scope": "target",
+  "kind": "failure",
+  "queries": [],
+  "recorded_at": "2026-10-28T08:01:18.071763+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "Frozen v3 audit detected shared upstream training/config.py drift while 32 workers were running; preserve last committed checkpoint and stop only v3 owned jobs, then isolate model source for new experiments. No source change was made to the frozen runtime or upstream by this agent."
+}

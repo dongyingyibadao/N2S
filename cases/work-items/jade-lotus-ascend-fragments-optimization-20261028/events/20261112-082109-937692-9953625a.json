@@ -1,0 +1,38 @@
+{
+  "case_id": "jade-lotus-ascend-fragments-optimization-20261028",
+  "evidence_refs": [
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/OPTIMIZATION_REVIEW_20261112.md"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/OPTIMIZATION_REVIEW_20261112.md": "3599cf7526d40a2e4e0259b5fb698793bbd87c3960cd8174290e402b232f3633"
+  },
+  "generalization": "pending_validation",
+  "id": "20261112-082109-937692-9953625a",
+  "issue_scope": "recordkeeping",
+  "kind": "lookup",
+  "queries": [
+    "n2s-knowledge search pinned --accepted-only --include-community",
+    "n2s-knowledge search native --accepted-only --include-community",
+    "n2s-knowledge search prefetch --accepted-only --include-community"
+  ],
+  "recorded_at": "2026-11-12T08:21:09.937681+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-11-12T08:21:08+00:00",
+      "applicability": "related",
+      "claim": "The pinned official recipe already documents inverse-CDF Beta, removal of the outer suffix checkpoint, QKV, fused attention, grouped MLP and DDP tuning.",
+      "comparison": "External LeRobot recipe claims; distinguish current OpenPI adaptation, component measurements and scope. This review does not establish any previously missing runtime acceptance or community-wide novelty.",
+      "content_sha256": "4659712bc9f9040a555526ae91474e17dcc609298be149d1bf312d5140392172",
+      "read_depth": "body",
+      "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi05/train/doc/README.md",
+      "url": null
+    }
+  ],
+  "stage": "optimization",
+  "summary": "Post-experiment source and implementation review identifies exact gradient-export/wire/prefetch combinations worth wider comparison. Preserve1.333x single-NPU D2H component result and48.1574percent exact wire byte reduction; do not promote component evidence to32-card/500-update acceptance or claim community-first novelty."
+}

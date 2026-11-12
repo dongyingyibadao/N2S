@@ -1,0 +1,22 @@
+{
+  "case_id": "jade-lotus-ascend-fragments-optimization-20261028",
+  "draft": false,
+  "evidence_refs": [
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/measurement-native-export-cpu-integration-04.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/measurement-native-export-cpu-integration-04.json": "8e9263c1ba3a30cfe0b7daab1e041cfafcd883d2274ba8526f9ea0e91c696c4c"
+  },
+  "generalization": "pending_validation",
+  "id": "20261028-103722-939928-7d534a19",
+  "issue_scope": "target",
+  "kind": "change",
+  "queries": [],
+  "recorded_at": "2026-10-28T10:37:22.939913+00:00",
+  "resolves": [],
+  "rollback": "Leave default fp32_snapshot_v1; use a separate immutable future run for any new NPU experiment; do not edit current formal runtime",
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "Implement explicitly gated owned NativeSnapshot/download_native/save_native_blob in separate working checkout; preserve exact v4 wire/FP32 CPU Adam/independent worker recovery and durable payload-before-result fencing. No active-run switch and no NPU performance claim."
+}

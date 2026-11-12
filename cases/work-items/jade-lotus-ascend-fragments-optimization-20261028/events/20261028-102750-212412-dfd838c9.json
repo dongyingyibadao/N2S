@@ -1,0 +1,23 @@
+{
+  "case_id": "jade-lotus-ascend-fragments-optimization-20261028",
+  "draft": false,
+  "evidence_refs": [
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/tooling-prefixed-log-audit-and-progress-04.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/tooling-prefixed-log-audit-and-progress-04.json": "7b9ca8d687c4c83b2d290e6d80f2e4b8d7c19c5baad2f8841bb80c66650ca227"
+  },
+  "generalization": "pending_validation",
+  "id": "20261028-102750-212412-dfd838c9",
+  "issue_scope": "target",
+  "kind": "resolution",
+  "queries": [],
+  "recorded_at": "2026-10-28T10:27:50.212400+00:00",
+  "resolves": [
+    "20261028-102733-733700-f2bbcf82"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Restricted dot-only supplementary auditor verifies896/896 accepted tasks throughstep28 with actual32LOW and unchanged161sourcefiles. Original runtime/auditor/logs kept; final500 byte acceptance still pending.52auditor+5controller tests passed."
+}

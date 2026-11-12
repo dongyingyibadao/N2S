@@ -1,0 +1,47 @@
+{
+  "case_id": "jade-lotus-ascend-fragments-optimization-20261028",
+  "draft": false,
+  "evidence_refs": [
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/tooling-prefixed-log-audit-and-progress-04.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/tooling-prefixed-log-audit-and-progress-04.json": "7b9ca8d687c4c83b2d290e6d80f2e4b8d7c19c5baad2f8841bb80c66650ca227"
+  },
+  "generalization": "pending_validation",
+  "id": "20261028-102750-019078-f4c11853",
+  "issue_scope": "target",
+  "kind": "lookup",
+  "queries": [
+    "qz worker stdout JSON progress dot prefix"
+  ],
+  "recorded_at": "2026-10-28T10:27:50.019065+00:00",
+  "resolves": [
+    "20261028-102733-733700-f2bbcf82"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-10-28T10:27:33.579790+00:00",
+      "applicability": "no_match",
+      "claim": "Accepted and community N2S index has no result for this exact stdout-prefix query",
+      "comparison": "No N2S guidance match; does not imply no upstream solution. Used original bytes, local stdlib decoder implementation and dedicated parser tests.",
+      "status": "no_match",
+      "trust": "unavailable",
+      "uri": null,
+      "url": null
+    },
+    {
+      "accessed_at": "2026-10-28T10:27:33.579790+00:00",
+      "applicability": "applicable",
+      "claim": "Actual complete JSON suffix and plan metrics preserve the accepted task; local json.decoder rejects the initial dot at position0",
+      "comparison": "Restricted dot-only parser fixes framing while preserving all task/finite/recompute guards; prefix/source hashes and offsets remain reviewable",
+      "read_depth": "implementation",
+      "status": "read",
+      "trust": "n2s_case_evidence",
+      "uri": "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/tooling-prefixed-log-audit-and-progress-04.json",
+      "url": null
+    }
+  ],
+  "stage": "troubleshooting",
+  "summary": "Error-specific N2S query returns no match; inspect exact original bytes, local stdlib raw_decode/scan_once and retained plan identity, without editing source logs."
+}

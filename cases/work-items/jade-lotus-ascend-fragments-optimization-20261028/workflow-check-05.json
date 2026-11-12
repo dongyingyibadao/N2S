@@ -1,0 +1,114 @@
+{
+  "blocking_unresolved_events": [
+    "20261028-080118-071779-226afa79",
+    "20261028-082346-771057-afd3ee47",
+    "20261028-085834-789729-aa335b1b"
+  ],
+  "case_id": "jade-lotus-ascend-fragments-optimization-20261028",
+  "checks": {
+    "model_migration": "not_applicable",
+    "optimization_goal": "pending",
+    "optimization_investigation": "pending",
+    "rule_approval": "not_evaluated",
+    "scoped_task_acceptance": "pending"
+  },
+  "completion_ready": false,
+  "draft_events": 0,
+  "events": 31,
+  "gap_details": [
+    {
+      "category": "target",
+      "code": "unresolved_failures_or_numerical_issues",
+      "event_id": null
+    },
+    {
+      "category": "recordkeeping",
+      "code": "error_source_comparison_missing:20261028-080118-071779-226afa79",
+      "event_id": "20261028-080118-071779-226afa79"
+    },
+    {
+      "category": "target",
+      "code": "scoped_functional_execution_not_verified",
+      "event_id": null
+    },
+    {
+      "category": "target",
+      "code": "agreed_accuracy_comparison_not_verified",
+      "event_id": null
+    },
+    {
+      "category": "target",
+      "code": "same_device_optimization_gain_not_verified",
+      "event_id": null
+    }
+  ],
+  "gaps": [
+    "unresolved_failures_or_numerical_issues",
+    "error_source_comparison_missing:20261028-080118-071779-226afa79",
+    "scoped_functional_execution_not_verified",
+    "agreed_accuracy_comparison_not_verified",
+    "same_device_optimization_gain_not_verified"
+  ],
+  "generalization": "pending_validation",
+  "issue_groups": {
+    "recordkeeping": [
+      {
+        "id": "20261028-092206-486320-4f05cbe4",
+        "resolved": true,
+        "source_comparison_recorded": true
+      }
+    ],
+    "target": [
+      {
+        "id": "20261028-080118-071779-226afa79",
+        "resolved": false,
+        "source_comparison_recorded": false
+      },
+      {
+        "id": "20261028-082346-771057-afd3ee47",
+        "resolved": false,
+        "source_comparison_recorded": true
+      },
+      {
+        "id": "20261028-085834-789729-aa335b1b",
+        "resolved": false,
+        "source_comparison_recorded": true
+      },
+      {
+        "id": "20261028-102733-733700-f2bbcf82",
+        "resolved": true,
+        "source_comparison_recorded": true
+      }
+    ],
+    "tooling": []
+  },
+  "measurements": {
+    "same_device_gain_observed": false
+  },
+  "note": "Checks recorded evidence and workflow coverage, not model correctness or rule approval. Open/blocked cases remain publishable.",
+  "scope": {
+    "backend": "npu",
+    "optimization_goal": "required_gain",
+    "task_type": "optimization_investigation"
+  },
+  "stages": {
+    "optimization": [
+      "20261028-082346-329347-08ce65b0",
+      "20261028-092205-884432-1cf5251d",
+      "20261028-103722-729085-1ed74f79",
+      "20261028-104027-068640-4c826a96"
+    ],
+    "preparation": [
+      "20261028-075254-368206-dee9114d"
+    ],
+    "troubleshooting": [
+      "20261028-102750-019078-f4c11853"
+    ]
+  },
+  "status": "incomplete",
+  "unresolved_events": [
+    "20261028-080118-071779-226afa79",
+    "20261028-082346-771057-afd3ee47",
+    "20261028-085834-789729-aa335b1b"
+  ]
+}

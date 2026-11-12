@@ -1,0 +1,34 @@
+{
+  "scope": "NPU parameter-upload benchmark; not training acceptance",
+  "observations": {
+    "parameter-transfer-strict-layout-v3": {
+      "status": "failed",
+      "error_type": "RuntimeError",
+      "error": "NPU contiguous operator only supported contiguous memory format.\n[ERROR] 2026-10-28-09:15:50 (PID:42, Device:0, RankID:0) ERR01007 OPS feature not supported",
+      "trace_call_sites": [
+        "benchmark_engine -> prepare_atomic_device -> preprocess",
+        "preprocessing_pytorch.py:75 bilinear interpolate",
+        "torch/nn/functional.py:4767 _upsample_linear_vec",
+        "torch/_decomp/decompositions.py:3946 result.contiguous(memory_format=memory_format)"
+      ],
+      "wrapper_entered": false,
+      "report_sha256": "2e23d0f61a79ce59e60493e1cbc82a7249efa3d17462086309f632e8a27a9e1b"
+    },
+    "parameter-transfer-strict-contiguous-v3": {
+      "status": "failed",
+      "error_type": "RuntimeError",
+      "error": "NPU contiguous operator only supported contiguous memory format.\n[ERROR] 2026-10-28-09:18:04 (PID:8, Device:0, RankID:0) ERR01007 OPS feature not supported",
+      "trace_call_sites": [
+        "benchmark_engine -> prepare_atomic_device -> preprocess",
+        "preprocessing_pytorch.py:75 bilinear interpolate",
+        "torch/nn/functional.py:4767 _upsample_linear_vec",
+        "torch/_decomp/decompositions.py:3946 result.contiguous(memory_format=memory_format)"
+      ],
+      "wrapper_entered": true,
+      "report_sha256": "ae54637703d3b0eb97d4584a7ebd4442d63aabc1bd14b95082b97c49a1a56dcc"
+    }
+  },
+  "source_digest": "843724c24dd8eaaf467a02dd71985db82ed86600fd9ad3ee70d51bb8dc7fd218",
+  "cause_status": "Trace confirms unsupported requested format in strict deterministic bilinear decomposition. Boundary-input contiguous wrapper did not resolve the internal layout. Same-path/backward equality remains untested in these two processes.",
+  "default_training_path_changed": false
+}

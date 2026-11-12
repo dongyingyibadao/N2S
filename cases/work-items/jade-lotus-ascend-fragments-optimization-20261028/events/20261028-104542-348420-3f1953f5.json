@@ -1,0 +1,22 @@
+{
+  "case_id": "jade-lotus-ascend-fragments-optimization-20261028",
+  "draft": false,
+  "evidence_refs": [
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/measurement-reducer-idle-cache-cpu-05.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/measurement-reducer-idle-cache-cpu-05.json": "72ae946da5e22f9e252236c00916f729c04222dc0e21e739c9564a3f9b970167"
+  },
+  "generalization": "pending_validation",
+  "id": "20261028-104542-348420-3f1953f5",
+  "issue_scope": "target",
+  "kind": "change",
+  "queries": [],
+  "recorded_at": "2026-10-28T10:45:42.348409+00:00",
+  "resolves": [],
+  "rollback": "Disable reducer_plan_cache in a newly prepared run or omit this source change from future freeze; do not edit current formal runtime.",
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "Refine existing opt-in reducer publication cache to suppress repeated full exhausted job scans, using exact cached object identity; independent worker/FP32 authority/fresh fences preserved."
+}

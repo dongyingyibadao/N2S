@@ -1,0 +1,14 @@
+{
+  "scope": "Strict determinism parameter-upload component probe, optimizer_updates0",
+  "failure": {
+    "caveat": "Component-only, one-NPU parameter-upload A/B, not global-batch-256 training throughput, a 32-card/preemption test, or 500 optimizer updates. No optimizer is run. Pack timing includes CPU dtype conversion; the engine does not separately time cast. Blocking legacy copy timing includes its implicit synchronization and conversion. First-use allocation/binding is reported separately from warmed alternating trials. Both warmed paths retain the batched buffers and use the same packed parameter storage. Readback, hashing, real forward/backward validation and input loading are outside upload timings. Host load, page caches, accelerator clocks and order can still affect measurements.",
+    "component_only": true,
+    "error": "NPU contiguous operator only supported contiguous memory format.\n[ERROR] 2026-10-28-08:52:56 (PID:8, Device:0, RankID:0) ERR01007 OPS feature not supported",
+    "error_type": "RuntimeError",
+    "status": "failed"
+  },
+  "native_dtype_policy_sha256": "65443f826212c807c4308301591fc2265719872896df250b5003a647102ab6b1",
+  "deterministic_algorithms": true,
+  "last_recorded_stage": "upload_trials",
+  "limitation": "Original frozen v2 harness lacked Python traceback; its outputs remain unchanged. The next frozen harness records traceback and finer stages. Static investigation is not yet a runtime causal proof."
+}

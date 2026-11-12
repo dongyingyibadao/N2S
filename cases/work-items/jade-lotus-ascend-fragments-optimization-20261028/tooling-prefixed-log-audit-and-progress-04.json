@@ -1,0 +1,60 @@
+{
+  "captured_at": "2026-10-28T10:27:33.579790+00:00",
+  "scope": "Auditor log parsing and metadata progress, not a model numerical failure",
+  "original_parser": {
+    "sha256": "8b9986ac9e79d154a425aca1bab4ecc8649551e8e8767df94eb78d8140522fd8",
+    "missing_task_evidence": 1,
+    "classification": "complete task JSON follows one ASCII dot from shared framework stdout"
+  },
+  "original_record": {
+    "line": 12,
+    "byte_offset": 4933,
+    "json_byte_offset": 4934,
+    "prefix_hex": "2e",
+    "raw_line_bytes": 2251,
+    "json_bytes": 2250,
+    "raw_line_sha256": "dea82e1f06ab6770199e756b11d51028bdddf742a7cfb0161aea35020260ea9f",
+    "json_sha256": "175c5b9ed730c751cb1e7308b8e7b682e6b735ce05fd85250bfbaa0607a06bec"
+  },
+  "causal_source": {
+    "module": "json.decoder",
+    "python_version": "3.12.14",
+    "source_sha256": "382cd02af6f7efede5a6d4abbcda1015e5c7a75794b0016022878f9cf32a24f6",
+    "implementation_read": "raw_decode delegates to scan_once and raises JSONDecodeError at initial dot",
+    "actual_json_loads_dot_rejection": {
+      "message": "Expecting value",
+      "position": 0
+    }
+  },
+  "lookup": {
+    "query": "qz worker stdout JSON progress dot prefix",
+    "accepted_only": true,
+    "include_community": true,
+    "total_results": 0,
+    "limitation": "No N2S guidance match; does not imply no upstream solution. Used original bytes, local stdlib decoder implementation and dedicated parser tests."
+  },
+  "fix": {
+    "auditor_sha256": "00fddd312f50a5dc72decbee4bf1d6b0152c2fd8fd2a8af6c41b0177b6db4672",
+    "only_allowed_prefix": "one or more ASCII dots immediately followed by a complete JSON object",
+    "full_suffix_consumed": true,
+    "arbitrary_diagnostic_prefix_rejected": true,
+    "identity_finite_recompute_gates_unchanged": true,
+    "tests_passed": 52,
+    "controller_tests_passed": 5,
+    "original_runtime_and_logs_unchanged": true
+  },
+  "supplementary_capsule_manifest_sha256": "563f5cfcaac53279de6a10942c1b8612d7d07ff23f19904963b743cf7c0eaca2",
+  "metadata_progress": {
+    "step": 28,
+    "accepted_tasks": 896,
+    "verified_task_results": 896,
+    "missing_task_evidence": 0,
+    "all_accepted_no_recompute": true,
+    "actual_low_npus": 32,
+    "source_files_checked": 161,
+    "checkpoint_step": 25,
+    "checkpoint_array_bytes_verified": false,
+    "acceptance_complete": false
+  },
+  "pending": "500 committed updates, COMPLETE/final500 checkpoint and real final parameter/Adam array verification; automatic supplementary controller waits for owned fleet cleanup and original audit outcome"
+}

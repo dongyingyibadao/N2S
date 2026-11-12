@@ -1,0 +1,28 @@
+{
+  "case_id": "jade-lotus-ascend-fragments-optimization-20261028",
+  "draft": false,
+  "environment": "QZ allocated single LOW/1 Ascend910B2C; Torch2.9/torch_npu and CANN environment from isolated optimized OpenPI, full805-leaf model, microbatch2/logical8, no recomputation, same prepared samples and seed; CPU FP32 authority.",
+  "error": {
+    "expected": "Complete finite gradients match at rtol=0,atol=0 after parameter upload.",
+    "message": "Real gradients exceed the declared tolerance: paligemma_with_expert.paligemma.model.vision_tower.vision_model.embeddings.patch_embedding.weight",
+    "observed": "First reported mismatch in vision patch_embedding.weight. Actual numerical magnitude and same-path repeat baseline were not retained by this harness.",
+    "type": "ValueError"
+  },
+  "evidence_refs": [
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/failure-parameter-upload-ab-01.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/failure-parameter-upload-ab-01.json": "2e422c4c8cfd99dd4c46925ec083059ceecee524dc8ddfc2710c5851230466c5"
+  },
+  "generalization": "pending_validation",
+  "id": "20261028-082346-771057-afd3ee47",
+  "issue_scope": "target",
+  "kind": "numerical_issue",
+  "queries": [],
+  "recorded_at": "2026-10-28T08:23:46.771046+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "Strict zero-tolerance real NPU gradient A/B failed on patch embedding weight after both complete native parameter readbacks passed individually. Preserve the failed probe; investigate same-path NPU backward variability before interpreting transfer correctness. Single-card warm upload times were about2.6s legacy and2.4s batched, so do not attribute the prior40s residual to isolated H2D."
+}

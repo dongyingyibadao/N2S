@@ -1,0 +1,89 @@
+{
+  "all_manifest_bytes_equal_to_serial": true,
+  "all_payload_bytes_equal_to_serial": true,
+  "cache_eviction_attempted": false,
+  "caveat": "Component-only measurement of one fixed ordered input set and one selected FP32 chunk; not 32-card end-to-end training throughput or optimizer-step speedup. Each timed reduce_chunk is synchronous and includes source manifest checks, selected-chunk reads/hash/finite checks, ordered FP32 weighted accumulation and output writes/fsync. Process startup, input snapshot checks and output byte comparison are outside timing. A fresh CPU process owns each trial; process CPU time includes its prefetch threads. RSS is process memory, not NPU memory. No cache eviction is attempted; filesystem/page caches, host load and trial order can affect results. Logical bytes do not measure physical storage or network traffic. Source manifests and file identities are checked before/after each trial, and selected source chunks are hashed during reduction; unselected payload bytes are not audited. Frozen source code is not executed or revalidated as a new training run.",
+  "component_only": true,
+  "input_snapshot_sha256": "9b7533f07dc4673a2ecde7a21d9d13dfe32dca619c924bef8fcefe088421c6c6",
+  "read_workers": [
+    1,
+    2,
+    4
+  ],
+  "repetitions": 2,
+  "sample_weights": [
+    8.0,
+    8.0,
+    8.0,
+    8.0,
+    8.0,
+    8.0,
+    8.0,
+    8.0,
+    8.0,
+    8.0,
+    8.0,
+    8.0,
+    8.0,
+    8.0,
+    8.0,
+    8.0,
+    8.0,
+    8.0,
+    8.0,
+    8.0,
+    8.0,
+    8.0,
+    8.0,
+    8.0,
+    8.0,
+    8.0,
+    8.0,
+    8.0,
+    8.0,
+    8.0,
+    8.0,
+    8.0
+  ],
+  "source_chunk": {
+    "index": 0,
+    "nbytes": 268435456,
+    "offset": 0
+  },
+  "source_gradient_count": 32,
+  "source_unchanged": true,
+  "status": "passed",
+  "summary_by_read_workers": {
+    "1": {
+      "max_rss_bytes": 595894272,
+      "median_process_cpu_seconds": 13.4944677045,
+      "median_wall_seconds": 13.879973195493221,
+      "trials": 2
+    },
+    "2": {
+      "max_rss_bytes": 867500032,
+      "median_process_cpu_seconds": 13.625261495499998,
+      "median_wall_seconds": 7.854867786169052,
+      "trials": 2
+    },
+    "4": {
+      "max_rss_bytes": 1408679936,
+      "median_process_cpu_seconds": 13.721106596999999,
+      "median_wall_seconds": 4.944756742566824,
+      "trials": 2
+    }
+  },
+  "total_sample_weight": 256.0,
+  "trial_order": [
+    1,
+    2,
+    4,
+    4,
+    2,
+    1
+  ],
+  "unselected_source_payload_bytes_audited": false,
+  "reducer_implementation_sha256": "c875ab17ca7abe7348c3af873a5894f9463ea5cd4fb4e6ea64c297bbc4867f7c",
+  "same_host": true,
+  "formal_500_update_acceptance": "incomplete; this CPU component benchmark cannot satisfy NPU training acceptance"
+}

@@ -1,0 +1,28 @@
+{
+  "case_id": "jade-lotus-ascend-fragments-optimization-20261028",
+  "draft": false,
+  "environment": "QZ1 LOW/1 Ascend910B2C; torch2.9.0, torch_npu git12d689a08941d4a6e45eab16e3ad6fef96a9affd, CANN8.5.0; strict Torch deterministic flag true before model initialization. Full805 parameters, no recomputation.",
+  "error": {
+    "expected": "A prepared real-data input and strict0-tolerance gradient comparison with same-path controls.",
+    "message": "NPU contiguous operator only supported contiguous memory format.\n[ERROR] 2026-10-28-08:52:56 (PID:8, Device:0, RankID:0) ERR01007 OPS feature not supported",
+    "observed": "NPU contiguous operator rejected a requested memory format; no backward validation summary. The failure record did not include a Python stack.",
+    "type": "RuntimeError"
+  },
+  "evidence_refs": [
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/failure-strictdet-layout-01.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/failure-strictdet-layout-01.json": "11c2b7accd46bd1acaf28410db1084eec3fc8da0b149bd3a59f75c623ba773d2"
+  },
+  "generalization": "pending_validation",
+  "id": "20261028-085834-789729-aa335b1b",
+  "issue_scope": "target",
+  "kind": "failure",
+  "queries": [],
+  "recorded_at": "2026-10-28T08:58:34.789717+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "Strict-determinism NPU transfer A/B hit unsupported contiguous memory format after upload trials and native dtype calibration, before a final gradient result. Preserve frozen failure, add stack/phase evidence, and inspect strict bilinear preprocessing decomposition rather than treating this as a new gradient mismatch."
+}

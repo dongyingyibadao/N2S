@@ -1,0 +1,23 @@
+{
+  "case_id": "jade-lotus-ascend-fragments-optimization-20261028",
+  "draft": false,
+  "evidence_refs": [
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/optimization-source-coverage-01.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/optimization-source-coverage-01.json": "f4b385733271665cc618f451b0253ec1e652fbd7037b702e2aa771d916959eb9"
+  },
+  "generalization": "pending_validation",
+  "id": "20261028-082346-475536-6ae610bf",
+  "issue_scope": "target",
+  "kind": "change",
+  "project_tree_sha256": "18d22e193eb542bcd3aa8aca9a8ba68bd25330a61ccc42c4d06bd77436d503bf",
+  "queries": [],
+  "recorded_at": "2026-10-28T08:23:46.475525+00:00",
+  "resolves": [],
+  "rollback": "Future experiments can use npu_parameter_transfer=leaf_copy_v1, reducer_input_read_workers=1 and reducer_plan_cache=false. Original v3 frozen runtime is retained for review only; do not restart its drifted upstream source. New code is separately frozen in the parameter-transfer probe.",
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "Implement opt-in batched_pinned_v1 NPU parameter uploader preserving native dtype and Parameter identity; bounded ordered reducer_input_read_workers and atomic-publication idle plan cache; add fixed-input reducer and one-NPU parameter-upload A/B harnesses; extend prepare flags and source identity to OpenPI client and isolated snapshot. Old v3 remains immutable and stopped at61. Real NPU correctness/performance is pending."
+}

@@ -1,0 +1,39 @@
+{
+  "case_id": "jade-lotus-ascend-fragments-optimization-20261028",
+  "draft": false,
+  "environment": "QZ Ascend910B2C LOW/1, global256, logical8, physical2, no activation recomputation; legacy parameter/gradient transfers and FP32 wire.",
+  "evidence_refs": [
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/measurement-native-owned-preflight-02.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/measurement-native-owned-preflight-02.json": "bf136430e1aacdd21dd7ae36cefe448a2eb0b3aa0a9f03a94fd398838c092b2c"
+  },
+  "generalization": "pending_validation",
+  "id": "20261028-092207-407534-7431f98f",
+  "issue_scope": "target",
+  "kind": "validation",
+  "queries": [],
+  "recorded_at": "2026-10-28T09:22:07.407523+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "Isolated-source cache/prefetch preflight completed4 updates/1024 samples on32 actual LOW NPUs with128 finite tasks and zero checkpoint calls. Warm mean113.32990 seconds establishes no large complete-step gain. All32 owned jobs terminal.",
+  "validation": {
+    "accuracy": "pending",
+    "accuracy_protocol": "Real official-weight/data32 NPU run; no same-input reference gradient or parameter trajectory comparison. Finite outputs and no recompute verified.",
+    "actual_backend": "npu",
+    "finite_outputs": true,
+    "functional": "passed",
+    "official_weights": true,
+    "optimization": "pending",
+    "performance": {
+      "baseline": null,
+      "direction": "lower",
+      "metric": "warm_update_wall_seconds",
+      "modified": 113.32990022997062,
+      "protocol": "Four global256 updates on32 LOW NPUs, mean of updates2-4 only. This is not a controlled end-to-end A/B and not the required500 updates.",
+      "same_device": false
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "case_id": "jade-lotus-ascend-fragments-optimization-20261028",
+  "draft": false,
+  "evidence_refs": [
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/measurement-native-owned-preflight-02.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/measurement-native-owned-preflight-02.json": "bf136430e1aacdd21dd7ae36cefe448a2eb0b3aa0a9f03a94fd398838c092b2c"
+  },
+  "generalization": "pending_validation",
+  "id": "20261028-092206-184747-50e7e366",
+  "issue_scope": "target",
+  "kind": "change",
+  "project_tree_sha256": "2b7cb2b2345df0960d0de262bff7823a0fe68c310c27583990bf121d285320fb",
+  "queries": [],
+  "recorded_at": "2026-10-28T09:22:06.184736+00:00",
+  "resolves": [],
+  "rollback": "Only prepare a new immutable run with gradient_wire_dtype=float32, parameter_load_mode=mmap_v1, npu_gradient_transfer=leaf_copy_v1, npu_parameter_transfer=leaf_copy_v1, reducer_input_read_workers=1, reducer_plan_cache=false. Never rewrite a frozen run or silently change optimizer precision.",
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "Add opt-in exact native mixed wire, verified owned-RAM parameter loading, pinned native D2H, detailed transfer timings and fixed-live-gradient A/B. Original CPU FP32 master/Adam and independent leased workers retained. Fair-reader benchmark protocol corrected; frozen old runtimes unchanged. Changed files: jade_lotus/array_blob.py, jade_lotus/sharded_transport.py, jade_lotus/worker.py, jade_lotus/sharded_coordinator.py, jade_lotus/npu_gradient_model.py, jade_lotus/npu_gradient_transfer.py, scripts/prepare_ascend_run.py, scripts/benchmark_parameter_blob_loading.py, scripts/benchmark_npu_gradient_transfer.py, scripts/benchmark_npu_parameter_transfer.py."
+}

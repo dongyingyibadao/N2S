@@ -1,0 +1,28 @@
+{
+  "case_id": "jade-lotus-ascend-fragments-optimization-20261028",
+  "draft": false,
+  "environment": "Frozen v4 independent LOW NPU training; mixed framework stdout and newline JSON event logs",
+  "error": {
+    "expected": "Every accepted task has verifiable no-recompute/finite execution evidence",
+    "message": "worker_evidence skipped a complete task_result line beginning with ASCII dot",
+    "observed": "One accepted task absent from strict whole-line parser; original byte suffix and retained reduction-plan metrics match",
+    "type": "DotPrefixedWorkerJsonSkipped"
+  },
+  "evidence_refs": [
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/tooling-prefixed-log-audit-and-progress-04.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/tooling-prefixed-log-audit-and-progress-04.json": "7b9ca8d687c4c83b2d290e6d80f2e4b8d7c19c5baad2f8841bb80c66650ca227"
+  },
+  "generalization": "pending_validation",
+  "id": "20261028-102733-733700-f2bbcf82",
+  "issue_scope": "target",
+  "kind": "failure",
+  "queries": [],
+  "recorded_at": "2026-10-28T10:27:33.733690+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Original strict worker-log audit misses one existing complete task record because framework stdout prepended an ASCII dot; this is evidence parsing, not missing gradients or NPU arithmetic failure."
+}

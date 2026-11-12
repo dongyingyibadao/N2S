@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "captured_at": "2026-10-28T10:24:57.206946+00:00",
+  "scope": "CPU-only contract and integration checks for new owned native export; active formal NPU run unchanged",
+  "code_files_sha256": {
+    "jade_lotus/native_snapshot.py": "89ab88e24f702829fc92fcf62e5bf75c165db3f528bb925ded2f150416003e6e",
+    "jade_lotus/npu_gradient_transfer.py": "5411c2e45621aefeba30f9fb0c974cc9b2d988f23be5c92ea38165c39f64a36e",
+    "jade_lotus/array_blob.py": "a9458c6afb4d7d0dd93daec5ab3a6dc5bea722a773dbe176d1492ad648ef9c10",
+    "jade_lotus/gradient_export.py": "ef0db9d68cdcf901b620663a1f06e3049399d389ba1cfb2116ba9c48bb4a8ee7",
+    "jade_lotus/native_numeric_validation.py": "68da7bc0181eb6efb95c28a2bbb6f38255ed50666d23c24082a0a472812d6681",
+    "jade_lotus/npu_gradient_model.py": "d65923c2cc858d86599ae6dc531918cf1e2240bb0b15c8b430a4305f107d96b7",
+    "jade_lotus/worker.py": "d57ce032caad58685e9659bc8997ec92ab0b40b50d21255e6240c5338656c24f",
+    "jade_lotus/sharded_transport.py": "69971a27f0572feafb9af63fc106f760d44fb310699fda39863b70365c6e6224",
+    "scripts/prepare_ascend_run.py": "81dc0a216835b0f6732d1896ccffc6ae4745b042acc27cb1049f418dc84e4900",
+    "scripts/audit_ascend_run.py": "00fddd312f50a5dc72decbee4bf1d6b0152c2fd8fd2a8af6c41b0177b6db4672",
+    "tests/test_native_snapshot.py": "5ee91e52f17f81b52f43071c5deac2cc6700aa74ddd7868be77788e83a79411e",
+    "tests/test_native_blob.py": "e02d18ca1c7768bbe9a9743fb4065933c37942db4eb0ce72e98fec7a8605604a",
+    "tests/test_gradient_export.py": "3f9862a0241aee9b99653a3755982cccb859ed3cc147c7f471e5f108fc3d669d",
+    "tests/test_native_worker_lifetime.py": "1e800e500923e685fd87d323df1146672a8c03549257e7eab46d9619854f6b22",
+    "tests/test_native_mixed_wire.py": "b18694fc32c530d4988b66f51211cca7dd091a4809bf1edcc723b35a1be23286"
+  },
+  "validation": {
+    "joint_pytest_passed": 380,
+    "joint_subtests_passed": 52,
+    "joint_elapsed_seconds": 16.59,
+    "additional_single_worker_lease_test_passed": 1,
+    "additional_elapsed_seconds": 1.88,
+    "result_record_kind": "Actual tool terminal summaries; not a full captured pytest transcript",
+    "actual_backend": "cpu",
+    "official_weights": false,
+    "npu_execution": false,
+    "new_npu_speed_measurement": false,
+    "covers": [
+      "2 global256 updates preserve every CPU FP32 parameter and Adam m/v bit",
+      "native bytes and complete v4 manifests match old exact encoder, including signed zero",
+      "writer failures/finite checks/temp cleanup and before/after task fencing",
+      "single worker expires during durable write: healthy accepted work and next assignment retained, missing samples reassigned exactly",
+      "snapshot release on normal/stale/failed submit/replay and legacy replay thresholds preserved"
+    ]
+  },
+  "configuration": {
+    "new_mode": "native_snapshot_v1",
+    "default": "fp32_snapshot_v1",
+    "required": [
+      "torch_npu",
+      "full atomic",
+      "pinned_native_v1",
+      "sharded_blob_v1",
+      "native_mixed_exact",
+      "complete actual dtype policy"
+    ],
+    "cpu_authority": "FP32 master/Adam and ordered FP32 reduction",
+    "group_restart": false
+  },
+  "active_run": {
+    "name": "pi05-ascend-independent-32npu-500-20261028-v4",
+    "frozen_source_digest": "96a6d693de21a4cd1634ef3f2655230b2c273e4724ef4e148ce54d69a48310af",
+    "new_mode_active": false,
+    "target_updates": 500,
+    "acceptance_complete": false
+  },
+  "known_unrelated_checks": {
+    "legacy_nvidia_mixed_precision_gate_failed": 22,
+    "cause": "host_precision.py and gpu_host_transfer.py absent from working checkout/fixture pins; original gates not weakened"
+  },
+  "pending": [
+    "Fixed-live true NPU download+write A/B for new native export",
+    "Formal32LOW global256 no-recompute500 and final bytes"
+  ],
+  "rollback": "Leave default fp32_snapshot_v1; use a separate immutable future run for any new NPU experiment; do not edit current formal runtime"
+}

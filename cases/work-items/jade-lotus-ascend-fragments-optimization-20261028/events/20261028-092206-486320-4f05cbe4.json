@@ -1,0 +1,28 @@
+{
+  "case_id": "jade-lotus-ascend-fragments-optimization-20261028",
+  "draft": false,
+  "environment": "CPU component benchmark harness; source chunk-tree verification supports4 workers.",
+  "error": {
+    "expected": "Both supported chunk-tree paths use the requested4 readers.",
+    "message": "Legacy verify_all_chunks omitted workers=read_workers in v1.",
+    "observed": "Legacy effective1 versus owned4 in v1; corrected v2 uses4 for both and is separately reported.",
+    "type": "OwnedLoadComparisonProtocolMismatch"
+  },
+  "evidence_refs": [
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/measurement-native-owned-preflight-02.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/measurement-native-owned-preflight-02.json": "bf136430e1aacdd21dd7ae36cefe448a2eb0b3aa0a9f03a94fd398838c092b2c"
+  },
+  "generalization": "pending_validation",
+  "id": "20261028-092206-486320-4f05cbe4",
+  "issue_scope": "recordkeeping",
+  "kind": "failure",
+  "queries": [],
+  "recorded_at": "2026-10-28T09:22:06.486308+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "The old loading-v1 A/B used serial legacy verify versus four owned readers, so its combined multiplier is not comparable to production. Preserve v1, use corrected v2."
+}

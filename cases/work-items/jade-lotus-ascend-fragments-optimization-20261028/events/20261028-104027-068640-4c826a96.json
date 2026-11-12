@@ -1,0 +1,38 @@
+{
+  "case_id": "jade-lotus-ascend-fragments-optimization-20261028",
+  "draft": false,
+  "evidence_refs": [
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/reducer-claim-source-review-05.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/reducer-claim-source-review-05.json": "74ecb34e9ac5874bfb93c3d5703bcc068668221296f16ba84080b7dcc453b612"
+  },
+  "generalization": "pending_validation",
+  "id": "20261028-104027-068640-4c826a96",
+  "issue_scope": "target",
+  "kind": "lookup",
+  "queries": [
+    "metadata",
+    "reducer_plan_cache",
+    "directory.mkdir"
+  ],
+  "recorded_at": "2026-10-28T10:40:27.068629+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-10-28T10:40:26.705397+00:00",
+      "applicability": "applicable",
+      "claim": "Actual target retry/publish/authority implementations allow exhausting only the exact cached publication, never semantic plan identity.",
+      "comparison": "Same target independent reducer protocol; source-level invariant only. Files/hashes/locators and search exclusions are recorded in evidence. Requires CPU fault/republication tests and later NPU32 speed measurement.",
+      "content_sha256": "74ecb34e9ac5874bfb93c3d5703bcc068668221296f16ba84080b7dcc453b612",
+      "read_depth": "implementation",
+      "status": "read",
+      "trust": "n2s_case_evidence",
+      "uri": "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/reducer-claim-source-review-05.json",
+      "url": null
+    }
+  ],
+  "stage": "optimization",
+  "summary": "Investigate repeated idle49-shard scan under existing publication cache. Actual target retry protocol rotates attempt_id and atomically republishes; preserve fresh execution/result fences and memoize only exact publication object. No NPU speed claim."
+}

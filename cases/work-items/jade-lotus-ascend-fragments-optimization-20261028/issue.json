@@ -1,0 +1,50 @@
+{
+  "completion": {
+    "backend": "npu",
+    "optimization_goal": "required_gain",
+    "task_type": "optimization_investigation"
+  },
+  "created_at": "2026-10-28T07:49:16.204494+00:00",
+  "generalization": "pending_validation",
+  "goal": "Optimize the separate Jade Lotus fragment engine around this existing OpenPI model checkout; preserve CPU FP32 authority, independent preemptible NPU workers, global batch 256 and no recomputation; measure same-device transfer and reduction gains and finish 32 LOW NPU 500 updates",
+  "id": "jade-lotus-ascend-fragments-optimization-20261028",
+  "knowledge_refs": [],
+  "maintenance_workflow": "three_stage_v1",
+  "models": [
+    "openpi-pi05-libero-fragments"
+  ],
+  "observations": "Intake records Git identity only, not an executed variant or complete source fingerprint. Checkout is dirty; baseline_revision identifies HEAD. The separate Jade Lotus target is not a Git checkout; intake Git revision refers only to the adjacent, dirty OpenPI model checkout. Fragment baseline is frozen v3 source digest 64beeb570928b3f6b42734b89fd78eb7f4a4221bf2d3e3db41fdeced766613f7, with separate immutable runtime and config. New optimizations are opt-in and are not active in v3. Existing real NPU functional probe and 32-card progress are historical evidence, not new N2S-runner executions. User has authorized low-priority QZ experiments and now explicitly asks for aggressive parallel optimization; keep unrelated native OpenPI evaluation workloads running.",
+  "related_rules": [],
+  "schema_version": "1.0.0",
+  "source": {
+    "baseline_revision": "215abfb217dbac7d5f1273282331b9b1866c0479",
+    "intake": {
+      "dirty": true,
+      "fingerprint_gaps": [
+        "execution_fingerprint_not_collected; plan must inspect the actual source",
+        "submodule_requires_separate_pinned_execution_scope:third_party/aloha",
+        "submodule_requires_separate_pinned_execution_scope:third_party/libero"
+      ],
+      "fingerprint_status": "not_collected",
+      "submodules": [
+        {
+          "checkout_revision": null,
+          "dirty": null,
+          "index_revision": "d1dc83afd89ded4379851257fe5d85632d31d5ec",
+          "path": "third_party/aloha",
+          "status": "uninitialized"
+        },
+        {
+          "checkout_revision": null,
+          "dirty": null,
+          "index_revision": "f78abd68ee283de9f9be3c8f7e2a9ad60246e95c",
+          "path": "third_party/libero",
+          "status": "uninitialized"
+        }
+      ]
+    },
+    "url": "https://github.com/Physical-Intelligence/openpi"
+  },
+  "state": "open",
+  "title": "Ascend preemptible full-parameter CPU-authority training performance"
+}

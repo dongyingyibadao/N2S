@@ -1,0 +1,92 @@
+{
+  "case_id": "jade-lotus-ascend-fragments-optimization-20261028",
+  "draft": false,
+  "evidence_refs": [
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/optimization-source-coverage-02.json",
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/failure-strictdet-layout-02.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/failure-strictdet-layout-02.json": "346703bc87b1ac720e72b8baa7b1ce0c181f9913aa7fc241126fbc28339cb1ad",
+    "cases/work-items/jade-lotus-ascend-fragments-optimization-20261028/optimization-source-coverage-02.json": "9bcc032cf0d84a8ae72ad5037562ed04630d43f00fa6c7dcee55be3162afe45f"
+  },
+  "generalization": "pending_validation",
+  "id": "20261028-092205-884432-1cf5251d",
+  "issue_scope": "target",
+  "kind": "lookup",
+  "queries": [
+    "knowledge search NPU contiguous deterministic ChannelsLast --accepted-only --include-community --json",
+    "knowledge search pin_memory non_blocking --accepted-only --include-community --json",
+    "Read actual strict-layout and strict-contiguous traceback and installed functional/decomposition at causal lines"
+  ],
+  "recorded_at": "2026-10-28T09:22:05.884419+00:00",
+  "resolves": [
+    "20261028-085834-789729-aa335b1b",
+    "20261028-082346-771057-afd3ee47"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-10-28T09:17:01.752843+00:00",
+      "applicability": "applicable",
+      "claim": "NPU contiguous returns immediately for an already matching format, otherwise rejects any requested non-Contiguous format.",
+      "comparison": "Matches actual NPU traceback. Does not prove the underlying backward is deterministic or validate batching.",
+      "content_sha256": "a73783dbbb465a3aa66ff673a06aefcaed5fc1eb7d1a14bb5a9f0e8df30a6500",
+      "read_depth": "implementation",
+      "revision": "12d689a08941d4a6e45eab16e3ad6fef96a9affd",
+      "status": "read",
+      "trust": "retrieved_unreviewed",
+      "uri": null,
+      "url": "https://raw.githubusercontent.com/Ascend/pytorch/12d689a08941d4a6e45eab16e3ad6fef96a9affd/torch_npu/csrc/aten/common/TensorProperties.cpp"
+    },
+    {
+      "accessed_at": "2026-10-28T09:21:14.343550+00:00",
+      "applicability": "applicable",
+      "claim": "Strict non-CPU bilinear interpolation selects the Python upsample decomposition.",
+      "comparison": "Installed source read at the causal lines; hash agrees with the previously checked version. Current whole-input contiguous wrapper is insufficient. No default training change adopted.",
+      "content_sha256": "5e96bb0880a4c6f4c0ae34c00a894e152412e68f6ffd073d2b442907eedeb5fa",
+      "read_depth": "implementation",
+      "revision": "0fabc3ba44823f257e70ce397d989c8de5e362c1",
+      "status": "read",
+      "trust": "retrieved_unreviewed",
+      "uri": null,
+      "url": "https://raw.githubusercontent.com/pytorch/pytorch/0fabc3ba44823f257e70ce397d989c8de5e362c1/torch/nn/functional.py"
+    },
+    {
+      "accessed_at": "2026-10-28T09:21:14.343550+00:00",
+      "applicability": "applicable",
+      "claim": "The decomposition suggests output memory format from the actual interpolation input and calls result.contiguous(memory_format=memory_format).",
+      "comparison": "Installed source read at the causal lines; hash agrees with the previously checked version. Current whole-input contiguous wrapper is insufficient. No default training change adopted.",
+      "content_sha256": "4061f0dd317b66822c2a324824110063cc262635e44ae7996f84538ce4f4d463",
+      "read_depth": "implementation",
+      "revision": "0fabc3ba44823f257e70ce397d989c8de5e362c1",
+      "status": "read",
+      "trust": "retrieved_unreviewed",
+      "uri": null,
+      "url": "https://raw.githubusercontent.com/pytorch/pytorch/0fabc3ba44823f257e70ce397d989c8de5e362c1/torch/_decomp/decompositions.py"
+    },
+    {
+      "accessed_at": "2026-10-28T09:21:14.343550+00:00",
+      "applicability": "no_match",
+      "claim": "No literal result in accepted snapshot plus selected community catalog for this combined query.",
+      "comparison": "Does not imply no upstream solution; followed exact installed-version implementation and actual traceback instead. Query: NPU contiguous deterministic ChannelsLast",
+      "read_depth": "catalog",
+      "status": "no_match",
+      "trust": "retrieved_unreviewed",
+      "uri": null,
+      "url": null
+    },
+    {
+      "accessed_at": "2026-10-28T09:21:14.343550+00:00",
+      "applicability": "no_match",
+      "claim": "No literal result in accepted snapshot plus selected community catalog for this combined query.",
+      "comparison": "Does not imply no upstream solution; followed exact installed-version implementation and actual traceback instead. Query: pin_memory non_blocking",
+      "read_depth": "catalog",
+      "status": "no_match",
+      "trust": "retrieved_unreviewed",
+      "uri": null,
+      "url": null
+    }
+  ],
+  "stage": "optimization",
+  "summary": "Read the installed-version strict-determinism bilinear/contiguous implementation after repeated NPU layout failure; both actual traces confirm the same call chain. No new numerical claim. Also reconcile the matched-reader parameter loading protocol."
+}

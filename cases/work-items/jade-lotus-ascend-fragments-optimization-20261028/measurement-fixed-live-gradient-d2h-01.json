@@ -1,0 +1,95 @@
+{
+  "scope": "Same actual NPU, one fixed live real backward; component-only. Zero optimizer updates.",
+  "report_sha256": "e9a2b0fd98dc919cd27fc9fc18d42099160090406a40b02a1d58a0670ab4abd7",
+  "status": "passed",
+  "npu_exercised": true,
+  "parameter_count": 3248572176,
+  "parameter_leaves": 805,
+  "native_bytes": 6736577376,
+  "summary": {
+    "leaf_copy_v1": {
+      "median_metrics": {
+        "gradient_cpu_widen_snapshot_calls": 805.0,
+        "gradient_cpu_widen_snapshot_seconds": 2.5410942938178778,
+        "gradient_d2h_enqueue_seconds": 1.8632865957915783,
+        "gradient_d2h_sync_seconds": 0.0,
+        "gradient_download_allocation_seconds": 0.0,
+        "gradient_download_copy_calls": 805.0,
+        "gradient_download_dtype_groups": 2.0,
+        "gradient_download_fp32_bytes": 12994288704.0,
+        "gradient_download_native_bytes": 6736577376.0,
+        "gradient_download_staging_bytes": 0.0,
+        "gradient_download_total_seconds": 5.766075847670436,
+        "gradient_finite_seconds": 1.3550870791077614,
+        "gradient_transfer_pinned": 0.0,
+        "gradient_transfer_pinned_native": 0.0,
+        "gradient_validation_seconds": 0.0008288882672786713
+      },
+      "median_wall_seconds": 5.766152421012521,
+      "p95_wall_seconds": 5.987553440406918,
+      "trials": 4
+    },
+    "pinned_native_v1": {
+      "median_metrics": {
+        "gradient_cpu_widen_snapshot_calls": 2.0,
+        "gradient_cpu_widen_snapshot_seconds": 2.6683102026581764,
+        "gradient_d2h_enqueue_seconds": 0.003071160987019539,
+        "gradient_d2h_sync_seconds": 0.2397523783147335,
+        "gradient_download_allocation_seconds": 8.819811046123505e-05,
+        "gradient_download_copy_calls": 805.0,
+        "gradient_download_dtype_groups": 2.0,
+        "gradient_download_fp32_bytes": 12994288704.0,
+        "gradient_download_native_bytes": 6736577376.0,
+        "gradient_download_staging_bytes": 6736577376.0,
+        "gradient_download_total_seconds": 4.325203759595752,
+        "gradient_finite_seconds": 1.4124055858701468,
+        "gradient_transfer_pinned": 1.0,
+        "gradient_transfer_pinned_native": 1.0,
+        "gradient_validation_seconds": 0.003586314618587494
+      },
+      "median_wall_seconds": 4.325754733756185,
+      "p95_wall_seconds": 4.3462335333228115,
+      "trials": 4
+    }
+  },
+  "trial_order": [
+    "leaf_copy_v1",
+    "pinned_native_v1",
+    "pinned_native_v1",
+    "leaf_copy_v1",
+    "leaf_copy_v1",
+    "pinned_native_v1",
+    "pinned_native_v1",
+    "leaf_copy_v1"
+  ],
+  "warmup_rounds": 1,
+  "repetitions": 4,
+  "same_live_gradient_source": true,
+  "rtol": 0.0,
+  "atol": 0.0,
+  "download_component_median_speedup": 1.3329818207250959,
+  "inputs_unchanged": true,
+  "source_before_sha256": "44da9ddd5053122d62bba1d6595e9453fb1b37c732148b684341a2e25fe7bb4b",
+  "source_after_sha256": "44da9ddd5053122d62bba1d6595e9453fb1b37c732148b684341a2e25fe7bb4b",
+  "software": {
+    "python": "3.12.14 | packaged by conda-forge | (main, Aug 21 2026, 22:48:28) [GCC 14.4.0]",
+    "torch": "2.9.0+cpu",
+    "torch_npu": "2.9.0"
+  },
+  "initialization_timings": {
+    "dataset_seconds": 0.44497497379779816,
+    "imports_seconds": 8.480504985898733,
+    "model_load_seconds": 59.34399717673659,
+    "total_seconds": 68.29223929345608
+  },
+  "caveat": "Component-only, single-NPU D2H comparison on one fixed real backward's live gradients. No optimizer updates, 32-card/preemption validation or global-batch-256 throughput is measured. Cold allocation/warmups are separate from warmed AB/BA trials. Both paths retain the pinned staging once allocated. Legacy timing includes blocking native copies and CPU widening; pinned timing includes enqueue, final fence, CPU FP32 snapshots and finite checks. Each timed download has an explicit final synchronization. Full byte hashes, source checks and output comparisons are outside download timing windows. The enclosing compute's d2h_seconds includes the entire experiment and must not be interpreted as an ordinary task's D2H latency. Device peaks remain cumulative so the real backward's peak is preserved. Host load, page caches, accelerator clocks and order can still affect measurements.",
+  "validation": {
+    "all_warmup_and_trial_gradients_bitwise_equal": true,
+    "same_native_source_digest": true,
+    "native_source_sha256": "dabd2ba99b8f14c0b28a3d5e9126ddedde54f6b40635fdb4bd3958f46362dcb4",
+    "all_pinned_groups": true,
+    "checkpoint_calls": 0,
+    "backward_executions": 1,
+    "optimizer_updates": 0
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "user_constraint": "Any single LOW card can be preempted by high priority. Do not use32-rank whole-group restart. Preserve healthy accepted tasks and reschedule only unaccepted lost work.",
+  "adopted_architecture": "Independent leased1-NPU jobs; stable CPU FP32 master and unique Adam; global batch256 waits for complete unique sample coverage.",
+  "new_run": "pi05-ascend-independent-32npu-500-20261028-v4",
+  "source_digest": "96a6d693de21a4cd1634ef3f2655230b2c273e4724ef4e148ce54d69a48310af",
+  "target_steps": 500,
+  "starting_step": 0,
+  "prior_steps_counted": 0,
+  "settings": {
+    "microbatch_size": 2,
+    "worker_task_batch_size": 8,
+    "npu_gradient_transfer": "pinned_native_v1",
+    "npu_parameter_transfer": "leaf_copy_v1",
+    "parameter_load_mode": "owned_buffer_v1",
+    "gradient_wire_dtype": "native_mixed_exact",
+    "gradient_wire_policy_sha256": "65443f826212c807c4308301591fc2265719872896df250b5003a647102ab6b1",
+    "checkpoint_steps": 25,
+    "checkpoint_seconds": 3600.0
+  },
+  "status": "Launched; awaiting32 actual NPU admission at recording.500 completion pending.",
+  "new_final_audit": "Native policy binds to CPU authority schema; final byte audit after500 and owned-fleet cleanup. Historical consumed gradient bytes not rehashed.33 tiny CPU auditor tests passed.",
+  "future_work": "Direct owned native export and independent streaming are design proposals only; no fixed communication group/NPU optimizer adopted."
+}

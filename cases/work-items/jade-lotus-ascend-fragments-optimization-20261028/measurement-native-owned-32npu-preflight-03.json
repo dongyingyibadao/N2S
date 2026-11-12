@@ -1,0 +1,141 @@
+{
+  "scope": "32 actual LOW NPU4-update integrated preflight, not500-update acceptance",
+  "source_digest": "2b7cb2b2345df0960d0de262bff7823a0fe68c310c27583990bf121d285320fb",
+  "sources_unchanged": true,
+  "changes_from_cache_prefetch_preflight": [
+    "owned_buffer_v1 parameters,4 readers",
+    "native_mixed_exact gradient wire with real NPU dtype policy",
+    "pinned_native_v1 D2H; legacy parameter upload retained"
+  ],
+  "steps": 4,
+  "samples_consumed": 1024,
+  "acceptance_completed": false,
+  "admitted_devices": 32,
+  "owned_jobs": 32,
+  "all_owned_jobs_official_terminal": true,
+  "terminal_status_counts": {
+    "job_stopped": 4,
+    "job_succeeded": 28
+  },
+  "warm_update_seconds": [
+    72.83510495722294,
+    72.3795700520277,
+    70.64561745896935
+  ],
+  "warm_mean_seconds": 71.95343082274,
+  "previous_preflight_warm_mean_seconds": 113.32990022997062,
+  "comparison_scope": "Observed sequential32-card trials, not a controlled same-physical-device A/B; file/page-cache and host load can differ. No guaranteed500-step completion time inferred.",
+  "worker_timings": [
+    {
+      "version": 0,
+      "tasks": 32,
+      "mean": {
+        "wall_seconds": 55.57894711470726,
+        "parameter_load_seconds": 6.953001709945966,
+        "parameter_validation_seconds": 1.6690673547127517,
+        "parameter_h2d_copy_seconds": 1.718844648115919,
+        "data_seconds": 2.1437875032861484,
+        "npu_seconds": 9.850831056428433,
+        "d2h_seconds": 16.981613049785665,
+        "gradient_cpu_widen_snapshot_seconds": 6.747978764215077,
+        "gradient_finite_seconds": 3.113075846900756
+      },
+      "max": {
+        "wall_seconds": 64.46740381303243,
+        "parameter_load_seconds": 7.734259295975789,
+        "parameter_validation_seconds": 5.004019402898848,
+        "parameter_h2d_copy_seconds": 2.1847068201750517,
+        "data_seconds": 2.2630347926169634,
+        "npu_seconds": 15.201123214326799,
+        "d2h_seconds": 27.822703558020294,
+        "gradient_cpu_widen_snapshot_seconds": 13.268544532125816,
+        "gradient_finite_seconds": 10.069148914888501
+      }
+    },
+    {
+      "version": 1,
+      "tasks": 32,
+      "mean": {
+        "wall_seconds": 31.350394519213296,
+        "parameter_load_seconds": 7.060328846164339,
+        "parameter_validation_seconds": 1.5849956976817339,
+        "parameter_h2d_copy_seconds": 1.6834208296932047,
+        "data_seconds": 2.032444821386889,
+        "npu_seconds": 1.465324539989524,
+        "d2h_seconds": 4.776466103015991,
+        "gradient_cpu_widen_snapshot_seconds": 2.9395240512967575,
+        "gradient_finite_seconds": 1.5490974085623748
+      },
+      "max": {
+        "wall_seconds": 38.89386620000005,
+        "parameter_load_seconds": 7.895316331181675,
+        "parameter_validation_seconds": 2.8722777001094073,
+        "parameter_h2d_copy_seconds": 1.89478893391788,
+        "data_seconds": 2.183983069844544,
+        "npu_seconds": 1.5007328859064728,
+        "d2h_seconds": 5.369296637130901,
+        "gradient_cpu_widen_snapshot_seconds": 3.337581031024456,
+        "gradient_finite_seconds": 1.7830284549854696
+      }
+    },
+    {
+      "version": 2,
+      "tasks": 32,
+      "mean": {
+        "wall_seconds": 33.372253461195214,
+        "parameter_load_seconds": 7.051141135474609,
+        "parameter_validation_seconds": 1.5341392214759253,
+        "parameter_h2d_copy_seconds": 1.6580598486179952,
+        "data_seconds": 1.9285818368007313,
+        "npu_seconds": 1.4638061551449937,
+        "d2h_seconds": 4.816208009440743,
+        "gradient_cpu_widen_snapshot_seconds": 2.93213701651257,
+        "gradient_finite_seconds": 1.6246535516838776
+      },
+      "max": {
+        "wall_seconds": 37.47673239186406,
+        "parameter_load_seconds": 7.93244947004132,
+        "parameter_validation_seconds": 2.2366623680572957,
+        "parameter_h2d_copy_seconds": 2.149665522854775,
+        "data_seconds": 2.0178568600676954,
+        "npu_seconds": 1.4882621909491718,
+        "d2h_seconds": 6.212307454785332,
+        "gradient_cpu_widen_snapshot_seconds": 3.1818993880879134,
+        "gradient_finite_seconds": 2.820160005008802
+      }
+    },
+    {
+      "version": 3,
+      "tasks": 32,
+      "mean": {
+        "wall_seconds": 30.99925533701753,
+        "parameter_load_seconds": 7.066412141219189,
+        "parameter_validation_seconds": 1.5397793838201324,
+        "parameter_h2d_copy_seconds": 1.6634875185991405,
+        "data_seconds": 1.913179485629371,
+        "npu_seconds": 1.4646289115189575,
+        "d2h_seconds": 4.751181455147162,
+        "gradient_cpu_widen_snapshot_seconds": 2.906508604173723,
+        "gradient_finite_seconds": 1.586872998479521
+      },
+      "max": {
+        "wall_seconds": 35.12172345002182,
+        "parameter_load_seconds": 8.04213659092784,
+        "parameter_validation_seconds": 2.0370412659831345,
+        "parameter_h2d_copy_seconds": 2.4766591293737292,
+        "data_seconds": 2.0395042337477207,
+        "npu_seconds": 1.539154906058684,
+        "d2h_seconds": 5.641475403681397,
+        "gradient_cpu_widen_snapshot_seconds": 3.2406356849242,
+        "gradient_finite_seconds": 2.5572928627952933
+      }
+    }
+  ],
+  "accepted_task_count": 128,
+  "all_tasks_finite": true,
+  "all_tasks_checkpoint_calls_zero": true,
+  "gradient_wire_policy_sha256": "65443f826212c807c4308301591fc2265719872896df250b5003a647102ab6b1",
+  "checkpoint_scope": "Step4 completion/manifest metadata checked; this report does not rescan checkpoint/Adam/final arrays. Formal500 final audit must verify actual array bytes.",
+  "interpretation": "Owned buffer removes most parameter finite-scan latency; complete warm update remains~72s and is dominated by worker export/shared-FS exchange and reduction. CPU Adam~2-3s is a small part. Independent worker replacement and CPU FP32 authority retained.",
+  "platform_verified_32_cards": true
+}

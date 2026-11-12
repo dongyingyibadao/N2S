@@ -1,0 +1,27 @@
+{
+  "case_id": "jade-lotus-ascend-fragments-optimization-20261028",
+  "claim": "Optimize the separate Jade Lotus fragment engine around this existing OpenPI model checkout; preserve CPU FP32 authority, independent preemptible NPU workers, global batch 256 and no recomputation; measure same-device transfer and reduction gains and finish 32 LOW NPU 500 updates",
+  "depends_on": [],
+  "evidence_refs": [],
+  "execution": null,
+  "id": "reproduce",
+  "level": "observation",
+  "protocol": {
+    "acceptance": "32 actual LOW/1 preemptible NPUs admitted; all activation recomputation disabled; global batch256; one immutable run completes500 committed optimizer updates with checkpoint/source/provenance audit. No evaluation or final export required; natural preemption need not occur.",
+    "assets": [],
+    "comparison_key": "jade-lotus-ascend-fragments-optimization-20261028",
+    "input_description": "Local official pi05_libero_lerobot full weights, horizon50,805 active leaves/3,248,572,176 parameters; fixed atomic four-sample identities and real LIBERO data; isolated OpenPI source snapshot.",
+    "seed": 42,
+    "variant": "baseline"
+  },
+  "requirements": {
+    "backends": [
+      "npu"
+    ],
+    "device_name_contains": [],
+    "versions": {}
+  },
+  "schema_version": "1.0.0",
+  "state": "draft",
+  "title": "Ascend preemptible full-parameter CPU-authority training performance"
+}

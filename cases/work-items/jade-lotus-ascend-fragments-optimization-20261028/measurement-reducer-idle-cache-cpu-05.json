@@ -1,0 +1,63 @@
+{
+  "format": "reducer-idle-cache-cpu-validation-v1",
+  "recorded_at_utc": "2026-10-28T10:45:41.989975+00:00",
+  "scope": "Working source only; no formal runtime change or NPU execution",
+  "changed_files_sha256": {
+    "jade_lotus/sharded_transport.py": "d270bdf6d4c2c1653ae50f600b00a46308c281131203e26ed522d4fa89d98778",
+    "tests/test_sharded_transport.py": "b0e55224a8cabbfb9938640c239bfb93cf9ebd20207052fce238d67b5282d5e8"
+  },
+  "mechanism": "When reducer_plan_cache is true, remember only an exact cached publication object after a complete no-work scan. New atomically published attempt invalidates; active authority checks and fresh execution/output fences remain. Default cache-disabled path unchanged.",
+  "new_test_methods": 7,
+  "new_test_subcases": 2,
+  "verification": [
+    {
+      "suites": [
+        "tests/test_sharded_transport.py",
+        "tests/test_sharded_maintenance.py",
+        "tests/test_native_mixed_wire.py",
+        "tests/test_worker_reducer_concurrency.py"
+      ],
+      "passed": 72,
+      "subtests_passed": 52,
+      "seconds": 8.98,
+      "source_note": "Before two final test methods were added; production code is identical to final checked source."
+    },
+    {
+      "tests": [
+        "ShardedTransportTest.test_claim_publication_failure_recovers_through_expiry_of_new_attempt",
+        "ShardedTransportTest.test_retry_published_during_final_exhaustion_scan_is_seen_on_next_poll"
+      ],
+      "passed": 2,
+      "subtests_passed": 2,
+      "seconds": 2.12,
+      "source_note": "Final source/test hashes above."
+    }
+  ],
+  "checked_contracts": [
+    "Repeated exhausted polls make no per-job result-exists/claim-mkdir calls",
+    "Expired attempt wakes exhausted observer; valid healthy reduced shard retained; exact complete FP32 Adam parameter update matches baseline",
+    "Same-byte-size and restored-mtime atomic publication replacement invalidates exhaustion",
+    "Competing claim services choose one winner; loser safely idles",
+    "Incomplete mkdir error is visible and does not hide available work",
+    "New publication cannot bypass active generation/version authority",
+    "Owner/first-heartbeat write failure followed by actual lease expiry recovers as a new attempt",
+    "Concurrent retry publication on last collision of full exhaustion scan is seen on immediately following poll",
+    "Existing late result/expiry/corrupt/missing shard/native wire/maintenance checks pass"
+  ],
+  "cpu_test_result_only": true,
+  "official_weights": false,
+  "npu_execution": false,
+  "performance_improvement": null,
+  "active_formal_run": {
+    "target_steps": 500,
+    "mode_changed": false,
+    "frozen_source_digest": "96a6d693de21a4cd1634ef3f2655230b2c273e4724ef4e148ce54d69a48310af"
+  },
+  "independent_review": "Read-only protocol review confirmed exact-object invalidation and exception/interleaving paths; recommended final two tests passed. No new hardware timing.",
+  "remaining_gaps": [
+    "NPU metadata/throughput A/B",
+    "Full500 acceptance and final checkpoint byte verification",
+    "Native snapshot export actual-device A/B"
+  ],
+  "rollback": "Disable reducer_plan_cache in a newly prepared run or omit this source change from future freeze; do not edit current formal runtime."
+}
