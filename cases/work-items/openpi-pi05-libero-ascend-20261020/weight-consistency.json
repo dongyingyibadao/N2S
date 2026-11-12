@@ -1,0 +1,22 @@
+{
+  "method": "Independent safetensors header shape/dtype/offset and full binary payload SHA256 comparison; no model execution",
+  "files": [
+    {
+      "path": "WORKSPACE/workspace/models/pi05_libero_finetuned/model.safetensors",
+      "payload_sha256": "f4297e24f94b403b9533bc545b3fb35c6da40b9c3393b49890bfd666cc3a3771",
+      "payload_bytes": 7472956256,
+      "stored_tensors": 812
+    },
+    {
+      "path": "WORKSPACE/openpi/data/ascend/pi05_libero_openpi/model.safetensors",
+      "payload_sha256": "f4297e24f94b403b9533bc545b3fb35c6da40b9c3393b49890bfd666cc3a3771",
+      "payload_bytes": 7472956256,
+      "stored_tensors": 812
+    }
+  ],
+  "all_tensor_headers_match_after_prefix_removal": true,
+  "tied_aliases_match": true,
+  "payload_equal": true,
+  "seconds": 13.435235073789954,
+  "output_parity": "not measured; byte identity does not compare framework execution"
+}

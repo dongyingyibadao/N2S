@@ -1,0 +1,17 @@
+{
+  "case_id": "openpi-pi05-libero-ascend-20261020",
+  "evidence_refs": [],
+  "evidence_sha256": {},
+  "generalization": "pending_validation",
+  "id": "20261020-122046-625981-d59fe6ab",
+  "kind": "change",
+  "project_revision": "215abfb217dbac7d5f1273282331b9b1866c0479",
+  "queries": [],
+  "recorded_at": "2026-10-20T12:20:46.625969+00:00",
+  "resolves": [],
+  "rollback": "Restore config.py and data_loader.py from the target-owned source_before backup, and remove only newly added libero_ascend.sh/check_libero_data.py after review. Prior Ascend adaptations and public data are preserved.",
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Add explicit local dataset_root to DataConfig and factory and pass the same verified directory to LeRobot metadata and dataset constructors. Add single-card launcher with offline mode, private HF cache and train/eval commands; retain existing preprocessing and checkpoint initialization."
+}

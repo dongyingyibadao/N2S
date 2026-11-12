@@ -1,0 +1,43 @@
+{
+  "case_id": "openpi-pi05-libero-ascend-20261020",
+  "environment": "One physical Ascend910B2C0, torch/torch-npu2.9.0, CANN8.5.0, batch1 BF16+selectedFP32, real fixed data/augmentation/noise/time; background keepalive retained; no concurrent task regression NPU checks.",
+  "evidence_refs": [
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/optimization-ab-controlled.json",
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/measurements/optimization-ab-controlled-baseline-gradients.json",
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/measurements/optimization-ab-controlled-baseline-repeat-gradient-comparison-parameters.json",
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/measurements/optimization-ab-controlled-gradient-comparison-parameters.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/optimization-ab-controlled.json": "509338764dbb013ddc87d5d540ecfa33fa1c77b184d01a2d3b10a3e7e11c2341",
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/measurements/optimization-ab-controlled-baseline-gradients.json": "f900e79c3731322b93a61d5074899efa1a9d895961d56ec2c5e10a2571f93dd5",
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/measurements/optimization-ab-controlled-baseline-repeat-gradient-comparison-parameters.json": "050baffa50e9692fead7474d1e1d1336d8ce1c9a872ba7aaec9fb227e5a633f2",
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/measurements/optimization-ab-controlled-gradient-comparison-parameters.json": "ea0345db238b7bc70a82930d8875d73653712a3f308626321eace078af187ba4"
+  },
+  "generalization": "pending_validation",
+  "id": "20261020-124143-287578-b2de5a11",
+  "kind": "validation",
+  "queries": [],
+  "recorded_at": "2026-10-20T12:41:43.287566+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "Controlled A/B completed. Loss all1600 values equal. 804/805 present gradients equal; only FP32 vision patch-conv gradient differs by5.238689482212067e-10; unmodified repeat also differs in that tensor by5.820766091346741e-10. Seven matching absent gradients and no nonfinite or presence mismatch. Median forward/backward improves but mean is nearly unchanged due one candidate outlier; memory unchanged. No accuracy tolerance or deterministic causal attribution established.",
+  "validation": {
+    "accuracy": "pending",
+    "accuracy_protocol": "Fixed real batch, same loaded weights, no parameter updates: complete loss and all named gradients compared. Native unmodified repeat difference observed; exact_match=false retained; no NVIDIA baseline, output tolerance or convergence claim.",
+    "actual_backend": "npu",
+    "finite_outputs": true,
+    "functional": "passed",
+    "official_weights": false,
+    "optimization": "measured_improvement",
+    "performance": {
+      "baseline": 0.4341255631297827,
+      "direction": "lower",
+      "metric": "median_fixed_batch_forward_backward_seconds",
+      "modified": 0.38313850248232484,
+      "protocol": "Two warmups per variant; six interleaved AB/BA synchronized runs; no optimizer/data/augmentation timing. Mean baseline0.433288/candidate0.431200seconds; one candidate0.674030second outlier; peaks both15.585855GB. Beta separately about tenfold operator microbenchmark, not end-to-end training gain.",
+      "same_device": true
+    }
+  }
+}

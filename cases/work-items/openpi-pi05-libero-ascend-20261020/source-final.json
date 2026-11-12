@@ -1,0 +1,31 @@
+{
+  "recorded_at": "2026-10-20T12:59:33.825654+00:00",
+  "source_sha256": {
+    ".gitignore": "62fdc9d611c3ffac36c2ce37868021993fc771e3a71b6ce94910162eb6958176",
+    "docs/ascend.md": "8cc24d1837821a35cb229b192b83581a1df62f16e47d8fa3710ffb8400f07cab",
+    "scripts/ascend_env.sh": "e44d40ece833b18c06d5d18031e1706bd86a77913352f0e28d9285d09e846c67",
+    "scripts/ascend_smoke.py": "dfe984bda42ebbc3f91f8674c3bf7b75bfbe6802147165c219ce09a0592e5600",
+    "scripts/benchmark_ascend_training.py": "620e9dedddc732e1d3cef28294640e44f0715342e0ddbac8de7a33d5505e2d89",
+    "scripts/check_libero_data.py": "755e822f960180505490bea520ecf47a5e4802b83e020e7882a5389b55934801",
+    "scripts/convert_lerobot_pi05.py": "899524c357e56f4565c1c06fa2de31bcad92cbbc706c45d84998fd6763f5f29f",
+    "scripts/eval_libero_npu.py": "4cbd67e00a5ec142bb46cc066b19d6d2f529fd3821787dec5a3e45f5f4552819",
+    "scripts/libero_ascend.sh": "d6cc74ddfa7c5de9b53adfe55e3abd0d3632fc3ab949bc0f50c4e3e84c62da71",
+    "scripts/requirements-ascend.txt": "478099e699bbd2c1238fb810d8e80ac08bdf9951c08f7bcee7b0c32ce5ec563e",
+    "scripts/serve_policy.py": "aed0baf7f53a4a567a4b6f4b2d8c2a8cfee79d01106d5d9c8860cb6374565f17",
+    "scripts/setup_ascend.sh": "a7b1ab61dc1a16e2205e19e66dcb517c5f3822da6a22cb577934d407b8175d8b",
+    "scripts/train_pytorch.py": "b383260b26cc6512db015dfd503ae2368078814805497d322c725548658da053",
+    "src/openpi/models/tokenizer.py": "bd8d2a267fb4c67911ed23536cb8e57b4a77270a5f6e4b1e8c4649700c0e3e17",
+    "src/openpi/models_pytorch/ascend_test.py": "d298679ef09ccfcda6f125620afef61f1f9a00072266924806ed7a771e4a6b1c",
+    "src/openpi/models_pytorch/device.py": "72c7b559ea190f89c1cac13cc87debb00a54b95e8f1966b172c7a1f2f07542ed",
+    "src/openpi/models_pytorch/pi0_pytorch.py": "a6f855f06720e99f309c8a6597d5d160b1e4e557df230868327edd8924292c2f",
+    "src/openpi/policies/policy.py": "54feebaf00616e4628a2b2f3a1462ca2255f3bdee66e8eccf7589a1c8c037394",
+    "src/openpi/policies/policy_config.py": "a8ad06b5a9b712b12a1cb5715932d81fe650c693da56c90204991116d87a7105",
+    "src/openpi/training/config.py": "234a0a828768a1b8851a7528c42ded023a71167eac3221d0362dcbf18d9705dd",
+    "src/openpi/training/data_loader.py": "4c8afab0dcbbcf192e4a980e6f353a865fd503446aea9cd45aaf65d041af4923",
+    "src/openpi/transforms.py": "999100afb12d3c9df74d03b1a4d31b9c991b09ae90299d463feff3e69ea1b5c2"
+  },
+  "baseline_revision": "215abfb217dbac7d5f1273282331b9b1866c0479",
+  "libero_submodule_gitlink": "f78abd68ee283de9f9be3c8f7e2a9ad60246e95c",
+  "aloha_submodule_gitlink": "d1dc83afd89ded4379851257fe5d85632d31d5ec",
+  "note": "Complete current dirty worktree file hashes, including pre-existing September changes. This list does not attribute all changes to this turn; see source_before and preparation.json."
+}

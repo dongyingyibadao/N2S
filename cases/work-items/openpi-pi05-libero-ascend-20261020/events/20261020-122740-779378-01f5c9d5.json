@@ -1,0 +1,21 @@
+{
+  "case_id": "openpi-pi05-libero-ascend-20261020",
+  "evidence_refs": [
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/launcher-nounset-resolution.md"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/launcher-nounset-resolution.md": "2d094802dfcdbac7b413702b24888333572e0609e0d21327a03785a68e081f07"
+  },
+  "generalization": "pending_validation",
+  "id": "20261020-122740-779378-01f5c9d5",
+  "kind": "resolution",
+  "queries": [],
+  "recorded_at": "2026-10-20T12:27:40.779363+00:00",
+  "resolves": [
+    "20261020-122214-331749-a74cac76"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Delay wrapper nounset until CANN initialization completes; help and bash syntax check passed."
+}

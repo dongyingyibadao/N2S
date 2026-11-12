@@ -1,0 +1,72 @@
+{
+  "case_id": "openpi-pi05-libero-ascend-20261020",
+  "evidence_refs": [],
+  "evidence_sha256": {},
+  "generalization": "pending_validation",
+  "id": "20261020-121740-911659-057e5598",
+  "kind": "lookup",
+  "queries": [
+    "guide --task training --stage preparation --json",
+    "search pi0 --scope manipulation --accepted-only --include-community --json",
+    "search libero --scope manipulation --accepted-only --include-community --json",
+    "search libc_sec.so --accepted-only --include-community --json",
+    "search jsonschema --accepted-only --include-community --json"
+  ],
+  "recorded_at": "2026-10-20T12:17:40.911648+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-10-20T12:17:40.801267+00:00",
+      "applicability": "related",
+      "claim": "Fixed LeRobot Pi0 training uses BF16, checkpointing, disabled compile and reports scoped multi-card throughput.",
+      "comparison": "Current project is OpenPI Pi0.5, already adapted. Reuse environment/memory principles, do not replace stack or claim local precision or performance from this recipe.",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi0/train/doc/README.md",
+      "url": null
+    },
+    {
+      "accessed_at": "2026-10-20T12:17:40.801284+00:00",
+      "applicability": "related",
+      "claim": "Provides inverse-CDF Beta sampling, local NPU fused attention and optional outer checkpoint removal.",
+      "comparison": "These are separate optimization candidates; current task first validates the public dataset and real training checkpoint. AdaRMS semantics and gradients must be preserved before adopting kernels.",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi0/train/src/patches/lerobot_pi0_ascend.patch",
+      "url": null
+    },
+    {
+      "accessed_at": "2026-10-20T12:17:40.801287+00:00",
+      "applicability": "applicable",
+      "claim": "Runs CPU MuJoCo rendering with NPU policy.",
+      "comparison": "Retain CPU rendering and separate model device. Current existing EGL path has prior evidence; OSMesa is an alternate if EGL fails.",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi0/train/src/scripts/run_eval.sh",
+      "url": null
+    },
+    {
+      "accessed_at": "2026-10-20T12:17:40.801291+00:00",
+      "applicability": "no_match",
+      "claim": "No knowledge-search result for libc_sec.so",
+      "comparison": "Resolved shell/interpreter setup from existing target environment; no universal upstream absence inferred.",
+      "status": "no_match",
+      "trust": "unavailable",
+      "uri": null,
+      "url": null
+    },
+    {
+      "accessed_at": "2026-10-20T12:17:40.801294+00:00",
+      "applicability": "no_match",
+      "claim": "No knowledge-search result for jsonschema",
+      "comparison": "Resolved shell/interpreter setup from existing target environment; no universal upstream absence inferred.",
+      "status": "no_match",
+      "trust": "unavailable",
+      "uri": null,
+      "url": null
+    }
+  ],
+  "stage": "preparation",
+  "summary": "Read fixed official Pi0 training and evaluation implementation plus OpenPI static sources; scope differences prevent wholesale copying. Preparation before first target edit. Existing environment has matching torch/torch-npu and enough memory for one bounded batch-1 run. Public-data full-reader path can avoid stale shard pointers in LeRobot 0.4.3."
+}

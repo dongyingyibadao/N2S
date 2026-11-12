@@ -1,0 +1,99 @@
+{
+  "checkpoint": "<OPENPI>/checkpoints/pi05_libero_lerobot/libero_public_20261020/21",
+  "optimization_flags": {
+    "fast_beta": true,
+    "skip_outer_checkpoint": true
+  },
+  "resumed_from_step": 20,
+  "target_global_step": 21,
+  "training_steps": [
+    {
+      "step": 20,
+      "loss": 0.1227,
+      "learning_rate": 5.24e-07,
+      "gradient_norm": 1.85,
+      "logged_seconds": 5.6
+    }
+  ],
+  "log_checks": {
+    "model_loaded": true,
+    "optimizer_loaded": true,
+    "all_checkpoint_components_loaded": true,
+    "resumed_at_20": true,
+    "saved_21": true
+  },
+  "cpu_beta_fallback_warning_observed": false,
+  "resume_log_sha256": "f6db4f36ea99e308642ba2463b1a9be35e74ab9787d5774024b45ea9743b0f02",
+  "scope": "Actual load of model/AdamW/global step and one update with both opt-in flags. RNG/sampler state is not checkpointed by this trainer; this does not prove identical continuation to uninterrupted training.",
+  "checkpoint_files": {
+    "20": {
+      "optimizer.pt": 13474092954,
+      "model.safetensors": 7473091464,
+      "metadata.pt": 3187,
+      "assets/libero/norm_stats.json": 1115
+    },
+    "21": {
+      "optimizer.pt": 13474216922,
+      "model.safetensors": 7473091464,
+      "metadata.pt": 3187,
+      "assets/libero/norm_stats.json": 1115
+    }
+  },
+  "metadata": {
+    "20": {
+      "global_step": 20,
+      "dataset_root": "<OPENPI>/../../public/huggingface_datase/libero_lerobot",
+      "batch_size": 1,
+      "num_train_steps": 20
+    },
+    "21": {
+      "global_step": 21,
+      "dataset_root": "<OPENPI>/../../public/huggingface_datase/libero_lerobot",
+      "batch_size": 1,
+      "num_train_steps": 21
+    }
+  },
+  "optimizer_step_check": {
+    "state_parameter_counts": {
+      "20": 805,
+      "21": 805
+    },
+    "step_histograms": {
+      "20": {
+        "20": 805
+      },
+      "21": {
+        "21": 805
+      }
+    },
+    "same_parameter_ids": true,
+    "all_steps_incremented_by_one": true
+  },
+  "selected_parameter_update_checks": {
+    "action_out_proj.weight": {
+      "elements": 32768,
+      "changed_elements": 32717,
+      "max_abs_change": 5.140900611877441e-07,
+      "finite": true
+    },
+    "action_in_proj.weight": {
+      "elements": 32768,
+      "changed_elements": 32442,
+      "max_abs_change": 5.364418029785156e-07,
+      "finite": true
+    },
+    "time_mlp_in.weight": {
+      "elements": 1048576,
+      "changed_elements": 1044088,
+      "max_abs_change": 4.954636096954346e-07,
+      "finite": true
+    }
+  },
+  "normalization_assets": {
+    "libero/norm_stats.json": {
+      "unchanged": true,
+      "sha256": "6245f8448c57317d1a60a9fa40d8cb911f7a94389c07f2d4c6d6be1f34806884"
+    }
+  },
+  "passed": true
+}

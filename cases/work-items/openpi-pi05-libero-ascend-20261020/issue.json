@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0.0",
+  "id": "openpi-pi05-libero-ascend-20261020",
+  "models": [
+    "openpi-pi05-libero"
+  ],
+  "title": "OpenPI PI0.5 public LIBERO training and evaluation on Ascend",
+  "created_at": "2026-10-20T12:16:18.499820+00:00",
+  "state": "open",
+  "generalization": "pending_validation",
+  "maintenance_workflow": "three_stage_v1",
+  "source": {
+    "url": "https://github.com/Physical-Intelligence/openpi",
+    "baseline_revision": "215abfb217dbac7d5f1273282331b9b1866c0479"
+  },
+  "goal": "Use existing isolated Ascend environment, connect public LIBERO data, verify bounded single-NPU training/save/resume and closed-loop evaluation. Numerical parity, convergence and same-device optimization remain independent pending checks.",
+  "observations": "Initial intake: Existing target worktree contains prior Ascend changes and 2026-09-09 results; these are historical, not new runs. Default knowledge CLI failed because system Python lacks jsonschema; use existing target venv. Bare npu-smi failed loading libc_sec.so; sourcing existing ascend_env.sh restored device query. new case CLI refuses tracked Git submodule directories; this schema-valid intake was created directly without changing runner safeguards. Source baseline is real target HEAD, not an archival replacement. Pin LIBERO submodule f78abd68ee283de9f9be3c8f7e2a9ad60246e95c and ALOHA d1dc83afd89ded4379851257fe5d85632d31d5ec separately. No new model experiment has run yet. User requests Ascend training/testing; bounded single-card execution is within task scope; do not stop other processes. Do not read prohibited sibling pi05 checkout. Final update 2026-10-20: completed20 baseline updates and resumed21 with both opt-in flags; all805 AdamW state counters20to21; trained checkpoint fixed20closedloop successes20/20, errors0, timeouts0. Controlled same-NPU median forward/backward434.126to383.139ms, mean433.288to431.200ms with candidate outlier; memory unchanged. Baseline-repeat also has tiny Conv2D gradient variation, no agreed tolerance or cross-device reference. User weights not independently authenticated official. Case remainsopen/pending_validation; no runner runs, commits, rule promotions or pushes.",
+  "knowledge_refs": [
+    "upstreams/AGENT_USAGE.md",
+    "upstreams/REFERENCE_BUNDLES.md"
+  ],
+  "related_rules": []
+}

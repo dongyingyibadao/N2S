@@ -1,0 +1,23 @@
+{
+  "case_id": "openpi-pi05-libero-ascend-20261020",
+  "environment": "System Python for first attempt; target isolated venv Python 3.12 available.",
+  "error": {
+    "expected": "Knowledge refresh should start using provisioned dependencies",
+    "message": "No module named 'jsonschema'",
+    "observed": "Import failed before network refresh",
+    "stack_excerpt": "n2s_knowledge/manager.py import jsonschema",
+    "type": "ModuleNotFoundError"
+  },
+  "evidence_refs": [],
+  "evidence_sha256": {},
+  "generalization": "pending_validation",
+  "id": "20261020-121630-930284-b1a8518f",
+  "kind": "failure",
+  "queries": [],
+  "recorded_at": "2026-10-20T12:16:30.930272+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Default N2S refresh CLI uses Python without jsonschema. Existing target venv has jsonschema; no installation required."
+}

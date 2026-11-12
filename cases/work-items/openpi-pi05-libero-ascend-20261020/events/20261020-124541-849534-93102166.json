@@ -1,0 +1,29 @@
+{
+  "case_id": "openpi-pi05-libero-ascend-20261020",
+  "evidence_refs": [
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/optimization-ab-controlled.json",
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/resume-21-summary.json",
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/measurements/optimization-ab-controlled-baseline-gradients.json",
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/measurements/optimization-ab-controlled-baseline-repeat-gradient-comparison-parameters.json",
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/measurements/optimization-ab-controlled-gradient-comparison-parameters.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/optimization-ab-controlled.json": "509338764dbb013ddc87d5d540ecfa33fa1c77b184d01a2d3b10a3e7e11c2341",
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/resume-21-summary.json": "3407b256e6f1df3562852ff97b1216ad8ad3c8dc6fb3a27c419fdc61cf0cd735",
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/measurements/optimization-ab-controlled-baseline-gradients.json": "f900e79c3731322b93a61d5074899efa1a9d895961d56ec2c5e10a2571f93dd5",
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/measurements/optimization-ab-controlled-baseline-repeat-gradient-comparison-parameters.json": "050baffa50e9692fead7474d1e1d1336d8ce1c9a872ba7aaec9fb227e5a633f2",
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/measurements/optimization-ab-controlled-gradient-comparison-parameters.json": "ea0345db238b7bc70a82930d8875d73653712a3f308626321eace078af187ba4"
+  },
+  "generalization": "pending_validation",
+  "id": "20261020-124541-849534-93102166",
+  "kind": "resolution",
+  "queries": [],
+  "recorded_at": "2026-10-20T12:45:41.849522+00:00",
+  "resolves": [
+    "20261020-123034-513246-3bbcc26f"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "Opt-in inverse-CDF Beta removes the observed dirichlet CPU fallback from the Beta operation: controlled CPU-dispatch profile has baseline aten::_sample_dirichlet and aten::_to_cpu, neither present in fast path. Both paths return finite NPU FP32 samples; separate distribution sample statistics retained; resumed real training also completes without fallback warning. Seeded sample sequence changes and task precision remains unconfirmed."
+}

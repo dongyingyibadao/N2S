@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0.0",
+  "id": "closed-loop",
+  "case_id": "openpi-pi05-libero-ascend-20261020",
+  "title": "Trained checkpoint LIBERO closed-loop evaluation",
+  "state": "ready",
+  "claim": "Measure environment success predicate on a predeclared fixed subset; no NVIDIA parity claim",
+  "level": "model",
+  "requirements": {
+    "backends": [
+      "npu"
+    ],
+    "device_name_contains": [
+      "910B2C"
+    ],
+    "versions": {}
+  },
+  "depends_on": [],
+  "evidence_refs": [
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/closed-loop-21-summary.json"
+  ],
+  "protocol": {
+    "input_description": "Trained/resumed checkpoint; four suites ids0,2,4,6,8; init state0 seed42; success=env.check_success; all 20 count including exceptions/timeouts",
+    "seed": 42,
+    "assets": [],
+    "variant": "modified",
+    "acceptance": "Measure environment success predicate on a predeclared fixed subset; no NVIDIA parity claim",
+    "comparison_key": "openpi-pi05-libero-ascend-20261020-closed-loop"
+  },
+  "execution": {
+    "argv": [
+      "bash",
+      "scripts/libero_ascend.sh",
+      "eval",
+      "--checkpoint",
+      "checkpoints/pi05_libero_lerobot/libero_public_20261020/21",
+      "--output",
+      "data/ascend/libero_public_20261020/eval21"
+    ],
+    "timeout_seconds": 1800,
+    "estimated_minutes": 15,
+    "memory_gb": 12,
+    "network": false,
+    "installs_dependencies": false
+  }
+}

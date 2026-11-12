@@ -1,0 +1,22 @@
+{
+  "case_id": "openpi-pi05-libero-ascend-20261020",
+  "environment": "Bash wrapper, existing CANN 8.5.0 set_env.sh and isolated OpenPI environment.",
+  "error": {
+    "expected": "Launcher initializes quietly from a fresh shell",
+    "message": "set_env.sh: LD_LIBRARY_PATH: unbound variable; CMAKE_PREFIX_PATH: unbound variable",
+    "observed": "Warnings when running bash scripts/libero_ascend.sh --help",
+    "type": "ShellUnboundVariable"
+  },
+  "evidence_refs": [],
+  "evidence_sha256": {},
+  "generalization": "pending_validation",
+  "id": "20261020-122214-331749-a74cac76",
+  "kind": "failure",
+  "queries": [],
+  "recorded_at": "2026-10-20T12:22:14.331738+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "New launcher enables nounset before sourcing CANN vendor set_env.sh, which reads unset LD_LIBRARY_PATH/CMAKE_PREFIX_PATH. Help exits zero but vendor warnings show initialization is not robust."
+}

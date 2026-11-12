@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0.0",
+  "id": "single-npu-train",
+  "case_id": "openpi-pi05-libero-ascend-20261020",
+  "title": "Bounded PI0.5 NPU training and resume",
+  "state": "ready",
+  "claim": "Finite full-model optimization, complete checkpoint save/load/resume using public LIBERO",
+  "level": "model",
+  "requirements": {
+    "backends": [
+      "npu"
+    ],
+    "device_name_contains": [
+      "910B2C"
+    ],
+    "versions": {}
+  },
+  "depends_on": [],
+  "evidence_refs": [
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/training-20-summary.json"
+  ],
+  "protocol": {
+    "input_description": "Physical NPU0 batch1, all parameters, public LIBERO, initial converted user-provided finetuned weights; flags off; 20 updates and atomic checkpoint",
+    "seed": 42,
+    "assets": [],
+    "variant": "modified",
+    "acceptance": "Finite full-model optimization, complete checkpoint save/load/resume using public LIBERO",
+    "comparison_key": "openpi-pi05-libero-ascend-20261020-single-npu-train"
+  },
+  "execution": {
+    "argv": [
+      "bash",
+      "scripts/libero_ascend.sh",
+      "train",
+      "--exp-name",
+      "libero_public_20261020",
+      "--seed",
+      "42"
+    ],
+    "timeout_seconds": 1800,
+    "estimated_minutes": 10,
+    "memory_gb": 45,
+    "network": false,
+    "installs_dependencies": false
+  }
+}

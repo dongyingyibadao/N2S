@@ -1,0 +1,31 @@
+{
+  "case_id": "openpi-pi05-libero-ascend-20261020",
+  "evidence_refs": [],
+  "evidence_sha256": {},
+  "generalization": "pending_validation",
+  "id": "20261020-122740-651336-57748e4a",
+  "kind": "lookup",
+  "queries": [
+    "search unbound variable --accepted-only --include-community --json",
+    "show upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/Isaac-GR00T/set_conda_env.sh"
+  ],
+  "recorded_at": "2026-10-20T12:27:40.651320+00:00",
+  "resolves": [
+    "20261020-122214-331749-a74cac76"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-10-20T12:27:40.541204+00:00",
+      "applicability": "related",
+      "claim": "Temporarily disable set -u while sourcing vendor conda shell initialization.",
+      "comparison": "Current failure is CANN shell initialization, not conda PS1, but the same unbound-environment-variable mechanism applies.",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/Isaac-GR00T/set_conda_env.sh",
+      "url": null
+    }
+  ],
+  "stage": "troubleshooting",
+  "summary": "Accepted vendor-setup example temporarily disables nounset; apply only that shell-initialization principle."
+}

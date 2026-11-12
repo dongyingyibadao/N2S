@@ -1,0 +1,22 @@
+{
+  "case_id": "openpi-pi05-libero-ascend-20261020",
+  "evidence_refs": [
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/environment-setup.md"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/environment-setup.md": "b70a574538dfc3e3d8b74358d99a5d01ff7fe0bce4b354442788c9aebd91d213"
+  },
+  "generalization": "pending_validation",
+  "id": "20261020-122046-502964-4f253790",
+  "kind": "resolution",
+  "queries": [],
+  "recorded_at": "2026-10-20T12:20:46.502952+00:00",
+  "resolves": [
+    "20261020-121630-930284-b1a8518f",
+    "20261020-121636-465701-0bad3af7"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Existing venv restores knowledge refresh and existing launcher restores npu-smi; verified without installing packages or stopping workloads."
+}

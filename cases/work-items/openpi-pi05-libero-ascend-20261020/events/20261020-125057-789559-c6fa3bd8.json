@@ -1,0 +1,30 @@
+{
+  "case_id": "openpi-pi05-libero-ascend-20261020",
+  "evidence_refs": [],
+  "evidence_sha256": {},
+  "generalization": "pending_validation",
+  "id": "20261020-125057-789559-c6fa3bd8",
+  "kind": "lookup",
+  "queries": [
+    "gradient checkpoint",
+    "show community://lerobot@4aaff99be4a1d81568c08c8f0296b41b40c99ec4/src/lerobot/policies/common/vla_utils.py"
+  ],
+  "recorded_at": "2026-10-20T12:50:57.789546+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-10-20T12:50:57.681198+00:00",
+      "applicability": "related",
+      "claim": "Shared VLA helpers expose additive masks, safe-dtype sinusoidal positions, vector padding and distinct centered versus left/top image padding.",
+      "comparison": "Static source at another version, not installed LeRobot0.4.3 execution or cross-framework output parity. No blanket replacement of preprocessing or attention kernels.",
+      "revision": "4aaff99be4a1d81568c08c8f0296b41b40c99ec4",
+      "status": "read",
+      "trust": "community_source_snapshot_static_only",
+      "uri": "community://lerobot@4aaff99be4a1d81568c08c8f0296b41b40c99ec4/src/lerobot/policies/common/vla_utils.py",
+      "url": "https://github.com/huggingface/lerobot/blob/4aaff99be4a1d81568c08c8f0296b41b40c99ec4/src/lerobot/policies/common/vla_utils.py"
+    }
+  ],
+  "stage": "optimization",
+  "summary": "Final source audit rechecks gradient checkpoint search and reads the complete pinned LeRobot VLA helper. Confirms additive masks and distinguishes centered OpenPI padding from left/top padding for other policies. Existing source and measured A/B remain authoritative; no new model changes or device experiments from this lookup."
+}

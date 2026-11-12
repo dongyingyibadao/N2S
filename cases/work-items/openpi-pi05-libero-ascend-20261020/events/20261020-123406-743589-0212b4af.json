@@ -1,0 +1,26 @@
+{
+  "case_id": "openpi-pi05-libero-ascend-20261020",
+  "environment": "NPU910B2C batch1/BF16+selectedFP32; fixed real data, identical augmentation/noise/time, same model, no optimizer updates; torch/torch-npu2.9.0.",
+  "error": {
+    "expected": "Characterize all-gradient consistency and native baseline repeat variation before accepting optimization.",
+    "message": "Only vision patch_embedding.weight FP32 gradient is not bitwise equal; max_abs_diff=6.984919309616089e-10; loss max_abs_diff=0.",
+    "observed": "No nonfinite loss/gradients or gradient presence mismatch. Need unmodified repeat control; first timing baseline max0.834684 versus other0.434-0.44seconds.",
+    "type": "FixedInputGradientDifference"
+  },
+  "evidence_refs": [
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/optimization-ab-initial.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/optimization-ab-initial.json": "f4718d7bc6973f36906362223a39b1feb5df347ae8b1fdeab64574c7cc7490a1"
+  },
+  "generalization": "pending_validation",
+  "id": "20261020-123406-743589-0212b4af",
+  "kind": "numerical_issue",
+  "queries": [],
+  "recorded_at": "2026-10-20T12:34:06.743576+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "Initial same-NPU checkpoint A/B loss is bitwise equal; 804 of 805 present gradients equal, one FP32 vision Conv2D weight gradient differs by 6.984919309616089e-10. Seven absent gradients match baseline. One baseline timing outlier coincides with concurrent small regression checks; do not attribute drift or quantify speedup yet."
+}

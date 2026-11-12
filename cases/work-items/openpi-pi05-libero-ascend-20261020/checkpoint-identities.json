@@ -1,0 +1,35 @@
+{
+  "recorded_at": "2026-10-20T12:53:26.938070+00:00",
+  "checkpoints": {
+    "20": {
+      "model.safetensors": {
+        "bytes": 7473091464,
+        "sha256": "b2ddd89caf92b07bd0daf00216a0f5f3d8e5d13dc065571aac5e9c26032dcfdf"
+      },
+      "metadata.pt": {
+        "bytes": 3187,
+        "sha256": "e51ec6752fca11112dd9ee6e37ba3bfef2411b2613ebd75d6913adaa87e2ce65"
+      },
+      "assets/libero/norm_stats.json": {
+        "bytes": 1115,
+        "sha256": "6245f8448c57317d1a60a9fa40d8cb911f7a94389c07f2d4c6d6be1f34806884"
+      }
+    },
+    "21": {
+      "model.safetensors": {
+        "bytes": 7473091464,
+        "sha256": "1d3d2874960e9dbc25ca6980a0e37ecf76188a8d7bbe13c7e133c68490e45291"
+      },
+      "metadata.pt": {
+        "bytes": 3187,
+        "sha256": "a48dea4796cc9192136ec4dfc014aba85a5b032add5c4659d2a6d82727e0fca6"
+      },
+      "assets/libero/norm_stats.json": {
+        "bytes": 1115,
+        "sha256": "6245f8448c57317d1a60a9fa40d8cb911f7a94389c07f2d4c6d6be1f34806884"
+      }
+    }
+  },
+  "seconds": 12.94369735661894,
+  "note": "Read-only identity hashes for cross-environment reproduction; optimizer counters and selected updates are independently checked in resume_summary.json. Hashes do not establish output parity."
+}

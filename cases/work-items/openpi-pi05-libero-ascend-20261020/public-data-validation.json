@@ -1,0 +1,474 @@
+{
+  "status": "passed",
+  "started_at_utc": "2026-10-20T12:24:22.727293+00:00",
+  "config": "pi05_libero_lerobot",
+  "device": "cpu",
+  "dataset_root": "LOCAL_PATH_0005",
+  "fixed_indices": [
+    0,
+    164,
+    212,
+    213,
+    498,
+    793,
+    841,
+    842,
+    843,
+    1078,
+    1126,
+    1127
+  ],
+  "hf_datasets_cache": "WORKSPACE/openpi/data/ascend/cache/datasets",
+  "scope": "Real training data reads and preprocessing; no model, optimizer, NPU, or success-rate evaluation",
+  "samples": [
+    {
+      "index": 0,
+      "episode_index": 0,
+      "frame_index": 0,
+      "episode_start": 0,
+      "episode_end_exclusive": 214,
+      "source_file": "data/chunk-000/file-000.parquet",
+      "prompt": "put the white mug on the left plate and put the yellow and white mug on the right plate",
+      "padding_count": 0,
+      "first_action_reference_index": 0,
+      "last_action_reference_index": 49,
+      "checks": {
+        "raw_action_horizon_exact": true,
+        "episode_padding_exact": true,
+        "raw_state_exact": true,
+        "raw_rgb_pixels_exact_without_rotation": true,
+        "task_and_prompt_exact": true,
+        "transformed_shapes_and_finite_values": true,
+        "mean_std_normalization_without_extra_delta": true,
+        "zero_state_and_action_padding": true
+      },
+      "transformed_shapes": {
+        "actions": [
+          50,
+          32
+        ],
+        "state": [
+          32
+        ],
+        "tokenized_prompt": [
+          200
+        ]
+      }
+    },
+    {
+      "index": 164,
+      "episode_index": 0,
+      "frame_index": 164,
+      "episode_start": 0,
+      "episode_end_exclusive": 214,
+      "source_file": "data/chunk-000/file-000.parquet",
+      "prompt": "put the white mug on the left plate and put the yellow and white mug on the right plate",
+      "padding_count": 0,
+      "first_action_reference_index": 164,
+      "last_action_reference_index": 213,
+      "checks": {
+        "raw_action_horizon_exact": true,
+        "episode_padding_exact": true,
+        "raw_state_exact": true,
+        "raw_rgb_pixels_exact_without_rotation": true,
+        "task_and_prompt_exact": true,
+        "transformed_shapes_and_finite_values": true,
+        "mean_std_normalization_without_extra_delta": true,
+        "zero_state_and_action_padding": true
+      },
+      "transformed_shapes": {
+        "actions": [
+          50,
+          32
+        ],
+        "state": [
+          32
+        ],
+        "tokenized_prompt": [
+          200
+        ]
+      }
+    },
+    {
+      "index": 212,
+      "episode_index": 0,
+      "frame_index": 212,
+      "episode_start": 0,
+      "episode_end_exclusive": 214,
+      "source_file": "data/chunk-000/file-000.parquet",
+      "prompt": "put the white mug on the left plate and put the yellow and white mug on the right plate",
+      "padding_count": 48,
+      "first_action_reference_index": 212,
+      "last_action_reference_index": 213,
+      "checks": {
+        "raw_action_horizon_exact": true,
+        "episode_padding_exact": true,
+        "raw_state_exact": true,
+        "raw_rgb_pixels_exact_without_rotation": true,
+        "task_and_prompt_exact": true,
+        "transformed_shapes_and_finite_values": true,
+        "mean_std_normalization_without_extra_delta": true,
+        "zero_state_and_action_padding": true
+      },
+      "transformed_shapes": {
+        "actions": [
+          50,
+          32
+        ],
+        "state": [
+          32
+        ],
+        "tokenized_prompt": [
+          200
+        ]
+      }
+    },
+    {
+      "index": 213,
+      "episode_index": 0,
+      "frame_index": 213,
+      "episode_start": 0,
+      "episode_end_exclusive": 214,
+      "source_file": "data/chunk-000/file-000.parquet",
+      "prompt": "put the white mug on the left plate and put the yellow and white mug on the right plate",
+      "padding_count": 49,
+      "first_action_reference_index": 213,
+      "last_action_reference_index": 213,
+      "checks": {
+        "raw_action_horizon_exact": true,
+        "episode_padding_exact": true,
+        "raw_state_exact": true,
+        "raw_rgb_pixels_exact_without_rotation": true,
+        "task_and_prompt_exact": true,
+        "transformed_shapes_and_finite_values": true,
+        "mean_std_normalization_without_extra_delta": true,
+        "zero_state_and_action_padding": true
+      },
+      "transformed_shapes": {
+        "actions": [
+          50,
+          32
+        ],
+        "state": [
+          32
+        ],
+        "tokenized_prompt": [
+          200
+        ]
+      }
+    },
+    {
+      "index": 498,
+      "episode_index": 2,
+      "frame_index": 0,
+      "episode_start": 498,
+      "episode_end_exclusive": 843,
+      "source_file": "data/chunk-000/file-000.parquet",
+      "prompt": "put the yellow and white mug in the microwave and close it",
+      "padding_count": 0,
+      "first_action_reference_index": 498,
+      "last_action_reference_index": 547,
+      "checks": {
+        "raw_action_horizon_exact": true,
+        "episode_padding_exact": true,
+        "raw_state_exact": true,
+        "raw_rgb_pixels_exact_without_rotation": true,
+        "task_and_prompt_exact": true,
+        "transformed_shapes_and_finite_values": true,
+        "mean_std_normalization_without_extra_delta": true,
+        "zero_state_and_action_padding": true
+      },
+      "transformed_shapes": {
+        "actions": [
+          50,
+          32
+        ],
+        "state": [
+          32
+        ],
+        "tokenized_prompt": [
+          200
+        ]
+      }
+    },
+    {
+      "index": 793,
+      "episode_index": 2,
+      "frame_index": 295,
+      "episode_start": 498,
+      "episode_end_exclusive": 843,
+      "source_file": "data/chunk-000/file-000.parquet",
+      "prompt": "put the yellow and white mug in the microwave and close it",
+      "padding_count": 0,
+      "first_action_reference_index": 793,
+      "last_action_reference_index": 842,
+      "checks": {
+        "raw_action_horizon_exact": true,
+        "episode_padding_exact": true,
+        "raw_state_exact": true,
+        "raw_rgb_pixels_exact_without_rotation": true,
+        "task_and_prompt_exact": true,
+        "transformed_shapes_and_finite_values": true,
+        "mean_std_normalization_without_extra_delta": true,
+        "zero_state_and_action_padding": true
+      },
+      "transformed_shapes": {
+        "actions": [
+          50,
+          32
+        ],
+        "state": [
+          32
+        ],
+        "tokenized_prompt": [
+          200
+        ]
+      }
+    },
+    {
+      "index": 841,
+      "episode_index": 2,
+      "frame_index": 343,
+      "episode_start": 498,
+      "episode_end_exclusive": 843,
+      "source_file": "data/chunk-000/file-000.parquet",
+      "prompt": "put the yellow and white mug in the microwave and close it",
+      "padding_count": 48,
+      "first_action_reference_index": 841,
+      "last_action_reference_index": 842,
+      "checks": {
+        "raw_action_horizon_exact": true,
+        "episode_padding_exact": true,
+        "raw_state_exact": true,
+        "raw_rgb_pixels_exact_without_rotation": true,
+        "task_and_prompt_exact": true,
+        "transformed_shapes_and_finite_values": true,
+        "mean_std_normalization_without_extra_delta": true,
+        "zero_state_and_action_padding": true
+      },
+      "transformed_shapes": {
+        "actions": [
+          50,
+          32
+        ],
+        "state": [
+          32
+        ],
+        "tokenized_prompt": [
+          200
+        ]
+      }
+    },
+    {
+      "index": 842,
+      "episode_index": 2,
+      "frame_index": 344,
+      "episode_start": 498,
+      "episode_end_exclusive": 843,
+      "source_file": "data/chunk-000/file-000.parquet",
+      "prompt": "put the yellow and white mug in the microwave and close it",
+      "padding_count": 49,
+      "first_action_reference_index": 842,
+      "last_action_reference_index": 842,
+      "checks": {
+        "raw_action_horizon_exact": true,
+        "episode_padding_exact": true,
+        "raw_state_exact": true,
+        "raw_rgb_pixels_exact_without_rotation": true,
+        "task_and_prompt_exact": true,
+        "transformed_shapes_and_finite_values": true,
+        "mean_std_normalization_without_extra_delta": true,
+        "zero_state_and_action_padding": true
+      },
+      "transformed_shapes": {
+        "actions": [
+          50,
+          32
+        ],
+        "state": [
+          32
+        ],
+        "tokenized_prompt": [
+          200
+        ]
+      }
+    },
+    {
+      "index": 843,
+      "episode_index": 3,
+      "frame_index": 0,
+      "episode_start": 843,
+      "episode_end_exclusive": 1128,
+      "source_file": "data/chunk-000/file-001.parquet",
+      "prompt": "put the yellow and white mug in the microwave and close it",
+      "padding_count": 0,
+      "first_action_reference_index": 843,
+      "last_action_reference_index": 892,
+      "checks": {
+        "raw_action_horizon_exact": true,
+        "episode_padding_exact": true,
+        "raw_state_exact": true,
+        "raw_rgb_pixels_exact_without_rotation": true,
+        "task_and_prompt_exact": true,
+        "transformed_shapes_and_finite_values": true,
+        "mean_std_normalization_without_extra_delta": true,
+        "zero_state_and_action_padding": true
+      },
+      "transformed_shapes": {
+        "actions": [
+          50,
+          32
+        ],
+        "state": [
+          32
+        ],
+        "tokenized_prompt": [
+          200
+        ]
+      }
+    },
+    {
+      "index": 1078,
+      "episode_index": 3,
+      "frame_index": 235,
+      "episode_start": 843,
+      "episode_end_exclusive": 1128,
+      "source_file": "data/chunk-000/file-001.parquet",
+      "prompt": "put the yellow and white mug in the microwave and close it",
+      "padding_count": 0,
+      "first_action_reference_index": 1078,
+      "last_action_reference_index": 1127,
+      "checks": {
+        "raw_action_horizon_exact": true,
+        "episode_padding_exact": true,
+        "raw_state_exact": true,
+        "raw_rgb_pixels_exact_without_rotation": true,
+        "task_and_prompt_exact": true,
+        "transformed_shapes_and_finite_values": true,
+        "mean_std_normalization_without_extra_delta": true,
+        "zero_state_and_action_padding": true
+      },
+      "transformed_shapes": {
+        "actions": [
+          50,
+          32
+        ],
+        "state": [
+          32
+        ],
+        "tokenized_prompt": [
+          200
+        ]
+      }
+    },
+    {
+      "index": 1126,
+      "episode_index": 3,
+      "frame_index": 283,
+      "episode_start": 843,
+      "episode_end_exclusive": 1128,
+      "source_file": "data/chunk-000/file-001.parquet",
+      "prompt": "put the yellow and white mug in the microwave and close it",
+      "padding_count": 48,
+      "first_action_reference_index": 1126,
+      "last_action_reference_index": 1127,
+      "checks": {
+        "raw_action_horizon_exact": true,
+        "episode_padding_exact": true,
+        "raw_state_exact": true,
+        "raw_rgb_pixels_exact_without_rotation": true,
+        "task_and_prompt_exact": true,
+        "transformed_shapes_and_finite_values": true,
+        "mean_std_normalization_without_extra_delta": true,
+        "zero_state_and_action_padding": true
+      },
+      "transformed_shapes": {
+        "actions": [
+          50,
+          32
+        ],
+        "state": [
+          32
+        ],
+        "tokenized_prompt": [
+          200
+        ]
+      }
+    },
+    {
+      "index": 1127,
+      "episode_index": 3,
+      "frame_index": 284,
+      "episode_start": 843,
+      "episode_end_exclusive": 1128,
+      "source_file": "data/chunk-000/file-001.parquet",
+      "prompt": "put the yellow and white mug in the microwave and close it",
+      "padding_count": 49,
+      "first_action_reference_index": 1127,
+      "last_action_reference_index": 1127,
+      "checks": {
+        "raw_action_horizon_exact": true,
+        "episode_padding_exact": true,
+        "raw_state_exact": true,
+        "raw_rgb_pixels_exact_without_rotation": true,
+        "task_and_prompt_exact": true,
+        "transformed_shapes_and_finite_values": true,
+        "mean_std_normalization_without_extra_delta": true,
+        "zero_state_and_action_padding": true
+      },
+      "transformed_shapes": {
+        "actions": [
+          50,
+          32
+        ],
+        "state": [
+          32
+        ],
+        "tokenized_prompt": [
+          200
+        ]
+      }
+    }
+  ],
+  "seconds": {
+    "independent_source_scan": 0.7125586112961173,
+    "real_training_dataset_constructor": 53.76249143015593,
+    "fixed_sample_checks": 2.9409973537549376,
+    "total": 64.87516045570374
+  },
+  "dataset": {
+    "root": "LOCAL_PATH_0005",
+    "frames": 273465,
+    "episodes": 1693,
+    "tasks": 40,
+    "fps": 10.0,
+    "data_shards": 377,
+    "data_bytes": 34925150020,
+    "metadata_shard_pointer_mismatches": 1690,
+    "global_indices_contiguous": true,
+    "episode_boundaries_and_frame_indices_match": true,
+    "timestamps_match_fps": true,
+    "all_episode_task_texts_match": true
+  },
+  "constructors": [
+    {
+      "class": "LeRobotDatasetMetadata",
+      "explicit_root": "LOCAL_PATH_0005",
+      "loaded_root": "LOCAL_PATH_0005"
+    },
+    {
+      "class": "LeRobotDatasetMetadata",
+      "explicit_root": "LOCAL_PATH_0005",
+      "loaded_root": "LOCAL_PATH_0005"
+    },
+    {
+      "class": "LeRobotDataset",
+      "explicit_root": "LOCAL_PATH_0005",
+      "loaded_root": "LOCAL_PATH_0005"
+    }
+  ],
+  "checks": {
+    "same_explicit_root_for_both_constructors": true,
+    "all_fixed_samples_passed": true
+  }
+}

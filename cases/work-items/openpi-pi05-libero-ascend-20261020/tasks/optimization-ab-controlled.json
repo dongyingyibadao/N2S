@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0.0",
+  "id": "optimization-ab-controlled",
+  "case_id": "openpi-pi05-libero-ascend-20261020",
+  "title": "Fixed-batch optimization with unmodified repeat control and isolated timing window",
+  "state": "ready",
+  "claim": "Removing duplicate outer checkpoint preserves fixed-batch loss and all gradients while improving synchronized forward/backward compute; inverse-CDF Beta retains specified distribution and avoids dirichlet fallback",
+  "level": "model",
+  "requirements": {
+    "backends": [
+      "npu"
+    ],
+    "device_name_contains": [
+      "910B2C"
+    ],
+    "versions": {
+      "torch": "2.9.0+cpu",
+      "torch-npu": "2.9.0",
+      "lerobot": "0.4.3"
+    }
+  },
+  "depends_on": [],
+  "evidence_refs": [
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/optimization-ab-controlled.json"
+  ],
+  "protocol": {
+    "input_description": "One actual public LIBERO batch1; original converted weights; one real training augmentation reused exactly; explicit fixed noise and time=0.5; no parameter updates; all loss values and gradient tensors compared on CPU; two warmups/variant and six interleaved AB/BA repetitions with device sync; Beta separately 256 calls and 65536 sample CDF. Excludes data, augmentation and AdamW time. Adds an unmodified second backward to characterize native repeat variation; other NPU checks are not run concurrently.",
+    "seed": 42,
+    "assets": [],
+    "variant": "modified",
+    "acceptance": "Report exact loss/gradient equality and missing/nonfinite checks; record per-variant timing/peak memory and Beta output distribution without claiming full throughput, convergence or NVIDIA parity.",
+    "comparison_key": "openpi-pi05-libero-ascend-20261020-optimization-controlled"
+  },
+  "execution": {
+    "argv": [
+      "bash",
+      "scripts/libero_ascend.sh",
+      "benchmark",
+      "--output",
+      "data/ascend/libero_public_20261020/optimization_ab_controlled",
+      "--device",
+      "npu:0",
+      "--repeats",
+      "6",
+      "--warmup",
+      "2"
+    ],
+    "timeout_seconds": 1800,
+    "estimated_minutes": 10,
+    "memory_gb": 40,
+    "network": false,
+    "installs_dependencies": false
+  }
+}

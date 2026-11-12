@@ -1,0 +1,39 @@
+{
+  "case_id": "openpi-pi05-libero-ascend-20261020",
+  "environment": "CPU data validation in existing Python3.12/LeRobot0.4.3/datasets4.8.5/OpenPI checkout; no model execution in this check.",
+  "evidence_refs": [
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/public-data-validation.json",
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/weight-consistency.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/public-data-validation.json": "84746ab02b5dc6e32cea73d73322975a84a9fcf8088f236fa8ac64870a141c34",
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/weight-consistency.json": "e8ed93aa55e955a1dc551ffafc154c7f6385a1af41bd6f203c9e82afc6a01c2c"
+  },
+  "generalization": "pending_validation",
+  "id": "20261020-122740-907996-733d0feb",
+  "kind": "validation",
+  "queries": [],
+  "recorded_at": "2026-10-20T12:27:40.907983+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Real public LIBERO constructor and all 12 independent boundary/pixel/task/preprocessing checks passed. Converted weight tensor headers, aliases and all binary payload bytes match independently. This validates data and conversion storage, not NPU output parity.",
+  "validation": {
+    "accuracy": "pending",
+    "accuracy_protocol": "No matched NVIDIA/original-LeRobot inference baseline or agreed tolerance; stored tensor bytes and dataset reference comparisons passed only.",
+    "actual_backend": "cpu",
+    "finite_outputs": true,
+    "functional": "passed",
+    "official_weights": false,
+    "optimization": "pending",
+    "performance": {
+      "baseline": null,
+      "direction": "lower",
+      "metric": "forward_backward_seconds",
+      "modified": null,
+      "protocol": "Pending same-NPU fixed-weight/input/time/noise/augmentation gradient and timing comparison.",
+      "same_device": false
+    }
+  }
+}

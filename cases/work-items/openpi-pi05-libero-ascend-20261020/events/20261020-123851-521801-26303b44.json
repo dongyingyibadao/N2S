@@ -1,0 +1,41 @@
+{
+  "case_id": "openpi-pi05-libero-ascend-20261020",
+  "evidence_refs": [],
+  "evidence_sha256": {},
+  "generalization": "pending_validation",
+  "id": "20261020-123851-521801-26303b44",
+  "kind": "lookup",
+  "queries": [
+    "Conv2DBackpropFilter",
+    "deterministic"
+  ],
+  "recorded_at": "2026-10-20T12:38:51.521791+00:00",
+  "resolves": [
+    "20261020-123406-743589-0212b4af"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-10-20T12:38:51.417157+00:00",
+      "applicability": "no_match",
+      "claim": "No Conv2DBackpropFilter match in the recorded accepted/community search.",
+      "comparison": "Does not establish absence of an upstream fix; next local test is a baseline-repeat control.",
+      "status": "no_match",
+      "trust": "accepted_upstream_documented",
+      "uri": null,
+      "url": null
+    },
+    {
+      "accessed_at": "2026-10-20T12:38:51.417177+00:00",
+      "applicability": "different_scope",
+      "claim": "Fixed mock inputs are compared across CPU/GPU and Ascend310P inference.",
+      "comparison": "Different device and inference-only scope; no causal explanation for the local Conv2D training gradient difference.",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi05/infer_with_torch/README.md",
+      "url": null
+    }
+  ],
+  "stage": "optimization",
+  "summary": "Error-specific lookup found no Conv2DBackpropFilter solution in the searched N2S sources. The official deterministic recipe covers fixed-input 310P inference, not 910B2C training convolution gradients. Add an unmodified repeated-backward control before attributing the observed tiny FP32 gradient difference to checkpoint removal."
+}

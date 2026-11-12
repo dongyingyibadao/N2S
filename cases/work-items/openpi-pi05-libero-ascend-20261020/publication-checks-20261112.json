@@ -1,0 +1,145 @@
+{
+  "case_id": "openpi-pi05-libero-ascend-20261020",
+  "checked_at": "2026-11-12T08:22:26.625446+00:00",
+  "validation": {
+    "status": "valid",
+    "tasks": 6,
+    "runs": 0
+  },
+  "workflow": {
+    "case_id": "openpi-pi05-libero-ascend-20261020",
+    "completion_ready": false,
+    "status": "incomplete",
+    "stages": {
+      "preparation": [
+        "20261020-121740-911659-057e5598"
+      ],
+      "troubleshooting": [
+        "20261020-122046-379760-0e35670d",
+        "20261020-122740-651336-57748e4a"
+      ],
+      "optimization": [
+        "20261020-123034-640808-e5c37ab6",
+        "20261020-123851-521801-26303b44",
+        "20261020-125057-789559-c6fa3bd8"
+      ]
+    },
+    "scope": {
+      "task_type": "model_migration",
+      "backend": "npu",
+      "optimization_goal": "required_gain"
+    },
+    "gaps": [
+      "unresolved_failures_or_numerical_issues",
+      "error_source_comparison_missing:20261020-121642-352689-0d2a84a0",
+      "error_source_comparison_missing:20261020-123034-513246-3bbcc26f",
+      "error_source_comparison_missing:20261020-123406-943216-69c0d00f",
+      "functional_and_accuracy_check_must_precede_optimization_lookup",
+      "official_weight_npu_execution_not_verified",
+      "agreed_accuracy_comparison_not_verified"
+    ],
+    "gap_details": [
+      {
+        "code": "unresolved_failures_or_numerical_issues",
+        "category": "target",
+        "event_id": null
+      },
+      {
+        "code": "error_source_comparison_missing:20261020-121642-352689-0d2a84a0",
+        "category": "recordkeeping",
+        "event_id": "20261020-121642-352689-0d2a84a0"
+      },
+      {
+        "code": "error_source_comparison_missing:20261020-123034-513246-3bbcc26f",
+        "category": "recordkeeping",
+        "event_id": "20261020-123034-513246-3bbcc26f"
+      },
+      {
+        "code": "error_source_comparison_missing:20261020-123406-943216-69c0d00f",
+        "category": "recordkeeping",
+        "event_id": "20261020-123406-943216-69c0d00f"
+      },
+      {
+        "code": "functional_and_accuracy_check_must_precede_optimization_lookup",
+        "category": "recordkeeping",
+        "event_id": null
+      },
+      {
+        "code": "official_weight_npu_execution_not_verified",
+        "category": "target",
+        "event_id": null
+      },
+      {
+        "code": "agreed_accuracy_comparison_not_verified",
+        "category": "target",
+        "event_id": null
+      }
+    ],
+    "issue_groups": {
+      "target": [
+        {
+          "id": "20261020-121630-930284-b1a8518f",
+          "resolved": true,
+          "source_comparison_recorded": true
+        },
+        {
+          "id": "20261020-121636-465701-0bad3af7",
+          "resolved": true,
+          "source_comparison_recorded": true
+        },
+        {
+          "id": "20261020-121642-352689-0d2a84a0",
+          "resolved": false,
+          "source_comparison_recorded": false
+        },
+        {
+          "id": "20261020-122214-331749-a74cac76",
+          "resolved": true,
+          "source_comparison_recorded": true
+        },
+        {
+          "id": "20261020-123034-513246-3bbcc26f",
+          "resolved": true,
+          "source_comparison_recorded": false
+        },
+        {
+          "id": "20261020-123406-743589-0212b4af",
+          "resolved": false,
+          "source_comparison_recorded": true
+        },
+        {
+          "id": "20261020-123406-943216-69c0d00f",
+          "resolved": false,
+          "source_comparison_recorded": false
+        }
+      ],
+      "tooling": [],
+      "recordkeeping": []
+    },
+    "unresolved_events": [
+      "20261020-121642-352689-0d2a84a0",
+      "20261020-123406-743589-0212b4af",
+      "20261020-123406-943216-69c0d00f"
+    ],
+    "blocking_unresolved_events": [
+      "20261020-121642-352689-0d2a84a0",
+      "20261020-123406-743589-0212b4af",
+      "20261020-123406-943216-69c0d00f"
+    ],
+    "events": 25,
+    "draft_events": 0,
+    "measurements": {
+      "same_device_gain_observed": true
+    },
+    "checks": {
+      "scoped_task_acceptance": "pending",
+      "model_migration": "pending",
+      "optimization_investigation": "pending",
+      "optimization_goal": "pending",
+      "rule_approval": "not_evaluated"
+    },
+    "generalization": "pending_validation",
+    "note": "Checks recorded evidence and workflow coverage, not model correctness or rule approval. Open/blocked cases remain publishable."
+  },
+  "scope_note": "Read-only record checks at first publication; no new model execution or rule approval. Historical original observations remain dated as captured."
+}

@@ -1,0 +1,335 @@
+{
+  "recorded_at": "2026-10-20T12:57:50.753213+00:00",
+  "exit_code_observed": 0,
+  "checkpoint": "<OPENPI>/checkpoints/pi05_libero_lerobot/libero_public_20261020/21",
+  "checkpoint_model_sha256": "1d3d2874960e9dbc25ca6980a0e37ecf76188a8d7bbe13c7e133c68490e45291",
+  "completed": 20,
+  "successes": 20,
+  "success_rate": 1.0,
+  "errors": 0,
+  "timeouts": 0,
+  "per_suite": {
+    "libero_spatial": {
+      "completed": 5,
+      "successes": 5
+    },
+    "libero_object": {
+      "completed": 5,
+      "successes": 5
+    },
+    "libero_goal": {
+      "completed": 5,
+      "successes": 5
+    },
+    "libero_10": {
+      "completed": 5,
+      "successes": 5
+    }
+  },
+  "total_control_actions": 2988,
+  "policy_calls": 606,
+  "online_inference_seconds": {
+    "count": 606,
+    "mean": 0.20942946169802015,
+    "median": 0.20898550562560558,
+    "p95": 0.21388712665066123,
+    "scope": "Synchronized policy.infer including input/output transforms, excluding model loading and simulator stepping."
+  },
+  "offline": {
+    "count": 20,
+    "finite_predictions": 20,
+    "mean_action_mae": 0.015600719949001418,
+    "mean_action_rmse": 0.04526681997878738,
+    "note": "20 first-frame dataset observations, not task success or framework output parity."
+  },
+  "rollout_artifact_checks": [
+    {
+      "episode": 1,
+      "suite": "libero_spatial",
+      "task_id": 0,
+      "success": true,
+      "status": "success",
+      "steps": 75,
+      "policy_calls": 15,
+      "npz_shapes_and_finite": true,
+      "task_order_and_seed_match_manifest": true,
+      "video": "01_libero_spatial_0.mp4",
+      "video_bytes": 95191
+    },
+    {
+      "episode": 2,
+      "suite": "libero_spatial",
+      "task_id": 2,
+      "success": true,
+      "status": "success",
+      "steps": 93,
+      "policy_calls": 19,
+      "npz_shapes_and_finite": true,
+      "task_order_and_seed_match_manifest": true,
+      "video": "02_libero_spatial_2.mp4",
+      "video_bytes": 115641
+    },
+    {
+      "episode": 3,
+      "suite": "libero_spatial",
+      "task_id": 4,
+      "success": true,
+      "status": "success",
+      "steps": 127,
+      "policy_calls": 26,
+      "npz_shapes_and_finite": true,
+      "task_order_and_seed_match_manifest": true,
+      "video": "03_libero_spatial_4.mp4",
+      "video_bytes": 161823
+    },
+    {
+      "episode": 4,
+      "suite": "libero_spatial",
+      "task_id": 6,
+      "success": true,
+      "status": "success",
+      "steps": 109,
+      "policy_calls": 22,
+      "npz_shapes_and_finite": true,
+      "task_order_and_seed_match_manifest": true,
+      "video": "04_libero_spatial_6.mp4",
+      "video_bytes": 156725
+    },
+    {
+      "episode": 5,
+      "suite": "libero_spatial",
+      "task_id": 8,
+      "success": true,
+      "status": "success",
+      "steps": 96,
+      "policy_calls": 20,
+      "npz_shapes_and_finite": true,
+      "task_order_and_seed_match_manifest": true,
+      "video": "05_libero_spatial_8.mp4",
+      "video_bytes": 128219
+    },
+    {
+      "episode": 6,
+      "suite": "libero_object",
+      "task_id": 0,
+      "success": true,
+      "status": "success",
+      "steps": 158,
+      "policy_calls": 32,
+      "npz_shapes_and_finite": true,
+      "task_order_and_seed_match_manifest": true,
+      "video": "06_libero_object_0.mp4",
+      "video_bytes": 149719
+    },
+    {
+      "episode": 7,
+      "suite": "libero_object",
+      "task_id": 2,
+      "success": true,
+      "status": "success",
+      "steps": 119,
+      "policy_calls": 24,
+      "npz_shapes_and_finite": true,
+      "task_order_and_seed_match_manifest": true,
+      "video": "07_libero_object_2.mp4",
+      "video_bytes": 122674
+    },
+    {
+      "episode": 8,
+      "suite": "libero_object",
+      "task_id": 4,
+      "success": true,
+      "status": "success",
+      "steps": 137,
+      "policy_calls": 28,
+      "npz_shapes_and_finite": true,
+      "task_order_and_seed_match_manifest": true,
+      "video": "08_libero_object_4.mp4",
+      "video_bytes": 128804
+    },
+    {
+      "episode": 9,
+      "suite": "libero_object",
+      "task_id": 6,
+      "success": true,
+      "status": "success",
+      "steps": 152,
+      "policy_calls": 31,
+      "npz_shapes_and_finite": true,
+      "task_order_and_seed_match_manifest": true,
+      "video": "09_libero_object_6.mp4",
+      "video_bytes": 149338
+    },
+    {
+      "episode": 10,
+      "suite": "libero_object",
+      "task_id": 8,
+      "success": true,
+      "status": "success",
+      "steps": 143,
+      "policy_calls": 29,
+      "npz_shapes_and_finite": true,
+      "task_order_and_seed_match_manifest": true,
+      "video": "10_libero_object_8.mp4",
+      "video_bytes": 138626
+    },
+    {
+      "episode": 11,
+      "suite": "libero_goal",
+      "task_id": 0,
+      "success": true,
+      "status": "success",
+      "steps": 119,
+      "policy_calls": 24,
+      "npz_shapes_and_finite": true,
+      "task_order_and_seed_match_manifest": true,
+      "video": "11_libero_goal_0.mp4",
+      "video_bytes": 133745
+    },
+    {
+      "episode": 12,
+      "suite": "libero_goal",
+      "task_id": 2,
+      "success": true,
+      "status": "success",
+      "steps": 85,
+      "policy_calls": 17,
+      "npz_shapes_and_finite": true,
+      "task_order_and_seed_match_manifest": true,
+      "video": "12_libero_goal_2.mp4",
+      "video_bytes": 87054
+    },
+    {
+      "episode": 13,
+      "suite": "libero_goal",
+      "task_id": 4,
+      "success": true,
+      "status": "success",
+      "steps": 91,
+      "policy_calls": 19,
+      "npz_shapes_and_finite": true,
+      "task_order_and_seed_match_manifest": true,
+      "video": "13_libero_goal_4.mp4",
+      "video_bytes": 105968
+    },
+    {
+      "episode": 14,
+      "suite": "libero_goal",
+      "task_id": 6,
+      "success": true,
+      "status": "success",
+      "steps": 86,
+      "policy_calls": 18,
+      "npz_shapes_and_finite": true,
+      "task_order_and_seed_match_manifest": true,
+      "video": "14_libero_goal_6.mp4",
+      "video_bytes": 101079
+    },
+    {
+      "episode": 15,
+      "suite": "libero_goal",
+      "task_id": 8,
+      "success": true,
+      "status": "success",
+      "steps": 79,
+      "policy_calls": 16,
+      "npz_shapes_and_finite": true,
+      "task_order_and_seed_match_manifest": true,
+      "video": "15_libero_goal_8.mp4",
+      "video_bytes": 100810
+    },
+    {
+      "episode": 16,
+      "suite": "libero_10",
+      "task_id": 0,
+      "success": true,
+      "status": "success",
+      "steps": 271,
+      "policy_calls": 55,
+      "npz_shapes_and_finite": true,
+      "task_order_and_seed_match_manifest": true,
+      "video": "16_libero_10_0.mp4",
+      "video_bytes": 265684
+    },
+    {
+      "episode": 17,
+      "suite": "libero_10",
+      "task_id": 2,
+      "success": true,
+      "status": "success",
+      "steps": 224,
+      "policy_calls": 45,
+      "npz_shapes_and_finite": true,
+      "task_order_and_seed_match_manifest": true,
+      "video": "17_libero_10_2.mp4",
+      "video_bytes": 242972
+    },
+    {
+      "episode": 18,
+      "suite": "libero_10",
+      "task_id": 4,
+      "success": true,
+      "status": "success",
+      "steps": 234,
+      "policy_calls": 47,
+      "npz_shapes_and_finite": true,
+      "task_order_and_seed_match_manifest": true,
+      "video": "18_libero_10_4.mp4",
+      "video_bytes": 246290
+    },
+    {
+      "episode": 19,
+      "suite": "libero_10",
+      "task_id": 6,
+      "success": true,
+      "status": "success",
+      "steps": 217,
+      "policy_calls": 44,
+      "npz_shapes_and_finite": true,
+      "task_order_and_seed_match_manifest": true,
+      "video": "19_libero_10_6.mp4",
+      "video_bytes": 280321
+    },
+    {
+      "episode": 20,
+      "suite": "libero_10",
+      "task_id": 8,
+      "success": true,
+      "status": "success",
+      "steps": 373,
+      "policy_calls": 75,
+      "npz_shapes_and_finite": true,
+      "task_order_and_seed_match_manifest": true,
+      "video": "20_libero_10_8.mp4",
+      "video_bytes": 375381
+    }
+  ],
+  "protocol": {
+    "suite_ids": [
+      0,
+      2,
+      4,
+      6,
+      8
+    ],
+    "init_state_index": 0,
+    "base_seed": 42,
+    "settle_steps": 10,
+    "replan_steps": 5,
+    "denoise_steps": 10,
+    "success": "env.check_success()",
+    "retries": 0,
+    "failed_episodes_excluded": 0,
+    "simulator": "MuJoCo3.8.1 / CPU EGL software renderer; policy on NPU"
+  },
+  "evidence_sha256": {
+    "manifest.json": "f6cab8fc14b134fb62da3cb4a16824f059064db30d80a43774c032ec86cdc369",
+    "results.json": "5c8922597cd77380c4eb032336d0ae96b890cbea6ba85c714430c22cb7259081",
+    "offline.json": "6d487475afa3a33443cedd1dde72cd500ee9e2e2d0f2e6922d2899098f17ebc7"
+  },
+  "limitations": [
+    "Fixed20-episode subset; not full LIBERO benchmark.",
+    "No NVIDIA or source-framework output baseline; no precision retention or convergence claim.",
+    "Weights are user-provided fine-tuned weights, not independently authenticated official-release weights."
+  ]
+}

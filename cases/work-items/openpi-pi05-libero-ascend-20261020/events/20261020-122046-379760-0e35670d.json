@@ -1,0 +1,33 @@
+{
+  "case_id": "openpi-pi05-libero-ascend-20261020",
+  "evidence_refs": [],
+  "evidence_sha256": {},
+  "generalization": "pending_validation",
+  "id": "20261020-122046-379760-0e35670d",
+  "kind": "lookup",
+  "queries": [
+    "search libc_sec.so --accepted-only --include-community --json",
+    "search jsonschema --accepted-only --include-community --json",
+    "read tooling/src/n2s_experiments/manager.py source() and new_case()"
+  ],
+  "recorded_at": "2026-10-20T12:20:46.379750+00:00",
+  "resolves": [
+    "20261020-121630-930284-b1a8518f",
+    "20261020-121636-465701-0bad3af7"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-10-20T12:20:46.270351+00:00",
+      "applicability": "no_match",
+      "claim": "No knowledge match for these two environment bootstrap errors.",
+      "comparison": "Use target-provided shell launcher and installed jsonschema; do not infer absence of external solutions.",
+      "status": "no_match",
+      "trust": "unavailable",
+      "uri": null,
+      "url": null
+    }
+  ],
+  "stage": "troubleshooting",
+  "summary": "Error-specific knowledge searches did not match shell-library or jsonschema errors; existing target launcher and provisioned venv directly address them. Case-creation runner limitation remains open."
+}

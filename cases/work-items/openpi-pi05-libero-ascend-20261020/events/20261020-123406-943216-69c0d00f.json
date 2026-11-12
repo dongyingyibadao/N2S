@@ -1,0 +1,22 @@
+{
+  "case_id": "openpi-pi05-libero-ascend-20261020",
+  "environment": "Existing isolated CPU regression environment with HF_HUB_OFFLINE=1, LeRobot0.4.3.",
+  "error": {
+    "expected": "Run local relevant regressions without unrelated downloads.",
+    "message": "Cannot reach huggingface dataset lerobot/aloha_sim_transfer_cube_human refs: offline mode is enabled.",
+    "observed": "19 tests passed; only test_with_real_dataset failed attempting uncached ALOHA metadata.",
+    "type": "OfflineModeIsEnabled"
+  },
+  "evidence_refs": [],
+  "evidence_sha256": {},
+  "generalization": "pending_validation",
+  "id": "20261020-123406-943216-69c0d00f",
+  "kind": "failure",
+  "queries": [],
+  "recorded_at": "2026-10-20T12:34:06.943205+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Broad existing regression selection includes an unrelated ALOHA real-data test that requires network; offline environment has no cached ALOHA dataset. Public LIBERO checks pass; do not download unrelated dataset to satisfy this test."
+}

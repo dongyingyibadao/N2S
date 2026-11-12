@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0.0",
+  "id": "resume-optimized",
+  "case_id": "openpi-pi05-libero-ascend-20261020",
+  "title": "Resume checkpoint20 with opt-in Beta and checkpoint changes",
+  "state": "ready",
+  "claim": "Finite full-model optimization, complete checkpoint save/load/resume using public LIBERO",
+  "level": "model",
+  "requirements": {
+    "backends": [
+      "npu"
+    ],
+    "device_name_contains": [
+      "910B2C"
+    ],
+    "versions": {}
+  },
+  "depends_on": [],
+  "evidence_refs": [
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/resume-21-summary.json"
+  ],
+  "protocol": {
+    "input_description": "Load model, AdamW and global step20, one real public-data update with both optimization flags1; save21 and verify all805 optimizer state steps increment20to21. RNG/sampler state is not checkpointed.",
+    "seed": 42,
+    "assets": [],
+    "variant": "modified",
+    "acceptance": "Finite full-model optimization, complete checkpoint save/load/resume using public LIBERO",
+    "comparison_key": "openpi-pi05-libero-ascend-20261020-single-npu-train-resume"
+  },
+  "execution": {
+    "argv": [
+      "env",
+      "OPENPI_NPU_FAST_BETA=1",
+      "OPENPI_NPU_SKIP_OUTER_CHECKPOINT=1",
+      "bash",
+      "scripts/libero_ascend.sh",
+      "train",
+      "--exp-name",
+      "libero_public_20261020",
+      "--resume",
+      "--num-train-steps",
+      "21",
+      "--save-interval",
+      "21",
+      "--seed",
+      "42"
+    ],
+    "timeout_seconds": 1800,
+    "estimated_minutes": 10,
+    "memory_gb": 45,
+    "network": false,
+    "installs_dependencies": false
+  }
+}

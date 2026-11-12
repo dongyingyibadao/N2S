@@ -1,0 +1,50 @@
+{
+  "case_id": "openpi-pi05-libero-ascend-20261020",
+  "evidence_refs": [
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/OPTIMIZATION_REVIEW_20261112.md"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/OPTIMIZATION_REVIEW_20261112.md": "c19e03e531ce5391bc4c39dd70597a70b501ecab8a4003d577dcba96551bb413"
+  },
+  "generalization": "pending_validation",
+  "id": "20261112-082108-765460-43f80951",
+  "issue_scope": "recordkeeping",
+  "kind": "lookup",
+  "queries": [
+    "n2s-knowledge search beta --accepted-only --include-community",
+    "n2s-knowledge search checkpoint --accepted-only --include-community"
+  ],
+  "recorded_at": "2026-11-12T08:21:08.765449+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-11-12T08:21:08+00:00",
+      "applicability": "related",
+      "claim": "The pinned official recipe already documents inverse-CDF Beta, removal of the outer suffix checkpoint, QKV, fused attention, grouped MLP and DDP tuning.",
+      "comparison": "External LeRobot recipe claims; distinguish current OpenPI adaptation, component measurements and scope. This review does not establish any previously missing runtime acceptance or community-wide novelty.",
+      "content_sha256": "4659712bc9f9040a555526ae91474e17dcc609298be149d1bf312d5140392172",
+      "read_depth": "body",
+      "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi05/train/doc/README.md",
+      "url": null
+    },
+    {
+      "accessed_at": "2026-11-12T08:21:08+00:00",
+      "applicability": "related",
+      "claim": "The actual sample_beta implementation uses an on-device uniform power transform when beta equals one.",
+      "comparison": "Read the implementation rather than infer novelty from the local flag; source runtime scope remains separate from this case.",
+      "content_sha256": "259183d96817aad1f1cb9f4f30a9e75a0927a9b42e6fe07201de840e4dee25cf",
+      "read_depth": "implementation",
+      "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi05/train/src/modeling_pi05.py",
+      "url": null
+    }
+  ],
+  "stage": "optimization",
+  "summary": "Post-experiment attribution review: inverse-CDF Beta and outer-checkpoint removal already exist upstream. Preserve local A/B mean and median, fixed-time scope, tiny gradient differences and pending precision; no model experiments or rule changes."
+}

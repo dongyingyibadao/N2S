@@ -1,0 +1,56 @@
+{
+  "case_id": "openpi-pi05-libero-ascend-20261020",
+  "evidence_refs": [],
+  "evidence_sha256": {},
+  "generalization": "pending_validation",
+  "id": "20261020-123034-640808-e5c37ab6",
+  "kind": "lookup",
+  "queries": [
+    "guide --task training --stage optimization --json",
+    "search pi05 --accepted-only --include-community --json",
+    "search Beta --accepted-only --include-community --json",
+    "show manipulation/pi05/train/doc/README.md at accepted revision",
+    "follow MOVA fixed ASCEND_SUPPORTS.md and read fixed mova/utils/adapter.py"
+  ],
+  "recorded_at": "2026-10-20T12:30:34.640798+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-10-20T12:30:34.405864+00:00",
+      "applicability": "related",
+      "claim": "Pi0.5 recipe describes inverse-CDF Beta, removing outer suffix checkpoint, fused attention, QKV/grouped-MLP and DDP tuning; external performance figures belong to LeRobot0.4.4/torch2.8/CANN8.3.",
+      "comparison": "Current OpenPI2.9 path has CPU Beta fallback and nested checkpoint. Validate local correctness and measured benefit; do not import external performance values.",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi05/train/doc/README.md",
+      "url": null
+    },
+    {
+      "accessed_at": "2026-10-20T12:24:10.331125+00:00",
+      "applicability": "different_scope",
+      "claim": "MOVA provides a pinned Ascend support recipe and runtime constraints.",
+      "comparison": "Video long-context/distributed setup is informative, not a direct Pi0.5 training patch or local evidence.",
+      "content_sha256": "bf5181937d6064716c9dda3dfa16e056a2a6c06d0346449be11a5c08e0298098",
+      "revision": "61e39c2e6e9b9047fb086112ab9bfae8d5b74182",
+      "status": "read",
+      "trust": "retrieved_unreviewed",
+      "uri": null,
+      "url": "https://raw.githubusercontent.com/OpenMOSS/MOVA/61e39c2e6e9b9047fb086112ab9bfae8d5b74182/ASCEND_SUPPORTS.md"
+    },
+    {
+      "accessed_at": "2026-10-20T12:24:30.555318+00:00",
+      "applicability": "different_scope",
+      "claim": "Uses NPU long-context attention, rotary and ordinary RMSNorm.",
+      "comparison": "Do not replace Pi0.5 adaRMS or gated residual with these unconditioned operators.",
+      "content_sha256": "f309608ea6abc464af7d70f6d3da85dce7958425fda2ef50d350ee929feffcfd",
+      "revision": "61e39c2e6e9b9047fb086112ab9bfae8d5b74182",
+      "status": "read",
+      "trust": "retrieved_unreviewed",
+      "uri": null,
+      "url": "https://raw.githubusercontent.com/OpenMOSS/MOVA/61e39c2e6e9b9047fb086112ab9bfae8d5b74182/mova/utils/adapter.py"
+    }
+  ],
+  "stage": "optimization",
+  "summary": "User specifically requests N2S-guided optimization. Re-read training/performance guide and direct official Pi0.5 implementation; inverse-CDF sampling and removal of nested outer checkpoint match current execution. Full-model same-NPU A/B is next. Fused attention deferred until masked-row semantics are independently checked; MOVA long-context and plain RMSNorm are different scope."
+}

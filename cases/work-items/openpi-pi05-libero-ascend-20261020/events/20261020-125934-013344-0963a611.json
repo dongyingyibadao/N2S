@@ -1,0 +1,53 @@
+{
+  "case_id": "openpi-pi05-libero-ascend-20261020",
+  "environment": "Single Ascend910B2Cphysical0/logicalnpu0; torch2.9.0+cpu/torch-npu2.9.0/CANN8.5.0/Python3.12.14/LeRobot0.4.3/Transformers4.53.2; MuJoCo3.8.1 CPU EGL software renderer; policy onNPU. Background keepalive retained.",
+  "evidence_refs": [
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/closed-loop-21-summary.json",
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/checkpoint-identities.json",
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/source-final.json",
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/resume-21-summary.json",
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/optimization-ab-controlled.json",
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/weight-consistency.json",
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/measurements/optimization-ab-controlled-baseline-gradients.json",
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/measurements/optimization-ab-controlled-baseline-repeat-gradient-comparison-parameters.json",
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/measurements/optimization-ab-controlled-gradient-comparison-parameters.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/checkpoint-identities.json": "d4745860d21921082b2763c31c42cfba972e11342a671c1265a122493adf555b",
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/closed-loop-21-summary.json": "80c3ed62f7b5f50be1e4bf235d9f84819d665057246944f3cbd212b3f720816e",
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/optimization-ab-controlled.json": "509338764dbb013ddc87d5d540ecfa33fa1c77b184d01a2d3b10a3e7e11c2341",
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/resume-21-summary.json": "3407b256e6f1df3562852ff97b1216ad8ad3c8dc6fb3a27c419fdc61cf0cd735",
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/source-final.json": "9472762feaa00dd691c51c7d1f2aa6bda7c00854edbbff47cb54aa59cd162208",
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/weight-consistency.json": "e8ed93aa55e955a1dc551ffafc154c7f6385a1af41bd6f203c9e82afc6a01c2c",
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/measurements/optimization-ab-controlled-baseline-gradients.json": "f900e79c3731322b93a61d5074899efa1a9d895961d56ec2c5e10a2571f93dd5",
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/measurements/optimization-ab-controlled-baseline-repeat-gradient-comparison-parameters.json": "050baffa50e9692fead7474d1e1d1336d8ce1c9a872ba7aaec9fb227e5a633f2",
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/measurements/optimization-ab-controlled-gradient-comparison-parameters.json": "ea0345db238b7bc70a82930d8875d73653712a3f308626321eace078af187ba4"
+  },
+  "generalization": "pending_validation",
+  "id": "20261020-125934-013344-0963a611",
+  "kind": "validation",
+  "queries": [],
+  "recorded_at": "2026-10-20T12:59:34.013331+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "Final bounded target validation completed:20 real baseline updates, load/resume to21 with both opt-in flags, full checkpoint, all805 optimizer counters incremented. Trained checkpoint20 fixed closed-loop episodes:20/20 success, all4suites5/5, errors0/timeouts0/retries0,2988controlactions/606policycalls.20offline observations finite. Independently verified all20rollout shapes/finite values/manifest order and nonemptyvideos. Related regressions18passed/2deselected; original unrelated offline ALOHA failure preserved. Fixed-batch optimization median gain measured, mean nearly equal due outlier; no memory gain or end-to-end throughput claim.",
+  "validation": {
+    "accuracy": "pending",
+    "accuracy_protocol": "20/20success refers only to predeclared fixed LIBERO subset with initstate0 and base seed42; no fullbenchmark, convergence, official-release authentication, NVIDIA/source-framework output baseline or agreed tolerance. Full loss1600elements exact;804/805present gradients exact; remaining FP32Conv gradient drift is also seen in unmodified repeat; exact_matchfalse retained.",
+    "actual_backend": "npu",
+    "finite_outputs": true,
+    "functional": "passed",
+    "official_weights": false,
+    "optimization": "measured_improvement",
+    "performance": {
+      "baseline": 0.4341255631297827,
+      "direction": "lower",
+      "metric": "median_fixed_batch_forward_backward_seconds",
+      "modified": 0.38313850248232484,
+      "protocol": "Same loaded model, no updates; one real train augmentation/noise/time fixed; two warmups/six synchronized interleaved ABBA. ExcludesAdamW/data/augmentation/transfer; fixedtime bypassesBeta. Mean0.433288vs0.431200seconds, onecandidate0.674030outlier; allocatedpeakboth15.585855GB. Beta separately270.78vs27.01microseconds/call; not an end-to-end gain.",
+      "same_device": true
+    }
+  }
+}

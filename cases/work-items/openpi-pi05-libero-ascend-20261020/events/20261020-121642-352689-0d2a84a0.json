@@ -1,0 +1,22 @@
+{
+  "case_id": "openpi-pi05-libero-ascend-20261020",
+  "environment": "N2S commit 2d299d4a03682f3fc0704a9ac214f4c0b6bf5820; OpenPI HEAD 215abfb217dbac7d5f1273282331b9b1866c0479; tracked third_party submodules.",
+  "error": {
+    "expected": "Create case for actual external project root",
+    "message": "Submodule checkouts need a separate explicitly pinned task",
+    "observed": "new command exited 2 before case creation",
+    "type": "ExperimentError"
+  },
+  "evidence_refs": [],
+  "evidence_sha256": {},
+  "generalization": "pending_validation",
+  "id": "20261020-121642-352689-0d2a84a0",
+  "kind": "failure",
+  "queries": [],
+  "recorded_at": "2026-10-20T12:16:42.352676+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "N2S new-case source fingerprint rejects tracked OpenPI submodules. Preserve the safeguard and use direct schema-valid case intake plus feedback reports for externally executed authorized checks."
+}

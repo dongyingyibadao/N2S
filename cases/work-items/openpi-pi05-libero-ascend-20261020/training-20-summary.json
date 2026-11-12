@@ -1,0 +1,183 @@
+{
+  "training_steps": [
+    {
+      "step": 0,
+      "loss": 0.1063,
+      "learning_rate": 2.5e-08,
+      "gradient_norm": 1.51,
+      "logged_seconds": 5.9
+    },
+    {
+      "step": 1,
+      "loss": 0.1145,
+      "learning_rate": 5e-08,
+      "gradient_norm": 1.63,
+      "logged_seconds": 1.0
+    },
+    {
+      "step": 2,
+      "loss": 0.0606,
+      "learning_rate": 7.49e-08,
+      "gradient_norm": 0.66,
+      "logged_seconds": 0.9
+    },
+    {
+      "step": 3,
+      "loss": 0.0566,
+      "learning_rate": 9.99e-08,
+      "gradient_norm": 0.57,
+      "logged_seconds": 0.9
+    },
+    {
+      "step": 4,
+      "loss": 0.1069,
+      "learning_rate": 1.25e-07,
+      "gradient_norm": 1.34,
+      "logged_seconds": 0.9
+    },
+    {
+      "step": 5,
+      "loss": 0.0857,
+      "learning_rate": 1.5e-07,
+      "gradient_norm": 0.92,
+      "logged_seconds": 0.9
+    },
+    {
+      "step": 6,
+      "loss": 0.1632,
+      "learning_rate": 1.75e-07,
+      "gradient_norm": 2.93,
+      "logged_seconds": 0.9
+    },
+    {
+      "step": 7,
+      "loss": 0.138,
+      "learning_rate": 2e-07,
+      "gradient_norm": 2.98,
+      "logged_seconds": 0.9
+    },
+    {
+      "step": 8,
+      "loss": 0.1089,
+      "learning_rate": 2.25e-07,
+      "gradient_norm": 1.37,
+      "logged_seconds": 0.9
+    },
+    {
+      "step": 9,
+      "loss": 0.0554,
+      "learning_rate": 2.5e-07,
+      "gradient_norm": 0.66,
+      "logged_seconds": 0.9
+    },
+    {
+      "step": 10,
+      "loss": 0.0576,
+      "learning_rate": 2.75e-07,
+      "gradient_norm": 0.59,
+      "logged_seconds": 0.9
+    },
+    {
+      "step": 11,
+      "loss": 0.0734,
+      "learning_rate": 3e-07,
+      "gradient_norm": 0.8,
+      "logged_seconds": 1.3
+    },
+    {
+      "step": 12,
+      "loss": 0.0985,
+      "learning_rate": 3.25e-07,
+      "gradient_norm": 1.04,
+      "logged_seconds": 0.9
+    },
+    {
+      "step": 13,
+      "loss": 0.1151,
+      "learning_rate": 3.5e-07,
+      "gradient_norm": 1.3,
+      "logged_seconds": 0.9
+    },
+    {
+      "step": 14,
+      "loss": 0.3243,
+      "learning_rate": 3.75e-07,
+      "gradient_norm": 2.41,
+      "logged_seconds": 0.9
+    },
+    {
+      "step": 15,
+      "loss": 0.1251,
+      "learning_rate": 4e-07,
+      "gradient_norm": 2.12,
+      "logged_seconds": 0.9
+    },
+    {
+      "step": 16,
+      "loss": 0.0639,
+      "learning_rate": 4.25e-07,
+      "gradient_norm": 0.97,
+      "logged_seconds": 0.9
+    },
+    {
+      "step": 17,
+      "loss": 0.1031,
+      "learning_rate": 4.5e-07,
+      "gradient_norm": 1.31,
+      "logged_seconds": 0.9
+    },
+    {
+      "step": 18,
+      "loss": 0.0749,
+      "learning_rate": 4.75e-07,
+      "gradient_norm": 1.23,
+      "logged_seconds": 0.9
+    },
+    {
+      "step": 19,
+      "loss": 0.0538,
+      "learning_rate": 5e-07,
+      "gradient_norm": 0.62,
+      "logged_seconds": 0.9
+    }
+  ],
+  "step_count": 20,
+  "loss_range": [
+    0.0538,
+    0.3243
+  ],
+  "gradient_norm_range": [
+    0.57,
+    2.98
+  ],
+  "parameter_change_checks": {
+    "action_out_proj.weight": {
+      "changed_elements": 32767,
+      "elements": 32768,
+      "max_abs_change": 5.155801773071289e-06
+    },
+    "action_in_proj.weight": {
+      "changed_elements": 32740,
+      "elements": 32768,
+      "max_abs_change": 5.155801773071289e-06
+    },
+    "time_mlp_in.weight": {
+      "changed_elements": 1048194,
+      "elements": 1048576,
+      "max_abs_change": 5.0049275159835815e-06
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.0.self_attn.q_proj.weight": {
+      "changed_elements": 3966,
+      "elements": 2097152,
+      "max_abs_change": 5.9604644775390625e-06
+    }
+  },
+  "checkpoint": "WORKSPACE/openpi/checkpoints/pi05_libero_lerobot/libero_public_20261020/20",
+  "cpu_beta_fallback_warning_observed": true,
+  "optimization_flags": {
+    "fast_beta": false,
+    "skip_outer_checkpoint": false
+  },
+  "training_log_sha256": "af5dd1bf56de01e0af383a57f466f813c7c5eb72d61c7d8a12c56589b667b18d",
+  "scope": "20 finite single-NPU updates and actual selected parameter changes; no convergence or NVIDIA parity claim"
+}

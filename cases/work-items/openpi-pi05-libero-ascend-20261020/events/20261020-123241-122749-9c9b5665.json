@@ -1,0 +1,37 @@
+{
+  "case_id": "openpi-pi05-libero-ascend-20261020",
+  "environment": "Ascend910B2C single visible physical0; torch2.9.0+cpu/torch-npu2.9.0/CANN8.5.0; BF16 plus selected FP32; gradientcheckpoint on; batch1; both optimization flags off.",
+  "evidence_refs": [
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/training-20-summary.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/training-20-summary.json": "1cbc3a0bad381692ede1aa3ce16da2647c47e6b07380af39e9d077db7d7af9fc"
+  },
+  "generalization": "pending_validation",
+  "id": "20261020-123241-122749-9c9b5665",
+  "kind": "validation",
+  "queries": [],
+  "recorded_at": "2026-10-20T12:32:41.122736+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Completed 20 real public-data single-NPU optimization steps, saved full model/AdamW metadata and verified selected trained parameter changes. All recorded losses and gradient norms finite.",
+  "validation": {
+    "accuracy": "pending",
+    "accuracy_protocol": "User-provided LeRobot-finetuned checkpoint; independent converted tensor-byte equality passed. No NVIDIA or source-framework output baseline; convergence and precision retention unconfirmed.",
+    "actual_backend": "npu",
+    "finite_outputs": true,
+    "functional": "passed",
+    "official_weights": false,
+    "optimization": "pending",
+    "performance": {
+      "baseline": null,
+      "direction": "lower",
+      "metric": "forward_backward_seconds",
+      "modified": null,
+      "protocol": "A/B running on fixed real batch with held noise/time/augmentation; 20-step training log is not paired A/B.",
+      "same_device": false
+    }
+  }
+}

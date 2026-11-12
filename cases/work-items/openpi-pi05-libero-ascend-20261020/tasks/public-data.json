@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0.0",
+  "id": "public-data",
+  "case_id": "openpi-pi05-libero-ascend-20261020",
+  "title": "Validate full public LIBERO training reader",
+  "state": "ready",
+  "claim": "Real frame/action/task identity and episode-local horizon padding with explicit local root",
+  "level": "integration",
+  "requirements": {
+    "backends": [
+      "cpu"
+    ],
+    "device_name_contains": [],
+    "versions": {}
+  },
+  "depends_on": [],
+  "evidence_refs": [
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/public-data-validation.json"
+  ],
+  "protocol": {
+    "input_description": "CPU constructor plus 12 fixed boundary samples; compare action/padding/raw pixels/text/normalization with independent parquet rows",
+    "seed": 42,
+    "assets": [],
+    "variant": "modified",
+    "acceptance": "Real frame/action/task identity and episode-local horizon padding with explicit local root",
+    "comparison_key": "openpi-pi05-libero-ascend-20261020-public-data"
+  },
+  "execution": {
+    "argv": [
+      "bash",
+      "scripts/libero_ascend.sh",
+      "check",
+      "--output",
+      "data/ascend/libero_public_20261020/data_check"
+    ],
+    "timeout_seconds": 1800,
+    "estimated_minutes": 5,
+    "memory_gb": 0,
+    "network": false,
+    "installs_dependencies": false
+  }
+}
