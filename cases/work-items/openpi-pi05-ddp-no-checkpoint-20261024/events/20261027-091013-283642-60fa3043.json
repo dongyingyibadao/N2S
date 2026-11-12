@@ -1,0 +1,38 @@
+{
+  "case_id": "openpi-pi05-ddp-no-checkpoint-20261024",
+  "draft": false,
+  "evidence_refs": [
+    "cases/work-items/openpi-pi05-ddp-no-checkpoint-20261024/qz-submission-preparation-20261027.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/openpi-pi05-ddp-no-checkpoint-20261024/qz-submission-preparation-20261027.json": "68a05615fb52a5bb9b9c4ccaaeb6ab3860a28a0677557959aadfe8bf720da98d"
+  },
+  "generalization": "pending_validation",
+  "id": "20261027-091013-283642-60fa3043",
+  "issue_scope": "tooling",
+  "kind": "lookup",
+  "queries": [
+    "tooling/n2s-knowledge guide --task distributed --stage preparation --json",
+    "tooling/n2s-knowledge search HCCL_INTRA_ROCE_ENABLE --accepted-only --include-community --json",
+    "tooling/n2s-knowledge search qz.sii.edu.cn --accepted-only --include-community --json"
+  ],
+  "recorded_at": "2026-10-27T09:10:13.283631+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-10-27T09:07:11.655423+00:00",
+      "applicability": "related",
+      "claim": "The single-node template maps NODE_RANK/MASTER_ADDR/MASTER_PORT to PET variables and separates Ascend logs by node; it documents a sixteen-card dual-P8 HCCL RoCE setting. It also includes system writes and workload-specific tuning.",
+      "comparison": "Use variable aliases and per-node log organization only. Four-node target topology and selected image remain unverified. Never execute this template or assume its interface/cache knobs apply.",
+      "content_sha256": "187386dcd5ca08984d0ba20b44e4089a231ec6168f3e4fc139ffbb513e735e52",
+      "read_depth": "body",
+      "status": "read",
+      "trust": "community_reference_bundle",
+      "uri": "reference://ascend-reference-20261005@b83a696461745e01f8e44e8a2e672db9fdadca7d66b6e19d7eaaaac53b5081a8/\u9644\u4ef6/share.bashrc",
+      "url": null
+    }
+  ],
+  "stage": "preparation",
+  "summary": "For the requested four-node formal launch, reuse the existing local sixteen-rank evidence without rerunning experiments. Read the reference environment template body and inspect target CLI, DDP setup, shared environment and loader; the template is not evidence of four-node success. Search did not yield a distributed job submission API or an authenticated client. License-change refresh block does not prevent reuse of the old accepted snapshot."
+}

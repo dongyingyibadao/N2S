@@ -1,0 +1,33 @@
+{
+  "case_id": "openpi-pi05-ddp-no-checkpoint-20261024",
+  "evidence_refs": [],
+  "evidence_sha256": {},
+  "generalization": "pending_validation",
+  "id": "20261024-072447-833179-c693c012",
+  "issue_scope": "tooling",
+  "kind": "lookup",
+  "queries": [
+    "torchrun Python interpreter --accepted-only --include-community --task distributed --stage optimization",
+    "inspect shutil.which(torchrun), entrypoint shebang, sys.executable"
+  ],
+  "recorded_at": "2026-10-24T07:24:47.833167+00:00",
+  "resolves": [
+    "20261024-072355-854131-5b0c8c2f"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-10-24T07:24:47.706458+00:00",
+      "applicability": "no_match",
+      "claim": "Exact keyword search returned total_results0.",
+      "comparison": "Used direct local interpreter/shebang evidence rather than claim missing N2S recipe or reinstall packages.",
+      "read_depth": "catalog",
+      "status": "no_match",
+      "trust": "unavailable",
+      "uri": null,
+      "url": null
+    }
+  ],
+  "stage": "optimization",
+  "summary": "No exact N2S match for interpreter problem. Local shell inspection establishes torchrun shebang points to base /opt environment, while python uses target .venv-ascend. Use python -m torch.distributed.run to preserve target executable; no dependency installation."
+}

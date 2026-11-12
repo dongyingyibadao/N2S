@@ -1,0 +1,107 @@
+{
+  "recorded_at": "2026-10-27T16:37:58.783252+00:00",
+  "scope": "Additional communication diagnostic entry point, not a model/optimizer/precision change.",
+  "retry_job_id": "local-job-a338c1d272ed",
+  "retry_job_name": "pi05-libero-4n64npu-b4-nockpt-20261027-r1",
+  "previous_job_id": "local-job-b8dab26e6873",
+  "source_revision": "215abfb217dbac7d5f1273282331b9b1866c0479",
+  "source_tree_dirty": true,
+  "changed_files_sha256": {
+    "scripts/check_hccl_qz.py": "8920bfcd08c16cb44253bcbd6ef263090f0d81a4f157db672bf5d69917048292",
+    "scripts/diagnose_libero_qz.sh": "c1955b923fd79ba6b77df4f9d8e09d4d872a43b8fe26baa2d1147ad41bae45c1",
+    "scripts/train_libero_qz.sh": "0d8e8bf6ffa05c8d5fb944b0890d36344697532d8d1ab12daa1ace2364900bef"
+  },
+  "new_files": [
+    "scripts/check_hccl_qz.py",
+    "scripts/diagnose_libero_qz.sh"
+  ],
+  "change": "Add atomic per-rank communication reports and explicit NPU device selection. Diagnostic launcher reads available hardware/link metadata, then runs fresh4-rank device1,4-rank device0 and64-rank collectives; enters the unchanged training launcher only when all groups pass.",
+  "collective_protocol": [
+    {
+      "op": "all_gather",
+      "dtype": "int64",
+      "shape": [
+        2
+      ],
+      "expected": "Gather exact ordered [rank,world_size] pairs."
+    },
+    {
+      "op": "all_reduce",
+      "dtype": "float32",
+      "shape": [
+        4096
+      ],
+      "expected": "Each value equals world_size*(world_size+1)/2."
+    },
+    {
+      "op": "all_reduce",
+      "dtype": "bfloat16",
+      "shape": [
+        1048576
+      ],
+      "expected": "Each value equals world_size."
+    },
+    {
+      "op": "broadcast",
+      "dtype": "bfloat16",
+      "shape": [
+        1048576
+      ],
+      "expected": "Each value equals0.25 from global rank0."
+    }
+  ],
+  "static_checks_reported": [
+    "bash -n",
+    "Python compile/help",
+    "ruff check",
+    "ruff format"
+  ],
+  "source_check_note": "Probe import formatting/lazy-import lint annotation updated after submission while containers were still being created; no collective semantics changed.",
+  "independent_static_review": [
+    {
+      "sha256_at_review": "8920bfcd08c16cb44253bcbd6ef263090f0d81a4f157db672bf5d69917048292",
+      "line_count": 127,
+      "reading_depth": "full; current 127-line version re-read at review timestamp",
+      "effect_on_decision": "No hard correctness bug identified in static review. Explicit device-index selects device 1 despite LOCAL_RANK=0; verifies gathered rank/world values, FP32 rank sum, BF16 sum and BF16 broadcast; atomic rank reports record import failures.",
+      "hash_verified_at": "2026-10-27T16:34:48.471941+00:00",
+      "limitations": [
+        "Static review does not prove multi-node execution will succeed.",
+        "The four operation checks are correctness probes, not application throughput or model-accuracy tests."
+      ],
+      "path": "check_hccl_qz.py"
+    },
+    {
+      "sha256_at_review": "c1955b923fd79ba6b77df4f9d8e09d4d872a43b8fe26baa2d1147ad41bae45c1",
+      "line_count": 77,
+      "reading_depth": "full; 77 lines",
+      "effect_on_decision": "Four-node/16-device guard; read-only hardware capture; selected-device 1 then 0 checks; 64-rank check; launches real training only after success. No hard correctness bug identified.",
+      "hash_verified_at": "2026-10-27T16:34:48.471941+00:00",
+      "limitations": [
+        "Per-probe outer timeout includes rendezvous/import/startup skew. This is a limitation, not an observed cause."
+      ],
+      "path": "diagnose_libero_qz.sh"
+    }
+  ],
+  "runtime_timeouts": {
+    "probe_connect_seconds": 120,
+    "probe_execution_seconds": 240,
+    "outer_probe_seconds": 285,
+    "training_execution_seconds": 1800,
+    "note": "Outer timeout includes rendezvous/import/startup skew; timing not a throughput benchmark."
+  },
+  "training_configuration_preserved": {
+    "nodes": 4,
+    "npu_per_node": 16,
+    "global_batch": 256,
+    "per_card_batch": 4,
+    "gradient_accumulation_steps": 1,
+    "gradient_checkpointing": false,
+    "precision": "bfloat16_with_selected_fp32",
+    "full_parameter": true,
+    "num_train_steps": 30000,
+    "save_interval": 1000
+  },
+  "rollback": "Choose the original scripts/train_libero_qz.sh entry point instead of scripts/diagnose_libero_qz.sh with the same explicit topology and a new experiment name; unused diagnostic helpers can remain. No network/device state change to revert.",
+  "hardware_diagnostic_gap": "hccn_tool unavailable in the selected image; link/TLS checks were not obtained.",
+  "privacy": "No upstream code, internal addresses, hostnames, raw hardware output, credentials or private absolute paths included."
+}

@@ -1,0 +1,23 @@
+{
+  "case_id": "openpi-pi05-ddp-no-checkpoint-20261024",
+  "evidence_refs": [
+    "cases/work-items/openpi-pi05-ddp-no-checkpoint-20261024/communication16-evidence.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/openpi-pi05-ddp-no-checkpoint-20261024/communication16-evidence.json": "3e3ee75d23a200e990cc6cd26c5043471ddf9f4b676beecb12097cf85d63cba8"
+  },
+  "generalization": "pending_validation",
+  "id": "20261024-072743-151623-c31ae669",
+  "issue_scope": "target",
+  "kind": "resolution",
+  "queries": [],
+  "recorded_at": "2026-10-24T07:27:43.151605+00:00",
+  "resolves": [
+    "20261024-072355-854131-5b0c8c2f",
+    "20261024-072553-509385-1cc63fc0"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "Target-Python module launcher removes missing-jax metadata issue; legal timeout removes EI0001. All16actualNPU ranks completedHCCL all_reduce and matched136, then barrier and cleanup. No training speed claim from scalar probe."
+}

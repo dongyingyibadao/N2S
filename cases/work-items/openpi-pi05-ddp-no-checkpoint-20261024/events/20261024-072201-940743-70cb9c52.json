@@ -1,0 +1,54 @@
+{
+  "case_id": "openpi-pi05-ddp-no-checkpoint-20261024",
+  "evidence_refs": [],
+  "evidence_sha256": {},
+  "generalization": "pending_validation",
+  "id": "20261024-072201-940743-70cb9c52",
+  "issue_scope": "target",
+  "kind": "lookup",
+  "queries": [
+    "disable-gc --accepted-only --include-community --task memory --stage optimization",
+    "HCCL_INTRA_ROCE_ENABLE --accepted-only --include-community --task distributed --stage optimization",
+    "npu-smi info -t topo"
+  ],
+  "recorded_at": "2026-10-24T07:22:01.940733+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-10-24T07:22:01.684012+00:00",
+      "applicability": "related",
+      "claim": "Independent --disable-gc and --disable-outer-suffix-checkpoint controls.",
+      "comparison": "Use true disable, not just outer skip; different LeRobot versions, no throughput transfer.",
+      "read_depth": "implementation",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi05/train/src/scripts/run_train.sh",
+      "url": null
+    },
+    {
+      "accessed_at": "2026-10-24T07:22:01.684027+00:00",
+      "applicability": "related",
+      "claim": "Joint-layer forward honors GC flag without forced enable.",
+      "comparison": "Local older OpenPI forced flag true; removing that is required. Relevant joint-forward code read.",
+      "read_depth": "implementation",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi05/train/src/modeling_pi05.py",
+      "url": null
+    },
+    {
+      "accessed_at": "2026-10-24T07:22:01.684030+00:00",
+      "applicability": "related",
+      "claim": "Template recommends HCCL_INTRA_ROCE_ENABLE=1 for16cards two8-card meshes; contains many unrelated system side effects.",
+      "comparison": "Actual npu-smi topology showsHCCS within0-7 and8-15, PCIe across. Read template only; do not source it; verify communication before16-rank training.",
+      "read_depth": "implementation",
+      "status": "read",
+      "trust": "community_reference_bundle",
+      "uri": "reference://ascend-reference-20261005@b83a696461745e01f8e44e8a2e672db9fdadca7d66b6e19d7eaaaac53b5081a8/\u9644\u4ef6/share.bashrc",
+      "url": null
+    }
+  ],
+  "stage": "optimization",
+  "summary": "Distinguish all-GC-off from official outer-only optimization, check HCCL two8-card mesh guidance against actual16-card topology. These references do not provide matching local throughput or prove batch4fits."
+}

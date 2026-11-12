@@ -1,0 +1,188 @@
+{
+  "recorded_at": "2026-10-24T07:50:55.232799+00:00",
+  "execution_method": "Direct user-authorized target checkout commands, not N2S runner. No N2S run IDs.",
+  "scope": "16card PI05 fullparameter training, all recomputation off, local4acc4 versus local2acc8, effectivebatch256,1warmup+2measured updates pervariant",
+  "device": "16xAscend910B2C64GiB, retained background keepalive observed~22-23percentAICore before test",
+  "software": {
+    "torch": "2.9.0+cpu",
+    "torch-npu": "2.9.0",
+    "transformers": "4.53.2",
+    "lerobot": "0.4.3",
+    "jax": "0.5.3",
+    "datasets": "4.8.5"
+  },
+  "comparison": {
+    "same_expected_measured_frame_indices": true,
+    "source_sha256_equal": true,
+    "baseline": "b2_acc8",
+    "candidate": "b4_acc4",
+    "time_saved_s": 1.048024721443653,
+    "time_reduction_percent": 7.430125211198294,
+    "throughput_ratio_b4_over_b2": 1.0802650454929332
+  },
+  "variants": {
+    "b4_acc4_effective256_updates2": {
+      "local_batch": 4,
+      "accumulation": 4,
+      "effective_global_batch": 256,
+      "warmup_updates": 1,
+      "measured_updates": 2,
+      "measured_samples": 512,
+      "measured_updates_timings": [
+        {
+          "index": 1,
+          "slowest_rank_duration_s": 6.660821910016239,
+          "max_rank_duration_s": 6.660821910016239,
+          "min_rank_duration_s": 6.616848914884031,
+          "mean_rank_duration_s": 6.627319140126929
+        },
+        {
+          "index": 2,
+          "slowest_rank_duration_s": 6.42010257486254,
+          "max_rank_duration_s": 6.42010257486254,
+          "min_rank_duration_s": 6.381528655998409,
+          "mean_rank_duration_s": 6.401513359742239
+        }
+      ],
+      "max_rank_measured_phase_wall_s": 13.057050114497542,
+      "sum_of_slowest_individual_update_durations_s": 13.080924484878778,
+      "cold_warmup_update_max_rank_s": 40.10889240819961,
+      "peak_allocated_GB": 55.915944448,
+      "peak_allocated_GiB": 52.07578134536743,
+      "peak_reserved_GB": 59.724791808,
+      "peak_scope": "warmup plus measured updates",
+      "samples_per_wall_second": 39.21253234921069,
+      "all16ranks_passed": true,
+      "checkpoint_calls": 0,
+      "loss_and_grad_norm_finite": true,
+      "parameter_elements": 3616757520,
+      "all_parameters_require_grad": true,
+      "optimizer_parameter_tensors_with_state": 805,
+      "naturally_unused_parameter_tensors": 7,
+      "optimizer_step_values": [
+        3
+      ],
+      "action_out_proj_all_ranks_changed": true,
+      "rank_reports": [
+        "rank_00.json",
+        "rank_01.json",
+        "rank_02.json",
+        "rank_03.json",
+        "rank_04.json",
+        "rank_05.json",
+        "rank_06.json",
+        "rank_07.json",
+        "rank_08.json",
+        "rank_09.json",
+        "rank_10.json",
+        "rank_11.json",
+        "rank_12.json",
+        "rank_13.json",
+        "rank_14.json",
+        "rank_15.json"
+      ],
+      "source_sha256": {
+        "scripts/benchmark_ascend_ddp.py": "cae3a833350d552bc3dbe2bf5ef9334a5681d54fbe996c04b816aa07b273f741",
+        "src/openpi/models_pytorch/pi0_pytorch.py": "7db3e6ff1f4f3dd86275a1219f730cbb4966dcd6d3f7a3731577280e51316d12",
+        "src/openpi/models_pytorch/gemma_pytorch.py": "71d95f3ef7985c6cf739e6cb01de9448bd8026cf7c979b6a0dc2a1feb17e7a28",
+        "src/openpi/models_pytorch/preprocessing_pytorch.py": "6a44e91be2d7a724c6140d2cc98ed0a631b8d38bbb29f63b380a0a19f903bbf6",
+        "src/openpi/training/config.py": "3bfa22d563c46b988b2983a85e13abd1a92cf8b2a4bcef20e7f1307545ca109e",
+        "src/openpi/training/data_loader.py": "4c8afab0dcbbcf192e4a980e6f353a865fd503446aea9cd45aaf65d041af4923"
+      },
+      "target_evidence_relative_path": "data/ascend/ddp_no_checkpoint_20261024/b4_acc4_effective256_updates2/summary.json"
+    },
+    "b2_acc8_effective256_updates2": {
+      "local_batch": 2,
+      "accumulation": 8,
+      "effective_global_batch": 256,
+      "warmup_updates": 1,
+      "measured_updates": 2,
+      "measured_samples": 512,
+      "measured_updates_timings": [
+        {
+          "index": 1,
+          "slowest_rank_duration_s": 7.059255739673972,
+          "max_rank_duration_s": 7.059255739673972,
+          "min_rank_duration_s": 7.032262639142573,
+          "mean_rank_duration_s": 7.041144589486066
+        },
+        {
+          "index": 2,
+          "slowest_rank_duration_s": 7.045570612885058,
+          "max_rank_duration_s": 7.045570612885058,
+          "min_rank_duration_s": 7.015932726673782,
+          "mean_rank_duration_s": 7.0336864271666855
+        }
+      ],
+      "max_rank_measured_phase_wall_s": 14.105074835941195,
+      "sum_of_slowest_individual_update_durations_s": 14.10482635255903,
+      "cold_warmup_update_max_rank_s": 40.28692993987352,
+      "peak_allocated_GB": 45.81125888,
+      "peak_allocated_GiB": 42.6650595664978,
+      "peak_reserved_GB": 52.676263936,
+      "peak_scope": "warmup plus measured updates",
+      "samples_per_wall_second": 36.2989920971827,
+      "all16ranks_passed": true,
+      "checkpoint_calls": 0,
+      "loss_and_grad_norm_finite": true,
+      "parameter_elements": 3616757520,
+      "all_parameters_require_grad": true,
+      "optimizer_parameter_tensors_with_state": 805,
+      "naturally_unused_parameter_tensors": 7,
+      "optimizer_step_values": [
+        3
+      ],
+      "action_out_proj_all_ranks_changed": true,
+      "rank_reports": [
+        "rank_00.json",
+        "rank_01.json",
+        "rank_02.json",
+        "rank_03.json",
+        "rank_04.json",
+        "rank_05.json",
+        "rank_06.json",
+        "rank_07.json",
+        "rank_08.json",
+        "rank_09.json",
+        "rank_10.json",
+        "rank_11.json",
+        "rank_12.json",
+        "rank_13.json",
+        "rank_14.json",
+        "rank_15.json"
+      ],
+      "source_sha256": {
+        "scripts/benchmark_ascend_ddp.py": "cae3a833350d552bc3dbe2bf5ef9334a5681d54fbe996c04b816aa07b273f741",
+        "src/openpi/models_pytorch/pi0_pytorch.py": "7db3e6ff1f4f3dd86275a1219f730cbb4966dcd6d3f7a3731577280e51316d12",
+        "src/openpi/models_pytorch/gemma_pytorch.py": "71d95f3ef7985c6cf739e6cb01de9448bd8026cf7c979b6a0dc2a1feb17e7a28",
+        "src/openpi/models_pytorch/preprocessing_pytorch.py": "6a44e91be2d7a724c6140d2cc98ed0a631b8d38bbb29f63b380a0a19f903bbf6",
+        "src/openpi/training/config.py": "3bfa22d563c46b988b2983a85e13abd1a92cf8b2a4bcef20e7f1307545ca109e",
+        "src/openpi/training/data_loader.py": "4c8afab0dcbbcf192e4a980e6f353a865fd503446aea9cd45aaf65d041af4923"
+      },
+      "target_evidence_relative_path": "data/ascend/ddp_no_checkpoint_20261024/b2_acc8_effective256_updates2/summary.json"
+    }
+  },
+  "limitations": [
+    "16devices only, not64/128devices throughput",
+    "Only2measured updates after1warmup",
+    "Background keepalive retained",
+    "Per-step durationmax sums may exceed phase-wallmax due different rank local start times; no perstep barrier",
+    "Expected frameindices derive from sampler, not independent index instrumentation",
+    "Different microbatch RNG consumption; no output accuracy/convergence comparison",
+    "No model/optimizer checkpoint saved by benchmark"
+  ],
+  "cpu_regression": {
+    "scope": "CPU regression only, no accelerator tests",
+    "execution": "Completed by checkpoint implementation collaborator; results preserved in tool output, no independent logfile saved; not re-run for evidence.",
+    "commands": [
+      {
+        "command": "source scripts/ascend_env.sh\npython -m pytest -q src/openpi/models_pytorch/ascend_test.py -k checkpointing",
+        "result": "4 passed, 5 deselected, 3 warnings in8.05s"
+      },
+      {
+        "command": "source scripts/ascend_env.sh\npython -m pytest -q src/openpi/models_pytorch/ascend_test.py -k 'not sinusoidal_npu'",
+        "result": "8 passed, 1 deselected, 3 warnings in7.88s"
+      }
+    ]
+  }
+}

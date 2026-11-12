@@ -1,0 +1,18 @@
+{
+  "case_id": "openpi-pi05-ddp-no-checkpoint-20261024",
+  "evidence_refs": [],
+  "evidence_sha256": {},
+  "generalization": "pending_validation",
+  "id": "20261024-072201-804186-8cb1b270",
+  "issue_scope": "target",
+  "kind": "change",
+  "project_revision": "215abfb217dbac7d5f1273282331b9b1866c0479",
+  "queries": [],
+  "recorded_at": "2026-10-24T07:22:01.804174+00:00",
+  "resolves": [],
+  "rollback": "Restore only this session changes from target data/ascend/ddp_no_checkpoint_20261024/source_before/{gemma_pytorch.py,pi0_pytorch.py,config.py,train_pytorch.py,ascend_test.py}; remove new scripts/benchmark_ascend_ddp.py if reverting benchmark. Preserve all earlier dirty worktree changes. Do not reset to git HEAD.",
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "Honor complete gradient-checkpoint disable before measuring per-device4vs2. Remove Gemma training-force-enable; recursively clear all HF sublayer flags in PI0.disable; add default-true pytorch_gradient_checkpointing config and trainer CLI control. Preserve enabled historical policy. Add real-data full-parameter AdamW/HCCL benchmark with hard checkpoint-call guard and failure persistence. No accelerator success claimed yet."
+}

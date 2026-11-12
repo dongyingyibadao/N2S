@@ -1,0 +1,369 @@
+{
+  "recorded_at": "2026-10-27T16:37:58.783252+00:00",
+  "scope": "Error-specific troubleshooting source review for first four-node EI0006 failure; no causal resolution.",
+  "related_failure_event": "20261027-162412-714974-7f1a3b6f",
+  "source_review_provenance": {
+    "artifact_name": "hccl_source_review.json",
+    "artifact_sha256": "26e16ae316bf0a39097926dd2876bec89af2b138f89fc9ccb80255a89fbd5293",
+    "original_review_recorded_at": "2026-10-27T16:34:48.471941+00:00",
+    "original_individual_query_read_times_recorded": false,
+    "recording_agent_reread_scope": "Selected reference body60-100, selected official implementation17-29 and full existing16rank evidence; no external fetch or experiment repeated."
+  },
+  "revisions": {
+    "N2S_HEAD": "bf7d2f386067b2b08b973456567c6ccdaf58f64d",
+    "openpi_HEAD": "215abfb217dbac7d5f1273282331b9b1866c0479",
+    "working_tree_note": "Repositories contain existing local changes; HEAD is not a claim that reviewed files are clean. Per-file SHA256 identifies bytes at review time.",
+    "accepted_cann_recipes_snapshot": "45d167135c81d97573bfbe0e564bb4a1d9642514",
+    "reference_bundle_manifest_sha256": "b83a696461745e01f8e44e8a2e672db9fdadca7d66b6e19d7eaaaac53b5081a8",
+    "startup_refresh": "Main agent previously reported blocked_license_changed; not rerun by this reviewer."
+  },
+  "queries": [
+    {
+      "query": "get rasocket timeout",
+      "result_count": 0,
+      "cwd": "N2S checkout",
+      "argv": [
+        "tooling/n2s-knowledge",
+        "search",
+        "get rasocket timeout",
+        "--accepted-only",
+        "--include-community",
+        "--task",
+        "distributed",
+        "--stage",
+        "troubleshooting",
+        "--json"
+      ],
+      "command_rendering": "tooling/n2s-knowledge search 'get rasocket timeout' --accepted-only --include-community --task distributed --stage troubleshooting --json",
+      "query_started_at": null,
+      "query_duration_seconds": null,
+      "timing_note": "Individual query time/duration was not recorded; this is the command form retained in this agent session.",
+      "effect": "No matching accepted/indexed result for this exact query"
+    },
+    {
+      "query": "HCCL 多机 通信 超时",
+      "result_count": 0,
+      "cwd": "N2S checkout",
+      "argv": [
+        "tooling/n2s-knowledge",
+        "search",
+        "HCCL 多机 通信 超时",
+        "--accepted-only",
+        "--include-community",
+        "--task",
+        "distributed",
+        "--stage",
+        "troubleshooting",
+        "--json"
+      ],
+      "command_rendering": "tooling/n2s-knowledge search 'HCCL 多机 通信 超时' --accepted-only --include-community --task distributed --stage troubleshooting --json",
+      "query_started_at": null,
+      "query_duration_seconds": null,
+      "timing_note": "Individual query time/duration was not recorded; this is the command form retained in this agent session.",
+      "effect": "No matching accepted/indexed result for this exact query"
+    },
+    {
+      "query": "HCCL",
+      "result_count": 19,
+      "cwd": "N2S checkout",
+      "argv": [
+        "tooling/n2s-knowledge",
+        "search",
+        "HCCL",
+        "--accepted-only",
+        "--include-community",
+        "--task",
+        "distributed",
+        "--stage",
+        "troubleshooting",
+        "--json"
+      ],
+      "command_rendering": "tooling/n2s-knowledge search HCCL --accepted-only --include-community --task distributed --stage troubleshooting --json",
+      "query_started_at": null,
+      "query_duration_seconds": null,
+      "timing_note": "Individual query time/duration was not recorded; this is the command form retained in this agent session.",
+      "effect": "Candidate discovery only; reading depth and decisions are recorded separately"
+    },
+    {
+      "query": "HCCL_INTRA_ROCE_ENABLE",
+      "result_count": 5,
+      "cwd": "N2S checkout",
+      "argv": [
+        "tooling/n2s-knowledge",
+        "search",
+        "HCCL_INTRA_ROCE_ENABLE",
+        "--accepted-only",
+        "--include-community",
+        "--task",
+        "distributed",
+        "--stage",
+        "troubleshooting",
+        "--json"
+      ],
+      "command_rendering": "tooling/n2s-knowledge search HCCL_INTRA_ROCE_ENABLE --accepted-only --include-community --task distributed --stage troubleshooting --json",
+      "query_started_at": null,
+      "query_duration_seconds": null,
+      "timing_note": "Individual query time/duration was not recorded; this is the command form retained in this agent session.",
+      "effect": "Candidate discovery only; reading depth and decisions are recorded separately"
+    },
+    {
+      "query": "EI0006",
+      "result_count": 0,
+      "cwd": "N2S checkout",
+      "argv": [
+        "tooling/n2s-knowledge",
+        "search",
+        "EI0006",
+        "--accepted-only",
+        "--include-community",
+        "--task",
+        "distributed",
+        "--stage",
+        "troubleshooting",
+        "--json"
+      ],
+      "command_rendering": "tooling/n2s-knowledge search EI0006 --accepted-only --include-community --task distributed --stage troubleshooting --json",
+      "query_started_at": null,
+      "query_duration_seconds": null,
+      "timing_note": "Individual query time/duration was not recorded; this is the command form retained in this agent session.",
+      "effect": "No matching accepted/indexed result for this exact query"
+    },
+    {
+      "query": "16 卡",
+      "result_count": 29,
+      "cwd": "N2S checkout",
+      "argv": [
+        "tooling/n2s-knowledge",
+        "search",
+        "16 卡",
+        "--accepted-only",
+        "--include-community",
+        "--task",
+        "distributed",
+        "--stage",
+        "troubleshooting",
+        "--json"
+      ],
+      "command_rendering": "tooling/n2s-knowledge search '16 卡' --accepted-only --include-community --task distributed --stage troubleshooting --json",
+      "query_started_at": null,
+      "query_duration_seconds": null,
+      "timing_note": "Individual query time/duration was not recorded; this is the command form retained in this agent session.",
+      "effect": "Candidate discovery only; reading depth and decisions are recorded separately"
+    },
+    {
+      "query": "910B2C",
+      "result_count": 4,
+      "cwd": "N2S checkout",
+      "argv": [
+        "tooling/n2s-knowledge",
+        "search",
+        "910B2C",
+        "--accepted-only",
+        "--include-community",
+        "--task",
+        "distributed",
+        "--stage",
+        "troubleshooting",
+        "--json"
+      ],
+      "command_rendering": "tooling/n2s-knowledge search 910B2C --accepted-only --include-community --task distributed --stage troubleshooting --json",
+      "query_started_at": null,
+      "query_duration_seconds": null,
+      "timing_note": "Individual query time/duration was not recorded; this is the command form retained in this agent session.",
+      "effect": "Candidate discovery only; reading depth and decisions are recorded separately"
+    },
+    {
+      "query": "HCCL_NIC_RANKS",
+      "result_count": 0,
+      "cwd": "N2S checkout",
+      "argv": [
+        "tooling/n2s-knowledge",
+        "search",
+        "HCCL_NIC_RANKS",
+        "--accepted-only",
+        "--include-community",
+        "--task",
+        "distributed",
+        "--stage",
+        "troubleshooting",
+        "--json"
+      ],
+      "command_rendering": "tooling/n2s-knowledge search HCCL_NIC_RANKS --accepted-only --include-community --task distributed --stage troubleshooting --json",
+      "query_started_at": null,
+      "query_duration_seconds": null,
+      "timing_note": "Individual query time/duration was not recorded; this is the command form retained in this agent session.",
+      "effect": "No matching accepted/indexed result for this exact query"
+    },
+    {
+      "query": "HCCL_NIC",
+      "result_count": 0,
+      "cwd": "N2S checkout",
+      "argv": [
+        "tooling/n2s-knowledge",
+        "search",
+        "HCCL_NIC",
+        "--accepted-only",
+        "--include-community",
+        "--task",
+        "distributed",
+        "--stage",
+        "troubleshooting",
+        "--json"
+      ],
+      "command_rendering": "tooling/n2s-knowledge search HCCL_NIC --accepted-only --include-community --task distributed --stage troubleshooting --json",
+      "query_started_at": null,
+      "query_duration_seconds": null,
+      "timing_note": "Individual query time/duration was not recorded; this is the command form retained in this agent session.",
+      "effect": "No matching accepted/indexed result for this exact query"
+    },
+    {
+      "query": "网口 选择",
+      "result_count": 0,
+      "cwd": "N2S checkout",
+      "argv": [
+        "tooling/n2s-knowledge",
+        "search",
+        "网口 选择",
+        "--accepted-only",
+        "--include-community",
+        "--task",
+        "distributed",
+        "--stage",
+        "troubleshooting",
+        "--json"
+      ],
+      "command_rendering": "tooling/n2s-knowledge search '网口 选择' --accepted-only --include-community --task distributed --stage troubleshooting --json",
+      "query_started_at": null,
+      "query_duration_seconds": null,
+      "timing_note": "Individual query time/duration was not recorded; this is the command form retained in this agent session.",
+      "effect": "No matching accepted/indexed result for this exact query"
+    }
+  ],
+  "source_checks": [
+    {
+      "uri": "reference://ascend-reference-20261005@b83a696461745e01f8e44e8a2e672db9fdadca7d66b6e19d7eaaaac53b5081a8/附件/share.bashrc",
+      "url": null,
+      "accessed_at": "2026-10-27T16:37:58.783252+00:00",
+      "status": "partial",
+      "read_depth": "body",
+      "trust": "community_reference_bundle",
+      "claim": "Selected body lines60-100 describe enabling HCCL_INTRA_ROCE_ENABLE=1 for two P8 groups in a16-device node, illustrate default-route interface choice and timeout/port templates.",
+      "applicability": "related",
+      "comparison": "These exact selected body lines were re-read for recording, corroborating the earlier reviewer. This is template/background support, not a verified four-node EI0006 fix. No template execution, interface guess, system write or blanket timeout increase was adopted.",
+      "content_sha256": "187386dcd5ca08984d0ba20b44e4089a231ec6168f3e4fc139ffbb513e735e52"
+    },
+    {
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/world_model/agibot-arm-world-model/train/run_train.sh",
+      "url": null,
+      "accessed_at": "2026-10-27T16:37:58.783252+00:00",
+      "status": "partial",
+      "read_depth": "implementation",
+      "trust": "accepted_upstream_documented",
+      "claim": "Selected implementation lines17-29 set HCCL_CONNECT_TIMEOUT default600 and HCCL_IF_BASE_PORT default21000 in a different world-model launcher.",
+      "applicability": "different_scope",
+      "comparison": "Exact selected code was re-read; it provides another-model configuration example, not evidence that changing these variables fixes this environment. Current connect120 and no inferred NIC-subset setting were retained.",
+      "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514",
+      "content_sha256": "cf5a8a7d00fe8798376090b754d0b707aed81a1c95abc76a26a33f635a3a2aad"
+    },
+    {
+      "uri": "cases/work-items/openpi-pi05-ddp-no-checkpoint-20261024/communication16-evidence.json",
+      "url": null,
+      "accessed_at": "2026-10-27T16:37:58.783252+00:00",
+      "status": "read",
+      "read_depth": "body",
+      "trust": "n2s_case_evidence",
+      "claim": "The previous single-instance16-rank FP32 scalar AllReduce passed with HCCL_INTRA_ROCE_ENABLE=1, CONNECT_TIMEOUT120 and EXEC_TIMEOUT180.",
+      "applicability": "contrary",
+      "comparison": "Full evidence was read. It argues against declaring INTRA_ROCE_ENABLE=1 categorically invalid. It does not establish four-node AllGather success, a current fault locus, or model accuracy.",
+      "content_sha256": "3e3ee75d23a200e990cc6cd26c5043471ddf9f4b676beecb12097cf85d63cba8"
+    },
+    {
+      "uri": null,
+      "url": null,
+      "accessed_at": "2026-10-27T16:34:48.471941+00:00",
+      "status": "no_match",
+      "read_depth": "catalog",
+      "trust": "unavailable",
+      "claim": "Reviewer-reported accepted/community searches returned no indexed matches for exact queries get rasocket timeout, HCCL 多机 通信 超时, EI0006, HCCL_NIC_RANKS, HCCL_NIC and 网口 选择.",
+      "applicability": "no_match",
+      "comparison": "Per-query start/duration were not retained; timestamp is the consolidated reviewer artifact time. No match in this local indexed state does not establish absence of an upstream solution. Broad HCCL results were discovery only and were not counted as body reads."
+    }
+  ],
+  "first_failure_interpretation": {
+    "operator": "HcclAllgather",
+    "phase": "DDP constructor parameter-shape verification",
+    "codes": [
+      "EI0006",
+      "ERR00100"
+    ],
+    "detected_rank_pattern": [
+      1,
+      9,
+      17,
+      25,
+      33,
+      41,
+      49,
+      57
+    ],
+    "traceback_rank_set": [
+      1,
+      9,
+      17,
+      33,
+      41,
+      49,
+      57
+    ],
+    "heartbeat_warnings": {
+      "count": 22,
+      "same_node": 18,
+      "cross_node": 4
+    },
+    "root_cause": "unconfirmed",
+    "limits": "Detected path includes intra-node and cross-node relationships. Runtime transport detector is diagnostic, not proof of a fault site; no defective hardware or purely cross-node cause established."
+  },
+  "source_access_gaps": {
+    "exact_no_match_queries": [
+      "get rasocket timeout",
+      "HCCL 多机 通信 超时",
+      "EI0006",
+      "HCCL_NIC_RANKS",
+      "HCCL_NIC",
+      "网口 选择"
+    ],
+    "external_failures": [
+      {
+        "service": "GitHub unauthenticated repository API",
+        "repositories": [
+          "Ascend/hccl",
+          "Ascend/cann-hccl",
+          "cannmirror/hccl"
+        ],
+        "result": "HTTP 403 rate limit; no official source body read."
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Ascend/hccl/master/README.md",
+        "result": "HTTP 404"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/cannmirror/hccl/master/README.md",
+        "result": "HTTP 404"
+      },
+      {
+        "url": "https://gitcode.com/cann/hccl/-/raw/master/README.md",
+        "result": "HTTP response was HTML shell, not source body",
+        "sha256_of_response": "3ab564aa12685b182e997fc28202b0a0d28025dcd3ea8f91eff491f743661a16"
+      }
+    ],
+    "NIC_subset_support": "Not established for CANN8.5/910B from reviewed sources or installed string searches. No guessed parameter adopted.",
+    "indexed_cache_caveat": "Ordinary rg ignores ignored caches; n2s-knowledge reaches indexed cached sources."
+  },
+  "decisions": [
+    "Retain HCCL_INTRA_ROCE_ENABLE=1; previous success and reference template are contrary to declaring it categorically wrong.",
+    "Separate selected-device1, selected-device0 and all64 collectives before loading model; use explicit device-index because prior benchmark binds LOCAL_RANK.",
+    "Do not claim a timeout/NIC parameter fix from another-model recipe or unsupported search inference.",
+    "Keep first-job root cause open; new-node passing probes are availability evidence only."
+  ],
+  "privacy": "Internal peer addresses, hostnames, raw logs, private absolute paths, credentials and source body content omitted. No rules/approval state changed."
+}

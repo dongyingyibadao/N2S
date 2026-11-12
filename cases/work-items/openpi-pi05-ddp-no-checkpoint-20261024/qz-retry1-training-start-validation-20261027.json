@@ -1,0 +1,150 @@
+{
+  "recorded_at": "2026-10-27T16:41:33.749035+00:00",
+  "source_snapshot_recorded_at": "2026-10-27T16:39:11.738662+00:00",
+  "scope": "Actual early64-rank training validation only, fixed to the supplied immutable68-update snapshot. No new experiment run by recording agent.",
+  "job_id": "local-job-a338c1d272ed",
+  "status": "training_updates_observed",
+  "resources": {
+    "nodes": 4,
+    "NPUs_per_node": 16,
+    "CPU_cores_per_node": 128,
+    "NPUs_total": 64
+  },
+  "configuration": {
+    "local_batch": 4,
+    "global_batch": 256,
+    "gradient_accumulation": 1,
+    "gradient_checkpointing": false,
+    "precision": "bfloat16 with existing selected FP32 components",
+    "full_parameter_training": true,
+    "target_updates": 30000,
+    "save_interval": 1000
+  },
+  "source_snapshot": {
+    "name": "retry1_training_start.json",
+    "sha256": "7b60160cf0119fbd03635dd7e93b97c6b4c290a0bba980663fc96e4599ea4f17"
+  },
+  "raw_log_verification": {
+    "main_rank": "node0/local_rank0/global_rank0",
+    "immutable_snapshot_completed_updates": 68,
+    "progress_marker_present": true,
+    "source_prefix_bytes_through_68_update_progress": 20988,
+    "source_prefix_sha256": "e2c3fce3688f072050a3de548866eb4baa5ab89a361aa7919855328efebd054c",
+    "raw_log_still_growing": "Later progress is intentionally not substituted into this fixed68-update record.",
+    "rank_log_count": 64,
+    "rank_marker_counts": {
+      "Using batch size per GPU: 4 (total batch size across 64 GPUs: 256)": 64,
+      "local_batch_size: 4": 64,
+      "Disabled gradient checkpointing by training configuration": 64,
+      "Loaded PyTorch weights": 64
+    },
+    "trainer_order_verified": "Code executes backward, finite gradient clipping, AdamW.step and zero_grad before incrementing global_step and updating tqdm; therefore68/30000 reflects68 completed optimizer steps, not a zero-based index.",
+    "training_script_sha256_at_read": "2501a6f14f99cbd6da5c60bdd264c585d49a229d3478f441c176ee517b3adb15"
+  },
+  "dataset": "Existing real public LIBERO LeRobot dataset, not mock inputs.",
+  "weights": {
+    "actually_loaded": "Existing converted pi05_libero_openpi model derived from user-provided pi05_libero_finetuned checkpoint.",
+    "loaded_marker_count": 64,
+    "direct_load_of_original_HF_checkpoint_claimed": false,
+    "upstream_official_lineage": "unknown; no new verification of upstream release identity or HF provenance.",
+    "official_weights_schema_flag": false,
+    "schema_flag_explanation": "The schema allows only true/false. False is retained from the existing case because these are user-provided LeRobot-finetuned converted weights; it does not encode an unsupported claim of direct original-HF loading.",
+    "historical_independent_conversion_check": {
+      "evidence": "cases/work-items/openpi-pi05-libero-ascend-20261020/weight-consistency.json",
+      "evidence_sha256": "e8ed93aa55e955a1dc551ffafc154c7f6385a1af41bd6f203c9e82afc6a01c2c",
+      "method": "Independent safetensors header shape/dtype/offset and full binary payload SHA256 comparison; no model execution",
+      "stored_tensors": 812,
+      "payload_bytes": 7472956256,
+      "source_and_converted_payload_sha256": "f4297e24f94b403b9533bc545b3fb35c6da40b9c3393b49890bfd666cc3a3771",
+      "all_tensor_headers_match_after_prefix_removal": true,
+      "tied_aliases_match": true,
+      "payload_equal": true,
+      "output_parity": "not measured; byte identity does not compare framework execution"
+    },
+    "weight_file_bytes_rehashed_now": false,
+    "provenance_limit": "Reuses existing conversion check; no new7.5GB file rehash or source-framework/NVIDIA execution. Log confirms configured converted path loaded, not independent revalidation of every current file byte."
+  },
+  "completed_optimizer_updates_at_snapshot": 68,
+  "target_optimizer_updates": 30000,
+  "interval_logs": [
+    {
+      "time_UTC": "16:37:08.274",
+      "step_index": 0,
+      "loss": 0.0762,
+      "lr": 2.5e-08,
+      "grad_norm": 0.51,
+      "interval_seconds": 41.9
+    },
+    {
+      "time_UTC": "16:37:30.631",
+      "step_index": 10,
+      "loss": 0.0872,
+      "lr": 1.62e-07,
+      "grad_norm": 0.56,
+      "interval_seconds": 22.4
+    },
+    {
+      "time_UTC": "16:37:48.313",
+      "step_index": 20,
+      "loss": 0.0889,
+      "lr": 4.12e-07,
+      "grad_norm": 0.55,
+      "interval_seconds": 17.7
+    },
+    {
+      "time_UTC": "16:38:05.822",
+      "step_index": 30,
+      "loss": 0.0887,
+      "lr": 6.62e-07,
+      "grad_norm": 0.54,
+      "interval_seconds": 17.5
+    },
+    {
+      "time_UTC": "16:38:23.142",
+      "step_index": 40,
+      "loss": 0.0991,
+      "lr": 9.12e-07,
+      "grad_norm": 0.54,
+      "interval_seconds": 17.3
+    },
+    {
+      "time_UTC": "16:38:40.664",
+      "step_index": 50,
+      "loss": 0.1063,
+      "lr": 1.16e-06,
+      "grad_norm": 0.53,
+      "interval_seconds": 17.5
+    },
+    {
+      "time_UTC": "16:38:57.922",
+      "step_index": 60,
+      "loss": 0.1069,
+      "lr": 1.41e-06,
+      "grad_norm": 0.52,
+      "interval_seconds": 17.3
+    }
+  ],
+  "finite_observation": "All retained main-rank interval loss and gradient-norm values are finite; this is early training health evidence, not an accuracy comparison.",
+  "timing": {
+    "cold_first_logged_update_seconds": 41.9,
+    "recent_ten_update_window_seconds": 17.3,
+    "recent_seconds_per_update": 1.73,
+    "scope": "Trainer log wall time for ten updates, including data/forward/backward/HCCL/AdamW; this is not a separate synchronized benchmark. Initial model load excluded; checkpoints not yet reached.",
+    "benchmark_or_speedup_claim": false,
+    "paired_baseline": null
+  },
+  "checkpoint": {
+    "directories_at_snapshot": [],
+    "save_interval": 1000,
+    "reached_first_save_interval": false,
+    "save_or_restore_tested_by_this_job_snapshot": false
+  },
+  "accuracy": "pending",
+  "full30000_updates_complete": false,
+  "original_failure_event": "20261027-162412-714974-7f1a3b6f",
+  "original_failure_resolved": false,
+  "causal_limit": "QZ assigned different physical servers. Early training on the new allocation does not establish the first-job HCCL cause, repair the original servers, or constitute a same-node A/B.",
+  "new_N2S_runner_run_ids": [],
+  "generalization": "pending_validation",
+  "privacy": "No hostnames, internal peer addresses, private absolute paths, credentials, raw logs, source code, checkpoints or dataset contents included."
+}

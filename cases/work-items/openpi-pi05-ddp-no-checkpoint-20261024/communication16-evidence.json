@@ -1,0 +1,286 @@
+{
+  "kind": "direct_target_execution_not_N2S_runner",
+  "recorded_at": "2026-10-24T07:27:42.854341+00:00",
+  "scope": "16rank HCCL scalar sum only, not training throughput",
+  "command": "target-python -m torch.distributed.run --standalone --nnodes=1 --nproc_per_node=16 scripts/benchmark_ascend_ddp.py --communication-only --communication-timeout180",
+  "hardware": "16xAscend910B2C64GiB, background keepalive retained",
+  "environment": {
+    "HCCL_INTRA_ROCE_ENABLE": "1",
+    "HCCL_CONNECT_TIMEOUT": "120",
+    "HCCL_EXEC_TIMEOUT": "180"
+  },
+  "ranks": [
+    {
+      "rank": 0,
+      "status": "passed",
+      "probe": {
+        "actual_sum": 136.0,
+        "expected_sum": 136.0,
+        "passed": true
+      },
+      "versions": {
+        "torch": "2.9.0+cpu",
+        "torch-npu": "2.9.0",
+        "transformers": "4.53.2",
+        "lerobot": "0.4.3",
+        "jax": "0.5.3",
+        "datasets": "4.8.5"
+      }
+    },
+    {
+      "rank": 1,
+      "status": "passed",
+      "probe": {
+        "actual_sum": 136.0,
+        "expected_sum": 136.0,
+        "passed": true
+      },
+      "versions": {
+        "torch": "2.9.0+cpu",
+        "torch-npu": "2.9.0",
+        "transformers": "4.53.2",
+        "lerobot": "0.4.3",
+        "jax": "0.5.3",
+        "datasets": "4.8.5"
+      }
+    },
+    {
+      "rank": 2,
+      "status": "passed",
+      "probe": {
+        "actual_sum": 136.0,
+        "expected_sum": 136.0,
+        "passed": true
+      },
+      "versions": {
+        "torch": "2.9.0+cpu",
+        "torch-npu": "2.9.0",
+        "transformers": "4.53.2",
+        "lerobot": "0.4.3",
+        "jax": "0.5.3",
+        "datasets": "4.8.5"
+      }
+    },
+    {
+      "rank": 3,
+      "status": "passed",
+      "probe": {
+        "actual_sum": 136.0,
+        "expected_sum": 136.0,
+        "passed": true
+      },
+      "versions": {
+        "torch": "2.9.0+cpu",
+        "torch-npu": "2.9.0",
+        "transformers": "4.53.2",
+        "lerobot": "0.4.3",
+        "jax": "0.5.3",
+        "datasets": "4.8.5"
+      }
+    },
+    {
+      "rank": 4,
+      "status": "passed",
+      "probe": {
+        "actual_sum": 136.0,
+        "expected_sum": 136.0,
+        "passed": true
+      },
+      "versions": {
+        "torch": "2.9.0+cpu",
+        "torch-npu": "2.9.0",
+        "transformers": "4.53.2",
+        "lerobot": "0.4.3",
+        "jax": "0.5.3",
+        "datasets": "4.8.5"
+      }
+    },
+    {
+      "rank": 5,
+      "status": "passed",
+      "probe": {
+        "actual_sum": 136.0,
+        "expected_sum": 136.0,
+        "passed": true
+      },
+      "versions": {
+        "torch": "2.9.0+cpu",
+        "torch-npu": "2.9.0",
+        "transformers": "4.53.2",
+        "lerobot": "0.4.3",
+        "jax": "0.5.3",
+        "datasets": "4.8.5"
+      }
+    },
+    {
+      "rank": 6,
+      "status": "passed",
+      "probe": {
+        "actual_sum": 136.0,
+        "expected_sum": 136.0,
+        "passed": true
+      },
+      "versions": {
+        "torch": "2.9.0+cpu",
+        "torch-npu": "2.9.0",
+        "transformers": "4.53.2",
+        "lerobot": "0.4.3",
+        "jax": "0.5.3",
+        "datasets": "4.8.5"
+      }
+    },
+    {
+      "rank": 7,
+      "status": "passed",
+      "probe": {
+        "actual_sum": 136.0,
+        "expected_sum": 136.0,
+        "passed": true
+      },
+      "versions": {
+        "torch": "2.9.0+cpu",
+        "torch-npu": "2.9.0",
+        "transformers": "4.53.2",
+        "lerobot": "0.4.3",
+        "jax": "0.5.3",
+        "datasets": "4.8.5"
+      }
+    },
+    {
+      "rank": 8,
+      "status": "passed",
+      "probe": {
+        "actual_sum": 136.0,
+        "expected_sum": 136.0,
+        "passed": true
+      },
+      "versions": {
+        "torch": "2.9.0+cpu",
+        "torch-npu": "2.9.0",
+        "transformers": "4.53.2",
+        "lerobot": "0.4.3",
+        "jax": "0.5.3",
+        "datasets": "4.8.5"
+      }
+    },
+    {
+      "rank": 9,
+      "status": "passed",
+      "probe": {
+        "actual_sum": 136.0,
+        "expected_sum": 136.0,
+        "passed": true
+      },
+      "versions": {
+        "torch": "2.9.0+cpu",
+        "torch-npu": "2.9.0",
+        "transformers": "4.53.2",
+        "lerobot": "0.4.3",
+        "jax": "0.5.3",
+        "datasets": "4.8.5"
+      }
+    },
+    {
+      "rank": 10,
+      "status": "passed",
+      "probe": {
+        "actual_sum": 136.0,
+        "expected_sum": 136.0,
+        "passed": true
+      },
+      "versions": {
+        "torch": "2.9.0+cpu",
+        "torch-npu": "2.9.0",
+        "transformers": "4.53.2",
+        "lerobot": "0.4.3",
+        "jax": "0.5.3",
+        "datasets": "4.8.5"
+      }
+    },
+    {
+      "rank": 11,
+      "status": "passed",
+      "probe": {
+        "actual_sum": 136.0,
+        "expected_sum": 136.0,
+        "passed": true
+      },
+      "versions": {
+        "torch": "2.9.0+cpu",
+        "torch-npu": "2.9.0",
+        "transformers": "4.53.2",
+        "lerobot": "0.4.3",
+        "jax": "0.5.3",
+        "datasets": "4.8.5"
+      }
+    },
+    {
+      "rank": 12,
+      "status": "passed",
+      "probe": {
+        "actual_sum": 136.0,
+        "expected_sum": 136.0,
+        "passed": true
+      },
+      "versions": {
+        "torch": "2.9.0+cpu",
+        "torch-npu": "2.9.0",
+        "transformers": "4.53.2",
+        "lerobot": "0.4.3",
+        "jax": "0.5.3",
+        "datasets": "4.8.5"
+      }
+    },
+    {
+      "rank": 13,
+      "status": "passed",
+      "probe": {
+        "actual_sum": 136.0,
+        "expected_sum": 136.0,
+        "passed": true
+      },
+      "versions": {
+        "torch": "2.9.0+cpu",
+        "torch-npu": "2.9.0",
+        "transformers": "4.53.2",
+        "lerobot": "0.4.3",
+        "jax": "0.5.3",
+        "datasets": "4.8.5"
+      }
+    },
+    {
+      "rank": 14,
+      "status": "passed",
+      "probe": {
+        "actual_sum": 136.0,
+        "expected_sum": 136.0,
+        "passed": true
+      },
+      "versions": {
+        "torch": "2.9.0+cpu",
+        "torch-npu": "2.9.0",
+        "transformers": "4.53.2",
+        "lerobot": "0.4.3",
+        "jax": "0.5.3",
+        "datasets": "4.8.5"
+      }
+    },
+    {
+      "rank": 15,
+      "status": "passed",
+      "probe": {
+        "actual_sum": 136.0,
+        "expected_sum": 136.0,
+        "passed": true
+      },
+      "versions": {
+        "torch": "2.9.0+cpu",
+        "torch-npu": "2.9.0",
+        "transformers": "4.53.2",
+        "lerobot": "0.4.3",
+        "jax": "0.5.3",
+        "datasets": "4.8.5"
+      }
+    }
+  ]
+}

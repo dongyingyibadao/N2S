@@ -1,0 +1,50 @@
+{
+  "completion": {
+    "backend": "npu",
+    "optimization_goal": "investigate",
+    "task_type": "optimization_investigation"
+  },
+  "created_at": "2026-10-24T07:14:40.926681+00:00",
+  "generalization": "pending_validation",
+  "goal": "User-clarified speed comparison on16Ascendcards:Pi05fullparameter,allGCoff,effectiveglobalbatch256. local4 accumulation4 versuslocal2 accumulation8,1warmup+2measuredAdamWupdates each. Model64cardbatch4/128cardbatch2 effectivebatch without claiming real64/128card throughput.",
+  "id": "openpi-pi05-ddp-no-checkpoint-20261024",
+  "knowledge_refs": [],
+  "maintenance_workflow": "three_stage_v1",
+  "models": [
+    "openpi-pi05-libero"
+  ],
+  "observations": "Direct target execution completed both variants, all16ranks passed ineach;512measuredsamples each. Case remainsopen/pending_validation because N2S accuracy/triple-stage record requirements are broader than throughput-only request; noNPUparityexperimentwasrun. No runner runIDs;1drafttask holds actual protocol, executionfingerprint remainsincomplete dueuninitializedsubmodules. Earlier256updateinterpretation run was intentionallystopped onuserclarification; artifacts retained. Keepalivebackground untouched.",
+  "related_rules": [],
+  "schema_version": "1.0.0",
+  "source": {
+    "baseline_revision": "215abfb217dbac7d5f1273282331b9b1866c0479",
+    "intake": {
+      "dirty": true,
+      "fingerprint_gaps": [
+        "execution_fingerprint_not_collected; plan must inspect the actual source",
+        "submodule_requires_separate_pinned_execution_scope:third_party/aloha",
+        "submodule_requires_separate_pinned_execution_scope:third_party/libero"
+      ],
+      "fingerprint_status": "not_collected",
+      "submodules": [
+        {
+          "checkout_revision": null,
+          "dirty": null,
+          "index_revision": "d1dc83afd89ded4379851257fe5d85632d31d5ec",
+          "path": "third_party/aloha",
+          "status": "uninitialized"
+        },
+        {
+          "checkout_revision": null,
+          "dirty": null,
+          "index_revision": "f78abd68ee283de9f9be3c8f7e2a9ad60246e95c",
+          "path": "third_party/libero",
+          "status": "uninitialized"
+        }
+      ]
+    },
+    "url": "https://github.com/Physical-Intelligence/openpi"
+  },
+  "state": "open",
+  "title": "PI05 full training batch4 versus batch2 without recomputation on16AscendNPUs"
+}

@@ -1,0 +1,32 @@
+{
+  "case_id": "openpi-pi05-ddp-no-checkpoint-20261024",
+  "evidence_refs": [],
+  "evidence_sha256": {},
+  "generalization": "pending_validation",
+  "id": "20261024-072742-991146-a32e196c",
+  "issue_scope": "target",
+  "kind": "lookup",
+  "queries": [
+    "HCCL_CONNECT_TIMEOUT --accepted-only --include-community --task distributed --stage optimization"
+  ],
+  "recorded_at": "2026-10-24T07:27:42.991130+00:00",
+  "resolves": [
+    "20261024-072553-509385-1cc63fc0"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-10-24T07:27:42.853562+00:00",
+      "applicability": "different_scope",
+      "claim": "Launch uses1200s HCCL connection/execution timeout and python-module fallback when torchrun absent.",
+      "comparison": "Inference launch, not PI05 measurement. Actual local diagnostic gives120..7200s accepted range; use bounded120, not copied1200.",
+      "read_depth": "implementation",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/3d_vision/vggt/vggt_launch.sh",
+      "url": null
+    }
+  ],
+  "stage": "optimization",
+  "summary": "HCCL rejects60s connect timeout. Read pinned VGGT launch and two-mesh template: they use1200/3600s and are different inference/workload scopes. Set120s connection timeout based on actual CANN diagnostic minimum and180s execution timeout, with300s outer process-group bound for training."
+}

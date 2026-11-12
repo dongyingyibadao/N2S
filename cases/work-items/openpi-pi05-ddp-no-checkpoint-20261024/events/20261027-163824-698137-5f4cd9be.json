@@ -1,0 +1,22 @@
+{
+  "case_id": "openpi-pi05-ddp-no-checkpoint-20261024",
+  "evidence_refs": [
+    "cases/work-items/openpi-pi05-ddp-no-checkpoint-20261024/qz-hccl-diagnostic-change-20261027.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/openpi-pi05-ddp-no-checkpoint-20261024/qz-hccl-diagnostic-change-20261027.json": "5721b556b12eccd9a9b21c330cb863e13c3cb8b1888153c8487f278ad9c465b7"
+  },
+  "generalization": "pending_validation",
+  "id": "20261027-163824-698137-5f4cd9be",
+  "issue_scope": "target",
+  "kind": "change",
+  "project_revision": "215abfb217dbac7d5f1273282331b9b1866c0479",
+  "queries": [],
+  "recorded_at": "2026-10-27T16:38:24.698127+00:00",
+  "resolves": [],
+  "rollback": "Choose the original scripts/train_libero_qz.sh entry point instead of scripts/diagnose_libero_qz.sh with the same explicit topology and a new experiment name; unused diagnostic helpers can remain. No network/device state change to revert.",
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Add an explicit-device HCCL collective probe and guarded diagnostic entry point before unchanged formal training. Read-only hardware capture and fresh device1/device0/full64 communicators isolate scope; all probes must pass before model launch. This is diagnostic instrumentation, not a demonstrated causal fix for first-job failure."
+}

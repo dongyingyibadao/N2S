@@ -1,0 +1,53 @@
+{
+  "case_id": "openpi-pi05-ddp-no-checkpoint-20261024",
+  "environment": "Four newly allocated nodes,16Ascend910B64GB and128CPU per node,64NPUs total; globalbatch256/local4/no accumulation/no recomputation; explicit BF16 with selectedFP32; existing converted user-provided LeRobot-finetuned checkpoint and real public LIBERO. Previous same-job probes report torch2.9.0+cpu/torch_npu2.9.0.",
+  "evidence_refs": [
+    "cases/work-items/openpi-pi05-ddp-no-checkpoint-20261024/qz-retry1-training-start-validation-20261027.json",
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/weight-consistency.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/openpi-pi05-ddp-no-checkpoint-20261024/qz-retry1-training-start-validation-20261027.json": "0d98add1d426d5cf64cd3de3f7d5f85ff848110ca5e89ffac8916913fafba5b3",
+    "cases/work-items/openpi-pi05-libero-ascend-20261020/weight-consistency.json": "e8ed93aa55e955a1dc551ffafc154c7f6385a1af41bd6f203c9e82afc6a01c2c"
+  },
+  "generalization": "pending_validation",
+  "id": "20261027-164150-485348-1750299b",
+  "issue_scope": "target",
+  "kind": "validation",
+  "queries": [],
+  "recorded_at": "2026-10-27T16:41:50.485336+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-10-27T16:41:33.749035+00:00",
+      "applicability": "related",
+      "claim": "Existing independent conversion check found812 tensors with matching headers after prefix removal, matching tied aliases and identical payload SHA256 for user-provided and converted files.",
+      "comparison": "Full prior report read and reused; no new weight-file rehash. Confirms historical conversion payload consistency, not original official-HF provenance or runtime output parity. Existing user-provided converted-weight classification is retained.",
+      "content_sha256": "e8ed93aa55e955a1dc551ffafc154c7f6385a1af41bd6f203c9e82afc6a01c2c",
+      "read_depth": "body",
+      "status": "read",
+      "trust": "n2s_case_evidence",
+      "uri": "cases/work-items/openpi-pi05-libero-ascend-20261020/weight-consistency.json",
+      "url": null
+    }
+  ],
+  "stage": "troubleshooting",
+  "summary": "Real public-data full-parameter pi0.5 training began on the new four-node64-NPU allocation:68 completed AdamW updates at the fixed snapshot,64/64 ranks loaded converted user-provided weights, per-card batch4/global256, BF16 with selectedFP32 and recomputation off. Retained main-rank losses/gradient norms are finite. This is early training only: no checkpoint yet, accuracy pending and30000updates incomplete. Original-allocation failure remains unresolved.",
+  "validation": {
+    "accuracy": "pending",
+    "accuracy_protocol": "Actual loaded checkpoint is converted user-provided LeRobot-finetuned pi05_libero weights. Official release lineage remains unknown; no direct-original-HF load claimed. Historical independent payload equality is not source-framework/NVIDIA output parity. No agreed task-accuracy comparison or convergence result.",
+    "actual_backend": "npu",
+    "finite_outputs": true,
+    "functional": "passed",
+    "official_weights": false,
+    "optimization": "pending",
+    "performance": {
+      "baseline": null,
+      "direction": "lower",
+      "metric": "early_training_log_wall_time_only",
+      "modified": null,
+      "protocol": "Trainer wall logs show cold first update41.9s and recent10-update window17.3s (~1.73s/update), including data/forward/backward/HCCL/AdamW and excluding initial model load; no checkpoint interval reached. No independent synchronized benchmark, paired baseline, controlled same-node A/B or optimization-gain claim.",
+      "same_device": false
+    }
+  }
+}

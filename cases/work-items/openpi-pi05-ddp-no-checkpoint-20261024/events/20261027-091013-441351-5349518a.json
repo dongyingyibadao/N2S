@@ -1,0 +1,21 @@
+{
+  "case_id": "openpi-pi05-ddp-no-checkpoint-20261024",
+  "evidence_refs": [
+    "cases/work-items/openpi-pi05-ddp-no-checkpoint-20261024/qz-submission-preparation-20261027.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/openpi-pi05-ddp-no-checkpoint-20261024/qz-submission-preparation-20261027.json": "68a05615fb52a5bb9b9c4ccaaeb6ab3860a28a0677557959aadfe8bf720da98d"
+  },
+  "generalization": "pending_validation",
+  "id": "20261027-091013-441351-5349518a",
+  "issue_scope": "tooling",
+  "kind": "change",
+  "queries": [],
+  "recorded_at": "2026-10-27T09:10:13.441340+00:00",
+  "resolves": [],
+  "rollback": "Remove only the two newly added target files scripts/train_libero_qz.sh and docs/qz_libero_training.md; retain existing user modifications, datasets, checkpoints and evidence.",
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "preparation",
+  "summary": "Added target scripts/train_libero_qz.sh and docs/qz_libero_training.md. Wrapper explicitly selects four nodes times four NPUs, full LIBERO, global batch64/local4, thirty thousand updates, BF16 with existing FP32 components and no checkpoint recomputation. Supports one torchrun per node or sixteen already-launched workers, with rank guards, explicit shared interpreter and isolated node logs. No existing training/model files changed. CLI parse, syntax and dry-run checks passed; not a runtime result. Default execution timeout1800 is a preventive operational setting, not a measured speedup."
+}

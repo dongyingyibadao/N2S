@@ -1,0 +1,17 @@
+{
+  "case_id": "openpi-pi05-ddp-no-checkpoint-20261024",
+  "evidence_refs": [],
+  "evidence_sha256": {},
+  "generalization": "pending_validation",
+  "id": "20261024-074043-777362-dd92af13",
+  "issue_scope": "target",
+  "kind": "change",
+  "queries": [],
+  "recorded_at": "2026-10-24T07:40:43.777350+00:00",
+  "resolves": [],
+  "rollback": "Revert only new accumulation-loop/summary/CLI additions in scripts/benchmark_ascend_ddp.py using session history; retain checkpoint-disable fix and earlier dirty worktree. Superseded output artifacts remain immutable. No N2S rule/approval changes.",
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "User clarified256samples per effective update, not256updates. Interrupted only own superseded no-accum run after239updates perrank. Extend benchmark with loss/K gradient accumulation, DDP.no_sync covering forward/backward before final microbatch, one clipping/AdamW per effectivebatch. New actual protocol:16x4x4 versus16x2x8, one warmup+two measured updates, equal512measuredsamples. Both static_graphFalse as preventive standard-no_sync choice; no observed static_graph failure. Prior artifacts retained."
+}

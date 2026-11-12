@@ -1,0 +1,72 @@
+{
+  "recorded_at": "2026-10-27T09:10:13.162738+00:00",
+  "scope": "Operational preparation for the user-authorized formal distributed LIBERO job. This extends the handoff, not the accepted scope or results of the earlier throughput comparison.",
+  "status": "prepared_not_submitted",
+  "platform_job_id": null,
+  "image_id": null,
+  "resources": {
+    "nodes": 4,
+    "npu_per_node": 4,
+    "total_npu": 16,
+    "cpu_per_node": 32,
+    "total_cpu": 128,
+    "cpu_interpretation": "128 total, 32 per node"
+  },
+  "training": {
+    "name": "pi05_libero_lerobot",
+    "batch_size": 64,
+    "per_rank_batch_for_16_ranks": 4,
+    "num_train_steps": 30000,
+    "pytorch_gradient_checkpointing": false,
+    "pytorch_training_precision": "bfloat16",
+    "num_workers": 0,
+    "save_interval": 1000,
+    "log_interval": 10,
+    "lr_schedule": {
+      "warmup_steps": 1000,
+      "peak_lr": 2.5e-05,
+      "decay_steps": 6000,
+      "decay_lr": 2.5e-06
+    },
+    "gradient_accumulation_steps": 1
+  },
+  "checks": {
+    "bash_syntax": true,
+    "node_dry_run": {
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "passed": true
+    },
+    "worker_dry_run": {
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "passed": true
+    },
+    "pet_node_dry_run": {
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "passed": true
+    },
+    "nested_launcher_guard": {
+      "exit_code": 2,
+      "expected_exit_code": 2,
+      "passed": true
+    }
+  },
+  "changed_files": {
+    "scripts/train_libero_qz.sh": "d4befd5f6acc3981efc7a4e1ca11ce1f6c0286c168ed5138fbffb144cfbd04c9",
+    "docs/qz_libero_training.md": "09501b02c59a35381bdc10d717aa0794bd7c07c568c02ee26f49f2d689175aa6"
+  },
+  "blocker": "The user reports successful browser login, but no authenticated browser control or platform client is exposed to this agent session. An independent unauthenticated terminal request redirects to identity login; this does not invalidate the local browser session. No credentials were requested and no task was submitted.",
+  "new_npu_experiments": 0,
+  "new_n2s_runner_run_ids": [],
+  "unverified": [
+    "four physical nodes networking",
+    "latest personal image identity and compatibility",
+    "QZ actual launcher mode",
+    "formal training convergence and accuracy"
+  ],
+  "known_loader_limitation": "The existing infinite loader wrapper does not forward sampler epochs; unchanged in this operational preparation.",
+  "n2s_refresh": "blocked_license_changed; prior accepted snapshot reused; no rules or approval state changed",
+  "source_read": "Full reference bundle body for share.bashrc read as data only; no upstream script executed. PET variable aliases and per-node logs informed the new wrapper. System writes, interface guesses and unrelated tuning were excluded."
+}

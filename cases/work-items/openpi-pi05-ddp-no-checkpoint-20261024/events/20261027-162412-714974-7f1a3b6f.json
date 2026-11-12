@@ -1,0 +1,28 @@
+{
+  "case_id": "openpi-pi05-ddp-no-checkpoint-20261024",
+  "environment": "Actual QZ job with four nodes, sixteen Ascend 910B 64GB NPUs and 128 CPU cores per node; total64 NPUs/global batch256/per-card4; BF16 training configured with selected FP32 components; gradient recomputation disabled, no accumulation. Existing patched target environment retained.",
+  "error": {
+    "expected": "Complete DDP parameter-shape verification across64 workers, then load weights and begin finite-loss training.",
+    "message": "HcclAllgather failed: Getting socket times out; ERR00100 PTA call acl api failed.",
+    "observed": "64 logs confirm batch and recomputation flags. First retained error at16:20:09, rank33; rank1 and17 report the same signature. Seven currently persisted stderr files contain EI0006. No first loss or update.",
+    "stack_excerpt": "scripts/train_pytorch.py:443 -> DistributedDataParallel.__init__ -> _verify_param_shape_across_processes -> dist._verify_params_across_processes -> RuntimeError: current working operator name is HcclAllgather; Communication_Error_Get_Socket(EI0006), ERR00100.",
+    "type": "RuntimeError / HCCL Communication_Error_Get_Socket(EI0006)"
+  },
+  "evidence_refs": [
+    "cases/work-items/openpi-pi05-ddp-no-checkpoint-20261024/qz-first-round-hccl-failure-20261027.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/openpi-pi05-ddp-no-checkpoint-20261024/qz-first-round-hccl-failure-20261027.json": "4a3fbfa5c817cfabca3dc0c77a55778fda41893282e95015a539ee26f787202e"
+  },
+  "generalization": "pending_validation",
+  "id": "20261027-162412-714974-7f1a3b6f",
+  "issue_scope": "target",
+  "kind": "failure",
+  "queries": [],
+  "recorded_at": "2026-10-27T16:24:12.714961+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "First real four-node launch reached all 64 worker logs with local batch4/global batch256 and recomputation disabled, then DDP parameter-shape verification failed in HcclAllgather with socket timeout EI0006/ERR00100. No weight-loading completion, loss or optimizer update was established. Root cause remains unconfirmed; mesh-index pattern is not proof of defective hardware or exclusively cross-node failure."
+}

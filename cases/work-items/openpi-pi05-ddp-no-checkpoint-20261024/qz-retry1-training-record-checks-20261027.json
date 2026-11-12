@@ -1,0 +1,126 @@
+{
+  "recorded_at": "2026-10-27 16:42:06 UTC",
+  "scope": "Final recordkeeping checks for fixed68-update early actual-training validation; not full training completion.",
+  "case_id": "openpi-pi05-ddp-no-checkpoint-20261024",
+  "event": {
+    "id": "20261027-164150-485348-1750299b",
+    "path": "events/20261027-164150-485348-1750299b.json",
+    "generalization": "pending_validation"
+  },
+  "evidence": "cases/work-items/openpi-pi05-ddp-no-checkpoint-20261024/qz-retry1-training-start-validation-20261027.json",
+  "validate": {
+    "exit_code": 0,
+    "result": {
+      "runs": 0,
+      "status": "valid",
+      "tasks": 1
+    }
+  },
+  "workflow_check": {
+    "exit_code": 1,
+    "result": {
+      "blocking_unresolved_events": [
+        "20261027-162412-714974-7f1a3b6f"
+      ],
+      "case_id": "openpi-pi05-ddp-no-checkpoint-20261024",
+      "checks": {
+        "model_migration": "not_applicable",
+        "optimization_goal": "pending",
+        "optimization_investigation": "pending",
+        "rule_approval": "not_evaluated",
+        "scoped_task_acceptance": "pending"
+      },
+      "completion_ready": false,
+      "draft_events": 0,
+      "events": 20,
+      "gap_details": [
+        {
+          "category": "target",
+          "code": "unresolved_failures_or_numerical_issues",
+          "event_id": null
+        },
+        {
+          "category": "recordkeeping",
+          "code": "functional_and_accuracy_check_must_precede_optimization_lookup",
+          "event_id": null
+        },
+        {
+          "category": "target",
+          "code": "agreed_accuracy_comparison_not_verified",
+          "event_id": null
+        },
+        {
+          "category": "target",
+          "code": "optimization_investigation_not_verified",
+          "event_id": null
+        },
+        {
+          "category": "recordkeeping",
+          "code": "optimization_lookup_must_precede_final_validation",
+          "event_id": null
+        }
+      ],
+      "gaps": [
+        "unresolved_failures_or_numerical_issues",
+        "functional_and_accuracy_check_must_precede_optimization_lookup",
+        "agreed_accuracy_comparison_not_verified",
+        "optimization_investigation_not_verified",
+        "optimization_lookup_must_precede_final_validation"
+      ],
+      "generalization": "pending_validation",
+      "issue_groups": {
+        "recordkeeping": [],
+        "target": [
+          {
+            "id": "20261024-072553-509385-1cc63fc0",
+            "resolved": true,
+            "source_comparison_recorded": true
+          },
+          {
+            "id": "20261027-162412-714974-7f1a3b6f",
+            "resolved": false,
+            "source_comparison_recorded": true
+          }
+        ],
+        "tooling": [
+          {
+            "id": "20261024-072355-854131-5b0c8c2f",
+            "resolved": true,
+            "source_comparison_recorded": true
+          },
+          {
+            "id": "20261027-091013-587462-7fc3db9b",
+            "resolved": true,
+            "source_comparison_recorded": true
+          }
+        ]
+      },
+      "measurements": {
+        "same_device_gain_observed": false
+      },
+      "note": "Checks recorded evidence and workflow coverage, not model correctness or rule approval. Open/blocked cases remain publishable.",
+      "scope": {
+        "backend": "npu",
+        "optimization_goal": "investigate",
+        "task_type": "optimization_investigation"
+      },
+      "stages": {
+        "optimization": [
+          "20261024-072201-940743-70cb9c52",
+          "20261024-072742-991146-a32e196c"
+        ],
+        "preparation": [
+          "20261024-071441-092745-83ae8ea9"
+        ],
+        "troubleshooting": [
+          "20261027-163824-529315-5ec5a815"
+        ]
+      },
+      "status": "incomplete",
+      "unresolved_events": [
+        "20261027-162412-714974-7f1a3b6f"
+      ]
+    }
+  },
+  "limits": "Original allocation failure remains unresolved, model accuracy pending, no checkpoint verified and30000updates not completed by snapshot. Latest validation contains no optimization-gain evidence; earlier immutable benchmark records retained."
+}

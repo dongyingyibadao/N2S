@@ -1,0 +1,113 @@
+{
+  "case_id": "openpi-pi05-ddp-no-checkpoint-20261024",
+  "checked_at": "2026-11-12T08:22:27.651120+00:00",
+  "validation": {
+    "status": "valid",
+    "tasks": 1,
+    "runs": 0
+  },
+  "workflow": {
+    "case_id": "openpi-pi05-ddp-no-checkpoint-20261024",
+    "completion_ready": false,
+    "status": "incomplete",
+    "stages": {
+      "preparation": [
+        "20261024-071441-092745-83ae8ea9"
+      ],
+      "troubleshooting": [
+        "20261027-163824-529315-5ec5a815"
+      ],
+      "optimization": [
+        "20261024-072201-940743-70cb9c52",
+        "20261024-072742-991146-a32e196c"
+      ]
+    },
+    "scope": {
+      "backend": "npu",
+      "optimization_goal": "investigate",
+      "task_type": "optimization_investigation"
+    },
+    "gaps": [
+      "unresolved_failures_or_numerical_issues",
+      "functional_and_accuracy_check_must_precede_optimization_lookup",
+      "agreed_accuracy_comparison_not_verified",
+      "optimization_investigation_not_verified",
+      "optimization_lookup_must_precede_final_validation"
+    ],
+    "gap_details": [
+      {
+        "code": "unresolved_failures_or_numerical_issues",
+        "category": "target",
+        "event_id": null
+      },
+      {
+        "code": "functional_and_accuracy_check_must_precede_optimization_lookup",
+        "category": "recordkeeping",
+        "event_id": null
+      },
+      {
+        "code": "agreed_accuracy_comparison_not_verified",
+        "category": "target",
+        "event_id": null
+      },
+      {
+        "code": "optimization_investigation_not_verified",
+        "category": "target",
+        "event_id": null
+      },
+      {
+        "code": "optimization_lookup_must_precede_final_validation",
+        "category": "recordkeeping",
+        "event_id": null
+      }
+    ],
+    "issue_groups": {
+      "target": [
+        {
+          "id": "20261024-072553-509385-1cc63fc0",
+          "resolved": true,
+          "source_comparison_recorded": true
+        },
+        {
+          "id": "20261027-162412-714974-7f1a3b6f",
+          "resolved": false,
+          "source_comparison_recorded": true
+        }
+      ],
+      "tooling": [
+        {
+          "id": "20261024-072355-854131-5b0c8c2f",
+          "resolved": true,
+          "source_comparison_recorded": true
+        },
+        {
+          "id": "20261027-091013-587462-7fc3db9b",
+          "resolved": true,
+          "source_comparison_recorded": true
+        }
+      ],
+      "recordkeeping": []
+    },
+    "unresolved_events": [
+      "20261027-162412-714974-7f1a3b6f"
+    ],
+    "blocking_unresolved_events": [
+      "20261027-162412-714974-7f1a3b6f"
+    ],
+    "events": 21,
+    "draft_events": 0,
+    "measurements": {
+      "same_device_gain_observed": false
+    },
+    "checks": {
+      "scoped_task_acceptance": "pending",
+      "model_migration": "not_applicable",
+      "optimization_investigation": "pending",
+      "optimization_goal": "pending",
+      "rule_approval": "not_evaluated"
+    },
+    "generalization": "pending_validation",
+    "note": "Checks recorded evidence and workflow coverage, not model correctness or rule approval. Open/blocked cases remain publishable."
+  },
+  "scope_note": "Read-only record checks at first publication; no new model execution or rule approval. Historical original observations remain dated as captured."
+}

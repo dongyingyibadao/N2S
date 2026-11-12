@@ -1,0 +1,139 @@
+{
+  "recorded_at": "2026-10-27 16:38:50 UTC",
+  "scope": "Recordkeeping checks for error-specific source review, diagnostic change and scoped communication validation; no experiment executed by recording agent.",
+  "case_id": "openpi-pi05-ddp-no-checkpoint-20261024",
+  "new_events": [
+    {
+      "kind": "lookup",
+      "id": "20261027-163824-529315-5ec5a815",
+      "generalization": "pending_validation",
+      "path": "events/20261027-163824-529315-5ec5a815.json"
+    },
+    {
+      "kind": "change",
+      "id": "20261027-163824-698137-5f4cd9be",
+      "generalization": "pending_validation",
+      "path": "events/20261027-163824-698137-5f4cd9be.json"
+    },
+    {
+      "kind": "validation",
+      "id": "20261027-163824-866503-5daa75d8",
+      "generalization": "pending_validation",
+      "path": "events/20261027-163824-866503-5daa75d8.json"
+    }
+  ],
+  "new_evidence": [
+    "cases/work-items/openpi-pi05-ddp-no-checkpoint-20261024/qz-hccl-error-source-review-20261027.json",
+    "cases/work-items/openpi-pi05-ddp-no-checkpoint-20261024/qz-hccl-diagnostic-change-20261027.json",
+    "cases/work-items/openpi-pi05-ddp-no-checkpoint-20261024/qz-retry1-communication-validation-20261027.json"
+  ],
+  "validate": {
+    "exit_code": 0,
+    "result": {
+      "runs": 0,
+      "status": "valid",
+      "tasks": 1
+    }
+  },
+  "workflow_check": {
+    "exit_code": 1,
+    "result": {
+      "blocking_unresolved_events": [
+        "20261027-162412-714974-7f1a3b6f"
+      ],
+      "case_id": "openpi-pi05-ddp-no-checkpoint-20261024",
+      "checks": {
+        "model_migration": "not_applicable",
+        "optimization_goal": "pending",
+        "optimization_investigation": "pending",
+        "rule_approval": "not_evaluated",
+        "scoped_task_acceptance": "pending"
+      },
+      "completion_ready": false,
+      "draft_events": 0,
+      "events": 19,
+      "gap_details": [
+        {
+          "category": "target",
+          "code": "unresolved_failures_or_numerical_issues",
+          "event_id": null
+        },
+        {
+          "category": "recordkeeping",
+          "code": "functional_and_accuracy_check_must_precede_optimization_lookup",
+          "event_id": null
+        },
+        {
+          "category": "target",
+          "code": "agreed_accuracy_comparison_not_verified",
+          "event_id": null
+        },
+        {
+          "category": "recordkeeping",
+          "code": "optimization_lookup_must_precede_final_validation",
+          "event_id": null
+        }
+      ],
+      "gaps": [
+        "unresolved_failures_or_numerical_issues",
+        "functional_and_accuracy_check_must_precede_optimization_lookup",
+        "agreed_accuracy_comparison_not_verified",
+        "optimization_lookup_must_precede_final_validation"
+      ],
+      "generalization": "pending_validation",
+      "issue_groups": {
+        "recordkeeping": [],
+        "target": [
+          {
+            "id": "20261024-072553-509385-1cc63fc0",
+            "resolved": true,
+            "source_comparison_recorded": true
+          },
+          {
+            "id": "20261027-162412-714974-7f1a3b6f",
+            "resolved": false,
+            "source_comparison_recorded": true
+          }
+        ],
+        "tooling": [
+          {
+            "id": "20261024-072355-854131-5b0c8c2f",
+            "resolved": true,
+            "source_comparison_recorded": true
+          },
+          {
+            "id": "20261027-091013-587462-7fc3db9b",
+            "resolved": true,
+            "source_comparison_recorded": true
+          }
+        ]
+      },
+      "measurements": {
+        "same_device_gain_observed": false
+      },
+      "note": "Checks recorded evidence and workflow coverage, not model correctness or rule approval. Open/blocked cases remain publishable.",
+      "scope": {
+        "backend": "npu",
+        "optimization_goal": "investigate",
+        "task_type": "optimization_investigation"
+      },
+      "stages": {
+        "optimization": [
+          "20261024-072201-940743-70cb9c52",
+          "20261024-072742-991146-a32e196c"
+        ],
+        "preparation": [
+          "20261024-071441-092745-83ae8ea9"
+        ],
+        "troubleshooting": [
+          "20261027-163824-529315-5ec5a815"
+        ]
+      },
+      "status": "incomplete",
+      "unresolved_events": [
+        "20261027-162412-714974-7f1a3b6f"
+      ]
+    }
+  },
+  "interpretation": "Valid append-only records. The first allocation's failure stays unresolved; error-source comparison is now recorded. Last validation is scoped collectives with no speed/accuracy claim, so checker does not carry forward historical measured improvement as the current final validation. Prior benchmark evidence remains unchanged."
+}

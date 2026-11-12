@@ -1,0 +1,72 @@
+{
+  "recorded_at": "2026-10-27T16:24:05.804437+00:00",
+  "job_id": "local-job-b8dab26e6873",
+  "attempt": "first_launch",
+  "training_state": "failed_during_ddp_constructor_before_weight_loading_or_first_update",
+  "failure_time_from_log": "2026-10-27 16:20:09",
+  "failure_log_timezone": "not_declared_in_log",
+  "error": {
+    "type": "RuntimeError",
+    "operator": "HcclAllgather",
+    "codes": [
+      "Communication_Error_Get_Socket(EI0006)",
+      "ERR00100"
+    ],
+    "message": "Getting socket times out",
+    "phase": "DistributedDataParallel constructor parameter-shape verification",
+    "dtype_shape": "Not available for the internal verification collective in the retained traceback. No parameter-shape mismatch was established."
+  },
+  "short_stack_sanitized": [
+    "scripts/train_pytorch.py:443 train_loop -> torch.nn.parallel.DistributedDataParallel",
+    "torch/nn/parallel/distributed.py:858 __init__ -> _verify_param_shape_across_processes",
+    "torch/distributed/utils.py:281 -> dist._verify_params_across_processes",
+    "RuntimeError: The process exits for this inner error; current working operator name is HcclAllgather.",
+    "[ERROR] 2026-10-27-16:20:09 Device:1 RankID:33 ERR00100 PTA call acl api failed.",
+    "Communication_Error_Get_Socket(EI0006): Getting socket times out."
+  ],
+  "startup_evidence": {
+    "stderr_files": 64,
+    "batch4_global256_logs": 64,
+    "recomputation_off_logs": 64,
+    "ei0006_stderr_count": 7,
+    "ei0006_rank_ids": [
+      1,
+      9,
+      17,
+      33,
+      41,
+      49,
+      57
+    ]
+  },
+  "mesh_pattern_reported_by_main_agent": {
+    "mesh_index": 1,
+    "rank_ids": [
+      1,
+      9,
+      17,
+      25,
+      33,
+      41,
+      49,
+      57
+    ],
+    "meaning": "Reported diagnostic pattern, not a proven causal locus. Distinct from the currently persisted per-rank EI0006 traceback set."
+  },
+  "primary_evidence_sha256": "4371bd80766f751403eaef0306f96367d632c36d90cc87543f1d481550a702f2",
+  "root_cause": "unconfirmed",
+  "diagnostic_limits": [
+    "Messages include both intra-node and inter-node destination relationships; failure is not established as exclusively cross-node.",
+    "Mesh-index/rank pattern does not establish defective hardware.",
+    "Asynchronous HCCL stack can be imprecise.",
+    "No weight-loading completion, loss, optimizer update or new training checkpoint has been established."
+  ],
+  "next_tests": [
+    "Read relevant error-specific N2S/official HCCL guidance; distinguish documented recommendations from tested changes.",
+    "Inspect earliest causal process errors and peer startup state across all ranks.",
+    "Check communication/device mapping and intra-node/inter-node paths with narrowly scoped diagnostics under existing authorization."
+  ],
+  "recordkeeping_only": true,
+  "sanitization": "Internal peer addresses, private absolute paths, PID values, credentials and tokens omitted. Primary raw log content hash retained; original log remains in the target checkout.",
+  "scope": "First actual four-node target failure; does not change or overwrite prior submission/preparation evidence or earlier single-instance benchmark results."
+}

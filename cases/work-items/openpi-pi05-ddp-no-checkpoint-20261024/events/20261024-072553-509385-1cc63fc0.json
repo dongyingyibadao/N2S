@@ -1,0 +1,23 @@
+{
+  "case_id": "openpi-pi05-ddp-no-checkpoint-20261024",
+  "environment": "16Ascend910B2C, target Python3.12 torch2.9/torch-npu2.9 CANN8.5.0; HCCL_INTRA_ROCE_ENABLE=1,HCCL_CONNECT_TIMEOUT=60,HCCL_EXEC_TIMEOUT=60.",
+  "error": {
+    "expected": "HCCL all_reduce of rank+1 sums to136 on all16ranks.",
+    "message": "HCCL_CONNECT_TIMEOUT is invalid: it should be a number greater than or equal to120s and less than or equal to7200s.",
+    "observed": "rank0 HcclGetRootInfo error code1, createHCCLCommOrigin ProcessGroupHCCL.cpp2314; other ranks terminated by torchrun before independent outcome.",
+    "type": "Config_Error_Invalid_Environment_Variable(EI0001)"
+  },
+  "evidence_refs": [],
+  "evidence_sha256": {},
+  "generalization": "pending_validation",
+  "id": "20261024-072553-509385-1cc63fc0",
+  "issue_scope": "target",
+  "kind": "failure",
+  "queries": [],
+  "recorded_at": "2026-10-24T07:25:53.509369+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "Target Python launch entered actual16-rank HCCL, then rejected the configured60second connection timeout. No training steps; target error is invalid timeout env, not hardware-connectivity failure."
+}

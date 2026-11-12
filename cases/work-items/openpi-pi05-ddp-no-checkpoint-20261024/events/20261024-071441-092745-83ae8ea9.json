@@ -1,0 +1,43 @@
+{
+  "case_id": "openpi-pi05-ddp-no-checkpoint-20261024",
+  "evidence_refs": [],
+  "evidence_sha256": {},
+  "generalization": "pending_validation",
+  "id": "20261024-071441-092745-83ae8ea9",
+  "issue_scope": "target",
+  "kind": "lookup",
+  "queries": [
+    "guide --task distributed --stage preparation --json",
+    "read accepted Pi05 training optimization and run_train implementation",
+    "inspect target Gemma force-enable and training DDP/batch semantics"
+  ],
+  "recorded_at": "2026-10-24T07:14:41.092733+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-10-24T07:14:40.972821+00:00",
+      "applicability": "related",
+      "claim": "Pi05 recipe recommends fine-grained gradient checkpointing with only the duplicate outer checkpoint removed; static_graph/gradient bucket hints apply to its LeRobot2.8 stack.",
+      "comparison": "User requests allcheckpointoff onOpenPI2.9/910B2C16rank. Must verify no actual checkpoint calls; cannot reuse external throughput or assume batch4fits.",
+      "read_depth": "body",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi05/train/doc/README.md",
+      "url": null
+    },
+    {
+      "accessed_at": "2026-10-24T07:14:40.972846+00:00",
+      "applicability": "related",
+      "claim": "Script exposes DDPruntime and checkpoint-related flags; uses per-process config.",
+      "comparison": "Read asreference only. Target config.batch_size is global, so16ranks require global64or32 to obtain local4or2. No upstream execution.",
+      "read_depth": "implementation",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi05/train/src/scripts/run_train.sh",
+      "url": null
+    }
+  ],
+  "stage": "preparation",
+  "summary": "User explicitly requests16-card true full-parameter PI05 training speed comparison, per-device batch4vs2, all gradient recomputation disabled, equal data volume. Need clarify256interpretation. Current Gemma forces checkpoint on during training; disabling must be honored before measurement. Official outer-only recipe is different scope. Existing single-NPU batch1 timing is not reusable as16-rank throughput."
+}

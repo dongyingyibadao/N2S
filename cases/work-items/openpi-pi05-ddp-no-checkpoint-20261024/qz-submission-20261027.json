@@ -1,0 +1,61 @@
+{
+  "recorded_at": "2026-10-27T16:13:32.767823+00:00",
+  "scope": "Sanitized operational handoff for the user-authorized formal QZ LIBERO job; extends case history without changing the earlier throughput comparison acceptance or creating an N2S runner run.",
+  "observation_source": "Main agent controlled browser submission and returned job status; this evidence is a report of that observed platform result, not independently repeated submission.",
+  "status": "job_creating",
+  "job_submitted": true,
+  "platform_job_id": "local-job-b8dab26e6873",
+  "platform_job_name": "pi05-libero-4n64npu-b4-nockpt-20261027",
+  "image_display_name": "ljx-261012:1",
+  "image_selection_basis": "First usable personal-visible image in displayed order; preceding ljx-261026:1 was not SUCCESS and could not be selected.",
+  "resources": {
+    "nodes": 4,
+    "npu_per_node": 16,
+    "total_npu": 64,
+    "npu_model": "Ascend 910B",
+    "npu_memory_gb": 64,
+    "cpu_cores_per_node": 128,
+    "total_cpu_cores": 512,
+    "memory_gib_per_node": 1024,
+    "shared_memory_gib_per_node": 64,
+    "user_confirmed_scope": "Four nodes, each 16 NPUs and 128 CPU cores; supersedes initial total-16-card interpretation."
+  },
+  "training": {
+    "config": "pi05_libero_lerobot",
+    "exp_name": "pi05_libero_qz_4n64npu_b4_nockpt_20261027",
+    "parameters": "full_parameter",
+    "optimizer": "AdamW",
+    "per_npu_batch": 4,
+    "global_batch": 256,
+    "gradient_accumulation_steps": 1,
+    "precision": "bfloat16",
+    "precision_note": "Explicit BF16 with selected FP32 components; not an autocast/GradScaler implementation.",
+    "gradient_checkpointing": false,
+    "num_train_steps": 30000,
+    "save_interval": 1000,
+    "log_interval": 10,
+    "num_workers": 0,
+    "wandb_enabled": false
+  },
+  "launcher": {
+    "configured_mode": "node",
+    "actual_environment_confirmed": false,
+    "pending": "Confirm node/rank/size variables from startup logs; no nested worker launcher has been established by submission alone."
+  },
+  "prior_access_blocker": "Authenticated controllable browser access is now available and an authorized real job was submitted. Earlier BrowserControlUnavailable observation is retained as history.",
+  "original_resource_interpretation_superseded": "Initial preparation assumed 4 nodes x 4 NPUs and total 128 CPU. User explicitly confirmed the platform 4-node option: 4 x 16 NPUs and 4 x 128 CPU.",
+  "not_verified_for_this_job": [
+    "resource allocation and container startup",
+    "selected image compatibility and shared mounts",
+    "four physical nodes HCCL connectivity and all 64 worker ranks",
+    "weight loading and first finite loss/gradients",
+    "checkpoint writing",
+    "throughput, convergence and accuracy"
+  ],
+  "new_n2s_runner_run_ids": [],
+  "new_n2s_tasks": [],
+  "case_state": "open",
+  "generalization": "pending_validation",
+  "n2s_refresh": "Earlier blocked_license_changed result retained; no refresh retry and no rule/approval changes.",
+  "privacy": "Registry host, platform addresses, private filesystem paths and browser secrets omitted; no credentials or session artifacts included."
+}

@@ -1,0 +1,23 @@
+{
+  "case_id": "openpi-pi05-ddp-no-checkpoint-20261024",
+  "environment": "Existing isolated browser-control tools and existing training checkout; actual submitted topology 4 nodes x 16 Ascend 910B NPUs and 128 CPU cores per node. No private browser credentials or environment secrets recorded.",
+  "evidence_refs": [
+    "cases/work-items/openpi-pi05-ddp-no-checkpoint-20261024/qz-submission-20261027.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/openpi-pi05-ddp-no-checkpoint-20261024/qz-submission-20261027.json": "b239cd7952222f9da51981521aaf729eb9ede6b48349b0d421a993b5bfb32818"
+  },
+  "generalization": "pending_validation",
+  "id": "20261027-161344-968879-636b4ee1",
+  "issue_scope": "tooling",
+  "kind": "resolution",
+  "queries": [],
+  "recorded_at": "2026-10-27T16:13:44.968867+00:00",
+  "resolves": [
+    "20261027-091013-587462-7fc3db9b"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "The earlier BrowserControlUnavailable blocker was overcome by establishing authenticated controllable browser access; the user-authorized four-node QZ job was actually submitted and returned job_creating. This resolves platform access/submission only. No training-start, NPU correctness, throughput or accuracy claim is made."
+}

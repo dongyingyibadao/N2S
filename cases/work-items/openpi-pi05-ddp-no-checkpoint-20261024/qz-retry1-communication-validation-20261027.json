@@ -1,0 +1,3493 @@
+{
+  "recorded_at": "2026-10-27T16:37:58.783252+00:00",
+  "scope": "NPU collective correctness only, using different four physical servers from first failed attempt. This is not full model training or accuracy acceptance.",
+  "source_summary_recorded_at": "2026-10-27T16:34:18.244876+00:00",
+  "source_summary_sha256": "a9f2aefc5eac60a2b616a832ab7b4c6d4d1215ad43f26155f946e594bca8f644",
+  "job_id": "local-job-a338c1d272ed",
+  "job_name": "pi05-libero-4n64npu-b4-nockpt-20261027-r1",
+  "image_display_name": "ljx-261012:1",
+  "topology": {
+    "nodes": 4,
+    "npu_per_node": 16,
+    "total_npu": 64
+  },
+  "groups": {
+    "rail1": {
+      "passed_ranks": 4,
+      "world_size": 4,
+      "first_started": "2026-10-27T16:31:25.713394+00:00",
+      "last_finished": "2026-10-27T16:31:35.953677+00:00",
+      "reports_sanitized": [
+        {
+          "rank": 0,
+          "world_size": 4,
+          "device_index": 1,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:31:25.713394+00:00",
+          "updated_at": "2026-10-27T16:31:35.892956+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 1.105489045381546
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.060206346213817596
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.1189204677939415
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "0a6fc81abfc1d6687148364c3e7f510d464ea1d675f07b3028f8e75d83f3df7d"
+        },
+        {
+          "rank": 1,
+          "world_size": 4,
+          "device_index": 1,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:31:25.727184+00:00",
+          "updated_at": "2026-10-27T16:31:35.933550+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 1.1655026646330953
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.1619236245751381
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.015925751999020576
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "b11030de24e50f734aa973f5fa8147e4bd4310b4850b1756a01b74f50f2a6198"
+        },
+        {
+          "rank": 2,
+          "world_size": 4,
+          "device_index": 1,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:31:25.718706+00:00",
+          "updated_at": "2026-10-27T16:31:35.944916+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 0.9920250158756971
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.05433584190905094
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.11919901333749294
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "8b8516a91e013f26284cd4f057fe11ecea12a0c0bfefa28b113a70fc96dcb558"
+        },
+        {
+          "rank": 3,
+          "world_size": 4,
+          "device_index": 1,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:31:25.718648+00:00",
+          "updated_at": "2026-10-27T16:31:35.953677+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 1.0854569820221514
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.0557595199206844
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.11918085801880807
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "55fe461ae0980da9d049df9f7214063cb8d2588557503f130ef4e3de00f42ffc"
+        }
+      ],
+      "environment_whitelist": {
+        "HCCL_INTRA_ROCE_ENABLE": "1",
+        "HCCL_CONNECT_TIMEOUT": "120",
+        "HCCL_EXEC_TIMEOUT": "240",
+        "HCCL_SOCKET_IFNAME": null,
+        "HCCL_HOST_SOCKET_PORT_RANGE": null,
+        "HCCL_NPU_SOCKET_PORT_RANGE": null
+      }
+    },
+    "rail0": {
+      "passed_ranks": 4,
+      "world_size": 4,
+      "first_started": "2026-10-27T16:31:45.910908+00:00",
+      "last_finished": "2026-10-27T16:32:01.040999+00:00",
+      "reports_sanitized": [
+        {
+          "rank": 0,
+          "world_size": 4,
+          "device_index": 0,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:31:45.917069+00:00",
+          "updated_at": "2026-10-27T16:32:01.040999+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 1.0098790153861046
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.05641542747616768
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.01658378541469574
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "fee044720a2cefad118228ac80a35c5c25ed0e0395df837326b3c52cbfbd1eeb"
+        },
+        {
+          "rank": 1,
+          "world_size": 4,
+          "device_index": 0,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:31:45.910908+00:00",
+          "updated_at": "2026-10-27T16:32:00.992168+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 6.143036591820419
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.057523587718605995
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.017663474194705486
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "e0b8b8905a8f32299c5b66564a7babe59089feab9c63e4e1e14b93afc7ea3d20"
+        },
+        {
+          "rank": 2,
+          "world_size": 4,
+          "device_index": 0,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:31:45.917061+00:00",
+          "updated_at": "2026-10-27T16:32:00.986832+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 5.993953607976437
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.060501569882035255
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.015266405418515205
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "5714ff427a518b38dd62b79191013cea83339446041a1b65ab6e9d21a075b2e8"
+        },
+        {
+          "rank": 3,
+          "world_size": 4,
+          "device_index": 0,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:31:45.917052+00:00",
+          "updated_at": "2026-10-27T16:32:00.992049+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 6.145814577001147
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.06595811410807073
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.016668341006152332
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "148679013a926accc041a66d4a37980e88a052adcc1ae0648fd5a49aaa54e8c3"
+        }
+      ],
+      "environment_whitelist": {
+        "HCCL_INTRA_ROCE_ENABLE": "1",
+        "HCCL_CONNECT_TIMEOUT": "120",
+        "HCCL_EXEC_TIMEOUT": "240",
+        "HCCL_SOCKET_IFNAME": null,
+        "HCCL_HOST_SOCKET_PORT_RANGE": null,
+        "HCCL_NPU_SOCKET_PORT_RANGE": null
+      }
+    },
+    "full64": {
+      "passed_ranks": 64,
+      "world_size": 64,
+      "first_started": "2026-10-27T16:32:10.727144+00:00",
+      "last_finished": "2026-10-27T16:33:11.764132+00:00",
+      "reports_sanitized": [
+        {
+          "rank": 0,
+          "world_size": 64,
+          "device_index": 0,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.741093+00:00",
+          "updated_at": "2026-10-27T16:33:11.683213+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 44.823483645915985
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.1866544485092163
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.15734759718179703
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "362c1cc7fe08231dd452f986ae942756647b48cda78e440d91d39434d5c25c8d"
+        },
+        {
+          "rank": 1,
+          "world_size": 64,
+          "device_index": 1,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.740360+00:00",
+          "updated_at": "2026-10-27T16:33:11.683043+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 50.08568453416228
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.22280798852443695
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.09206295385956764
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "5a7c8343c95fc7e2820ff7d4c00539f1710df3133d785d2e2e1612fa74ee81b3"
+        },
+        {
+          "rank": 2,
+          "world_size": 64,
+          "device_index": 2,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.740677+00:00",
+          "updated_at": "2026-10-27T16:33:11.683768+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 42.5991289280355
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.16647635400295258
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.15073665603995323
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "5a72c564a4eaa6a9f330440cc112de5250aa578a5d58a6762528c1396c48647f"
+        },
+        {
+          "rank": 3,
+          "world_size": 64,
+          "device_index": 3,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.740224+00:00",
+          "updated_at": "2026-10-27T16:33:11.759535+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 39.19850695878267
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.1771848239004612
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.10642985999584198
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "7fe3d34c1d5240a7a7c90e6faff8d12b007dfbfda3f4158c235e424b173a1969"
+        },
+        {
+          "rank": 4,
+          "world_size": 64,
+          "device_index": 4,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.740874+00:00",
+          "updated_at": "2026-10-27T16:33:11.683056+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 35.77038098871708
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.12330164015293121
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.07519102469086647
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "4c204781ba52254be4086020c3ad535dbb8f10be31818e9c40ddb735b47d7807"
+        },
+        {
+          "rank": 5,
+          "world_size": 64,
+          "device_index": 5,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.741400+00:00",
+          "updated_at": "2026-10-27T16:33:11.683059+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 32.31681140139699
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.2615095302462578
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.02883816510438919
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "6e3e8d4f877f67f432c833ad548a27939cf36447c68d44d701c1533fc3b0205a"
+        },
+        {
+          "rank": 6,
+          "world_size": 64,
+          "device_index": 6,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.741718+00:00",
+          "updated_at": "2026-10-27T16:33:11.759181+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 15.091276127845049
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.16665345430374146
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.05470864847302437
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "97defbc990edeb3233145e85270740e930e648978de0c2922def2bebf10d6a8d"
+        },
+        {
+          "rank": 7,
+          "world_size": 64,
+          "device_index": 7,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.757914+00:00",
+          "updated_at": "2026-10-27T16:33:11.759022+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 18.519109945744276
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.2770589031279087
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.17665893584489822
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "986498b6c6de741f749884d6eeb8e4a6e941f4cffaa44bae3262c23b336df66d"
+        },
+        {
+          "rank": 8,
+          "world_size": 64,
+          "device_index": 8,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.757407+00:00",
+          "updated_at": "2026-10-27T16:33:11.455059+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 28.848015934228897
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.13766063749790192
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.04492615908384323
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "ac5911c9f5683ed7dcc45e7fe617a2fbda79e2983242d38e780059f7399b389e"
+        },
+        {
+          "rank": 9,
+          "world_size": 64,
+          "device_index": 9,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.758435+00:00",
+          "updated_at": "2026-10-27T16:33:11.759530+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 11.665002100169659
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.15575670078396797
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.05719104781746864
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "501eef0dd311141742ef579ad792debd3d031e027858cb63ca548fe8e6cea60f"
+        },
+        {
+          "rank": 10,
+          "world_size": 64,
+          "device_index": 10,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.758643+00:00",
+          "updated_at": "2026-10-27T16:33:11.759048+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 25.408596761524677
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.17804085463285446
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.03568752482533455
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "f72a82545bc79471f3a64cc9d4a1c01d166b16f3d526952f08307f9647b394b0"
+        },
+        {
+          "rank": 11,
+          "world_size": 64,
+          "device_index": 11,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.758235+00:00",
+          "updated_at": "2026-10-27T16:33:11.759378+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 8.221760910004377
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.1411326415836811
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.10251479968428612
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "2f27d72532bc7fc7ae46e0353ae2e1ffb8ffde5d68eb0553df47c07772d18bd4"
+        },
+        {
+          "rank": 12,
+          "world_size": 64,
+          "device_index": 12,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.759021+00:00",
+          "updated_at": "2026-10-27T16:33:11.456266+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 46.040158059448004
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.31909550726413727
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.019942831248044968
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "faaddb746ac38e75a582310bc64570e1d7bd26cb14ff498bb8c5802b339dc8f9"
+        },
+        {
+          "rank": 13,
+          "world_size": 64,
+          "device_index": 13,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.758828+00:00",
+          "updated_at": "2026-10-27T16:33:11.683207+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 1.3916488885879517
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.10804028064012527
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.06186838075518608
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "9b9938e1193ac4f818f3d9db80826c0eef8fd5242f5976b1a83ee6104a0a1a32"
+        },
+        {
+          "rank": 14,
+          "world_size": 64,
+          "device_index": 14,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.811877+00:00",
+          "updated_at": "2026-10-27T16:33:11.758876+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 21.954743336886168
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.2808539643883705
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.08441996574401855
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "c89343c697dfbbee6b12df26ab1a8f07e6e9330f2f2f95672849f102fcea79c3"
+        },
+        {
+          "rank": 15,
+          "world_size": 64,
+          "device_index": 15,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.757690+00:00",
+          "updated_at": "2026-10-27T16:33:11.763026+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 4.78319975361228
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.0931866392493248
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.16570929810404778
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "df3fdf870363c898caf0861186aaabd76049982e25d1a86c6e860f996861ffb1"
+        },
+        {
+          "rank": 16,
+          "world_size": 64,
+          "device_index": 0,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.734676+00:00",
+          "updated_at": "2026-10-27T16:33:11.745397+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 49.73869010154158
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.21319309994578362
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.1105595389381051
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "7956bcc4e344ea0de963ca2c4415bd5bead5854431e9739151d7f97d4e6c56fc"
+        },
+        {
+          "rank": 17,
+          "world_size": 64,
+          "device_index": 1,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.742064+00:00",
+          "updated_at": "2026-10-27T16:33:11.745145+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 50.07167767547071
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.17931903712451458
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.022465079091489315
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "3e165bf657a080e3a9cbbc02fd7f76fd8b5855f4298d6495791d5fe69663258d"
+        },
+        {
+          "rank": 18,
+          "world_size": 64,
+          "device_index": 2,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.741632+00:00",
+          "updated_at": "2026-10-27T16:33:11.745262+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 18.907130864448845
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.27682141214609146
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.07168619893491268
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "04a31d50d2a59cbacd6c88d0df14db9ac0af5d1e11f4ec97e035aa0d69a23145"
+        },
+        {
+          "rank": 19,
+          "world_size": 64,
+          "device_index": 3,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.741821+00:00",
+          "updated_at": "2026-10-27T16:33:11.745326+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 42.83910681679845
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.12574091739952564
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.13706081360578537
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "5b46111278e42769f2e1d709b1d3cc560e221b26ebafe82c27d599009263dd70"
+        },
+        {
+          "rank": 20,
+          "world_size": 64,
+          "device_index": 4,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.742248+00:00",
+          "updated_at": "2026-10-27T16:33:11.745293+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 25.736345635727048
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.22560064401477575
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.12026568781584501
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "9964813ccb49d2d44a01215a74ed9f92aa0f259b28bdac434406a69d441d8162"
+        },
+        {
+          "rank": 21,
+          "world_size": 64,
+          "device_index": 5,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.741363+00:00",
+          "updated_at": "2026-10-27T16:33:11.745411+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 15.485716628842056
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.11191080696880817
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.1572183594107628
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "456090837bf77569ce96cd1ab2ed44abc68792f0c4aaecb7f10dba74da1451b2"
+        },
+        {
+          "rank": 22,
+          "world_size": 64,
+          "device_index": 6,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.751497+00:00",
+          "updated_at": "2026-10-27T16:33:11.745094+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 46.145066182129085
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.23437236435711384
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.162018071860075
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "d3068562a0685b6b9fe1645c3cf3ae1112f4c1615079f736dfa510a29d2e3e55"
+        },
+        {
+          "rank": 23,
+          "world_size": 64,
+          "device_index": 7,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.751334+00:00",
+          "updated_at": "2026-10-27T16:33:11.745684+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 22.301628343760967
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.13663781713694334
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.1450122743844986
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "89c8e21ba78157c61e023b9f6aeb6cda704a456f12eb44d5f74d40962130603a"
+        },
+        {
+          "rank": 24,
+          "world_size": 64,
+          "device_index": 8,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.751972+00:00",
+          "updated_at": "2026-10-27T16:33:11.672033+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 5.080820433795452
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.10241566132754087
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.022361447103321552
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "6323ae9e4d96f12ea6b0fd70eae7d9883b090e5294aa06f45afe945139fe8c40"
+        },
+        {
+          "rank": 25,
+          "world_size": 64,
+          "device_index": 9,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.752482+00:00",
+          "updated_at": "2026-10-27T16:33:11.745235+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 39.3537104986608
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.11079958360642195
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.05044335685670376
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "bdf8db0e6efc6d9de71b8d2c64501343ef7402e07f09e6b09d1dcac5c865b712"
+        },
+        {
+          "rank": 26,
+          "world_size": 64,
+          "device_index": 10,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.751734+00:00",
+          "updated_at": "2026-10-27T16:33:11.745371+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 29.166450573131442
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.17053728830069304
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.131471686065197
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "f75bcebaab4a072947dfa3607c35fb4a2f05a646b3d70f6aebea6aecd5c15a64"
+        },
+        {
+          "rank": 27,
+          "world_size": 64,
+          "device_index": 11,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.752340+00:00",
+          "updated_at": "2026-10-27T16:33:11.745233+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 35.98876417521387
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.20391456596553326
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.05983197223395109
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "ffa4891699b9599081ab23e046ed3b87992a02633f2c41d64e7e274e37055a7b"
+        },
+        {
+          "rank": 28,
+          "world_size": 64,
+          "device_index": 12,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.752122+00:00",
+          "updated_at": "2026-10-27T16:33:11.745796+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 32.598787103779614
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.21689593140035868
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.061083318665623665
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "b88f2053c4c94ccb07b6e9cce3834ba009a5a014c4678047f3c60bf7f9867dd4"
+        },
+        {
+          "rank": 29,
+          "world_size": 64,
+          "device_index": 13,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.770480+00:00",
+          "updated_at": "2026-10-27T16:33:11.745329+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 8.496676160022616
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.16773192305117846
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.03398839198052883
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "7f699602193bb928644026928045931e7a4efb8d8a3f3da884eb54ea8df8df2a"
+        },
+        {
+          "rank": 30,
+          "world_size": 64,
+          "device_index": 14,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.770278+00:00",
+          "updated_at": "2026-10-27T16:33:11.672095+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 1.45731461327523
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.1061072526499629
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.04234863352030516
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "98a277ba2d269b46ad29d197003cbf21fff6f7d14cd29055049ea7c71063d7fe"
+        },
+        {
+          "rank": 31,
+          "world_size": 64,
+          "device_index": 15,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.770652+00:00",
+          "updated_at": "2026-10-27T16:33:11.745506+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 12.076431449502707
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.12141392007470131
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.02886875718832016
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "87718e8b36b6f493d84890e46c5c9e5b1721ae192b8152d7fd4a9510befd0704"
+        },
+        {
+          "rank": 32,
+          "world_size": 64,
+          "device_index": 0,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.727196+00:00",
+          "updated_at": "2026-10-27T16:33:11.517823+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 50.15868414752185
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.2821654248982668
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.15808497928082943
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "2ef2627b499dc9e5233a1463bf4ac9f51ac0ae2ccdaed02c5645484f83fd8ab1"
+        },
+        {
+          "rank": 33,
+          "world_size": 64,
+          "device_index": 1,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.732753+00:00",
+          "updated_at": "2026-10-27T16:33:11.749599+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 50.165426682680845
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.1850453931838274
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.04657978378236294
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "bec1f3afab0f7c465b3d7c3dccf9ca512fdc9449a684c8b14737891ae7fbde18"
+        },
+        {
+          "rank": 34,
+          "world_size": 64,
+          "device_index": 2,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.732791+00:00",
+          "updated_at": "2026-10-27T16:33:11.750052+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 42.75912519544363
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.1088664960116148
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.05336795188486576
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "3db5942d465e5148ee5023bfd698d38e081c94aec4b9f6988dc9ac3aeda96819"
+        },
+        {
+          "rank": 35,
+          "world_size": 64,
+          "device_index": 3,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.732794+00:00",
+          "updated_at": "2026-10-27T16:33:11.666718+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 39.30680602788925
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.16249410808086395
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.08872865326702595
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "70554f62bce0f6088f884ed7e107a00a1b6eeb27c04b3700ab219a7ac5df91c7"
+        },
+        {
+          "rank": 36,
+          "world_size": 64,
+          "device_index": 4,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.732787+00:00",
+          "updated_at": "2026-10-27T16:33:11.666619+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 29.05236873589456
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.1563457027077675
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.146173894405365
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "e8c18713c18a0b245dadc033c3f8954485cf093c9cecd8ff6fb3f8db8e76c3f7"
+        },
+        {
+          "rank": 37,
+          "world_size": 64,
+          "device_index": 5,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.757509+00:00",
+          "updated_at": "2026-10-27T16:33:11.749456+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 1.4966657813638449
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.17842078767716885
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.16944364830851555
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "076607216c6dba8776ad6f54e26dd5f61949d904765c7ac3223259a5ffcfd69e"
+        },
+        {
+          "rank": 38,
+          "world_size": 64,
+          "device_index": 6,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.757953+00:00",
+          "updated_at": "2026-10-27T16:33:11.517841+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 8.542359409853816
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.1118135042488575
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.1789299976080656
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "c18114316c142a1607c50dac4648227bb5591fb9ec0cefc94d97f7e08cde85ff"
+        },
+        {
+          "rank": 39,
+          "world_size": 64,
+          "device_index": 7,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.758389+00:00",
+          "updated_at": "2026-10-27T16:33:11.666578+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 46.164880983531475
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.1900485921651125
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.15004451386630535
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "05213449a54632767f3a49cd81eee9d5c0f02d9a0d54ad1d37f7c94e04023f7d"
+        },
+        {
+          "rank": 40,
+          "world_size": 64,
+          "device_index": 8,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.757679+00:00",
+          "updated_at": "2026-10-27T16:33:11.517809+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 35.88438607938588
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.14087452366948128
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.06791560165584087
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "2fa9f1bf752a4652738b4a2f11740d989bc6f4fcc1a3ff3b6fc39b1a681c0696"
+        },
+        {
+          "rank": 41,
+          "world_size": 64,
+          "device_index": 9,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.758144+00:00",
+          "updated_at": "2026-10-27T16:33:11.666729+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 11.957088144496083
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.28379102796316147
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.09937883354723454
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "4eda69e316f3aa8d21136a9b2db59cf2de882e26422d1069e7f3c5525364abe1"
+        },
+        {
+          "rank": 42,
+          "world_size": 64,
+          "device_index": 10,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.758488+00:00",
+          "updated_at": "2026-10-27T16:33:11.749312+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 32.46315364167094
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.2226302195340395
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.059632088989019394
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "46166a9b157705840ad6e05ec75f210c7b4d5d7d6989e4074f045766e57957ea"
+        },
+        {
+          "rank": 43,
+          "world_size": 64,
+          "device_index": 11,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.758592+00:00",
+          "updated_at": "2026-10-27T16:33:11.749459+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 25.58648442849517
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.15163831785321236
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.07487591356039047
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "cebee5e4e1f5f271f15469fb857c48ee8a62270a1b74fd661558ef8d703097ed"
+        },
+        {
+          "rank": 44,
+          "world_size": 64,
+          "device_index": 12,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.757876+00:00",
+          "updated_at": "2026-10-27T16:33:11.366179+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 15.361699003726244
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.3049966748803854
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.11118532158434391
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "a7c179fe347037ae1abb0f5e9efe255bea53a1c3035709461e50885e24deea5a"
+        },
+        {
+          "rank": 45,
+          "world_size": 64,
+          "device_index": 13,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.757350+00:00",
+          "updated_at": "2026-10-27T16:33:11.749295+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 4.995305368676782
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.12310146912932396
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.032424988225102425
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "514a84651ce18a29b16ae39951f52f0df492b0b792cfbcc99842bcc05d060143"
+        },
+        {
+          "rank": 46,
+          "world_size": 64,
+          "device_index": 14,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.791628+00:00",
+          "updated_at": "2026-10-27T16:33:11.749375+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 22.172818172723055
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.2778706531971693
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.03946256637573242
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "cd8324d1c5df1638e9ec93235d6bf97dc183a9f8544d9fed8de60b190c70263c"
+        },
+        {
+          "rank": 47,
+          "world_size": 64,
+          "device_index": 15,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.758249+00:00",
+          "updated_at": "2026-10-27T16:33:11.749348+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 18.719305519014597
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.2401258423924446
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.07888028398156166
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "5d8f35e81efba636fef7d1e46b460e19f53c009ae7b9f01ce15e6fc76bc94b7b"
+        },
+        {
+          "rank": 48,
+          "world_size": 64,
+          "device_index": 0,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.727144+00:00",
+          "updated_at": "2026-10-27T16:33:10.993096+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 50.054403346031904
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.2032517020124942
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.05272105697076768
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "0e33f6cfbd578a5717cd44a73193553ec2bae04d6f76c7114459e06554482338"
+        },
+        {
+          "rank": 49,
+          "world_size": 64,
+          "device_index": 1,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.740724+00:00",
+          "updated_at": "2026-10-27T16:33:11.763667+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 49.768555358052254
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.1751703650224954
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.07447053107898682
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "c16256e3aa335f66d48221012d7ba92a65eebe9ebd89ab55a2aa12b4a3d3778d"
+        },
+        {
+          "rank": 50,
+          "world_size": 64,
+          "device_index": 2,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.740258+00:00",
+          "updated_at": "2026-10-27T16:33:11.763525+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 8.556051068007946
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.23623798694461584
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.023610144038684666
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "a0a6160b50c543491d9935f2222cb47e14fb779f95fd156778074a9c25a288bb"
+        },
+        {
+          "rank": 51,
+          "world_size": 64,
+          "device_index": 3,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.741188+00:00",
+          "updated_at": "2026-10-27T16:33:11.763227+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 15.438185654929839
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.09591062797699124
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.037669648067094386
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "42e8a89421e9e3e4df539fa7855497a511f062ca250a7f8242a6a712cdf44495"
+        },
+        {
+          "rank": 52,
+          "world_size": 64,
+          "device_index": 4,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.740488+00:00",
+          "updated_at": "2026-10-27T16:33:11.763744+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 39.41313057602383
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.24461710709147155
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.12697710609063506
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "b7ff679a136d528ccf3cd9caee509b79077e936906d4defa7496453824813f00"
+        },
+        {
+          "rank": 53,
+          "world_size": 64,
+          "device_index": 5,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.739794+00:00",
+          "updated_at": "2026-10-27T16:33:11.763664+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 46.358335018041544
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.1385977640748024
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.020782321924343705
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "49aabda1f2f7c2a2909f13db980ac940d35346d6c4186c7636e91b3ddee0de44"
+        },
+        {
+          "rank": 54,
+          "world_size": 64,
+          "device_index": 6,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.739967+00:00",
+          "updated_at": "2026-10-27T16:33:11.763179+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 12.052547706058249
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.11486678698565811
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.030589895090088248
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "9a27224e191d96bd40654e9d6f4717521e0cbdd2be36c2e449f831c816c4cb7f"
+        },
+        {
+          "rank": 55,
+          "world_size": 64,
+          "device_index": 7,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.740953+00:00",
+          "updated_at": "2026-10-27T16:33:11.763599+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 35.96528765291441
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.1523338109254837
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.11157064605504274
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "a2a2bd97ef8d204d67cf43ec3705f72caceb4ee0c69c83c75443721c9270b2b3"
+        },
+        {
+          "rank": 56,
+          "world_size": 64,
+          "device_index": 8,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.758157+00:00",
+          "updated_at": "2026-10-27T16:33:11.763234+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 22.296570962062106
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.21738641802221537
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.05835893808398396
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "3de0ed3a06c0791233904913034af6161f97acec198585ead6223f67cd164a81"
+        },
+        {
+          "rank": 57,
+          "world_size": 64,
+          "device_index": 9,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.758348+00:00",
+          "updated_at": "2026-10-27T16:33:11.763562+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 42.86647025402635
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.20839010400231928
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.11890303203836083
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "a86c3db0e986adab64afc2ba107eef2ed7cfb679681e433bdfcee22453011e6c"
+        },
+        {
+          "rank": 58,
+          "world_size": 64,
+          "device_index": 10,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.821207+00:00",
+          "updated_at": "2026-10-27T16:33:11.762946+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 32.52271690801717
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.14085153304040432
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.134203290916048
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "7bebde21d8db73098422d5624a4a10472ff389c9ee6c1dc217ea3cfdb3baaa3f"
+        },
+        {
+          "rank": 59,
+          "world_size": 64,
+          "device_index": 11,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.820986+00:00",
+          "updated_at": "2026-10-27T16:33:11.763101+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 29.104612292023376
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.23024329403415322
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.15539342793636024
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "0f16e7ebebec71e8f63c78333cccb13dec3d859ff2c67b3def93a888b8d7b660"
+        },
+        {
+          "rank": 60,
+          "world_size": 64,
+          "device_index": 12,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.757365+00:00",
+          "updated_at": "2026-10-27T16:33:11.764132+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 5.197308382950723
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.18409841903485358
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.019542317953892052
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "0331371639215f9ed0775cbbaa8d2f74a7580cb20302224047978c759ff55c28"
+        },
+        {
+          "rank": 61,
+          "world_size": 64,
+          "device_index": 13,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.757618+00:00",
+          "updated_at": "2026-10-27T16:33:11.763275+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 1.762688372982666
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.10891042009461671
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.14709567709360272
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "f7c22acc22d06ea6a5e6f1e64ae40aeae82e4854f1ad0189f7d663067fe30d21"
+        },
+        {
+          "rank": 62,
+          "world_size": 64,
+          "device_index": 14,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.821433+00:00",
+          "updated_at": "2026-10-27T16:33:11.611628+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 25.690990076051094
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.130311646964401
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.09881504392251372
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "15a262f6791460a9b2ad0668083d5da7b163077963b3e2f5995ffbe4f775266b"
+        },
+        {
+          "rank": 63,
+          "world_size": 64,
+          "device_index": 15,
+          "status": "passed",
+          "stage": "complete",
+          "started_at": "2026-10-27T16:32:10.757868+00:00",
+          "updated_at": "2026-10-27T16:33:11.763125+00:00",
+          "checks": [
+            {
+              "op": "all_gather",
+              "dtype": "int64",
+              "shape": [
+                2
+              ],
+              "seconds": 18.827031012042426
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "float32",
+              "shape": [
+                4096
+              ],
+              "seconds": 0.10218987299595028
+            },
+            {
+              "op": "all_reduce",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ],
+              "seconds": 0.044210421037860215
+            },
+            {
+              "op": "broadcast",
+              "dtype": "bfloat16",
+              "shape": [
+                1048576
+              ]
+            }
+          ],
+          "versions": {
+            "torch": "2.9.0+cpu",
+            "torch_npu": "2.9.0"
+          },
+          "source_sha256": "0aa6758ea6e0b76a089e20eab4575891ce8302bac41fa543096a708339a9b83f"
+        }
+      ],
+      "environment_whitelist": {
+        "HCCL_INTRA_ROCE_ENABLE": "1",
+        "HCCL_CONNECT_TIMEOUT": "120",
+        "HCCL_EXEC_TIMEOUT": "240",
+        "HCCL_SOCKET_IFNAME": null,
+        "HCCL_HOST_SOCKET_PORT_RANGE": null,
+        "HCCL_NPU_SOCKET_PORT_RANGE": null
+      }
+    }
+  },
+  "exact_output_checks": [
+    {
+      "op": "all_gather",
+      "dtype": "int64",
+      "shape": [
+        2
+      ],
+      "expected": "Gather exact ordered [rank,world_size] pairs."
+    },
+    {
+      "op": "all_reduce",
+      "dtype": "float32",
+      "shape": [
+        4096
+      ],
+      "expected": "Each value equals world_size*(world_size+1)/2."
+    },
+    {
+      "op": "all_reduce",
+      "dtype": "bfloat16",
+      "shape": [
+        1048576
+      ],
+      "expected": "Each value equals world_size."
+    },
+    {
+      "op": "broadcast",
+      "dtype": "bfloat16",
+      "shape": [
+        1048576
+      ],
+      "expected": "Each value equals0.25 from global rank0."
+    }
+  ],
+  "weights_used": false,
+  "model_outputs_tested": false,
+  "model_accuracy": "pending",
+  "model_optimizer_updates_established_by_this_evidence": 0,
+  "formal_training_handoff": "Main agent reports automatic transition to formal training after all probes passed. At that report no weight-loading completion or optimizer update had been established; this evidence does not independently monitor later training.",
+  "root_cause_first_job": "unconfirmed",
+  "causal_comparison": "Different physical allocations; no controlled same-node before/after and no proof of original-node repair. HCCL_INTRA_ROCE_ENABLE remains1 and no guessed NIC-subset workaround used.",
+  "performance_claim": "None. Cold communicator timings include startup/connection effects and are not model step time or speedup measurements.",
+  "hardware_diagnostic_gap": "hccn_tool unavailable in image; NPU NIC link/TLS checks not obtained.",
+  "new_N2S_runner_run_ids": [],
+  "privacy": "Per-rank hostnames and raw report paths omitted; retained only sanitized protocol/results, package versions and whitelisted HCCL settings with source hashes."
+}

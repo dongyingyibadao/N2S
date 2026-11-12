@@ -1,0 +1,82 @@
+{
+  "case_id": "openpi-pi05-ddp-no-checkpoint-20261024",
+  "evidence_refs": [
+    "cases/work-items/openpi-pi05-ddp-no-checkpoint-20261024/qz-hccl-error-source-review-20261027.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/openpi-pi05-ddp-no-checkpoint-20261024/qz-hccl-error-source-review-20261027.json": "b3ef76658e67eb6f1921ba9655645fcb011c0c702b30b10d182e77a6c62dd3ca"
+  },
+  "generalization": "pending_validation",
+  "id": "20261027-163824-529315-5ec5a815",
+  "issue_scope": "target",
+  "kind": "lookup",
+  "queries": [
+    "get rasocket timeout",
+    "HCCL \u591a\u673a \u901a\u4fe1 \u8d85\u65f6",
+    "HCCL",
+    "HCCL_INTRA_ROCE_ENABLE",
+    "EI0006",
+    "16 \u5361",
+    "910B2C",
+    "HCCL_NIC_RANKS",
+    "HCCL_NIC",
+    "\u7f51\u53e3 \u9009\u62e9"
+  ],
+  "recorded_at": "2026-10-27T16:38:24.529303+00:00",
+  "resolves": [
+    "20261027-162412-714974-7f1a3b6f"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-10-27T16:37:58.783252+00:00",
+      "applicability": "related",
+      "claim": "Selected body lines60-100 describe enabling HCCL_INTRA_ROCE_ENABLE=1 for two P8 groups in a16-device node, illustrate default-route interface choice and timeout/port templates.",
+      "comparison": "These exact selected body lines were re-read for recording, corroborating the earlier reviewer. This is template/background support, not a verified four-node EI0006 fix. No template execution, interface guess, system write or blanket timeout increase was adopted.",
+      "content_sha256": "187386dcd5ca08984d0ba20b44e4089a231ec6168f3e4fc139ffbb513e735e52",
+      "read_depth": "body",
+      "status": "partial",
+      "trust": "community_reference_bundle",
+      "uri": "reference://ascend-reference-20261005@b83a696461745e01f8e44e8a2e672db9fdadca7d66b6e19d7eaaaac53b5081a8/\u9644\u4ef6/share.bashrc",
+      "url": null
+    },
+    {
+      "accessed_at": "2026-10-27T16:37:58.783252+00:00",
+      "applicability": "different_scope",
+      "claim": "Selected implementation lines17-29 set HCCL_CONNECT_TIMEOUT default600 and HCCL_IF_BASE_PORT default21000 in a different world-model launcher.",
+      "comparison": "Exact selected code was re-read; it provides another-model configuration example, not evidence that changing these variables fixes this environment. Current connect120 and no inferred NIC-subset setting were retained.",
+      "content_sha256": "cf5a8a7d00fe8798376090b754d0b707aed81a1c95abc76a26a33f635a3a2aad",
+      "read_depth": "implementation",
+      "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514",
+      "status": "partial",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/world_model/agibot-arm-world-model/train/run_train.sh",
+      "url": null
+    },
+    {
+      "accessed_at": "2026-10-27T16:37:58.783252+00:00",
+      "applicability": "contrary",
+      "claim": "The previous single-instance16-rank FP32 scalar AllReduce passed with HCCL_INTRA_ROCE_ENABLE=1, CONNECT_TIMEOUT120 and EXEC_TIMEOUT180.",
+      "comparison": "Full evidence was read. It argues against declaring INTRA_ROCE_ENABLE=1 categorically invalid. It does not establish four-node AllGather success, a current fault locus, or model accuracy.",
+      "content_sha256": "3e3ee75d23a200e990cc6cd26c5043471ddf9f4b676beecb12097cf85d63cba8",
+      "read_depth": "body",
+      "status": "read",
+      "trust": "n2s_case_evidence",
+      "uri": "cases/work-items/openpi-pi05-ddp-no-checkpoint-20261024/communication16-evidence.json",
+      "url": null
+    },
+    {
+      "accessed_at": "2026-10-27T16:34:48.471941+00:00",
+      "applicability": "no_match",
+      "claim": "Reviewer-reported accepted/community searches returned no indexed matches for exact queries get rasocket timeout, HCCL \u591a\u673a \u901a\u4fe1 \u8d85\u65f6, EI0006, HCCL_NIC_RANKS, HCCL_NIC and \u7f51\u53e3 \u9009\u62e9.",
+      "comparison": "Per-query start/duration were not retained; timestamp is the consolidated reviewer artifact time. No match in this local indexed state does not establish absence of an upstream solution. Broad HCCL results were discovery only and were not counted as body reads.",
+      "read_depth": "catalog",
+      "status": "no_match",
+      "trust": "unavailable",
+      "uri": null,
+      "url": null
+    }
+  ],
+  "stage": "troubleshooting",
+  "summary": "Error-specific review for EI0006/HcclAllgather: exact error/NIC queries had no indexed matches; selected reference-template body and different-model official implementation are background, while prior single-instance success is contrary evidence to declaring INTRA_ROCE_ENABLE=1 wrong. Do not infer faulty hardware, a pure cross-node cause, or unsupported NIC-subset fix. Root cause remains open."
+}

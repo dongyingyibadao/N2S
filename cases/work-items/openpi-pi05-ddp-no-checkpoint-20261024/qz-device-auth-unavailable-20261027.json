@@ -1,0 +1,12 @@
+{
+  "recorded_at": "2026-10-27T09:12:31.957385+00:00",
+  "scope": "Standard device-authorization feasibility check only; no task submission or model execution.",
+  "client_id": "REDACTED_LOCAL_IDENTIFIER",
+  "discovery_advertises_device_authorization": true,
+  "device_authorization_response": {
+    "http_status": 401,
+    "error": "unauthorized_client",
+    "error_description": "Invalid client or Invalid client credentials"
+  },
+  "result": "No usable unauthenticated CLI device flow for this known web client. No credentials were requested or captured; no browser session was connected; job_id remains null."
+}

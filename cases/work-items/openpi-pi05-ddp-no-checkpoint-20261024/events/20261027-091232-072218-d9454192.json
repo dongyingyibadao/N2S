@@ -1,0 +1,38 @@
+{
+  "case_id": "openpi-pi05-ddp-no-checkpoint-20261024",
+  "draft": false,
+  "evidence_refs": [
+    "cases/work-items/openpi-pi05-ddp-no-checkpoint-20261024/qz-device-auth-unavailable-20261027.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/openpi-pi05-ddp-no-checkpoint-20261024/qz-device-auth-unavailable-20261027.json": "404b4254317103aa0bbe1af60ca89f909ae0d153be13018c88d667c94f62635c"
+  },
+  "generalization": "pending_validation",
+  "id": "20261027-091232-072218-d9454192",
+  "issue_scope": "tooling",
+  "kind": "lookup",
+  "queries": [
+    "Read the known identity realm OIDC discovery configuration; inspect device_authorization_endpoint.",
+    "POST standard device authorization using only the known web client_id and openid/profile scope; no secret or password."
+  ],
+  "recorded_at": "2026-10-27T09:12:32.072207+00:00",
+  "resolves": [
+    "20261027-091013-587462-7fc3db9b"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-10-27T09:12:31.957385+00:00",
+      "applicability": "contrary",
+      "claim": "The normal device-authorization attempt for the known web client returns401unauthorized_client with Invalid client or Invalid client credentials.",
+      "comparison": "Realm discovery advertises the grant, but this client cannot initiate it with the available public client identifier. No authorized platform session, task ID or image selection resulted.",
+      "read_depth": "body",
+      "status": "read",
+      "trust": "retrieved_unreviewed",
+      "uri": null,
+      "url": "https://keycloak-inspire-prod.sii.edu.cn/realms/inf-internal/protocol/openid-connect/auth/device"
+    }
+  ],
+  "stage": "troubleshooting",
+  "summary": "Checked the publicly advertised OIDC device authorization flow as an alternative to browser control. The known web client returned401unauthorized_client: Invalid client or Invalid client credentials. This normal authentication attempt did not obtain a session or permit submission. Do not request user passwords or infer a usable API from discovery alone. Browser control or user-side platform submission is still required."
+}

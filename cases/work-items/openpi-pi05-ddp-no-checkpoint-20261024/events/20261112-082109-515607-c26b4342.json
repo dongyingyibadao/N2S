@@ -1,0 +1,50 @@
+{
+  "case_id": "openpi-pi05-ddp-no-checkpoint-20261024",
+  "evidence_refs": [
+    "cases/work-items/openpi-pi05-ddp-no-checkpoint-20261024/OPTIMIZATION_REVIEW_20261112.md"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/openpi-pi05-ddp-no-checkpoint-20261024/OPTIMIZATION_REVIEW_20261112.md": "14d1facf26b0bc53fb04d4875c1b2dcbc30e4be45caa9c81c277b203a89f82c4"
+  },
+  "generalization": "pending_validation",
+  "id": "20261112-082109-515607-c26b4342",
+  "issue_scope": "recordkeeping",
+  "kind": "lookup",
+  "queries": [
+    "Pinned official run_train.sh --disable-gc source inspection",
+    "OpenPI checkpoint disable implementation and 16-card fixed global256 case comparison"
+  ],
+  "recorded_at": "2026-11-12T08:21:09.515599+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-11-12T08:21:08+00:00",
+      "applicability": "related",
+      "claim": "The pinned official recipe already documents inverse-CDF Beta, removal of the outer suffix checkpoint, QKV, fused attention, grouped MLP and DDP tuning.",
+      "comparison": "External LeRobot recipe claims; distinguish current OpenPI adaptation, component measurements and scope. This review does not establish any previously missing runtime acceptance or community-wide novelty.",
+      "content_sha256": "4659712bc9f9040a555526ae91474e17dcc609298be149d1bf312d5140392172",
+      "read_depth": "body",
+      "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi05/train/doc/README.md",
+      "url": null
+    },
+    {
+      "accessed_at": "2026-11-12T08:21:08+00:00",
+      "applicability": "related",
+      "claim": "The pinned official launcher already parses --disable-gc and --disable-outer-suffix-checkpoint.",
+      "comparison": "Existing mechanism; the local value is actual disabled recomputation and a hardware/software-specific microbatch comparison. No64/128-card throughput was measured.",
+      "content_sha256": "8dc0f76d31e49a2e0e2ed838cf0041a8b68d67b517d5bc8e3255551e391f761a",
+      "read_depth": "implementation",
+      "revision": "45d167135c81d97573bfbe0e564bb4a1d9642514",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi05/train/src/scripts/run_train.sh",
+      "url": null
+    }
+  ],
+  "stage": "optimization",
+  "summary": "Post-experiment attribution review: disabling GC is an existing mechanism; the OpenPI forced-enable repair and measured checkpoint_calls=0 are local adaptation evidence. The16-card fixedglobal256 comparison records7.4301percent short-window time reduction with higher memory, without accuracy or long-run equivalence."
+}

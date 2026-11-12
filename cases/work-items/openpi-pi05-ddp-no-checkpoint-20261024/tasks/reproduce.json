@@ -1,0 +1,27 @@
+{
+  "case_id": "openpi-pi05-ddp-no-checkpoint-20261024",
+  "claim": "User clarified16rank local4 accumulation4 versus local2 accumulation8, both effective globalbatch256. One warmup update plus two measured AdamW updates per variant. Compare512same measuredsamples. No64/128card throughput extrapolation. Direct target execution, no N2S runner.",
+  "depends_on": [],
+  "evidence_refs": [],
+  "execution": null,
+  "id": "reproduce",
+  "level": "observation",
+  "protocol": {
+    "acceptance": "All16ranks complete1warmup+2measured updates, effective globalbatch256, loss/gradnormfinite, checkpointcalls0andflagsfalse, allparamsrequiregrad, AdamWstatecounts3, FP32action_out_projprobechanged. Report1/2measured update synchronizedtimes and phasewall with cold/background/small-sample limits.",
+    "assets": [],
+    "comparison_key": "openpi-pi05-ddp-no-checkpoint-20261024",
+    "input_description": "Same converted pi05_libero checkpoint, same publicLIBERO expected prefix0..511 measured and0..255 warmup, BF16+selectedFP32, allGCoff, fullparams,AdamW. Accumulation4/8 with no_sync before final microbatch; static_graphFalse for both.",
+    "seed": 42,
+    "variant": "baseline"
+  },
+  "requirements": {
+    "backends": [
+      "npu"
+    ],
+    "device_name_contains": [],
+    "versions": {}
+  },
+  "schema_version": "1.0.0",
+  "state": "draft",
+  "title": "PI05 full training batch4 versus batch2 without recomputation on16AscendNPUs"
+}

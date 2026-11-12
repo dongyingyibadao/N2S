@@ -1,0 +1,28 @@
+{
+  "case_id": "openpi-pi05-ddp-no-checkpoint-20261024",
+  "environment": "Remote terminal agent; no browser connector, browser process or installed authenticated platform CLI. Existing target shared environment is retained; no new accelerator execution.",
+  "error": {
+    "expected": "Use the user-authorized browser session to select a personal image and submit four nodes, sixteen NPUs and128totalCPU.",
+    "message": "No authenticated QZ browser control is exposed to the agent. A separate terminal HTTP request redirects to identity login.",
+    "observed": "Cannot inspect the actual image list or launch fields, submit a job, or monitor a platform job ID. Prepared local launcher and reviewed configuration instead.",
+    "stack_excerpt": "No Python/model exception: this is missing platform access, not an NPU runtime failure.",
+    "type": "BrowserControlUnavailable"
+  },
+  "evidence_refs": [
+    "cases/work-items/openpi-pi05-ddp-no-checkpoint-20261024/qz-submission-preparation-20261027.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/openpi-pi05-ddp-no-checkpoint-20261024/qz-submission-preparation-20261027.json": "68a05615fb52a5bb9b9c4ccaaeb6ab3860a28a0677557959aadfe8bf720da98d"
+  },
+  "generalization": "pending_validation",
+  "id": "20261027-091013-587462-7fc3db9b",
+  "issue_scope": "tooling",
+  "kind": "failure",
+  "queries": [],
+  "recorded_at": "2026-10-27T09:10:13.587452+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Formal platform job submission remains blocked by absent browser-control access, independently of the user-reported local browser login. Launch preparation is complete and reviewable; no job ID or selected image exists."
+}

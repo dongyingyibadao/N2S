@@ -1,0 +1,23 @@
+{
+  "case_id": "openpi-pi05-ddp-no-checkpoint-20261024",
+  "environment": "Target .venv-ascend activated through scripts/ascend_env.sh; launch used shell torchrun entrypoint.16Ascend910B2C; exact interpreter mismatch under investigation.",
+  "error": {
+    "expected": "All16rank processes use target interpreter and enter HCCL probe",
+    "message": "No package metadata was found for jax",
+    "observed": "All16rank reports failed at device_initialization while collecting distribution versions, before HCCL init.",
+    "type": "PackageNotFoundError"
+  },
+  "evidence_refs": [],
+  "evidence_sha256": {},
+  "generalization": "pending_validation",
+  "id": "20261024-072355-854131-5b0c8c2f",
+  "issue_scope": "tooling",
+  "kind": "failure",
+  "queries": [],
+  "recorded_at": "2026-10-24T07:23:55.854118+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "First16-process communication preflight failed before HCCL initialization: torchrun executable selected a different interpreter from the sourced target python. No model steps or communication result produced. All ranks report missing jax distribution metadata."
+}

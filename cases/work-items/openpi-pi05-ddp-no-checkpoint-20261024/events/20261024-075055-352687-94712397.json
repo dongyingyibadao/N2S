@@ -1,0 +1,38 @@
+{
+  "case_id": "openpi-pi05-ddp-no-checkpoint-20261024",
+  "environment": "16Ascend910B2C64GiB, Python3.12.14 torch2.9.0+cpu torch-npu2.9.0 CANN8.5.0 Transformers4.53.2 LeRobot0.4.3. Existingkeepalive retained.",
+  "evidence_refs": [
+    "cases/work-items/openpi-pi05-ddp-no-checkpoint-20261024/measurement-effective256.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/openpi-pi05-ddp-no-checkpoint-20261024/measurement-effective256.json": "0cb57ee226f66876a73bcc2d06d658a69b428c4817fa24e91683d7ff5b4d6475"
+  },
+  "generalization": "pending_validation",
+  "id": "20261024-075055-352687-94712397",
+  "issue_scope": "target",
+  "kind": "validation",
+  "queries": [],
+  "recorded_at": "2026-10-24T07:50:55.352676+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "Completed actual16card true fullparameter PI05/AdamW throughput comparison, allGCoff:local4acc4 versuslocal2acc8, effectivebatch256,1warmup+2measured updates,512measuredsamples each. All32rank reports passed, loss/gradnormfinite, zero checkpointcalls, flagsfalse,805AdamWstatecounters3, finiteFP32weightprobechanged. Maxrank phasewall13.05705s versus14.10507s, time7.43percentlower forlocal4. Only2measured updates withbackgroundload, not64/128card performance. Accuracy parity not part of this speed measurement and remains unconfirmed; do not satisfy it through invented records.",
+  "validation": {
+    "accuracy": "pending",
+    "accuracy_protocol": "pending: user requested throughput only; CPUtiny loss/gradient consistency passed, NPU output/gradient parity and source-framework accuracy not measured in this two-update test.",
+    "actual_backend": "npu",
+    "finite_outputs": true,
+    "functional": "passed",
+    "official_weights": false,
+    "optimization": "measured_improvement",
+    "performance": {
+      "baseline": 14.105074835941195,
+      "direction": "lower",
+      "metric": "same512samples_two_AdamW_updates_maxrank_wall_seconds",
+      "modified": 13.057050114497542,
+      "protocol": "Same16actualcards, samecheckpoint/source/dtype/data prefix, effectiveglobalbatch256. localbatch2acc8baseline vs4acc4candidate; no_sync onnonfinalmicrobatches,1realwarmup+2measuredAdamWupdates, realdata+preprocess+transfer+forward+backward+HCCL+clip+AdamW+sync timed. Phasewall alsoincludesreportwrites/logging.Only2updatesandbackgroundkeepalive, no statistical significance or64/128card extrapolation.",
+      "same_device": true
+    }
+  }
+}
