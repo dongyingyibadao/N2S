@@ -17,7 +17,7 @@ import jsonschema
 
 ROOT = Path(__file__).resolve().parents[3]
 IDENTIFIER = re.compile(r"[a-z0-9][a-z0-9-]{2,79}\Z")
-SECRET = re.compile(r"-----BEGIN .*PRIVATE KEY-----|\b(?:gh[pousr]_[A-Za-z0-9]{20,}|hf_[A-Za-z0-9]{20,})|https?://[^\s/@]+:[^\s/@]+@|(?:api[_-]?key|access[_-]?token|password)\s*[:=]\s*[\"']?[^\s\"']{8,}", re.I)
+SECRET = re.compile(r"-----BEGIN .*PRIVATE KEY-----|\b(?:gh[pousr]_[A-Za-z0-9]{20,}|hf_[A-Za-z0-9]{20,})|https?://[^\s/@]+:[^\s/@]+@|(?:api[_-]?key|access[_-]?token|password)[\"']?\s*[:=]\s*[\"']?[^\s\"']{8,}", re.I)
 
 
 class ExperimentError(ValueError):
@@ -867,21 +867,32 @@ class Experiments:
             raise ExperimentError("Case publication must not delete existing records")
         for name in staged:
             relative = name[len(prefix):]
+            structured_report = (relative != "issue.json" and bool(
+                re.fullmatch(r"(?:measurements/)?[a-zA-Z0-9_-]+\.json", relative)))
             allowed = (relative == "issue.json"
                        or re.fullmatch(r"tasks/[a-z0-9-]+\.json", relative)
                        or re.fullmatch(r"events/[a-z0-9-]+\.json", relative)
                        or re.fullmatch(r"runs/[a-z0-9-]+/(run\.json|review\.json|evidence\.txt)", relative)
+                       or structured_report
                        or re.fullmatch(r"[a-zA-Z0-9_-]+\.md", relative))
             if not allowed:
                 raise ExperimentError("Only case metadata, Markdown notes and reviewed run artifacts may be published")
-            if "/runs/" in name or "/events/" in name:
+            if "/runs/" in name or "/events/" in name or structured_report:
                 result = subprocess.run(["git", "cat-file", "-e", "HEAD:" + name], cwd=self.root, capture_output=True)
                 if result.returncode == 0:
                     raise ExperimentError("Published run/feedback artifacts are immutable; append a new record instead")
             path = self.path(name)
             if path.stat().st_size > 1024 * 1024:
                 raise ExperimentError("Large artifacts must stay outside Git")
-            check_text(path.read_text(encoding="utf-8"))
+            content = path.read_text(encoding="utf-8")
+            check_text(content)
+            if structured_report:
+                try:
+                    report = json.loads(content)
+                except ValueError as error:
+                    raise ExperimentError("Structured evidence must be valid JSON: " + relative) from error
+                if not isinstance(report, (dict, list)):
+                    raise ExperimentError("Structured evidence must be a JSON object or array: " + relative)
         return {"status": "ready_for_user_review", "paths": staged,
                 "staged_diff_sha256": hashlib.sha256(git(self.root, "diff", "--cached", "--binary").encode()).hexdigest(),
                 "note": "No commit or push performed. Confirm destination, content and licensing with the user."}

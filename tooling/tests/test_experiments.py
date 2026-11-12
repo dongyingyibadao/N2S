@@ -359,6 +359,40 @@ class ExperimentTests(unittest.TestCase):
         with self.assertRaisesRegex(ExperimentError, "Only case metadata"):
             self.manager.publish_check("mint-trial")
 
+    def test_publish_structured_reports_are_portable_and_immutable(self):
+        case = self.root / "cases/work-items/mint-trial"
+        (case / "measurements").mkdir()
+        for path in (case / "comparison.json", case / "measurements/fixed-input.json"):
+            write_json(path, {"measured": True, "accuracy": "pending", "values": [1, 2]})
+        command("git", "add", "cases/work-items/mint-trial", cwd=self.root)
+        self.manager.publish_check("mint-trial")
+        command("git", "commit", "-m", "publish structured evidence", cwd=self.root)
+        for path in (case / "comparison.json", case / "measurements/fixed-input.json"):
+            write_json(path, {"rewritten": True})
+            command("git", "add", str(path), cwd=self.root)
+            with self.assertRaisesRegex(ExperimentError, "immutable"):
+                self.manager.publish_check("mint-trial")
+            write_json(path, {"measured": True, "accuracy": "pending", "values": [1, 2]})
+            command("git", "add", str(path), cwd=self.root)
+
+    def test_publish_structured_reports_keep_content_and_size_checks(self):
+        report = self.root / "cases/work-items/mint-trial/comparison.json"
+        for content, error in (("not JSON", "valid JSON"), ('"source text"', "object or array"),
+                               (json.dumps({"password": "fixture-value-only"}), "credential"),
+                               (json.dumps({"oversized": "x" * 1048576}), "Large artifacts")):
+            report.write_text(content)
+            command("git", "add", "cases/work-items/mint-trial", cwd=self.root)
+            with self.assertRaisesRegex(ExperimentError, error):
+                self.manager.publish_check("mint-trial")
+
+    def test_publish_measurements_do_not_allow_executable_files(self):
+        directory = self.root / "cases/work-items/mint-trial/measurements"
+        directory.mkdir()
+        (directory / "source.py").write_text("print('upstream code is not evidence')\n")
+        command("git", "add", "cases/work-items/mint-trial", cwd=self.root)
+        with self.assertRaisesRegex(ExperimentError, "Only case metadata"):
+            self.manager.publish_check("mint-trial")
+
     def test_attached_report_cannot_rewrite_original_provenance(self):
         self.ready()
         result = self.run_plan()

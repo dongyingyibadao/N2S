@@ -8,6 +8,7 @@ CASE_ID/
   issue.json          来源、目标、观察、官方引用、待验证迁移假设
   tasks/TASK_ID.json  固定问题、硬件与版本、输入协议、命令和验收条件
   events/EVENT_ID.json 追加的查询对照、错误、改动、解决与验算节点
+  measurements/REPORT.json  可选，脱敏的结构化测量报告；也可放在 case 根目录
   runs/RUN_ID/
     run.json          一次运行的源码/环境/任务指纹和结果
     evidence.txt      可选，经人工脱敏的日志摘录或测量报告
@@ -19,6 +20,22 @@ CASE_ID/
 所有模型统一使用 [迁移与复测指南](EXPERIMENT_GUIDE.md)，不需要各自的首次实验说明。
 迁移 Agent 在第一次修改前开工单，并按 [即时反馈指南](FEEDBACK_GUIDE.md) 连续追加，
 不要等整体成功才记录。三阶段原文阅读要求见 [AGENT_USAGE.md](../../upstreams/AGENT_USAGE.md)。
+
+## 实验记录入口
+
+以下为 2026-11-12 首次整理发布的历史观察，均保持 `open / pending_validation`。
+以各目录的发布审阅、原始实验时间和测量范围为准；局部通过不代表长训完成或通用规则获批。
+
+| 工单 | 可复用信息与仍需验证的范围 |
+|---|---|
+| [OpenPI PI0.5 LIBERO](openpi-pi05-libero-ascend-20261020/PUBLICATION_REVIEW.md) | 数据、训练/恢复、闭环及 Beta/外层 checkpoint 对照；官方权重身份与约定精度仍待核验 |
+| [PI0.5 无重计算与多机通信](openpi-pi05-ddp-no-checkpoint-20261024/PUBLICATION_REVIEW.md) | 固定 global256 的 microbatch 对照、HCCL 失败及重试；精度与长训未完成 |
+| [PI0.5 独立 worker 组合优化](jade-lotus-ascend-fragments-optimization-20261028/PUBLICATION_REVIEW.md) | 精确梯度导出/存储、reducer 预读组件证据；完整正确性和 500 更新验收未完成 |
+| [GR00T N1.6](gr00t-n16-libero-ascend-20261111/PUBLICATION_REVIEW.md) | 无重计算、模型/状态对照、恢复与短程记录；后续慢速问题及 20,000 更新待验证 |
+| [Wan1.3B 全训练](partially-diffusion-wan13-full-20261016/PUBLICATION_REVIEW.md) | bounded reducer、精确 mask cache、容量与 checkpoint/恢复；不证明跨 CUDA 等价或 3,000 步完成 |
+
+PI0.5 的已有官方方法、本地实测和可能值得扩大来源对照的组合见各目录的
+`OPTIMIZATION_REVIEW_20261112.md`。未穷尽社区时不声称首创，不将组件收益当作整模型收益。
 
 ## 记录要求
 
@@ -64,6 +81,8 @@ git push origin HEAD:main
 若 `publish-check` 因暂存区有无关文件而拒绝，不替用户撤销或清空暂存区；在独立干净工作树
 整理本次提交，或请用户处理。禁止 `git add .`、force push、覆盖已有运行记录和自动解决冲突。
 工具检查不是提交钩子；检查后修改了文件必须重新检查。事件和 run 已提交后不可覆盖。
+根目录及 `measurements/` 下的结构化 JSON 报告也按发布后不可改写管理，每文件不超过 1 MiB；
+后续修正使用新文件、新反馈并保留原记录。JSON 只能存报告，不得包裹上游代码或未脱敏日志。
 日志脱敏、许可证和分支内容仍须人工确认。
 
 其它配置上在干净 main 工作树执行 `git pull --ff-only origin main`，再按模型和硬件筛选任务。
