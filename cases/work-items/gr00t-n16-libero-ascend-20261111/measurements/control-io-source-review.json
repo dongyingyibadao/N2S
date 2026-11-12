@@ -1,0 +1,10 @@
+{
+  "observed_run": "sixtyfour-perf-v2",
+  "measurement": "global256 mean2.347s over steps9-30; representative step11 rank-max backward0.293s,communication0.417s,clipAdam0.328s. Phase maxima are not additive critical path.",
+  "reviewed_sources": {
+    "vendor/scripts/probe_resident_openpi_fault.py": "7e475f5d36387311ef1c3bee65eeee470dfe147c28bebe2dc55e7e1d5b666151",
+    "vendor/jade_lotus/pod_controller_runtime.py": "b05cc6378158f1c8e95b55d75111931fe7cf1deb96925afc74b7333531255b7e",
+    "docs/04_validation_and_performance.md": "6afaef9d7b35e9c9fe80a1f6929e89b5fdad67240d0a5b70726b894249396f72"
+  },
+  "findings": "Controller performs serial atomic/fsynced command writes, repeated serial exact-session heartbeat/exit/error/report reads and per-COMMIT liveness compaction. No claim of the dominant function without CPU profile. Preserve APPLY/COMMIT barriers, full-state auditing, heartbeat and mandatory fsync; first vary supported hot control poll from10ms to50ms and collect stdlib CPU profile. Do not label different allocated-node measurements same-device A/B."
+}

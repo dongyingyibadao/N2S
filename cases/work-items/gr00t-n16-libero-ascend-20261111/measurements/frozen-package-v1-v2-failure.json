@@ -1,0 +1,14 @@
+{
+  "first_causal_exceptions": [
+    {
+      "run": "two-normal-v1",
+      "exception": "ModuleNotFoundError: gr00t.data"
+    },
+    {
+      "run": "two-normal-v2",
+      "exception": "ModuleNotFoundError: gr00t.configs.data"
+    }
+  ],
+  "cause": "Generic kit.copy_sources excludes every path component named data. Both are executable Python packages. Copying only gr00t/data is insufficient.",
+  "platform_jobs_submitted": 0
+}

@@ -1,0 +1,18 @@
+{
+  "case_id": "gr00t-n16-libero-ascend-20261111",
+  "evidence_refs": [],
+  "evidence_sha256": {},
+  "generalization": "pending_validation",
+  "id": "20261111-113822-551727-94749dbf",
+  "issue_scope": "target",
+  "kind": "change",
+  "project_revision": "9b37aa1ce69c73c6d165233fa88128283bba4508",
+  "queries": [],
+  "recorded_at": "2026-11-11T11:38:22.551716+00:00",
+  "resolves": [],
+  "rollback": "Revert target changes relative to recorded baseline; remove only task-created overlay/cache/run artifacts if requested. Public data and reference projects untouched.",
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Added explicit NPU runtime, backward-capable packed attention preserving image/window boundaries, DiT boolean mask processor, deterministic explicit flow inputs, read-only LIBERO v3 reader and lossless random-access cache, full-parameter BF16 benchmark with synchronized metrics and recomputation rejection. ModelScope source nv-community/GR00T-N1.6-3B revision60bb56a02bedb2569bf381f027d03765874fd11e found after owner-name lookup; downloads SHA256 checked. Independent overlay leaves shared environment unchanged."
+}

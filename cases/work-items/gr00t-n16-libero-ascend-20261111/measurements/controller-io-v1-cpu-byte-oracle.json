@@ -1,0 +1,20 @@
+{
+  "scope": "CPU shared-filesystem microbenchmark, not full training speed",
+  "members": 64,
+  "repetitions": 3,
+  "serial_seconds": [
+    0.232629275880754,
+    0.20586106274276972,
+    0.2069988138973713
+  ],
+  "parallel_seconds": [
+    0.05342367850244045,
+    0.050131515599787235,
+    0.05252531263977289
+  ],
+  "serial_median": 0.2069988138973713,
+  "parallel_median": 0.05252531263977289,
+  "every_command_byte_identical_to_native": true,
+  "fsync_retained": true,
+  "failure_barrier_and_durability_tests": "2 passed"
+}

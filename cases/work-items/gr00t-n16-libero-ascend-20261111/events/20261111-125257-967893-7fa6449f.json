@@ -1,0 +1,46 @@
+{
+  "case_id": "gr00t-n16-libero-ascend-20261111",
+  "evidence_refs": [
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/control-io-source-review.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/control-io-source-review.json": "c78476e11a35342900b25b323c85b8da3d2ab3447a0783549be7d9ef90e73572"
+  },
+  "generalization": "pending_validation",
+  "id": "20261111-125257-967893-7fa6449f",
+  "issue_scope": "target",
+  "kind": "lookup",
+  "queries": [
+    "guide --task performance --stage optimization",
+    "search distributed training host overhead fsync communication polling --accepted-only --include-community"
+  ],
+  "recorded_at": "2026-11-11T12:52:57.967883+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-11-11T12:53:00Z",
+      "applicability": "applicable",
+      "claim": "Serial durable file I/O and exact-session liveness scans are performed at split protocol barriers.",
+      "comparison": "Model compute is fast; profile controller operations and test polling before altering shared-runtime semantics.",
+      "content_sha256": "c78476e11a35342900b25b323c85b8da3d2ab3447a0783549be7d9ef90e73572",
+      "read_depth": "implementation",
+      "status": "read",
+      "trust": "n2s_case_evidence",
+      "uri": "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/control-io-source-review.json",
+      "url": null
+    },
+    {
+      "accessed_at": "2026-11-11T12:53:00Z",
+      "applicability": "no_match",
+      "claim": "Accepted/community search for distributed training host overhead fsync communication polling returned0matches.",
+      "comparison": "Use directly inspected local protocol sources and measured CPU/NPU timing; no absence of a general upstream solution is inferred.",
+      "status": "no_match",
+      "trust": "unavailable",
+      "uri": null,
+      "url": null
+    }
+  ],
+  "stage": "optimization",
+  "summary": "Investigate measured64-card controller overhead after functional/distributed acceptance. Read exact local protocol/I/O implementation and performance caveats; preserve recovery/durability semantics. Add optional stdlib cProfile at prepare time and test supported50ms hot polling before deciding further optimization."
+}

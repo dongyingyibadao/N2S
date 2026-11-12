@@ -1,0 +1,27 @@
+{
+  "case_id": "gr00t-n16-libero-ascend-20261111",
+  "claim": "Official weights on Ascend; batch4 without gradient checkpointing measured speed and memory; same-device optimization; global256 training for 20000 updates using 64x4 or32x8 LOW jobs",
+  "depends_on": [],
+  "evidence_refs": [],
+  "execution": null,
+  "id": "reproduce",
+  "level": "observation",
+  "protocol": {
+    "acceptance": "pending: user must define what counts as running successfully",
+    "assets": [],
+    "comparison_key": "gr00t-n16-libero-ascend-20261111",
+    "input_description": "pending: fixed input and observed failure stage",
+    "seed": null,
+    "variant": "baseline"
+  },
+  "requirements": {
+    "backends": [
+      "npu"
+    ],
+    "device_name_contains": [],
+    "versions": {}
+  },
+  "schema_version": "1.0.0",
+  "state": "draft",
+  "title": "GR00T N1.6 Libero Ascend training migration and optimization"
+}

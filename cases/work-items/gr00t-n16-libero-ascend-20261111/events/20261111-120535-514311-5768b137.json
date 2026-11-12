@@ -1,0 +1,38 @@
+{
+  "case_id": "gr00t-n16-libero-ascend-20261111",
+  "environment": "910B2C card1,CANN8.5 torch/torch_npu2.9,transformers4.51.3,BF16 native state,horizon16,two views",
+  "evidence_refs": [
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/full-b4-model-oracle-v2.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/full-b4-model-oracle-v2.json": "8ba2328d6a0527fdb8bad94cdfc3f72256d0a07b4e47364340e39573b30cbba4"
+  },
+  "generalization": "pending_validation",
+  "id": "20261111-120535-514311-5768b137",
+  "issue_scope": "target",
+  "kind": "validation",
+  "queries": [],
+  "recorded_at": "2026-11-11T12:05:35.514301+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Official-weight real-LIBERO full-active-parameter batch4 migration passes complete gradient replay and fused/reference comparison. Exact replay of all2,960,729,840 gradient elements; attention relative L2=.002744,max_abs9.155e-5. Complete model/Adam checkpoint restore followed by an update is bitwise identical across9,208,069,606 elements. No recomputation.",
+  "validation": {
+    "accuracy": "passed",
+    "accuracy_protocol": "BF16 fixed real inputs: reference/fused per-example loss rtol.01/atol.002; full gradient relativeL2<.08 (observed .002744). Repeated atomic4 gradients and restored full model/Adam next-update tensors exactly equal. This is a training-path oracle,not LIBERO rollout success rate. Batch8 separately failed and is not admitted.",
+    "actual_backend": "npu",
+    "finite_outputs": true,
+    "functional": "passed",
+    "official_weights": true,
+    "optimization": "pending",
+    "performance": {
+      "baseline": null,
+      "direction": "lower",
+      "metric": "seconds/update",
+      "modified": null,
+      "protocol": "Functional oracle only; matched warmed end-to-end A/B next.",
+      "same_device": true
+    }
+  }
+}

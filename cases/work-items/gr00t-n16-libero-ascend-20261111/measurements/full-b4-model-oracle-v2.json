@@ -1,0 +1,125 @@
+{
+  "official_weights": true,
+  "gradient_checkpointing": false,
+  "atomic_units": [
+    0,
+    32
+  ],
+  "replay": {
+    "relative_l2": 0.0,
+    "max_abs": 0.0,
+    "unequal_tensors": 0,
+    "first_unequal": [],
+    "elements": 2960729840,
+    "groups": {
+      "backbone.model": {
+        "relative_l2": 0.0,
+        "max_abs": 0.0
+      },
+      "action_head.model": {
+        "relative_l2": 0.0,
+        "max_abs": 0.0
+      },
+      "action_head.state_encoder": {
+        "relative_l2": 0.0,
+        "max_abs": 0.0
+      },
+      "action_head.action_encoder": {
+        "relative_l2": 0.0,
+        "max_abs": 0.0
+      },
+      "action_head.action_decoder": {
+        "relative_l2": 0.0,
+        "max_abs": 0.0
+      },
+      "action_head.vlln": {
+        "relative_l2": 0.0,
+        "max_abs": 0.0
+      },
+      "action_head.position_embedding": {
+        "relative_l2": 0.0,
+        "max_abs": 0.0
+      }
+    }
+  },
+  "attention": {
+    "relative_l2": 0.00274394591938144,
+    "max_abs": 9.1552734375e-05,
+    "unequal_tensors": 424,
+    "first_unequal": [
+      "backbone.model.vision_model.vision_model.embeddings.patch_embedding.weight",
+      "backbone.model.vision_model.vision_model.embeddings.patch_embedding.bias",
+      "backbone.model.vision_model.vision_model.embeddings.position_embedding.weight",
+      "backbone.model.vision_model.vision_model.encoder.layers.0.layer_norm1.weight",
+      "backbone.model.vision_model.vision_model.encoder.layers.0.layer_norm1.bias",
+      "backbone.model.vision_model.vision_model.encoder.layers.0.self_attn.k_proj.weight",
+      "backbone.model.vision_model.vision_model.encoder.layers.0.self_attn.k_proj.bias",
+      "backbone.model.vision_model.vision_model.encoder.layers.0.self_attn.v_proj.weight",
+      "backbone.model.vision_model.vision_model.encoder.layers.0.self_attn.v_proj.bias",
+      "backbone.model.vision_model.vision_model.encoder.layers.0.self_attn.q_proj.weight"
+    ],
+    "elements": 2960729840,
+    "groups": {
+      "backbone.model": {
+        "relative_l2": 0.003037791209803715,
+        "max_abs": 9.1552734375e-05
+      },
+      "action_head.model": {
+        "relative_l2": 0.0,
+        "max_abs": 0.0
+      },
+      "action_head.state_encoder": {
+        "relative_l2": 0.0,
+        "max_abs": 0.0
+      },
+      "action_head.action_encoder": {
+        "relative_l2": 0.0,
+        "max_abs": 0.0
+      },
+      "action_head.action_decoder": {
+        "relative_l2": 0.0,
+        "max_abs": 0.0
+      },
+      "action_head.vlln": {
+        "relative_l2": 0.0,
+        "max_abs": 0.0
+      },
+      "action_head.position_embedding": {
+        "relative_l2": 0.0,
+        "max_abs": 0.0
+      }
+    },
+    "fused_losses": [
+      1.1027097702026367,
+      1.1635442972183228,
+      1.2697819471359253,
+      1.1561933755874634
+    ],
+    "reference_losses": [
+      1.1027097702026367,
+      1.1635442972183228,
+      1.2697819471359253,
+      1.1561933755874634
+    ]
+  },
+  "checkpoint_restore": {
+    "relative_l2": 0.0,
+    "max_abs": 0.0,
+    "unequal_tensors": 0,
+    "first_unequal": [],
+    "elements": 9208069606,
+    "groups": {
+      "model.backbone": {
+        "relative_l2": 0.0,
+        "max_abs": 0.0
+      },
+      "model.action_head": {
+        "relative_l2": 0.0,
+        "max_abs": 0.0
+      }
+    }
+  },
+  "passed": true,
+  "checkpoint_calls": 0,
+  "seconds": 60.007052599452436
+}

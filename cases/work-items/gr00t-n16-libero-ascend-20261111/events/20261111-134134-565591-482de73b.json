@@ -1,0 +1,26 @@
+{
+  "case_id": "gr00t-n16-libero-ascend-20261111",
+  "evidence_refs": [
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/low-two-fault-v3-summary.json",
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/platform-query-guard-cpu-validation.json",
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/controller-io-v1-cpu-byte-oracle.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/controller-io-v1-cpu-byte-oracle.json": "203f097b5df0c27382139cfc6c36dd3ab6a3e14c062f6b417a5a66202d6c859d",
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/low-two-fault-v3-summary.json": "f4a7823c549a63fe099d51ff337d16762d3f8e7e6ea669e466ee6294f2a9c707",
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/platform-query-guard-cpu-validation.json": "9ba1ee99a59a036c8ae27419bc28a21599b3ee076f6fb79304caaec741965fa2"
+  },
+  "generalization": "pending_validation",
+  "id": "20261111-134134-565591-482de73b",
+  "issue_scope": "tooling",
+  "kind": "resolution",
+  "queries": [],
+  "recorded_at": "2026-11-11T13:41:34.565581+00:00",
+  "resolves": [
+    "20261111-132714-808172-51200b6c"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "Read-only HTTPException guard passed injected real native launcher retry without STOP and preserves ambiguous create/stop handling. Fresh real fault8-step run completed after replacement alignment; all final model/Adam states identical, payload independently rehashed, recomputation0, owned resources0. Original20-commit v2 remains incomplete/failed evidence; no claim that CPU injection is a network reproduction."
+}

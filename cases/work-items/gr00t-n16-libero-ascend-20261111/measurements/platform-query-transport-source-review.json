@@ -1,0 +1,10 @@
+{
+  "search": "http.client.IncompleteRead job list response retry; accepted/community no matches",
+  "reads": [
+    "fragment_training_kit/vendor/jade_lotus/ascend_platform.py:CookieClient.request,READ_ONLY_API,list_own_jobs,submit_with_inventory",
+    "fragment_training_kit/launch.py:run_training transient catch and BaseException cleanup",
+    "Python3.12 http.client.IncompleteRead inheritance: HTTPException, not OSError"
+  ],
+  "decision": "GR00T-side make_client wrapper normalizes HTTPException only for exact registered READ_ONLY_API paths to existing PlatformError. No internal retry, no create/stop mutation wrapping; preserve native bounded retry and durable mutation reconciliation.",
+  "limitations": "No general upstream remedy inferred from no-match; independent injected CPU retry check and fresh real fault acceptance required"
+}

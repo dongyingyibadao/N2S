@@ -1,0 +1,8 @@
+{
+  "source_log": "full-b4-reference-40.log",
+  "first_causal_exception": [
+    "[E1111 11:50:20.945737663 OpParamMaker.cpp:444] operator():third_party/op-plugin/op_plugin/ops/opapi/FlashAttentionKernelNpuOpApi.cpp:1130 NPU function error: call aclnnFlashAttentionScore failed, error code is 561103",
+    "EZ9999: Inner Error!",
+    "EZ9999[PID: 1207442] 2026-11-11-11:50:20.786.288 (EZ9999):  get unsupported atten_mask shape, the shape is [4, 1, 1, 211]. B=[4], N=[32], Sq=[17], Skv=[211], supported atten_mask shape can be [B, N, Sq, Skv], [B, 1, Sq, Skv], [1, 1, Sq, Skv] and [Sq, Skv].[FUNC:AnalyzeOptionalInput][FILE:flash_attention_score_tiling_general.cpp][LINE:1606]"
+  ]
+}

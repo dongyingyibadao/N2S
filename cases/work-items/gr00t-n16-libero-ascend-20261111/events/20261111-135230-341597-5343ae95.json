@@ -1,0 +1,40 @@
+{
+  "case_id": "gr00t-n16-libero-ascend-20261111",
+  "environment": "Ascend910B2C,64cards,global256/physical4,noactivationrecomputation,official GR00T-N1.6 weights,real LIBERO. Original KIT57 runtime files verified unchanged.",
+  "evidence_refs": [
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/low-sixtyfour-perf-v7-and-formal-start.json",
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/low-two-fault-v3-summary.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/low-sixtyfour-perf-v7-and-formal-start.json": "1e85e5b9bd0666abd19eda715a339aa99f2874290b12812982d475d3e296d4d6",
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/low-two-fault-v3-summary.json": "f4a7823c549a63fe099d51ff337d16762d3f8e7e6ea669e466ee6294f2a9c707"
+  },
+  "generalization": "pending_validation",
+  "id": "20261111-135230-341597-5343ae95",
+  "issue_scope": "target",
+  "kind": "validation",
+  "queries": [],
+  "recorded_at": "2026-11-11T13:52:30.341585+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "Bounded command I/O passed exact CPU bytes/barriers,real controlled loss/replacement,64-card30updates,complete final model/Adam equality and independently rehashed checkpoint;owned test resources0.64-card mean consecutive interval2.03736s,allocated33.941GiB. Parallel read probe regressed and was not applied. Formal20000-step source frozen and training actually started;completion pending.",
+  "validation": {
+    "accuracy": "passed",
+    "accuracy_protocol": "Previously recorded full-gradient reference/fusion and complete model/Adam restore oracles remain applicable: numerical methods unchanged. New controller-only changes pass preserved healthy native gradient/state and exact final replica/full checkpoint-byte audits. No simulator-success or FP32-master equivalence claim.",
+    "actual_backend": "npu",
+    "finite_outputs": true,
+    "functional": "passed",
+    "official_weights": true,
+    "optimization": "measured_improvement",
+    "performance": {
+      "baseline": 0.5604620836675167,
+      "direction": "lower",
+      "metric": "single_card_mean_step_seconds",
+      "modified": 0.4466295576712582,
+      "protocol": "Earlier unchanged same-card1 physical4 40steps/warmup8 attention/model-path benchmark. Additional64-card intervals2.39554\u21922.03736 are measured on separate LOW allocations,not asserted to be fixed physical-card A/B.",
+      "same_device": true
+    }
+  }
+}

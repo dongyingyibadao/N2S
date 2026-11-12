@@ -1,0 +1,37 @@
+{
+  "case_id": "gr00t-n16-libero-ascend-20261111",
+  "evidence_refs": [
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/controller-profile-bootstrap-review.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/controller-profile-bootstrap-review.json": "3de3b6c23ab72832c97e85706430691372a15ec79b3a29247dd48eb8370c8467"
+  },
+  "generalization": "pending_validation",
+  "id": "20261111-130356-921958-b160a8d7",
+  "issue_scope": "tooling",
+  "kind": "lookup",
+  "queries": [
+    "search cProfile __main__ no such option -u module identity --accepted-only --include-community",
+    "local read Python3.12cProfile.main/runctx and native controller sys.modules[__name__] call site"
+  ],
+  "recorded_at": "2026-11-11T13:03:56.921949+00:00",
+  "resolves": [
+    "20261111-130236-194646-91d17caf"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-11-11T13:03:56.802217+00:00",
+      "applicability": "applicable",
+      "claim": "Python3.12cProfile.main uses exec(code,globs) through runctx, but does not register those globals as a new sys.modules[__main__]. Frozen probe controller passes sys.modules[__name__] as protocol API.",
+      "comparison": "scripts/profile_ascend_controller.py loads frozen target through importlib.spec_from_file_location, registers the module before exec_module, and calls module.main under Profile.runcall; no native protocol functions patched.",
+      "read_depth": "implementation",
+      "status": "read",
+      "trust": "n2s_case_evidence",
+      "uri": "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/controller-profile-bootstrap-review.json",
+      "url": null
+    }
+  ],
+  "stage": "optimization",
+  "summary": "Causal source comparison for cProfile bootstrap failures: runctx changes execution globals but not the module registry identity expected by this controller. Use registered importlib module and Profile.runcall, preserving the frozen target and all native protocol methods."
+}

@@ -1,0 +1,74 @@
+{
+  "completion": {
+    "backend": "npu",
+    "optimization_goal": "required_gain",
+    "task_type": "model_migration"
+  },
+  "created_at": "2026-11-11T11:23:59.051306+00:00",
+  "generalization": "pending_validation",
+  "goal": "Official weights on Ascend; batch4 without gradient checkpointing measured speed and memory; same-device optimization; global256 training for 20000 updates using 64x4 or32x8 LOW jobs",
+  "id": "gr00t-n16-libero-ascend-20261111",
+  "knowledge_refs": [],
+  "maintenance_workflow": "three_stage_v1",
+  "models": [
+    "GR00T-N1.6-3B"
+  ],
+  "observations": "Intake records Git identity only, not an executed variant or complete source fingerprint.",
+  "related_rules": [],
+  "schema_version": "1.0.0",
+  "source": {
+    "baseline_revision": "9b37aa1ce69c73c6d165233fa88128283bba4508",
+    "intake": {
+      "dirty": false,
+      "fingerprint_gaps": [
+        "execution_fingerprint_not_collected; plan must inspect the actual source",
+        "submodule_requires_separate_pinned_execution_scope:external_dependencies/GR00T-WholeBodyControl",
+        "submodule_requires_separate_pinned_execution_scope:external_dependencies/LIBERO",
+        "submodule_requires_separate_pinned_execution_scope:external_dependencies/SimplerEnv",
+        "submodule_requires_separate_pinned_execution_scope:external_dependencies/robocasa",
+        "submodule_requires_separate_pinned_execution_scope:external_dependencies/robocasa-gr1-tabletop-tasks"
+      ],
+      "fingerprint_status": "not_collected",
+      "submodules": [
+        {
+          "checkout_revision": null,
+          "dirty": null,
+          "index_revision": "3966393ed7a37612af16c9b77e7aaed91231c407",
+          "path": "external_dependencies/GR00T-WholeBodyControl",
+          "status": "uninitialized"
+        },
+        {
+          "checkout_revision": null,
+          "dirty": null,
+          "index_revision": "8f1084e3132a39270c3a13ebe37270a43ece2a01",
+          "path": "external_dependencies/LIBERO",
+          "status": "uninitialized"
+        },
+        {
+          "checkout_revision": null,
+          "dirty": null,
+          "index_revision": "8a2d286c926c1371927caa7651a412b4cc331756",
+          "path": "external_dependencies/SimplerEnv",
+          "status": "uninitialized"
+        },
+        {
+          "checkout_revision": null,
+          "dirty": null,
+          "index_revision": "d89d481ce9c76da7f179466981676e268aa842e5",
+          "path": "external_dependencies/robocasa",
+          "status": "uninitialized"
+        },
+        {
+          "checkout_revision": null,
+          "dirty": null,
+          "index_revision": "4840e671596f93ca03651524b9f72ffb1aadfeff",
+          "path": "external_dependencies/robocasa-gr1-tabletop-tasks",
+          "status": "uninitialized"
+        }
+      ]
+    },
+    "url": "https://github.com/NVIDIA/Isaac-GR00T"
+  },
+  "state": "open",
+  "title": "GR00T N1.6 Libero Ascend training migration and optimization"
+}

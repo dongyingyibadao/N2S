@@ -1,0 +1,32 @@
+{
+  "case_id": "gr00t-n16-libero-ascend-20261111",
+  "evidence_refs": [],
+  "evidence_sha256": {},
+  "generalization": "pending_validation",
+  "id": "20261111-125704-766350-e6beb269",
+  "issue_scope": "tooling",
+  "kind": "lookup",
+  "queries": [
+    "local source review fragment_training_kit/examples/audit_refill.py lifecycle gate and first failed audit traceback"
+  ],
+  "recorded_at": "2026-11-11T12:57:04.766340+00:00",
+  "resolves": [
+    "20261111-125507-514754-3444cf99"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-11-11T12:57:04.646047+00:00",
+      "applicability": "applicable",
+      "claim": "The first audit reached missing cleanup_receipt.json before it was written; the authoritative audit reads official terminal state and requires zero owned resources.",
+      "comparison": "Keep every lifecycle assertion and retry after official cleanup, preserving first-attempt log.",
+      "read_depth": "implementation",
+      "status": "read",
+      "trust": "n2s_case_evidence",
+      "uri": "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/premature-low-audit.json",
+      "url": null
+    }
+  ],
+  "stage": "optimization",
+  "summary": "Read independent audit lifecycle gates: cleanup receipt and every owned job official terminal status are required in addition to probe success. A missing receipt is intentionally rejected. Invoke acceptance only after cleanup is recorded."
+}

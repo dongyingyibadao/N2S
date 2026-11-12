@@ -1,0 +1,27 @@
+{
+  "case_id": "gr00t-n16-libero-ascend-20261111",
+  "environment": "Python3.12 stdlib cProfile; unchanged native frozen controller/GR00T;64cards requested within shared budget;0updates committed.",
+  "error": {
+    "expected": "Profile native controller without changing its API module identity",
+    "message": "cProfile.py: error: no such option: -u; AttributeError: module __main__ has no attribute ControllerLiveness at PodController.__init__",
+    "observed": "Unregistered cProfile runctx globals broke sys.modules[__name__] API lookup",
+    "type": "ProfileBootstrapError"
+  },
+  "evidence_refs": [
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/controller-profile-v3-v4-failures.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/controller-profile-v3-v4-failures.json": "79cf5b41c049a404eef8c0ec6aabc7020fc0be8e170cd57076448da8e6097a77"
+  },
+  "generalization": "pending_validation",
+  "id": "20261111-130236-194646-91d17caf",
+  "issue_scope": "tooling",
+  "kind": "failure",
+  "queries": [],
+  "recorded_at": "2026-11-11T13:02:36.194635+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "Optional CPU profiling wrappers v3/v4 failed before any training update. Both failed run directories and earliest errors retained, every owned resource released. New registered-module bootstrap passes targeted CPU controller initialization."
+}

@@ -1,0 +1,27 @@
+{
+  "case_id": "gr00t-n16-libero-ascend-20261111",
+  "environment": "910B2C card1,CANN8.5 torch_npu2.9,SDPA reference branch",
+  "error": {
+    "expected": "SDPA broadcasts boolean mask to B,1,Q,K",
+    "message": "aclnnFlashAttentionScore unsupported atten_mask shape [4,1,1,211]",
+    "observed": "NPU SDPA requires [B,1,Sq,Skv] materialization; run failed before first update",
+    "type": "RuntimeError"
+  },
+  "evidence_refs": [
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/gr00t-reference-mask-failure-setup.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/gr00t-reference-mask-failure-setup.json": "35e96ea10ee35315a235d4e02cf3dbab8555e2874b426212fa4e5b039905b244"
+  },
+  "generalization": "pending_validation",
+  "id": "20261111-115235-085566-e5651e08",
+  "issue_scope": "target",
+  "kind": "failure",
+  "queries": [],
+  "recorded_at": "2026-11-11T11:52:35.085554+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "NPU PyTorch SDPA reference rejects broadcast-only cross-attention mask [4,1,1,211]. First causal kernel message requires explicit Q dimension. Expand mask without changing boolean keep semantics; do not infer asynchronous Linear stack is causal."
+}

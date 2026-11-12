@@ -1,0 +1,19 @@
+{
+  "allocated_bytes": 0,
+  "created_at": 1794401118.432271,
+  "device": "npu:1",
+  "device_free_bytes": 65065615360,
+  "device_index": 1,
+  "device_name": "Ascend910B2C",
+  "device_total_bytes": 65452113920,
+  "hostname": "REDACTED_LOCAL_IDENTIFIER",
+  "peak_allocated_bytes": 8389120,
+  "peak_reserved_bytes": 20971520,
+  "pid": 1602451,
+  "reserved_bytes": 20971520,
+  "resident_adapter": "gr00t.ascend.resident:create_engine",
+  "schema": "gr00t-native-npu-memory-v1",
+  "scope": "Native allocator high-water counters at existing device sync points; device free is sampled",
+  "updated_at": 1794401118.5358238,
+  "visible_devices": 16
+}

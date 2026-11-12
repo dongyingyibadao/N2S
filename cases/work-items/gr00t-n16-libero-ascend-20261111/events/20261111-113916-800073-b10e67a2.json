@@ -1,0 +1,24 @@
+{
+  "case_id": "gr00t-n16-libero-ascend-20261111",
+  "environment": "GR00T n1d6 9b37aa1; transformers4.51.3; CPU/meta architecture inspection; no weights/NPU allocated.",
+  "error": {
+    "expected": "Construct shape-only architecture under pretrained-style no-init context",
+    "message": "name Siglip2Model is not defined in custom Siglip2PreTrainedModel._init_weights",
+    "observed": "Bare constructor post_init visits undefined removed classes during initialization",
+    "stack_excerpt": "modeling_siglip2.py:_init_weights -> isinstance(module, Siglip2Model)",
+    "type": "NameError"
+  },
+  "evidence_refs": [],
+  "evidence_sha256": {},
+  "generalization": "pending_validation",
+  "id": "20261111-113916-800073-b10e67a2",
+  "issue_scope": "target",
+  "kind": "failure",
+  "queries": [],
+  "recorded_at": "2026-11-11T11:39:16.800062+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Meta-only architecture construction hit an upstream dangling class reference during random weight initialization. This is not a pretrained NPU training failure."
+}

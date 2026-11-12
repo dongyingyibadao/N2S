@@ -1,0 +1,22 @@
+{
+  "case_id": "gr00t-n16-libero-ascend-20261111",
+  "evidence_refs": [
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/resident-local-oracle-v4.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/resident-local-oracle-v4.json": "83dbc8cc67853cab61e581649dcdeb09238a0ed8ed7e27e5db90c19cb8b8d6ff"
+  },
+  "generalization": "pending_validation",
+  "id": "20261111-122333-602182-c85e1e71",
+  "issue_scope": "tooling",
+  "kind": "resolution",
+  "queries": [],
+  "recorded_at": "2026-11-11T12:23:33.602171+00:00",
+  "resolves": [
+    "20261111-120753-598231-117c6e9c"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Frozen GR00T package and processor/config assets load and train successfully after explicit package-code inclusion. clear=False atomic replay is bitwise exact; cross-NPU full gradient relativeL2 .002766. Runtime manifest remains untouched and private data/weights stay external."
+}

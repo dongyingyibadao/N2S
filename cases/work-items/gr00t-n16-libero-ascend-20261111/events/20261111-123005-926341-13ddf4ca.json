@@ -1,0 +1,90 @@
+{
+  "case_id": "gr00t-n16-libero-ascend-20261111",
+  "evidence_refs": [
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/source-freezing-inspection.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/source-freezing-inspection.json": "bde7f9332b21baa7d1e19c2add39cbe72215c4797788ceb7ab571346dbd712c5"
+  },
+  "generalization": "pending_validation",
+  "id": "20261111-123005-926341-13ddf4ca",
+  "issue_scope": "target",
+  "kind": "lookup",
+  "queries": [
+    "search Siglip2Model is not defined --accepted-only --include-community",
+    "search attention mask broadcast shape SDPA --accepted-only --include-community",
+    "search NPU dropout manual_seed batch gradient replay --accepted-only --include-community",
+    "search ModuleNotFoundError package source copy data --accepted-only --include-community"
+  ],
+  "recorded_at": "2026-11-11T12:30:05.926330+00:00",
+  "resolves": [
+    "20261111-113916-800073-b10e67a2",
+    "20261111-114128-717241-84650ff4",
+    "20261111-115235-085566-e5651e08",
+    "20261111-115515-845264-be7b0ba8",
+    "20261111-120753-598231-117c6e9c"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-11-11T12:23:33.334245+00:00",
+      "applicability": "applicable",
+      "claim": "Pinned local Siglip2 _init_weights tests undefined Siglip2Model/Siglip2ForImageClassification classes during bare initialization.",
+      "comparison": "Real from_pretrained no-init loading avoids this unused random-init branch and strict full state loading passes.",
+      "content_sha256": "e6ead7558cd66c098a9faa9edc594c44a7328fcaf578fad1b1e05f9d2e38c128",
+      "read_depth": "implementation",
+      "status": "read",
+      "trust": "retrieved_unreviewed",
+      "uri": null,
+      "url": "https://github.com/NVIDIA/Isaac-GR00T/blob/9b37aa1ce69c73c6d165233fa88128283bba4508/gr00t/model/modules/nvidia/Eagle-Block2A-2B-v2/modeling_siglip2.py"
+    },
+    {
+      "accessed_at": "2026-11-11T12:23:33.334245+00:00",
+      "applicability": "applicable",
+      "claim": "Installed4.51.3 _autoset_attn_implementation propagates requested root implementation into child sub_configs at lines2085-2100.",
+      "comparison": "Reconfigure child text SDPA and custom packed vision inside Eagle constructor after root setup; meta and real trained model validate it.",
+      "content_sha256": "bf3f2b4314492a5148d69bde5ef23dbe0c63a9224970b5e83a22af0d10269a0c",
+      "read_depth": "implementation",
+      "status": "read",
+      "trust": "retrieved_unreviewed",
+      "uri": null,
+      "url": "https://github.com/huggingface/transformers/blob/v4.51.3/src/transformers/modeling_utils.py"
+    },
+    {
+      "accessed_at": "2026-11-11T12:23:33.334245+00:00",
+      "applicability": "applicable",
+      "claim": "Pinned official GR00T DiT patch materializes [B,1,Sq,Skv] mask.",
+      "comparison": "The observed CANN failure explicitly requires the query dimension; our bool keep mask is expanded before both NPU SDPA and fused paths.",
+      "content_sha256": "3bd1f761486a17d232c718bee0b63be1930290e6619d2e0166e8c722c689e884",
+      "read_depth": "implementation",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/Isaac-GR00T/adaptor_patches/dit_patch.py",
+      "url": null
+    },
+    {
+      "accessed_at": "2026-11-11T12:23:33.334245+00:00",
+      "applicability": "applicable",
+      "claim": "Local generic fragment_training_kit.launch.copy_sources excludes any path component named data.",
+      "comparison": "GR00T data and configs/data are executable packages. Wrapper now freezes the explicitly bounded gr00t Python package and known processor assets before manifest creation.",
+      "content_sha256": "bde7f9332b21baa7d1e19c2add39cbe72215c4797788ceb7ab571346dbd712c5",
+      "read_depth": "implementation",
+      "status": "read",
+      "trust": "n2s_case_evidence",
+      "uri": "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/source-freezing-inspection.json",
+      "url": null
+    },
+    {
+      "accessed_at": "2026-11-11T12:23:33.334245+00:00",
+      "applicability": "no_match",
+      "claim": "Error-specific accepted/community searches for dropout manual_seed batch gradient replay and source copy ModuleNotFoundError returned no matches.",
+      "comparison": "Directly read the local native dropout/source-freezing paths and performed real NPU oracles; no upstream solution is inferred absent.",
+      "status": "no_match",
+      "trust": "unavailable",
+      "uri": null,
+      "url": null
+    }
+  ],
+  "stage": "troubleshooting",
+  "summary": "Consolidated source comparison for previously executed error-specific lookups and local causal-code reads. Full model/load/mask evidence resolved the first three issues. Physical batch8 numerical grouping remains excluded; fixed atomic4 replay and cross-device BF16 gradient oracle passed. Prepared-package validation closes the tooling import omission."
+}

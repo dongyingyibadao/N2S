@@ -1,0 +1,59 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "layout": "TND",
+      "dim": 48,
+      "lengths": [
+        17,
+        23,
+        11
+      ],
+      "output_max_abs": 0.007839083671569824,
+      "output_relative_l2": 0.0032581528648734093,
+      "gradient_relative_l2": [
+        0.005068451631814241,
+        0.005047960672527552,
+        0.0032828578259795904
+      ]
+    },
+    {
+      "layout": "TND",
+      "dim": 72,
+      "lengths": [
+        17,
+        23,
+        11
+      ],
+      "output_max_abs": 0.014379501342773438,
+      "output_relative_l2": 0.0033184646163135767,
+      "gradient_relative_l2": [
+        0.004812568426132202,
+        0.005065000616014004,
+        0.0031323577277362347
+      ]
+    },
+    {
+      "layout": "TND",
+      "dim": 128,
+      "lengths": [
+        17,
+        23,
+        11
+      ],
+      "output_max_abs": 0.009016752243041992,
+      "output_relative_l2": 0.0032410165295004845,
+      "gradient_relative_l2": [
+        0.004866455215960741,
+        0.004832898266613483,
+        0.003009810345247388
+      ]
+    },
+    {
+      "layout": "BNSD",
+      "mask": "bool discard",
+      "output_relative_l2": 0.0019687358289957047,
+      "masked_value_gradient_max": 0.0
+    }
+  ]
+}

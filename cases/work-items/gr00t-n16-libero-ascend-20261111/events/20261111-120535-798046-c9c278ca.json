@@ -1,0 +1,58 @@
+{
+  "case_id": "gr00t-n16-libero-ascend-20261111",
+  "evidence_refs": [
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/full-b4-model-oracle-v2.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/full-b4-model-oracle-v2.json": "8ba2328d6a0527fdb8bad94cdfc3f72256d0a07b4e47364340e39573b30cbba4"
+  },
+  "generalization": "pending_validation",
+  "id": "20261111-120535-798046-c9c278ca",
+  "issue_scope": "target",
+  "kind": "lookup",
+  "queries": [
+    "guide --task performance --stage optimization",
+    "search GR00T --accepted-only --include-community",
+    "search npu_fusion_attention training --accepted-only --include-community",
+    "search GR00T training fusion attention optimizer host overhead --accepted-only --include-community"
+  ],
+  "recorded_at": "2026-11-11T12:05:35.798034+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-11-11T12:05:35.398176+00:00",
+      "applicability": "different_scope",
+      "claim": "A3 inference profiling identifies host-bound small operators and proposes graph/fusion; inference-only attention and LN-to-RMSNorm substitutions are present.",
+      "comparison": "Target is full parameter910B2C training. Retain exact LayerNorm and use only backward-capable operators; no inference timings transferred.",
+      "read_depth": "body",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/docs/manipulation/GR00T N1.6/README.md",
+      "url": null
+    },
+    {
+      "accessed_at": "2026-11-11T12:05:35.398176+00:00",
+      "applicability": "related",
+      "claim": "Training patch repeats KV heads and translates additive masks into npu_fusion_attention discard masks, and offers QKV projection fusion.",
+      "comparison": "GR00T packed vision usesTND,DiT usesBNSD boolean masks. Existing module and full batch4 gradient oracles cover our implementations; QKV fusion would need independent weight/gradient and time validation.",
+      "read_depth": "implementation",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/pi0/train/src/patches/lerobot_pi0_ascend.patch",
+      "url": null
+    },
+    {
+      "accessed_at": "2026-11-11T12:05:35.398176+00:00",
+      "applicability": "no_match",
+      "claim": "Combined GR00T training fusion attention optimizer host overhead search yielded zero hits.",
+      "comparison": "Broadened to GR00T and npu_fusion_attention training and read concrete pinned bodies; absence of combined matches is not absence of upstream solutions.",
+      "status": "no_match",
+      "trust": "unavailable",
+      "uri": null,
+      "url": null
+    }
+  ],
+  "stage": "optimization",
+  "summary": "After official-weight batch4 numerical validation, revisit host overhead and fusion. The GR00T A3 recipe is inference-only; reject inference attention and LayerNorm-to-RMSNorm. Training PI0 patch uses backward-capable npu_fusion_attention with explicit GQA/masks. Measure packed training fusion and removal of unused vocabulary logits/hidden collections on the same card; keep all action-path parameters trainable."
+}

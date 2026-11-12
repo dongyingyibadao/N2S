@@ -1,0 +1,23 @@
+{
+  "case_id": "gr00t-n16-libero-ascend-20261111",
+  "environment": "N1.6 shape-only constructor, transformers4.51.3, no_init_weights and meta; no real pretrained run yet.",
+  "error": {
+    "expected": "Text causal SDPA and packed vision attention retained after HF config propagation",
+    "message": "Qwen3 must use flash_attention_2 but got eager",
+    "observed": "Child text config reset to eager by root _from_config",
+    "type": "AssertionError"
+  },
+  "evidence_refs": [],
+  "evidence_sha256": {},
+  "generalization": "pending_validation",
+  "id": "20261111-114128-717241-84650ff4",
+  "issue_scope": "target",
+  "kind": "failure",
+  "queries": [],
+  "recorded_at": "2026-11-11T11:41:28.717230+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Hugging Face root eager attention propagation overwrote text/vision child implementations during _from_config. Reapply explicit child backends inside Eagle construction."
+}

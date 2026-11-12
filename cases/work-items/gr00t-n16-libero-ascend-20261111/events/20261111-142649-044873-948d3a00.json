@@ -1,0 +1,27 @@
+{
+  "case_id": "gr00t-n16-libero-ascend-20261111",
+  "environment": "Real64xAscend910B2C/fullBF16/physical4/global256/no recomputation;unchanged frozen GR00T math,8-thread durable command writes;GPFS shared run directory.",
+  "error": {
+    "expected": "Short30-step gate2.037s consecutive interval is representative of sustained training",
+    "message": "Recent100 consecutive update interval grew from~2.1s after startup to2.85s around758steps;loss decreased to~0.15,all64members active,no platform/device errors,peak allocated33.941GiB.",
+    "observed": "Recent100interval2.85s around758steps;memory/model/Adam valid andall64active;sampled parent blocked in cxiWaitEventWait",
+    "type": "LongRunStepIntervalDrift"
+  },
+  "evidence_refs": [
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/formal-early-longrun-step-interval-observation.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/formal-early-longrun-step-interval-observation.json": "ec1fd505d2771601ef8cf417935599a5000cddc682878c0d934431f2db427541"
+  },
+  "generalization": "pending_validation",
+  "id": "20261111-142649-044873-948d3a00",
+  "issue_scope": "target",
+  "kind": "failure",
+  "queries": [],
+  "recorded_at": "2026-11-11T14:26:49.044863+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "Observed longer live-run step intervals than30-step gate;diagnose shared filesystem/control I/O while healthy training continues. Not a numerical/device failure."
+}

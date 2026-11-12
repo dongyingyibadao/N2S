@@ -1,0 +1,47 @@
+{
+  "case_id": "gr00t-n16-libero-ascend-20261111",
+  "evidence_refs": [
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/platform-query-transport-source-review.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/platform-query-transport-source-review.json": "76f5fd0cb6c58bd3f4658f5fce39617967216b5c6629cdcdbfa6f7c8a32b054c"
+  },
+  "generalization": "pending_validation",
+  "id": "20261111-132808-868225-fbc14e93",
+  "issue_scope": "tooling",
+  "kind": "lookup",
+  "queries": [
+    "http.client.IncompleteRead job list response retry; accepted/community no matches"
+  ],
+  "recorded_at": "2026-11-11T13:28:08.868212+00:00",
+  "resolves": [
+    "20261111-132714-808172-51200b6c"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-11-11T13:28:08.746989+00:00",
+      "applicability": "applicable",
+      "claim": "Native client explicitly registers read-only POST API paths, normalizes URLError/TimeoutError/ValueError but misses HTTPException; outer launcher retries PlatformError only3times. Mutations have durable submission_unknown reconciliation.",
+      "comparison": "GR00T-side make_client wrapper normalizes HTTPException only for exact registered READ_ONLY_API paths to existing PlatformError. No internal retry, no create/stop mutation wrapping; preserve native bounded retry and durable mutation reconciliation.",
+      "content_sha256": "76f5fd0cb6c58bd3f4658f5fce39617967216b5c6629cdcdbfa6f7c8a32b054c",
+      "read_depth": "implementation",
+      "status": "read",
+      "trust": "n2s_case_evidence",
+      "uri": "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/platform-query-transport-source-review.json",
+      "url": null
+    },
+    {
+      "accessed_at": "2026-11-11T13:28:08.747050+00:00",
+      "applicability": "no_match",
+      "claim": "http.client.IncompleteRead job list response retry; accepted/community no matches",
+      "comparison": "No general upstream remedy inferred from no-match; independent injected CPU retry check and fresh real fault acceptance required",
+      "status": "no_match",
+      "trust": "unavailable",
+      "uri": null,
+      "url": null
+    }
+  ],
+  "stage": "optimization",
+  "summary": "GR00T-side make_client wrapper normalizes HTTPException only for exact registered READ_ONLY_API paths to existing PlatformError. No internal retry, no create/stop mutation wrapping; preserve native bounded retry and durable mutation reconciliation."
+}

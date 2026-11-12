@@ -1,0 +1,16 @@
+{
+  "scope": "Optional frozen GR00T controller wrapper; immutable KIT original unchanged",
+  "sources": {
+    "gr00t/ascend/controller_io.py": "41b1cb27e492fbab7b2f1a1a22ac970b7c5eb0a0a77b73323887edeed61af974",
+    "scripts/profile_ascend_controller.py": "741270e118f3ff284e590a9975ca955373018ecbec5637a50d72185f350cc702",
+    "scripts/launch_ascend_low.py": "9aa113171f6034a298fc6720a202aed096c533f0392b3fb9f4c2635f2cb554da",
+    "tests/test_ascend_controller_io.py": "9c22ef57f14a47ac09d3a5675e41083070460a14c952e4340b610dbd4fc7eac7"
+  },
+  "mechanism": "C JSON serialization; bounded8-thread independent command writes. Preserve exclusive temp,flush,fsync,atomic rename; drain all writes before return/error; no changes to authorization,session fences,gradient math,APPLY/COMMIT.",
+  "cpu_validation": "2 durability/error-barrier tests passed,ruff passed,real frozen CLI help passed; initial64-command shared-fs CPU benchmark byte-identical and fsync-preserving,serial0.2318s vs parallel0.05024s. Not full training speed.",
+  "next_tests": [
+    "two-fault-v2:20commits including victim loss/replay/full state join",
+    "sixtyfour-perf-v6:64cards30commits,unprofiled,full state audit"
+  ],
+  "rollback": "Set controller_io_workers=0 and profile_controller=false in a new site/run; use original native controller. Never edit prepared source."
+}

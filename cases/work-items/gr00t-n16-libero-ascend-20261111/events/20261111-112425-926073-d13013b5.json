@@ -1,0 +1,76 @@
+{
+  "case_id": "gr00t-n16-libero-ascend-20261111",
+  "draft": false,
+  "evidence_refs": [],
+  "evidence_sha256": {},
+  "generalization": "pending_validation",
+  "id": "20261111-112425-926073-d13013b5",
+  "issue_scope": "target",
+  "kind": "lookup",
+  "queries": [
+    "guide --task training --stage preparation",
+    "search GR00T --accepted-only --include-community"
+  ],
+  "recorded_at": "2026-11-11T11:24:25.926062+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [
+    {
+      "accessed_at": "2026-11-11T11:24:25.803919+00:00",
+      "applicability": "different_scope",
+      "claim": "Reference pins N1.6 e29d8fc and torch2.7.1 CANN8.3 A3 inference",
+      "comparison": "Target is N1.6 9b37aa1,910B2C,CANN8.5,torch2.9 training; reference is not training validation.",
+      "read_depth": "body",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/Isaac-GR00T/README.md",
+      "url": null
+    },
+    {
+      "accessed_at": "2026-11-11T11:24:25.803919+00:00",
+      "applicability": "applicable",
+      "claim": "Expands cross attention mask to broadcastable B1QS",
+      "comparison": "Need preserve boolean/additive conventions and verify padded language positions.",
+      "read_depth": "implementation",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/Isaac-GR00T/adaptor_patches/dit_patch.py",
+      "url": null
+    },
+    {
+      "accessed_at": "2026-11-11T11:24:25.803919+00:00",
+      "applicability": "different_scope",
+      "claim": "Compiles diffusion inference loop with frozen parameters",
+      "comparison": "Not appropriate for training forward/backward and no-gradient-recompute acceptance.",
+      "read_depth": "implementation",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/Isaac-GR00T/adaptor_patches/gr00t_n1d6_patch.py",
+      "url": null
+    },
+    {
+      "accessed_at": "2026-11-11T11:24:25.803919+00:00",
+      "applicability": "contrary",
+      "claim": "Uses inference attention and replaces LayerNorm with RMSNorm",
+      "comparison": "Inference-only operator and removing mean/bias are not equivalent to original training. Reject literal copy; retain normalization, use training attention.",
+      "read_depth": "implementation",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/manipulation/Isaac-GR00T/adaptor_patches/modeling_siglip2_patch.py",
+      "url": null
+    },
+    {
+      "accessed_at": "2026-11-11T11:24:25.803919+00:00",
+      "applicability": "related",
+      "claim": "A3 batch1 single-camera 4-step inference profiling suggests host-bound attention/norm/rotary optimizations",
+      "comparison": "Cannot compare 82ms inference to LIBERO two-view BF16 batch4 training.",
+      "read_depth": "body",
+      "status": "read",
+      "trust": "accepted_upstream_documented",
+      "uri": "upstream://cann-recipes-embodied-ai@45d167135c81d97573bfbe0e564bb4a1d9642514/docs/manipulation/GR00T N1.6/README.md",
+      "url": null
+    }
+  ],
+  "stage": "preparation",
+  "summary": "User authorizes Ascend training adaptation, optimization, downloads and LOW allocation. Choose N1.6 stable branch matching reference recipes; preserve LayerNorm semantics and use backward-capable attention. Baseline 9b37aa1ce69c73c6d165233fa88128283bba4508. Local910B2C CANN8.5 torch2.9. No experiments yet."
+}

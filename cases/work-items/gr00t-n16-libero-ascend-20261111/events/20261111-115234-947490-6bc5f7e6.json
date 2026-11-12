@@ -1,0 +1,42 @@
+{
+  "case_id": "gr00t-n16-libero-ascend-20261111",
+  "environment": "910B2C card1,CANN8.5,torch/torch_npu2.9,transformers4.51.3,official GR00T N1.6 weights",
+  "evidence_refs": [
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/gr00t-official-b4-first-validation-full-b4-fused-initial.json",
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/gr00t-official-b4-first-validation-setup.json",
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/gr00t-official-b4-first-validation-attention-oracle.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/gr00t-official-b4-first-validation-attention-oracle.json": "78f74cabfd88ad225cfcdd04b1ca1c472a3d75083916fa8e2c7702f82b635ef7",
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/gr00t-official-b4-first-validation-full-b4-fused-initial.json": "3794a0b21b09f25ef2cfadfee39c4b6c09ba1db55d04aac108d300310bef7aff",
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/gr00t-official-b4-first-validation-setup.json": "3c7275ff22538320ddc8bf9c0b4363858cb28a513b7c4a829c8a68bfe9e5ce3a"
+  },
+  "generalization": "pending_validation",
+  "id": "20261111-115234-947490-6bc5f7e6",
+  "issue_scope": "target",
+  "kind": "validation",
+  "queries": [],
+  "recorded_at": "2026-11-11T11:52:34.947479+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Official pinned ModelScope weights verified by SHA256. Eight real LIBERO NPU BF16 full active-parameter updates passed with finite losses and all trainable gradients present. Unused vocabulary and vision pooling heads retained but frozen; 2,960,729,840 active parameters out of 3,286,608,832 total. No checkpoint calls. Short warm timing is preliminary; correctness comparison and longer A/B pending.",
+  "validation": {
+    "accuracy": "pending",
+    "accuracy_protocol": "CPU FP32 module attention oracle passed; full model fixed-input reference/fused and replay oracle pending; no simulator success-rate claim.",
+    "actual_backend": "npu",
+    "finite_outputs": true,
+    "functional": "passed",
+    "official_weights": true,
+    "optimization": "pending",
+    "performance": {
+      "baseline": null,
+      "direction": "lower",
+      "metric": "seconds/update",
+      "modified": null,
+      "protocol": "Initial 8 updates,3 warmup excluded,physical4,horizon16,two views,no recomputation. Longer matched A/B pending.",
+      "same_device": true
+    }
+  }
+}

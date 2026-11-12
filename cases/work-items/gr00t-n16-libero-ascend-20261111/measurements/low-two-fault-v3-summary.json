@@ -1,0 +1,22 @@
+{
+  "status": "passed",
+  "completed_step": 8,
+  "global_batch": 256,
+  "physical_batch": 4,
+  "checkpoint_calls": 0,
+  "first_loss": 1.2172781378030777,
+  "last_loss": 1.2107757274061441,
+  "all_final_states_identical": true,
+  "resources_released": true,
+  "fault_injected": true,
+  "native_memory": {
+    "peak_allocated_gib": 33.933438301086426,
+    "peak_reserved_gib": 36.427734375,
+    "peak_sampled_device_used_gib": 38.035518646240234,
+    "workers_observed": 3,
+    "final_members_verified": 2,
+    "scope": "Native allocated/reserved high-water counters at existing NPU sync points; includes HCCL/Adam; device used is sampled"
+  },
+  "checkpoint_payload_bytes": 18416141656,
+  "scope": "Real8-step controlled-fault final acceptance for frozen GR00T optional controller I/O/query guard; full original model-gradient oracle remains separate earlier evidence."
+}

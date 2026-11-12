@@ -1,0 +1,21 @@
+{
+  "case_id": "gr00t-n16-libero-ascend-20261111",
+  "evidence_refs": [
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/platform-query-guard-cpu-validation.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/platform-query-guard-cpu-validation.json": "9ba1ee99a59a036c8ae27419bc28a21599b3ee076f6fb79304caaec741965fa2"
+  },
+  "generalization": "pending_validation",
+  "id": "20261111-133051-245828-c6b47c7b",
+  "issue_scope": "tooling",
+  "kind": "change",
+  "queries": [],
+  "recorded_at": "2026-11-11T13:30:51.245818+00:00",
+  "resolves": [],
+  "rollback": "Remove GR00T-side make_client guard in a new source/run; preserve existing frozen runs and original toolkit.",
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "Normalize only explicit native read-only POST HTTPException responses to PlatformError, entering unchanged3-attempt launcher retry. No internal retries and no mutation wrapping; original native client/KIT source unchanged. CPU injected real native run_training retries once and completes without STOP;3query/mutation unit checks pass."
+}

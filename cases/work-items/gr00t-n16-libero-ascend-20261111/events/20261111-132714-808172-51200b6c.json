@@ -1,0 +1,27 @@
+{
+  "case_id": "gr00t-n16-libero-ascend-20261111",
+  "environment": "Python3.12 urllib/http.client, LOW QZ cookie client;2Ascend cards;full native BF16 global256 physical4;optional controller8-thread I/O.",
+  "error": {
+    "expected": "Transient job-list transport failure enters existing bounded query retry, preserving healthy trainer",
+    "message": "http.client.IncompleteRead: IncompleteRead(134682 bytes read)",
+    "observed": "HTTPException escaped PlatformError/OSError handler; run_training BaseException cleanup stopped workers before final state export",
+    "type": "IncompleteRead"
+  },
+  "evidence_refs": [
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/two-fault-v2-platform-incomplete-read.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/two-fault-v2-platform-incomplete-read.json": "ad867fb412eb0e31772a4e6b2f01094e4a584d8f22b489186181c1dd28fffdc9"
+  },
+  "generalization": "pending_validation",
+  "id": "20261111-132714-808172-51200b6c",
+  "issue_scope": "tooling",
+  "kind": "failure",
+  "queries": [],
+  "recorded_at": "2026-11-11T13:27:14.808161+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "Read-only platform job-list response truncated and escaped bounded launcher retry path, cleaning up before final acceptance.20commits are not complete validation. Failed evidence retained and owned resources0."
+}

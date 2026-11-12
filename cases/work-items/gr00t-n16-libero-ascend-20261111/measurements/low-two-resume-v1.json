@@ -1,0 +1,266 @@
+{
+  "status": "passed",
+  "run_dir": "LOCAL_PATH_0008",
+  "start_step": 10,
+  "completed_step": 20,
+  "global_batch": 256,
+  "physical_batch": 4,
+  "checkpoint_calls": 0,
+  "updates": [
+    {
+      "step": 11,
+      "members": 2,
+      "loss": 1.2145375106483698,
+      "grad_norm": 0.37109375,
+      "seconds": 11.226899432949722,
+      "commit_interval_seconds": 11.226901734247804,
+      "timings_rank_max": {
+        "apply_wait_seconds": 0.026663843542337418,
+        "backward_seconds": 9.13884063065052,
+        "communication_seconds": 1.1508604772388935,
+        "cpu_reader_startup_seconds": 0.0,
+        "data_seconds": 0.08953209593892097,
+        "fault_recovery_total_seconds": 0.0,
+        "gradient_buffer_pack_seconds": 0.02473321184515953,
+        "install_clip_optimizer_seconds": 0.7556741461157799,
+        "prefetch_wait_seconds": 0.0,
+        "state_preservation_hash_seconds": 5.763024091720581e-06,
+        "worker_step_seconds": 11.199674487113953
+      }
+    },
+    {
+      "step": 12,
+      "members": 2,
+      "loss": 1.1791329570114613,
+      "grad_norm": 0.416015625,
+      "seconds": 8.968832392245531,
+      "commit_interval_seconds": 8.972589204087853,
+      "timings_rank_max": {
+        "apply_wait_seconds": 0.024831335991621017,
+        "backward_seconds": 8.425474494695663,
+        "communication_seconds": 0.2963590994477272,
+        "cpu_reader_startup_seconds": 0.0,
+        "data_seconds": 0.002760171890258789,
+        "fault_recovery_total_seconds": 0.0,
+        "gradient_buffer_pack_seconds": 0.01665126159787178,
+        "install_clip_optimizer_seconds": 0.17640328034758568,
+        "prefetch_wait_seconds": 0.0,
+        "state_preservation_hash_seconds": 6.120651960372925e-06,
+        "worker_step_seconds": 8.939480025321245
+      }
+    },
+    {
+      "step": 13,
+      "members": 2,
+      "loss": 1.21045683324337,
+      "grad_norm": 0.53125,
+      "seconds": 8.975144255906343,
+      "commit_interval_seconds": 8.978549220599234,
+      "timings_rank_max": {
+        "apply_wait_seconds": 0.0270039401948452,
+        "backward_seconds": 8.438253082334995,
+        "communication_seconds": 0.30073651671409607,
+        "cpu_reader_startup_seconds": 0.0,
+        "data_seconds": 0.0028731897473335266,
+        "fault_recovery_total_seconds": 0.0,
+        "gradient_buffer_pack_seconds": 0.016835402697324753,
+        "install_clip_optimizer_seconds": 0.17432039976119995,
+        "prefetch_wait_seconds": 0.0,
+        "state_preservation_hash_seconds": 5.908310413360596e-06,
+        "worker_step_seconds": 8.954191360622644
+      }
+    },
+    {
+      "step": 14,
+      "members": 2,
+      "loss": 1.2051920853555202,
+      "grad_norm": 0.8046875,
+      "seconds": 9.308833807706833,
+      "commit_interval_seconds": 9.312434645369649,
+      "timings_rank_max": {
+        "apply_wait_seconds": 0.025524772703647614,
+        "backward_seconds": 8.744529090821743,
+        "communication_seconds": 0.5410990864038467,
+        "cpu_reader_startup_seconds": 0.0,
+        "data_seconds": 0.004797734320163727,
+        "fault_recovery_total_seconds": 0.0,
+        "gradient_buffer_pack_seconds": 0.019636645913124084,
+        "install_clip_optimizer_seconds": 0.18596763908863068,
+        "prefetch_wait_seconds": 0.0,
+        "state_preservation_hash_seconds": 1.703202724456787e-05,
+        "worker_step_seconds": 9.283594761043787
+      }
+    },
+    {
+      "step": 15,
+      "members": 2,
+      "loss": 1.1848622001707554,
+      "grad_norm": 0.96875,
+      "seconds": 9.620396034792066,
+      "commit_interval_seconds": 9.624926591292024,
+      "timings_rank_max": {
+        "apply_wait_seconds": 0.02432192489504814,
+        "backward_seconds": 9.069196905940771,
+        "communication_seconds": 0.9861788898706436,
+        "cpu_reader_startup_seconds": 0.0,
+        "data_seconds": 0.0035543330013751984,
+        "fault_recovery_total_seconds": 0.0,
+        "gradient_buffer_pack_seconds": 0.01895572990179062,
+        "install_clip_optimizer_seconds": 0.17928792908787727,
+        "prefetch_wait_seconds": 0.0,
+        "state_preservation_hash_seconds": 4.861503839492798e-06,
+        "worker_step_seconds": 9.592404387891293
+      }
+    },
+    {
+      "step": 16,
+      "members": 2,
+      "loss": 1.1963567174971104,
+      "grad_norm": 0.67578125,
+      "seconds": 9.39506533741951,
+      "commit_interval_seconds": 9.398974178358912,
+      "timings_rank_max": {
+        "apply_wait_seconds": 0.02548995241522789,
+        "backward_seconds": 8.84188735857606,
+        "communication_seconds": 0.31042444705963135,
+        "cpu_reader_startup_seconds": 0.0,
+        "data_seconds": 0.00391436368227005,
+        "fault_recovery_total_seconds": 0.0,
+        "gradient_buffer_pack_seconds": 0.019161559641361237,
+        "install_clip_optimizer_seconds": 0.18200534582138062,
+        "prefetch_wait_seconds": 0.0,
+        "state_preservation_hash_seconds": 5.729496479034424e-06,
+        "worker_step_seconds": 9.369799446314573
+      }
+    },
+    {
+      "step": 17,
+      "members": 2,
+      "loss": 1.16053466219455,
+      "grad_norm": 1.5078125,
+      "seconds": 9.399575593881309,
+      "commit_interval_seconds": 9.403791177086532,
+      "timings_rank_max": {
+        "apply_wait_seconds": 0.025837566703557968,
+        "backward_seconds": 8.754834327846766,
+        "communication_seconds": 0.5097269006073475,
+        "cpu_reader_startup_seconds": 0.0,
+        "data_seconds": 0.004108283668756485,
+        "fault_recovery_total_seconds": 0.0,
+        "gradient_buffer_pack_seconds": 0.019212204962968826,
+        "install_clip_optimizer_seconds": 0.18285872787237167,
+        "prefetch_wait_seconds": 0.0,
+        "state_preservation_hash_seconds": 6.429851055145264e-06,
+        "worker_step_seconds": 9.283569816499949
+      }
+    },
+    {
+      "step": 18,
+      "members": 2,
+      "loss": 1.1494242893531919,
+      "grad_norm": 1.25,
+      "seconds": 9.248481751419604,
+      "commit_interval_seconds": 9.252277652733028,
+      "timings_rank_max": {
+        "apply_wait_seconds": 0.02572869136929512,
+        "backward_seconds": 8.688338674604893,
+        "communication_seconds": 0.3897736258804798,
+        "cpu_reader_startup_seconds": 0.0,
+        "data_seconds": 0.0038247890770435333,
+        "fault_recovery_total_seconds": 0.0,
+        "gradient_buffer_pack_seconds": 0.020644892007112503,
+        "install_clip_optimizer_seconds": 0.17893541604280472,
+        "prefetch_wait_seconds": 0.0,
+        "state_preservation_hash_seconds": 6.105750799179077e-06,
+        "worker_step_seconds": 9.216822069138288
+      }
+    },
+    {
+      "step": 19,
+      "members": 2,
+      "loss": 1.200409377925098,
+      "grad_norm": 12.0,
+      "seconds": 9.173923057503998,
+      "commit_interval_seconds": 9.179982986301184,
+      "timings_rank_max": {
+        "apply_wait_seconds": 0.02380342036485672,
+        "backward_seconds": 8.633263792842627,
+        "communication_seconds": 0.3748197443783283,
+        "cpu_reader_startup_seconds": 0.0,
+        "data_seconds": 0.004633881151676178,
+        "fault_recovery_total_seconds": 0.0,
+        "gradient_buffer_pack_seconds": 0.017827719449996948,
+        "install_clip_optimizer_seconds": 0.17766090855002403,
+        "prefetch_wait_seconds": 0.0,
+        "state_preservation_hash_seconds": 6.165355443954468e-06,
+        "worker_step_seconds": 9.152173612266779
+      }
+    },
+    {
+      "step": 20,
+      "members": 2,
+      "loss": 1.162957956083119,
+      "grad_norm": 3.71875,
+      "seconds": 9.099872478283942,
+      "commit_interval_seconds": 9.103556122630835,
+      "timings_rank_max": {
+        "apply_wait_seconds": 0.02570755034685135,
+        "backward_seconds": 8.541566226631403,
+        "communication_seconds": 0.3415253423154354,
+        "cpu_reader_startup_seconds": 0.0,
+        "data_seconds": 0.0035253241658210754,
+        "fault_recovery_total_seconds": 0.0,
+        "gradient_buffer_pack_seconds": 0.016967598348855972,
+        "install_clip_optimizer_seconds": 0.17995556071400642,
+        "prefetch_wait_seconds": 0.0,
+        "state_preservation_hash_seconds": 5.979090929031372e-06,
+        "worker_step_seconds": 9.06910289824009
+      }
+    }
+  ],
+  "checkpoint": {
+    "path": "LOCAL_PATH_0009",
+    "step": 20,
+    "payload_bytes": 18416141656,
+    "payload_sha256": "9f1a662d2c1c394335eb67f56b1d17d13ff47ea2df51858b2a02e7db87fdc29f",
+    "manifest_sha256": "9c592a0eada78b7df29f0b50fec3e2dc564414d3977f3567a96fb4107f46296f",
+    "model_sha256": "22299c617e37a1fd3fdbdbfa92e481dda2638762f281b078ab8842794ebcf3e5",
+    "optimizer_sha256": "ec913431a247e8276f4b702b9505988df1f6ef1ad38b3076a8b273b5ffebe47f",
+    "optimizer_config_sha256": "2b1d0636c75fe9ee10df7f7e9163c67f726196759e68afcab772ee0e7b04b2fb",
+    "payload_bytes_independently_verified": true,
+    "max_read_block_bytes": 4194304
+  },
+  "first_loss": 1.2145375106483698,
+  "last_loss": 1.162957956083119,
+  "median_update_seconds": 9.308833807706833,
+  "mean_update_seconds": 9.320878294429608,
+  "peak_allocated_gib": 33.93328332901001,
+  "peak_reserved_gib": 35.654296875,
+  "peak_sampled_device_used_gib": 37.25592041015625,
+  "all_final_states_identical": true,
+  "resources_released": true,
+  "fault_injected": false,
+  "resume": {
+    "checkpoint": {
+      "path": "LOCAL_PATH_0010",
+      "step": 10,
+      "payload_bytes": 18416141656,
+      "payload_sha256": "eeb5dcff03b5988e0034e5b61a109a25b83770d132935404b3743036a1d559c7",
+      "manifest_sha256": "97ff245788fadbc883207a361c64079a572fe592e7a2e4511addef3eb67e3bc1",
+      "model_sha256": "c21407cd3b648a621a0c56f98a3cafba92d11ede8ddc73c2d475d75275181b91",
+      "optimizer_sha256": "646a89a38d97f24d2487a9b665fccd994fb2ff0612182231a535ea1a481a9761",
+      "optimizer_config_sha256": "2b1d0636c75fe9ee10df7f7e9163c67f726196759e68afcab772ee0e7b04b2fb",
+      "payload_bytes_independently_verified": true,
+      "max_read_block_bytes": 4194304
+    },
+    "source_evidence_sha256": {
+      "probe/spec.json": "625d10859d6451129982a75f9be79b8b31315454fb459a7c6d487d5c270629c7",
+      "training.json": "41fec99caee99d6be3a448b99b064eb63cdc7959a95de36e8bf7309200f57bc4",
+      "probe/summary.json": "019898488d4a0553633045a2e0163092225784ad6f09dca663814ebfddb07cbe",
+      "probe/states/checkpoint-10/manifest.json": "a5792d0ace26b7d5def83d293dd16656bc0d950b1f4b786ad7f4230e734d2723",
+      "probe/states/checkpoint-10/state.bin": "eeb5dcff03b5988e0034e5b61a109a25b83770d132935404b3743036a1d559c7"
+    }
+  },
+  "scope": "Protocol and complete checkpoint bytes; independent real-model gradient oracle required",
+  "auditor_source_sha256": "13c5507f25ebedfd13d38909c4f9217b18ee5aa3aa99d62afe7364cf7a1454ba"
+}

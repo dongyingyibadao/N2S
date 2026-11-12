@@ -1,0 +1,6 @@
+{
+  "run": "sixtyfour-perf-v2",
+  "observation": "First read-only audit started after probe passed but before platform cleanup receipt was written. Final checkpoint bytes and protocol were traversed, then FileNotFoundError on cleanup_receipt.json. No result was published and no acceptance check was disabled.",
+  "subsequent_observation": "Official cleanup receipt arrived with resources_released=true and active/reserved0; retry of complete audit started under a new log name.",
+  "scope": "Audit invocation ordering, not model/NPU training failure."
+}

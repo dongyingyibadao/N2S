@@ -1,0 +1,18 @@
+{
+  "scope": "CPU injected real native run_training transient retry; no platform or NPU resources",
+  "injected": "http.client.IncompleteRead on first real guarded job-list call",
+  "requests": 2,
+  "native_loop_return": 0,
+  "first_error": "PlatformError: IncompleteRead: truncated/unavailable read-only platform response",
+  "resources_released": true,
+  "no_STOP_created": true,
+  "client_wrapper_does_not_retry": true,
+  "mutation_guard_tests": "create/stop original exception preserved, no replay",
+  "sources": {
+    "gr00t/ascend/platform_queries.py": "ac973f9708be4eeb91d0bd8723c7f42c13551754ee9929a058f665049417a424",
+    "scripts/launch_ascend_low.py": "7b238093da18ebc15d0526535a86e639c0358f7e9e63a94c954c2ed90d591815",
+    "tests/test_ascend_platform_queries.py": "5325fd84629f2df04874cfa9dea6694367407b610a1fdfc1d7c0a6d319ccc8bf"
+  },
+  "unit_tests": "3 passed: sanitized read query error/no internal retry; create and stop exceptions unchanged/no retry",
+  "real_acceptance": "New immutable two-fault-v3 and sixtyfour-perf-v7 prepared; v3 now running. Keep v2 failed."
+}

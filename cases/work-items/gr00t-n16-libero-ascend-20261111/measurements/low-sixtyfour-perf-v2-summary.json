@@ -1,0 +1,249 @@
+{
+  "schema": "fragment-refill-evidence-audit-v1",
+  "status": "passed",
+  "run_dir": "LOCAL_PATH_0002",
+  "run_id": "686b97b8ebec4366a250bc407a7adddc",
+  "auditor_source_sha256": "7de7f75d92dce2b587ae728a246f4014931e30ee8b860e279832d4f54e62318f",
+  "scope": "Read-only saved native dynamic-refill evidence and checkpoint-byte audit; no numerical oracle",
+  "model_or_device_framework_imported": false,
+  "numerical_gradient_oracle_performed": false,
+  "start_step": 0,
+  "completed_step": 30,
+  "updates_audited": 30,
+  "global_batch": 256,
+  "atomic_units": 64,
+  "initial_cards": 64,
+  "final_cards": 64,
+  "physical_pool_limit": 64,
+  "initial_job_layout": [
+    16,
+    16,
+    16,
+    16
+  ],
+  "final_active_allocation_layout": [
+    {
+      "worker_prefix": "w000001",
+      "allocated_cards": 16,
+      "final_active_members": 16,
+      "member_ids": [
+        "w000001",
+        "w000002",
+        "w000003",
+        "w000004",
+        "w000005",
+        "w000006",
+        "w000007",
+        "w000008",
+        "w000009",
+        "w000010",
+        "w000011",
+        "w000012",
+        "w000013",
+        "w000014",
+        "w000015",
+        "w000016"
+      ]
+    },
+    {
+      "worker_prefix": "w000002",
+      "allocated_cards": 16,
+      "final_active_members": 16,
+      "member_ids": [
+        "w000017",
+        "w000018",
+        "w000019",
+        "w000020",
+        "w000021",
+        "w000022",
+        "w000023",
+        "w000024",
+        "w000025",
+        "w000026",
+        "w000027",
+        "w000028",
+        "w000029",
+        "w000030",
+        "w000031",
+        "w000032"
+      ]
+    },
+    {
+      "worker_prefix": "w000003",
+      "allocated_cards": 16,
+      "final_active_members": 16,
+      "member_ids": [
+        "w000033",
+        "w000034",
+        "w000035",
+        "w000036",
+        "w000037",
+        "w000038",
+        "w000039",
+        "w000040",
+        "w000041",
+        "w000042",
+        "w000043",
+        "w000044",
+        "w000045",
+        "w000046",
+        "w000047",
+        "w000048"
+      ]
+    },
+    {
+      "worker_prefix": "w000004",
+      "allocated_cards": 16,
+      "final_active_members": 16,
+      "member_ids": [
+        "w000049",
+        "w000050",
+        "w000051",
+        "w000052",
+        "w000053",
+        "w000054",
+        "w000055",
+        "w000056",
+        "w000057",
+        "w000058",
+        "w000059",
+        "w000060",
+        "w000061",
+        "w000062",
+        "w000063",
+        "w000064"
+      ]
+    }
+  ],
+  "historical_allocated_member_count": 64,
+  "training_elapsed_seconds": 313.3130159378052,
+  "first_update_loss": 1.2172781378030777,
+  "last_update_loss": 1.1748828813433647,
+  "admissions": [],
+  "admission_pause_seconds_total": 0,
+  "steady_by_cards": {
+    "48": {
+      "steps": [],
+      "commit_seconds": {
+        "count": 0,
+        "mean": null,
+        "median": null,
+        "min": null,
+        "max": null
+      },
+      "commit_interval_seconds": {
+        "count": 0,
+        "mean": null,
+        "median": null,
+        "min": null,
+        "max": null
+      },
+      "communication_seconds_rank_max": {
+        "count": 0,
+        "mean": null,
+        "median": null,
+        "min": null,
+        "max": null
+      }
+    },
+    "64": {
+      "steps": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30
+      ],
+      "commit_seconds": {
+        "count": 28,
+        "mean": 2.3394359321932177,
+        "median": 2.321788613218814,
+        "min": 2.230350088328123,
+        "max": 2.523501195013523
+      },
+      "commit_interval_seconds": {
+        "count": 28,
+        "mean": 2.384932910358267,
+        "median": 2.3510458106175065,
+        "min": 2.250577920116484,
+        "max": 2.5852710818871856
+      },
+      "communication_seconds_rank_max": {
+        "count": 28,
+        "mean": 0.4193975089916161,
+        "median": 0.41178376227617264,
+        "min": 0.38546061143279076,
+        "max": 0.5105959177017212
+      }
+    }
+  },
+  "steady_excluded_steps": [
+    1,
+    2
+  ],
+  "steady_excluded_recovery_steps": [],
+  "steady_excluded_after_boundary_steps": [],
+  "timing_scope": "Exclude first two updates, membership/recovery updates and the first interval after every admission/rejection. Worker communication includes peer arrival and stream dependencies, not pure network time.",
+  "checkpoint": {
+    "path": "LOCAL_PATH_0003",
+    "step": 30,
+    "payload_bytes": 18416141656,
+    "payload_sha256": "99e81c1e0ea60e08ba5e7e4b967e6ab47bdbc0ef79d28a47d890b1aa1396b545",
+    "manifest_sha256": "4f30281cf2aa358c1c94d5a30dea46d1d7e73be901cf2180066486470d00a172",
+    "model_sha256": "0decae759a20d1e10944f2ff504f77551fc3cd94bdaacfbcf8bd843b33453435",
+    "optimizer_sha256": "6035520337c59f1055351dc41dd1b22249a8c43bc0f24386f4a329f665d1b6e3",
+    "optimizer_config_sha256": "2b1d0636c75fe9ee10df7f7e9163c67f726196759e68afcab772ee0e7b04b2fb",
+    "payload_bytes_independently_verified": true,
+    "max_read_block_bytes": 4194304
+  },
+  "all_final_state_hashes_identical": true,
+  "unused_cancelled_candidate_failures": [],
+  "platform_jobs_officially_terminal": 4,
+  "resources_released": true,
+  "evidence_file_count": 6217,
+  "evidence_index_sha256": "68c9bd64182a7b5181b97dd7e33ee0c15e3629a466ba80cb3b50cad8667ad16c",
+  "limitations": [
+    "Recorded hashes/protocol receipts are not a signed attestation or an independent gradient oracle.",
+    "No model is loaded and no task-quality evaluation or checkpoint inference is performed.",
+    "Payload bytes are rehashed; tensor numerical values and Adam mathematics are not recomputed.",
+    "Timing describes this saved run and may include shared-filesystem/control overhead; it is not pure HCCL bandwidth.",
+    "Unused candidate READY is optional; malformed evidence and nonterminal historical platform jobs are rejected."
+  ],
+  "native_memory": {
+    "peak_allocated_gib": 33.94103527069092,
+    "peak_reserved_gib": 36.748046875,
+    "peak_sampled_device_used_gib": 38.395538330078125,
+    "workers_observed": 64,
+    "final_members_verified": 64,
+    "scope": "Native allocated/reserved high-water counters at existing NPU sync points; includes HCCL/Adam; device used is sampled"
+  },
+  "original_audit_sha256": "5c2c0382abafb252a94b7658d2f29c94a7287abcc644239a191c1a41be51d296",
+  "warmup8_step_seconds": {
+    "n": 22,
+    "mean": 2.3474003354680133,
+    "median": 2.3257694393396378
+  }
+}

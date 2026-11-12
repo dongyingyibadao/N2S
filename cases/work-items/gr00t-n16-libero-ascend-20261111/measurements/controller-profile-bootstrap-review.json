@@ -1,0 +1,7 @@
+{
+  "reviewed_implementation": "Python3.12cProfile.main uses exec(code,globs) through runctx, but does not register those globals as a new sys.modules[__main__]. Frozen probe controller passes sys.modules[__name__] as protocol API.",
+  "targeted_fix": "scripts/profile_ascend_controller.py loads frozen target through importlib.spec_from_file_location, registers the module before exec_module, and calls module.main under Profile.runcall; no native protocol functions patched.",
+  "validation": "Actual PodController initialized onCPU under profiler with2complete supervisor/READY fixture records, created phase.json and retained correct module API. Full CLI --help/profile-output check passed. New run sixtyfour-perf-v5 has64READY and has committed its first update.",
+  "query_result": "accepted/community cProfile __main__ no such option -u module identity search returned0matches",
+  "scope": "Tooling bootstrap only; production entry remains the previously validated native unprofiled command."
+}

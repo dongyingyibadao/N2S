@@ -1,0 +1,19 @@
+{
+  "runs": [
+    "sixtyfour-perf-v3",
+    "sixtyfour-perf-v4"
+  ],
+  "first_causal_errors": [
+    "cProfile.py: error: no such option: -u",
+    "AttributeError: module __main__ has no attribute ControllerLiveness at PodController.__init__"
+  ],
+  "training_updates": 0,
+  "scope": "Optional profiling bootstrap failures, not model migration or NPU arithmetic.",
+  "causes": "First wrapper passed python -u after cProfile options; corrected CLI then exposed cProfile runctx globals not registered as the controller sys.modules[__main__]. Native controller passes sys.modules[__name__] to its protocol classes.",
+  "fix": "Load the frozen probe through importlib under a real registered unique module, then cProfile.Profile.runcall(module.main), dumping stats in finally. Preserve interpreter -u before the driver.",
+  "local_validation": "CLI --help exits0 and creates profile; real PodController initialized under cProfile with2copied supervisor/READY identities, no NPU/jobs.",
+  "cleanup": {
+    "sixtyfour-perf-v3": true,
+    "sixtyfour-perf-v4": true
+  }
+}

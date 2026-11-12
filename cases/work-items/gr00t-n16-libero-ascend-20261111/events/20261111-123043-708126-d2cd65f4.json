@@ -1,0 +1,17 @@
+{
+  "case_id": "gr00t-n16-libero-ascend-20261111",
+  "evidence_refs": [],
+  "evidence_sha256": {},
+  "generalization": "pending_validation",
+  "id": "20261111-123043-708126-d2cd65f4",
+  "issue_scope": "target",
+  "kind": "change",
+  "queries": [],
+  "recorded_at": "2026-11-11T12:30:43.708113+00:00",
+  "resolves": [],
+  "rollback": "Set attention=reference to select segmented SDPA. Set optimize_backbone=false in LOW configuration or --execution baseline for the standalone trainer to disable feature/output and transfer changes. Re-prepare a new frozen run; never modify an active run.",
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "Use training-backward-capable TND packed vision attention and BNSD DiT fusion; preserve image/window segmentation, mask meaning and LayerNorm. Optional features-only backbone output avoids unused logits/hidden output, and input deduplication avoids repeated transfers. Keep native BF16, full active action path, atomic4 and no checkpointing."
+}

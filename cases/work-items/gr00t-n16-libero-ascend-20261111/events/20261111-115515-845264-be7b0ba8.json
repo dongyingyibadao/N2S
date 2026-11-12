@@ -1,0 +1,27 @@
+{
+  "case_id": "gr00t-n16-libero-ascend-20261111",
+  "environment": "Official GR00T N1.6 BF16 full active parameters,LIBERO horizon16,910B2C card1,CANN8.5 torch_npu2.9",
+  "error": {
+    "expected": "Gradient sum of units0/32 matches physical batch8 within BF16 roundoff",
+    "message": "physical_batch8 relative_l2 0.48217 exceeds0.08",
+    "observed": "Large differences across backbone and action head despite exact same-batch replay",
+    "type": "AssertionError"
+  },
+  "evidence_refs": [
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/model-oracle-v1-failure.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/model-oracle-v1-failure.json": "a558f3455c1dadbb08addca0a2078694622638efd640ff78721941702428bcc6"
+  },
+  "generalization": "pending_validation",
+  "id": "20261111-115515-845264-be7b0ba8",
+  "issue_scope": "target",
+  "kind": "numerical_issue",
+  "queries": [],
+  "recorded_at": "2026-11-11T11:55:15.845254+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Full-model physical batch8 vs two nonadjacent atomic4 units failed gradient equivalence: relative L2 0.48217. Same batch4 replay was bitwise identical; fused/reference attention gradient relative L2 0.002744. Do not admit batch8 or claim deterministic replay yet; investigate dropout masks, explicit stochastic inputs and batch-dependent behavior."
+}

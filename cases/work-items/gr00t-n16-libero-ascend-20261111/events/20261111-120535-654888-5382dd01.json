@@ -1,0 +1,24 @@
+{
+  "case_id": "gr00t-n16-libero-ascend-20261111",
+  "evidence_refs": [
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/full-b4-model-oracle-v2.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/full-b4-model-oracle-v2.json": "8ba2328d6a0527fdb8bad94cdfc3f72256d0a07b4e47364340e39573b30cbba4"
+  },
+  "generalization": "pending_validation",
+  "id": "20261111-120535-654888-5382dd01",
+  "issue_scope": "target",
+  "kind": "resolution",
+  "queries": [],
+  "recorded_at": "2026-11-11T12:05:35.654878+00:00",
+  "resolves": [
+    "20261111-113916-800073-b10e67a2",
+    "20261111-114128-717241-84650ff4",
+    "20261111-115235-085566-e5651e08"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Real official-weight pretrained loading bypasses the dangling random-init class branch; constructor reapplication preserves text SDPA/vision packed backends; materializing the query mask dimension allows reference forward/backward. Validated by full model gradients and complete restored Adam update."
+}

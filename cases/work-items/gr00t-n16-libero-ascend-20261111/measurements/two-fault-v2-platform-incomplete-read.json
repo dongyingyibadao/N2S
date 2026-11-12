@@ -1,0 +1,19 @@
+{
+  "run": "two-fault-v2",
+  "observed": "20commits and fault/replacement/full-state checkpoint10 passed, but final export incomplete when launcher query failed",
+  "first_causal_error": "http.client.IncompleteRead: IncompleteRead(134682 bytes read)",
+  "call_chain": [
+    "launch.run_training",
+    "snapshot",
+    "_snapshot_locked",
+    "ascend_fleet.reconcile",
+    "ascend_platform.list_own_jobs",
+    "QzCookieClient.request",
+    "json.load(response)",
+    "http.client.HTTPResponse._read_chunked"
+  ],
+  "scope": "Read-only platform job-list query; not NPU math or controller command I/O failure",
+  "cause": "IncompleteRead is an HTTPException, outside existing launcher PlatformError/OSError transient-query catch",
+  "cleanup": "Owned jobs officially stopped;cleanup resources_released=true;all resources0",
+  "next_test": "Inspect exact client/list API and normalize read-only HTTP transport failures to existing bounded PlatformError retry path; never retry create/stop mutations blindly; new immutable fault run and64card performance gate"
+}

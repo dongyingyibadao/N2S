@@ -1,0 +1,27 @@
+{
+  "case_id": "gr00t-n16-libero-ascend-20261111",
+  "environment": "Read-only Python3.12 stdlib audit; actual64-card30-step training had passed, official cleanup was still completing.",
+  "error": {
+    "expected": "Probe passed AND official cleanup receipt confirms0resources before audit acceptance",
+    "message": "cleanup_receipt.json absent when independent audit reached lifecycle acceptance",
+    "observed": "Probe passed; cleanup receipt had not yet been written when the first audit reached it",
+    "type": "FileNotFoundError"
+  },
+  "evidence_refs": [
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/premature-low-audit.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/premature-low-audit.json": "131ac0d18c14ff88a02c2db6ab1d0b7f6b372a717b09f7debc7fed0e317cf874"
+  },
+  "generalization": "pending_validation",
+  "id": "20261111-125507-514754-3444cf99",
+  "issue_scope": "tooling",
+  "kind": "failure",
+  "queries": [],
+  "recorded_at": "2026-11-11T12:55:07.514742+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "First read-only audit started after probe passed but before platform cleanup receipt was written. Final checkpoint bytes and protocol were traversed, then FileNotFoundError on cleanup_receipt.json. No result was published and no acceptance check was disabled."
+}

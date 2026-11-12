@@ -1,0 +1,22 @@
+{
+  "case_id": "gr00t-n16-libero-ascend-20261111",
+  "evidence_refs": [
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/resident-local-oracle-v4.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/resident-local-oracle-v4.json": "83dbc8cc67853cab61e581649dcdeb09238a0ed8ed7e27e5db90c19cb8b8d6ff"
+  },
+  "generalization": "pending_validation",
+  "id": "20261111-122333-746949-d6cade9a",
+  "issue_scope": "target",
+  "kind": "resolution",
+  "queries": [],
+  "recorded_at": "2026-11-11T12:23:33.746940+00:00",
+  "resolves": [
+    "20261111-115515-845264-be7b0ba8"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Resolve the production replay requirement by enforcing physical batch4 in the LOW adapter and selecting the user-authorized64x4 layout. Do not admit the failed physical8 path or claim its gradients match. Real fixed-atomic4 replay is exact on one device and across devices has relativeL2 .002766,max_abs6.676e-6. Batch8 grouping remains future work outside the selected production layout."
+}

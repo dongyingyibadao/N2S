@@ -1,0 +1,143 @@
+{
+  "checks": [
+    "batch4 exact replay",
+    "reference attention gradients",
+    "batch8 vs two batch4 gradients"
+  ],
+  "results": [
+    {
+      "relative_l2": 0.0,
+      "max_abs": 0.0,
+      "unequal_tensors": 0,
+      "first_unequal": [],
+      "elements": 2960729840,
+      "groups": {
+        "backbone.model": {
+          "relative_l2": 0.0,
+          "max_abs": 0.0
+        },
+        "action_head.model": {
+          "relative_l2": 0.0,
+          "max_abs": 0.0
+        },
+        "action_head.state_encoder": {
+          "relative_l2": 0.0,
+          "max_abs": 0.0
+        },
+        "action_head.action_encoder": {
+          "relative_l2": 0.0,
+          "max_abs": 0.0
+        },
+        "action_head.action_decoder": {
+          "relative_l2": 0.0,
+          "max_abs": 0.0
+        },
+        "action_head.vlln": {
+          "relative_l2": 0.0,
+          "max_abs": 0.0
+        },
+        "action_head.position_embedding": {
+          "relative_l2": 0.0,
+          "max_abs": 0.0
+        }
+      }
+    },
+    {
+      "relative_l2": 0.00274394591938144,
+      "max_abs": 9.1552734375e-05,
+      "unequal_tensors": 424,
+      "first_unequal": [
+        "backbone.model.vision_model.vision_model.embeddings.patch_embedding.weight",
+        "backbone.model.vision_model.vision_model.embeddings.patch_embedding.bias",
+        "backbone.model.vision_model.vision_model.embeddings.position_embedding.weight",
+        "backbone.model.vision_model.vision_model.encoder.layers.0.layer_norm1.weight",
+        "backbone.model.vision_model.vision_model.encoder.layers.0.layer_norm1.bias",
+        "backbone.model.vision_model.vision_model.encoder.layers.0.self_attn.k_proj.weight",
+        "backbone.model.vision_model.vision_model.encoder.layers.0.self_attn.k_proj.bias",
+        "backbone.model.vision_model.vision_model.encoder.layers.0.self_attn.v_proj.weight",
+        "backbone.model.vision_model.vision_model.encoder.layers.0.self_attn.v_proj.bias",
+        "backbone.model.vision_model.vision_model.encoder.layers.0.self_attn.q_proj.weight"
+      ],
+      "elements": 2960729840,
+      "groups": {
+        "backbone.model": {
+          "relative_l2": 0.003037791209803715,
+          "max_abs": 9.1552734375e-05
+        },
+        "action_head.model": {
+          "relative_l2": 0.0,
+          "max_abs": 0.0
+        },
+        "action_head.state_encoder": {
+          "relative_l2": 0.0,
+          "max_abs": 0.0
+        },
+        "action_head.action_encoder": {
+          "relative_l2": 0.0,
+          "max_abs": 0.0
+        },
+        "action_head.action_decoder": {
+          "relative_l2": 0.0,
+          "max_abs": 0.0
+        },
+        "action_head.vlln": {
+          "relative_l2": 0.0,
+          "max_abs": 0.0
+        },
+        "action_head.position_embedding": {
+          "relative_l2": 0.0,
+          "max_abs": 0.0
+        }
+      }
+    },
+    {
+      "relative_l2": 0.4821698259211933,
+      "max_abs": 0.1141357421875,
+      "unequal_tensors": 1094,
+      "first_unequal": [
+        "backbone.model.vision_model.vision_model.embeddings.patch_embedding.weight",
+        "backbone.model.vision_model.vision_model.embeddings.patch_embedding.bias",
+        "backbone.model.vision_model.vision_model.embeddings.position_embedding.weight",
+        "backbone.model.vision_model.vision_model.encoder.layers.0.layer_norm1.weight",
+        "backbone.model.vision_model.vision_model.encoder.layers.0.layer_norm1.bias",
+        "backbone.model.vision_model.vision_model.encoder.layers.0.self_attn.k_proj.weight",
+        "backbone.model.vision_model.vision_model.encoder.layers.0.self_attn.k_proj.bias",
+        "backbone.model.vision_model.vision_model.encoder.layers.0.self_attn.v_proj.weight",
+        "backbone.model.vision_model.vision_model.encoder.layers.0.self_attn.v_proj.bias",
+        "backbone.model.vision_model.vision_model.encoder.layers.0.self_attn.q_proj.weight"
+      ],
+      "elements": 2960729840,
+      "groups": {
+        "backbone.model": {
+          "relative_l2": 0.7114290145833306,
+          "max_abs": 0.1141357421875
+        },
+        "action_head.model": {
+          "relative_l2": 0.36905126441804353,
+          "max_abs": 0.010528564453125
+        },
+        "action_head.state_encoder": {
+          "relative_l2": 1.0808281425743502,
+          "max_abs": 0.0245361328125
+        },
+        "action_head.action_encoder": {
+          "relative_l2": 1.0175190578424735,
+          "max_abs": 0.002223968505859375
+        },
+        "action_head.action_decoder": {
+          "relative_l2": 0.026150492998325458,
+          "max_abs": 0.0013427734375
+        },
+        "action_head.vlln": {
+          "relative_l2": 0.7032090495494783,
+          "max_abs": 0.014404296875
+        },
+        "action_head.position_embedding": {
+          "relative_l2": 1.0027283787444614,
+          "max_abs": 0.0013818740844726562
+        }
+      }
+    }
+  ],
+  "failure": "physical_batch8 relative_l2 >= 0.08"
+}

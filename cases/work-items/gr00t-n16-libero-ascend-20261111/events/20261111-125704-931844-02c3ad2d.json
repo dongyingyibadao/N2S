@@ -1,0 +1,22 @@
+{
+  "case_id": "gr00t-n16-libero-ascend-20261111",
+  "evidence_refs": [
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/low-sixtyfour-perf-v2-summary.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/low-sixtyfour-perf-v2-summary.json": "d5c1f0f30ab474250fe9d477271e67413f300ededa811cb07f9be0f35c60236d"
+  },
+  "generalization": "pending_validation",
+  "id": "20261111-125704-931844-02c3ad2d",
+  "issue_scope": "tooling",
+  "kind": "resolution",
+  "queries": [],
+  "recorded_at": "2026-11-11T12:57:04.931834+00:00",
+  "resolves": [
+    "20261111-125507-514754-3444cf99"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "After official cleanup_receipt confirmed0active/reserved, the complete independent64-card30-update audit passed, including the whole18.42GB native checkpoint and native peak memory records for64exact final processes. Original premature audit log retained."
+}

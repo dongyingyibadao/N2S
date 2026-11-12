@@ -1,0 +1,65 @@
+{
+  "runs": [
+    {
+      "run": "sixtyfour-perf-v2",
+      "warmup_discarded": 8,
+      "measured_updates": 22,
+      "commit_seconds_mean": 2.3474003354680133,
+      "commit_seconds_median": 2.3257694393396378,
+      "interval_seconds_mean": 2.395537532908334,
+      "interval_seconds_median": 2.3664340474642813,
+      "first_loss": 1.2172781378030777,
+      "last_loss": 1.1748828813433647,
+      "audit_status": "passed",
+      "final_states_identical": true,
+      "checkpoint_payload_bytes": 18416141656,
+      "native_memory": {
+        "peak_allocated_gib": 33.94103527069092,
+        "peak_reserved_gib": 36.748046875,
+        "peak_sampled_device_used_gib": 38.395538330078125,
+        "workers_observed": 64,
+        "final_members_verified": 64,
+        "scope": "Native allocated/reserved high-water counters at existing NPU sync points; includes HCCL/Adam; device used is sampled"
+      },
+      "resources_released": true
+    },
+    {
+      "run": "sixtyfour-perf-v7",
+      "warmup_discarded": 8,
+      "measured_updates": 22,
+      "commit_seconds_mean": 2.0063528907485306,
+      "commit_seconds_median": 2.0193209857679904,
+      "interval_seconds_mean": 2.0373611261814157,
+      "interval_seconds_median": 2.044437522534281,
+      "first_loss": 1.2172781378030777,
+      "last_loss": 1.1746594365686178,
+      "audit_status": "passed",
+      "final_states_identical": true,
+      "checkpoint_payload_bytes": 18416141656,
+      "native_memory": {
+        "peak_allocated_gib": 33.94103527069092,
+        "peak_reserved_gib": 36.748046875,
+        "peak_sampled_device_used_gib": 38.400245666503906,
+        "workers_observed": 64,
+        "final_members_verified": 64,
+        "scope": "Native allocated/reserved high-water counters at existing NPU sync points; includes HCCL/Adam; device used is sampled"
+      },
+      "resources_released": true
+    }
+  ],
+  "physical_batch": 4,
+  "global_batch": 256,
+  "cards": 64,
+  "activation_recomputation": false,
+  "precision": "Native BF16 parameters/gradients/moments,no FP32 master",
+  "scope": "Separate LOW allocations,same hardware type;not fixed physical-card A/B. Prior single-card attention optimization is separately measured on the same physical card.",
+  "negative_cpu_read_probe": {
+    "scope": "CPU192-file historical liveness/error/exits read sweep; not live protocol change",
+    "repetitions": 12,
+    "serial_median_seconds": 0.0038833864964544773,
+    "parallel8_median_seconds": 0.008192388340830803,
+    "equal": true,
+    "decision": "Do not change liveness protocol based only on microbenchmark; evaluate marginal savings against added validation cost."
+  },
+  "formal_run": "libero-full-20000-v3 now actually running,target20000;not complete"
+}

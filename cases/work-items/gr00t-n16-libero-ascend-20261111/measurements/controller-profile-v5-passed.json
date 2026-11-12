@@ -1,0 +1,56 @@
+{
+  "run": "sixtyfour-perf-v5",
+  "scope": "Optional CPU profiler diagnostics, not production speed",
+  "audit_status": "passed",
+  "committed_steps": 30,
+  "final_states_identical": true,
+  "resources_released": true,
+  "profile_total_seconds": 428.2284380739997,
+  "entries": [
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<built-in method posix.fsync>",
+      "primitive_calls": 6292,
+      "calls": 6292,
+      "own_seconds": 11.068891427,
+      "cumulative_seconds": 11.068891427
+    },
+    {
+      "file": "probe_resident_openpi_fault.py",
+      "line": 44,
+      "function": "_write",
+      "primitive_calls": 6202,
+      "calls": 6202,
+      "own_seconds": 0.078736996,
+      "cumulative_seconds": 95.44009866900001
+    },
+    {
+      "file": "pod_controller_runtime.py",
+      "line": 209,
+      "function": "run_step",
+      "primitive_calls": 30,
+      "calls": 30,
+      "own_seconds": 0.008166444,
+      "cumulative_seconds": 137.4270247
+    },
+    {
+      "file": "__init__.py",
+      "line": 120,
+      "function": "dump",
+      "primitive_calls": 6202,
+      "calls": 6202,
+      "own_seconds": 11.812951263,
+      "cumulative_seconds": 72.45424857200001
+    },
+    {
+      "file": "probe_resident_openpi_fault.py",
+      "line": 37,
+      "function": "_read",
+      "primitive_calls": 817444,
+      "calls": 817444,
+      "own_seconds": 1.5679200260000001,
+      "cumulative_seconds": 102.007181818
+    }
+  ]
+}

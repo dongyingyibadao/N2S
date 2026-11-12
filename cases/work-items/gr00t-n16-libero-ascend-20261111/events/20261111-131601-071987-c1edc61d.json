@@ -1,0 +1,22 @@
+{
+  "case_id": "gr00t-n16-libero-ascend-20261111",
+  "evidence_refs": [
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/controller-profile-v5-passed.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/controller-profile-v5-passed.json": "28d803d4c6501b36d97ae1a505f3791ef92b5470a8d6cb7296e9fa9d0685174b"
+  },
+  "generalization": "pending_validation",
+  "id": "20261111-131601-071987-c1edc61d",
+  "issue_scope": "tooling",
+  "kind": "resolution",
+  "queries": [],
+  "recorded_at": "2026-11-11T13:16:01.071976+00:00",
+  "resolves": [
+    "20261111-130236-194646-91d17caf"
+  ],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "Registered-module profiler bootstrap passed a real64-card30-update run and full independent native-state audit. All ranks final states identical; complete payload verified; owned resources0. Profiling measurements diagnose controller I/O only and do not count as production speed. Failed v3/v4 evidence preserved."
+}

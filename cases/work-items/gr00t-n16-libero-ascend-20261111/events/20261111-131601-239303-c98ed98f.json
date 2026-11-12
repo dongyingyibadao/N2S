@@ -1,0 +1,21 @@
+{
+  "case_id": "gr00t-n16-libero-ascend-20261111",
+  "evidence_refs": [
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/controller-io-v1-change.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/controller-io-v1-change.json": "6cf98d58eb73bbdad275524c5dc16a83577324c4a83a3a84199ecd026de0a151"
+  },
+  "generalization": "pending_validation",
+  "id": "20261111-131601-239303-c98ed98f",
+  "issue_scope": "target",
+  "kind": "change",
+  "queries": [],
+  "recorded_at": "2026-11-11T13:16:01.239292+00:00",
+  "resolves": [],
+  "rollback": "Set controller_io_workers=0 and profile_controller=false in a new site/run; use original native controller. Never edit prepared source.",
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "C JSON serialization; bounded8-thread independent command writes. Preserve exclusive temp,flush,fsync,atomic rename; drain all writes before return/error; no changes to authorization,session fences,gradient math,APPLY/COMMIT."
+}

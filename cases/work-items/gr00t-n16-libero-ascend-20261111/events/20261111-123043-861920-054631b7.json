@@ -1,0 +1,44 @@
+{
+  "case_id": "gr00t-n16-libero-ascend-20261111",
+  "environment": "Ascend910B2C local card1; CANN8.5; Python3.12; torch2.9.0 and torch_npu2.9; transformers4.51.3. BF16 params/grads/moments, no FP32 master.",
+  "evidence_refs": [
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/b4-reference-40.json",
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/b4-fused-40.json",
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/b4-optimized-40.json",
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/b4-optimized-model-oracle.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/b4-fused-40.json": "9e99069b8dcbff585a5fe275369daba12e8cc3601ea44b6db7b745b1ad1e0ccc",
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/b4-optimized-40.json": "7dab9eefd511a13e2baea31ae1d72ae7176cc91063827f0ca769c7f43da752b9",
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/b4-optimized-model-oracle.json": "9e19a78db6ff9a0605ae23847f879ecdd398820991a1069ea5e2aa2f805e2124",
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/b4-reference-40.json": "61e2afd60df771b8fb7ef704b555c07f19a155a80930c3251fc4d8595d18ed55"
+  },
+  "generalization": "pending_validation",
+  "id": "20261111-123043-861920-054631b7",
+  "issue_scope": "target",
+  "kind": "validation",
+  "queries": [],
+  "recorded_at": "2026-11-11T12:30:43.861910+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "Official-weight complete batch4 backward and native Adam checkpoint oracle passes after optimization. Same-device40-step A/B records a20.31% step-time reduction versus reference attention; features-only/dedup alone adds only0.8% over fusion. No batch8 production claim; 64x4 selected.",
+  "validation": {
+    "accuracy": "passed",
+    "accuracy_protocol": "Full2,960,729,840-element gradient replay bitwise equal; fused/reference relativeL2=0.0027439459<0.01; optimization on/off all gradients bitwise equal; full model+Adam restore next-update bitwise equal over9,208,069,606 elements; real checkpoint instrumentation0. This is BF16 NPU reference accuracy, not CUDA equivalence or LIBERO task success.",
+    "actual_backend": "npu",
+    "finite_outputs": true,
+    "functional": "passed",
+    "official_weights": true,
+    "optimization": "measured_improvement",
+    "performance": {
+      "baseline": 0.5604620836675167,
+      "direction": "lower",
+      "metric": "mean_synchronized_optimizer_step_seconds",
+      "modified": 0.4466295576712582,
+      "protocol": "Sequential runs on the same physical910B2C card1; identical official weights, canonical sample positions/augment/noise/dropout seeds, real Libero2views252x252, physical4, horizon16, full BF16 Adam/no recomputation.40 steps each, discard first8,32 measured updates, include data wait and forward/backward/clip/Adam, synchronize NPU. Full reports include mean/median/P95 and allocated/reserved HBM. Fusion-only mean0.450237436. No multi-card-speed inference.",
+      "same_device": true
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "unchanged_methods": {
+    "checkpoint_call_count": true,
+    "_positions": true,
+    "_submit": true,
+    "_batch": true,
+    "backward_units": true,
+    "close": true
+  },
+  "changed_methods": [
+    "__init__",
+    "_sync"
+  ],
+  "scope": "Telemetry adds allocator-counter reads and bounded JSON writes after the pre-existing synchronization. No numerical model, data, gradient, RNG, clipping or Adam operations changed. Real8MiB NPU allocation/release verifies high-water counters.",
+  "old_source_sha256": "fc14bb5196a21cd53c34c60101fd9dc1c2efd1e5f31381fbaa424e919f7a4d05",
+  "new_source_sha256": "3fe0dcd8e2f4b7aed7ade8807ba506d2392cad9bd254e06cdfa819a1adc7ca83"
+}

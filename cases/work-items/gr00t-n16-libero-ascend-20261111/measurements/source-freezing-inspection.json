@@ -1,0 +1,6 @@
+{
+  "source": "fragment_training_kit/launch.py",
+  "sha256": "c5b4151f5a9e144716a92b960666b5923ddd877b98c5b8bfed4349a4e5a53e1b",
+  "observation": "copy_sources uses IGNORE_PARTS containing data, excluding executable gr00t/data and gr00t/configs/data. Wrapper explicitly copies the bounded gr00t Python package and known processor/config assets before source manifest creation. Generic toolkit remains unchanged.",
+  "validation": "two-normal-v3 completed20, exact source verification and final complete native-state audit passed."
+}

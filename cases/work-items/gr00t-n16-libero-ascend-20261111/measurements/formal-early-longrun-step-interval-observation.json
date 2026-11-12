@@ -1,0 +1,7 @@
+{
+  "run": "libero-full-20000-v3",
+  "observation": "Recent100 consecutive update interval grew from~2.1s after startup to2.85s around758steps;loss decreased to~0.15,all64members active,no platform/device errors,peak allocated33.941GiB.",
+  "checked": "Summary1.49MB/capped100commits;updated~1.52KB/rank stable;supervisor~321B/status~267B stable;workerlogs0B. Controller16.2%CPU,42MiBRSS,blocked sampled wchan=cxiWaitEventWait;consistent with GPFS I/O wait but no unique cause established.",
+  "scope": "Live long-run performance observation;no numerical failure,OOM or monotonic growth proof. Healthy training continues.",
+  "next": "Inspect control file/shared filesystem and original openpi/LOW longrun guidance;keep exact recovery/durability invariants;do not patch frozen source or stop without a concrete validated improvement."
+}

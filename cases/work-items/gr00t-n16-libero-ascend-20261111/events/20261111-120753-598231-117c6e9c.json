@@ -1,0 +1,27 @@
+{
+  "case_id": "gr00t-n16-libero-ascend-20261111",
+  "environment": "Standalone fragment_training_kit prepared local frozen-source GR00T validation,torch_npu2.9,card2 initialized only",
+  "error": {
+    "expected": "Freeze executable package code including schema/config modules",
+    "message": "gr00t.data then gr00t.configs.data absent from frozen package",
+    "observed": "Generic ignore-by-directory-name omitted package code; first partial wrapper copied gr00t/data but not configs/data",
+    "type": "ModuleNotFoundError"
+  },
+  "evidence_refs": [
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/frozen-package-v1-v2-failure.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/frozen-package-v1-v2-failure.json": "0367caa219c7784330003fa9b750a8585cdf3157c33514f402a8f0585b0e38e2"
+  },
+  "generalization": "pending_validation",
+  "id": "20261111-120753-598231-117c6e9c",
+  "issue_scope": "tooling",
+  "kind": "failure",
+  "queries": [],
+  "recorded_at": "2026-11-11T12:07:53.598221+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "troubleshooting",
+  "summary": "Frozen-source local adapter acceptance exposed generic kit data-directory exclusion. Preserve failed preparedv1/v2; copy explicitly bounded GR00T Python package, including configs/data, before source_manifest freezing. No platform jobs created."
+}

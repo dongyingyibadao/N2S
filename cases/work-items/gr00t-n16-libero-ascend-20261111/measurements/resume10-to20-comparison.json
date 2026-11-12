@@ -1,0 +1,18 @@
+{
+  "source_run": "two-normal-v3",
+  "resume_run": "two-resume-v1",
+  "source_boundary_step": 10,
+  "target_step": 20,
+  "original_final": {
+    "model_sha256": "22299c617e37a1fd3fdbdbfa92e481dda2638762f281b078ab8842794ebcf3e5",
+    "optimizer_sha256": "ec913431a247e8276f4b702b9505988df1f6ef1ad38b3076a8b273b5ffebe47f",
+    "manifest_sha256": "561b20116edf7d8b069e40a1498f5f224e4317937520a12dfc915f50bf772d5c"
+  },
+  "resumed_checkpoint20": {
+    "model_sha256": "22299c617e37a1fd3fdbdbfa92e481dda2638762f281b078ab8842794ebcf3e5",
+    "optimizer_sha256": "ec913431a247e8276f4b702b9505988df1f6ef1ad38b3076a8b273b5ffebe47f",
+    "manifest_sha256": "9c592a0eada78b7df29f0b50fec3e2dc564414d3977f3567a96fb4107f46296f"
+  },
+  "model_and_adam_bitwise_equal_by_complete_native_hash": true,
+  "scope": "Checkpoint20 saved and runtime verified; final independent byte audit follows official resource cleanup."
+}

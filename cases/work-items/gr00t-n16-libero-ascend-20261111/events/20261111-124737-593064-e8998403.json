@@ -1,0 +1,48 @@
+{
+  "case_id": "gr00t-n16-libero-ascend-20261111",
+  "environment": "Real Ascend910B2C LOW/1 jobs; global256,physical4,horizon16,full native BF16,noFP32 master,noactivationrecomputation. Unchanged standalone fragment_training_kit recovery/Adam backend.",
+  "evidence_refs": [
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/low-two-normal-v3.json",
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/low-two-fault-v1.json",
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/low-two-resume-v1.json",
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/resume10-to20-comparison.json",
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/native-memory-source-comparison.json",
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/native-memory-observer-test.json"
+  ],
+  "evidence_sha256": {
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/low-two-fault-v1.json": "1945a1e205f0904fd6235e7d35ab6fa2efbcf0231bb77a989ee12d2dbd800144",
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/low-two-normal-v3.json": "cdb22f22fdbff9ce1b61142f24ec918263ba77bb3f9056293a0da1f7e922b4b0",
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/low-two-resume-v1.json": "d39d1eb347390b0c676c3b2f62b1364b9b81f044025ab99a383c9e0f561a33f8",
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/native-memory-observer-test.json": "6a0776831d33b14e19a04a54175dd29e66ccc5501ea6116dbaab064c8e95e32a",
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/native-memory-source-comparison.json": "8b9e2bdd80dd7f209fd3b45400db4f7cda0e06fd5d1e93277280b298b69bf335",
+    "cases/work-items/gr00t-n16-libero-ascend-20261111/measurements/resume10-to20-comparison.json": "3a29e25d6762212d4956c7bd7dc1ad336179feed707112fa68f8f93ce6d1431c"
+  },
+  "generalization": "pending_validation",
+  "id": "20261111-124737-593064-e8998403",
+  "issue_scope": "target",
+  "kind": "validation",
+  "queries": [],
+  "recorded_at": "2026-11-11T12:47:37.593054+00:00",
+  "resolves": [],
+  "schema_version": "1.0.0",
+  "source_checks": [],
+  "stage": "optimization",
+  "summary": "Real LOW two-card normal20, controlled full-backward-before-collective victim loss/replacement20, and checkpoint10-to20 resume all passed independent protocol and complete native checkpoint-byte audits. HealthyPID/model/Adam/original gradients preserved; only lost units replayed; replacement whole state aligned before step6. Resume final model/Adam equal continuous20 by complete native hashes. All owned resources officially released. Native telemetry subsequently adds read-only high-water observation at existing sync points; numerical methods AST unchanged and real8MiB NPU allocation/release test passed.64-card performance gate now running;20000-step training remains pending.",
+  "validation": {
+    "accuracy": "passed",
+    "accuracy_protocol": "Previous full-gradient and complete-state model oracle remains numerical reference; new LOW audits check exact sample coverage, preserved healthy native state/gradients, authorized single update, complete model/Adam restoration and exact final replica hashes. Resume10-to20 matches uninterrupted model/Adam. Controlled-fault trajectory need not be bitwise equal to different BF16 reduction grouping. No downstream simulation success claim.",
+    "actual_backend": "npu",
+    "finite_outputs": true,
+    "functional": "passed",
+    "official_weights": true,
+    "optimization": "measured_improvement",
+    "performance": {
+      "baseline": 0.5604620836675167,
+      "direction": "lower",
+      "metric": "single_card_mean_step_seconds",
+      "modified": 0.4466295576712582,
+      "protocol": "Same-device40-step/warmup8 performance evidence recorded earlier. Two-card global256 memory peak33.94GiB, normal mean9.05s; not extrapolated to64cards.64-card runtime will be measured separately.",
+      "same_device": true
+    }
+  }
+}

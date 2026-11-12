@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "source_rows_checked": 12,
+  "identical_original_images": 24,
+  "canonical_replay_all_fields": true,
+  "horizon": 16,
+  "frame_count": 273465
+}

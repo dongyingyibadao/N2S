@@ -1,0 +1,7 @@
+{
+  "scope": "CPU-only conversion of final native checkpoint model parameters to conventional safetensors; optimizer remains in original native checkpoint",
+  "native_source_read": "fragment_training_kit/vendor/jade_lotus/resident_state.py:_model_layout,_read_manifest,verify_native_state,_logical; all parameters/aliases and buffers covered; complete payload/chunk/logical hashes validated before use",
+  "observed_real_model": "Official base safetensors index1106keys exactly equal1106native named model parameters;only extra buffer is nonpersistent rotary_emb.inv_freq",
+  "decision": "Verify full native checkpoint, exact committed step and base tensor schema; read model tensors on CPU by verified offsets with per-tensor SHA;save safetensors then reread every tensor/shape/dtype/SHA before complete publication. Export license/config and provenance; never modify source native state or weights.",
+  "remaining": "Tiny independent roundtrip/corruption CPU checks and real18.42GB checkpoint conversion must pass before final20000export; no NPU experiment implied."
+}

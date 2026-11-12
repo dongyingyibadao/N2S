@@ -1,0 +1,75 @@
+{
+  "passed": true,
+  "devices": [
+    2,
+    3
+  ],
+  "active_leaves": 1094,
+  "active_parameters": 2960729840,
+  "clear_false_replay_bitwise": true,
+  "cross_device_bitwise": false,
+  "unequal_leaf_count": 423,
+  "cross_device_error": {
+    "relative_l2": 0.002765911199537674,
+    "max_abs": 6.67572021484375e-06,
+    "unequal_tensors": 423,
+    "first_unequal": [
+      "backbone.model.vision_model.vision_model.embeddings.patch_embedding.weight",
+      "backbone.model.vision_model.vision_model.embeddings.patch_embedding.bias",
+      "backbone.model.vision_model.vision_model.embeddings.position_embedding.weight",
+      "backbone.model.vision_model.vision_model.encoder.layers.0.layer_norm1.weight",
+      "backbone.model.vision_model.vision_model.encoder.layers.0.layer_norm1.bias",
+      "backbone.model.vision_model.vision_model.encoder.layers.0.self_attn.k_proj.weight",
+      "backbone.model.vision_model.vision_model.encoder.layers.0.self_attn.k_proj.bias",
+      "backbone.model.vision_model.vision_model.encoder.layers.0.self_attn.v_proj.weight",
+      "backbone.model.vision_model.vision_model.encoder.layers.0.self_attn.v_proj.bias",
+      "backbone.model.vision_model.vision_model.encoder.layers.0.self_attn.q_proj.weight"
+    ],
+    "elements": 2960729840,
+    "groups": {
+      "backbone.model": {
+        "relative_l2": 0.00415795887161192,
+        "max_abs": 6.67572021484375e-06
+      },
+      "action_head.model": {
+        "relative_l2": 0.0,
+        "max_abs": 0.0
+      },
+      "action_head.state_encoder": {
+        "relative_l2": 0.0,
+        "max_abs": 0.0
+      },
+      "action_head.action_encoder": {
+        "relative_l2": 0.0,
+        "max_abs": 0.0
+      },
+      "action_head.action_decoder": {
+        "relative_l2": 0.0,
+        "max_abs": 0.0
+      },
+      "action_head.vlln": {
+        "relative_l2": 0.0,
+        "max_abs": 0.0
+      },
+      "action_head.position_embedding": {
+        "relative_l2": 0.0,
+        "max_abs": 0.0
+      }
+    }
+  },
+  "checkpoint_calls": 0,
+  "measurement": {
+    "units": [
+      0,
+      32
+    ],
+    "samples": 8,
+    "loss_contribution": 0.03619150072336197,
+    "backward_calls": 2,
+    "seconds": 1.336452104151249,
+    "data_seconds": 0.08361301384866238,
+    "backward_seconds": 1.2528155641630292,
+    "physical_microbatch_size": 4,
+    "timing_scope": "synchronized local data wait and forward/backward; excludes SUM/clip/Adam"
+  }
+}
